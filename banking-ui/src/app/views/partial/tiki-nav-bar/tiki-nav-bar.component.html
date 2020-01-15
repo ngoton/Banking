@@ -1,0 +1,12 @@
+<ul style="z-index:2" class="navigation-wrapper">
+    <li *ngFor="let item of navigations" class="menu-item">
+        <a [href]="item.url" class="menu-link">
+            <span class="icon-wrap">
+                <i class="{{item.icon + ' lv1-icon tikicon'}}"></i>
+            </span>
+            <span class="text">{{item.name}}</span>
+            <i *ngIf="item.label !== undefined && item.label.variant === 'new'" class="addon-icon tikicon icon-new"></i>
+            <i *ngIf="item.label !== undefined && item.label.variant === 'hot'" class="addon-icon tikicon icon-hot"></i>
+        </a>
+    </li>
+</ul>

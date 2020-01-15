@@ -1,0 +1,474 @@
+.edge-anner-wrapper {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.container-sc {
+    width: 1270px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.hot-slider-wrapper {
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.hot-slider-wrapper > .slide-container {
+    margin-top: -8px;
+    overflow: hidden;
+}
+
+.title-wrapper {
+    margin-bottom: 10px;
+    color: rgb(51, 51, 51);
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.hot-slider-slide {
+    height: 100%;
+    outline: none;
+}
+
+.hot-slider-slide .element {
+    height: 100%;
+    padding: 8px;
+}
+
+.hot-slider-slide .element > a {
+    display: flex;
+    flex-direction: column;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    height: 100%;
+    color: rgb(68, 68, 68);
+    font-size: 13px;
+    line-height: 20px;
+    background-color: rgb(225, 225, 225);
+    padding: 16px;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.hot-slider-slide .element > a p {
+    color: rgb(255, 255, 255);
+    text-align: center;
+    margin: 0px;
+}
+
+.hot-slider-slide .element > a:hover {
+    opacity: 0.8;
+}
+
+.hot-slider-slide-sc {
+    height: 100%;
+    outline: none;
+}
+
+.hot-slider-slide-sc .element {
+    height: 100%;
+    padding: 10px;
+}
+
+.hot-slider-slide-sc .element > a {
+    display: flex;
+    flex-direction: column;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    height: 100%;
+    color: rgb(68, 68, 68);
+    font-size: 12px;
+    line-height: 20px;
+    background-color: rgb(225, 225, 225);
+    padding: 16px;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.hot-slider-slide-sc .element > a.categories {
+    background-color: rgb(255, 255, 255);
+}
+
+.hot-slider-slide-sc .element > a .image {
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    width: 96px;
+    height: 96px;
+}
+
+.hot-slider-slide-sc .element > a .image img {
+    width: 100%;
+}
+
+.hot-slider-slide-sc .element > a p {
+    color: rgb(255, 255, 255);
+    text-align: center;
+    margin: 0px;
+}
+
+.hot-slider-slide-sc .element > a.categories p {
+    color: rgb(68, 68, 68);
+    margin: 12px 0px 0px;
+}
+
+.icon {
+    display: inline-block;
+    vertical-align: middle;
+    background-repeat: no-repeat;
+    background-position: 0px 0px;
+}
+
+.slide-root a {
+    outline: none;
+}
+
+.picture-styled-picture {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    width: 584px;
+    height: 365px;
+}
+
+.picture-styled-picture .image {
+    position: relative;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.banners-hot-product {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.hot-product-item {
+    display: flex;
+    flex-wrap: wrap;
+    width: 50%;
+    height: 181px;
+    background: rgb(148, 191, 255);
+}
+
+.hot-product-item-pic {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    width: 292px;
+    height: 181px;
+}
+
+.hot-product-item-pic .image {
+    position: relative;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.hot-product-item-pic-yellow {
+    display: flex;
+    flex-wrap: wrap;
+    width: 50%;
+    height: 181px;
+    background: rgb(185, 213, 255);
+}
+
+.styled-picture {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    width: 206px;
+    height: 181px;
+}
+
+.styled-picture .image {
+    position: relative;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.group-products-wrapper {
+    margin-top: 40px;
+    margin-bottom: 20px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 4px;
+}
+
+.group-products-wrapper > .header {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid rgb(244, 244, 244);
+}
+
+.group-products-wrapper > .header .title.deal {
+    color: rgb(255, 61, 0);
+}
+
+.group-products-wrapper > .header .title {
+    color: rgb(51, 51, 51);
+    font-size: 17px;
+    margin: 0px;
+}
+
+.group-products-wrapper > .header .description {
+    color: rgb(51, 51, 51);
+    font-size: 13px;
+    margin: 6px 0px 0px;
+}
+
+.group-products-wrapper > .footer {
+    display: flex;
+    flex-direction: column;
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+.view-button-wrapper {
+    cursor: pointer;
+    display: inline-block;
+    width: 200px;
+    color: rgb(24, 158, 255);
+    font-size: 13px;
+    text-align: center;
+    margin: 20px 0px;
+    padding: 7px 16px;
+    border-radius: 5px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: initial;
+    border-image: initial;
+}
+
+.list-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    align-self: stretch;
+    background-color: rgb(255, 255, 255);
+}
+
+.item-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    -webkit-box-align: center;
+    align-items: center;
+    width: 100%;
+    background-color: rgb(255, 255, 255);
+    padding: 16px;
+}
+
+.item-wrapper:hover {
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 20px;
+    z-index: 1; 
+}
+
+.item-picture {
+    width: 200px;
+    height: 200px;
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.icon.tikinow-15 {
+    width: 53px;
+    height: 15px;
+    background-image: url("assets/img/icons/tiki-now-15.png");
+    background-size: 53px 15px;
+}
+
+.item-wrapper .title {
+    position: relative;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    max-height: 40px;
+    width: 100%;
+    color: rgb(36, 36, 36);
+    font-size: 13px;
+    font-weight: 300;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.54;
+    letter-spacing: 0.1px;
+    text-align: left;
+    text-overflow: ellipsis;
+    margin: 0px;
+    overflow: hidden;
+}
+
+.item-wrapper .title .icon.tikinow-15 {
+    position: relative;
+    width: 64px;
+    padding-right: 11px;
+    vertical-align: baseline;
+}
+
+.item-wrapper .title .icon.tikinow-15::before {
+    content: "";
+    position: absolute;
+    right: 6px;
+    bottom: 0px;
+    width: 1px;
+    height: 10px;
+    background-color: rgb(216, 216, 216);
+}
+
+
+.item-wrapper .price {
+    align-self: stretch;
+    color: rgb(36, 36, 36);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.6;
+    margin: 0px;
+    padding: 8px 0px 0px;
+}
+
+.item-wrapper .price .percent.deal {
+    position: absolute;
+    top: 15px;
+    left: 25px;
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    padding-bottom: 4px;
+    color: rgb(255, 255, 255);
+    font-weight: 500;
+    width: 40px;
+    height: 36px;
+    background-image: url("assets/img/icons/deal-tag.png");
+    background-size: 40px 36px;
+    margin: 1px 0px 0px;
+    background-position: 0px 0px;
+}
+
+.item-wrapper .price .percent {
+    margin-left: 8px;
+    color: rgb(120, 120, 120);
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 1.6;
+}
+
+.item-wrapper .price .original {
+    display: block;
+    margin-left: 0px;
+    color: rgb(120, 120, 120);
+    font-size: 13px;
+    font-weight: 300;
+    text-decoration: line-through;
+}
+
+.item-wrapper .price .original.deal {
+    display: inline-block;
+    margin-left: 8px;
+}
+
+.item-wrapper .bottom {
+    display: flex;
+    flex-direction: column;
+    justify-content: normal;
+    align-self: stretch;
+    flex: 1 1 0%;
+}
+
+.item-deal .progress {
+    display: flex;
+    align-self: stretch;
+    margin-top: 12px;
+    height: auto;
+    overflow: initial;
+}
+
+.item-deal .progress .bar {
+    position: relative;
+    height: 18px;
+    background-color: rgb(253, 218, 200);
+    flex: 1 1 0%;
+    border-radius: 9px;
+    overflow: hidden;
+}
+
+.item-deal .progress .bar .percent {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 0px;
+    height: 100%;
+    background-color: rgb(253, 110, 35);
+    z-index: 1;
+}
+
+.item-deal .progress .bar .content {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    padding: 0px 4px;
+}
+
+.item-deal .progress .bar .content .text {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    color: rgb(255, 255, 255);
+    font-size: 12px;
+    text-align: center;
+    margin: 0px;
+}
+
+.count-down-wrapper {
+    color: rgb(36, 36, 36);
+    font-size: 12px;
+    font-weight: 300;
+    line-height: 18px;
+    margin: 0px;
+}
+
+.lazyload-image-wrapper {
+    width: 100%;
+    opacity: 0;
+    transition: opacity 0.3s ease 0s;
+}

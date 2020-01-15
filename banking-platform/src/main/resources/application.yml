@@ -1,0 +1,36 @@
+# Spring Boot configuration
+spring:
+  application:
+    name: banking
+  # Database
+  datasource:
+    url: jdbc:postgresql://banking-postgres:5432/banking
+    username: banking
+    password: banking
+    driverClassName: org.postgresql.Driver
+    hikari:
+      connectionTimeout: 20000
+      maximumPoolSize: 5
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    schemas: public
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+# Logger configuration
+logging:
+  level:
+    org.springframework: INFO
+    org.hibernate: DEBUG
+# Server configuration
+server:
+  port: 8800
+  sessionTimeout: 30

@@ -1,0 +1,10 @@
+version: '2.1'
+services:
+  banking-angular:
+    build:
+      context: .
+      dockerfile: Dockerfile_app
+    ports:
+      - 4200:4200
+    networks:
+      - banking-network

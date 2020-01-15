@@ -1,0 +1,49 @@
+version: '2.1'
+services:
+  flyway:
+    image: boxfuse/flyway:latest
+    command:
+      -url=jdbc:postgresql://banking-postgres:5432/banking -schemas=public -user=banking -password=banking migrate
+    volumes:
+      - ./banking-platform/src/main/resources/db/migration:/flyway/sql
+    depends_on:
+      banking-postgres:
+        condition: service_healthy
+    networks:
+      - banking-network
+  banking-spring:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8800:8800
+    depends_on:
+      banking-postgres:
+        condition: service_healthy
+    networks:
+      - banking-network
+  banking-postgres:
+    image: postgres:10.5-alpine
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: banking
+      POSTGRES_PASSWORD: banking
+      POSTGRES_DB: banking
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U banking"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - banking-network
+
+volumes:
+  db-data:
+    driver: local
+networks:
+  banking-network:
+    driver: bridge

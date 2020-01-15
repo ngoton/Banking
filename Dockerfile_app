@@ -1,0 +1,15 @@
+FROM node:12-alpine
+
+RUN mkdir -p /app
+
+WORKDIR /app
+
+COPY /banking-ui/package.json /app
+
+RUN npm install
+
+COPY /banking-ui /app
+
+EXPOSE 4200
+
+CMD ["npm", "start"]

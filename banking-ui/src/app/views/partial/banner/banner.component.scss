@@ -1,0 +1,38 @@
+.banners-main-grid {
+    display: flex;
+    flex-wrap: wrap;
+    width: 996px;
+    border-radius: 0px 4px 4px 0px;
+    overflow: hidden;
+    background: rgb(148, 191, 255);
+}
+
+.banners-main-grid-sc-left {
+    display: flex;
+    flex-wrap: wrap;
+    width: 584px;
+}
+
+.banners-main-grid-sc-right {
+    display: flex;
+    flex-wrap: wrap;
+    width: 412px;
+}
+
+.banners-main-grid-slide {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 362px;
+}
+
+.slide-root {
+    width: 100%;
+    height: 100%;
+    background-color: rgb(148, 191, 255);
+    overflow: hidden;
+}
+
+.slide-root a {
+    outline: none;
+}
