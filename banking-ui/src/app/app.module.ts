@@ -1,98 +1,47 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { LocationStrategy, HashLocationStrategy } from '@angular/common';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
-
-const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-  suppressScrollX: true
-};
-
-import { AppComponent } from './app.component';
-
-// Import containers
-import { DefaultLayoutComponent } from './containers';
-import { TikiLayoutModule } from './containers/tiki-layout/tiki-layout.module';
-
-import { P404Component } from './views/error/404.component';
-import { P500Component } from './views/error/500.component';
-import { LoginComponent } from './views/login/login.component';
-import { RegisterComponent } from './views/register/register.component';
-
-const APP_CONTAINERS = [
-  DefaultLayoutComponent
-];
-
 import {
-  AppAsideModule,
-  AppBreadcrumbModule,
-  AppHeaderModule,
-  AppFooterModule,
-  AppSidebarModule
-} from '@coreui/angular';
+  MatInputModule,
+  MatPaginatorModule,
+  MatProgressSpinnerModule,
+  MatSortModule,
+  MatIconModule,
+  MatButtonModule,
+  MatCardModule,
+  MatGridListModule } from '@angular/material';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 
-// Import routing module
-import { AppRoutingModule } from './app.routing';
-
-// Import 3rd party components
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { TabsModule } from 'ngx-bootstrap/tabs';
-import { ChartsModule } from 'ng2-charts';
-import { NguoiDungModule } from './views/nguoi-dung/nguoi-dung.module';
-
-import { HomeComponent } from './views/home/home.component';
-import { TikiNavBarComponent } from './views/partial/tiki-nav-bar/tiki-nav-bar.component';
-import { HotCategoryComponent } from './views/partial/hot-category/hot-category.component';
-import { HotWordComponent } from './views/partial/hot-word/hot-word.component';
-import { LoadingProductListComponent } from './views/partial/loading-product-list/loading-product-list.component';
-
-// Import your library
-import { SlickCarouselModule } from 'ngx-slick-carousel';
-import { BannerComponent } from './views/partial/banner/banner.component';
-
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { OnboardingComponent } from './onboarding/onboarding.component';
+import { NotifierModule, NotifierService } from 'angular-notifier';
+import { CurrencyPipe } from '@angular/common';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { InterceptorService } from './_services/interceptor.service';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
+  declarations: [AppComponent, OnboardingComponent],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule,
+    HttpClientModule,
     AppRoutingModule,
-    AppAsideModule,
-    AppBreadcrumbModule.forRoot(),
-    AppFooterModule,
-    AppHeaderModule,
-    AppSidebarModule,
-    PerfectScrollbarModule,
-    BsDropdownModule.forRoot(),
-    TabsModule.forRoot(),
-    ChartsModule,
-    TikiLayoutModule,
-    NguoiDungModule,
-    // Specify your library as an import
-    SlickCarouselModule,
-    HttpClientModule
+    BrowserAnimationsModule,
+    NotifierModule.withConfig({
+      // Custom options in here
+    }),
+    NgbModule
   ],
-  declarations: [
-    AppComponent,
-    ...APP_CONTAINERS,
-    P404Component,
-    P500Component,
-    LoginComponent,
-    RegisterComponent,
-    HomeComponent,
-    TikiNavBarComponent,
-    HotCategoryComponent,
-    HotWordComponent,
-    LoadingProductListComponent,
-    BannerComponent
+  schemas: [NO_ERRORS_SCHEMA],
+  providers: [
+    NotifierService,
+    CurrencyPipe,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: InterceptorService,
+      multi: true
+    }
   ],
-  // providers: [{
-  //   provide: LocationStrategy,
-  //   useClass: HashLocationStrategy
-  // }],
-  bootstrap: [ AppComponent ]
+  bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
