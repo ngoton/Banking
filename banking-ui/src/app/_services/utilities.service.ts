@@ -71,6 +71,27 @@ export class UtilitiesService {
     return this.randomNumber;
   }
 
+  formatDate(dateObj) {
+    let newFormat: any = '';
+    if (dateObj) {
+      console.log('datttee' + dateObj);
+      dateObj.day = this.addzero(dateObj.day);
+      dateObj.month = this.addzero(dateObj.month);
+      newFormat = `${dateObj.year}-${dateObj.month}-${dateObj.day}`;
+      console.log(newFormat);
+    }
+    console.log(newFormat);
+    return newFormat;
+  }
+
+  addzero(value) {
+    let formated = value.toString();
+    if (formated.length === 1) {
+      formated = '0' + value;
+    }
+    return formated;
+  }
+
   addAuthParams(body) {
     this.user = this.userService.getUserDetails();
     console.log(this.user);
@@ -122,5 +143,52 @@ export class UtilitiesService {
     }
     console.log(errormessage);
     return throwError(`${errormessage.slice(errormessage.indexOf("-") + 1)}`);
+  }
+
+  handleResponseError(res) {
+    let message = res.responseDescription;
+    switch (res.responseCode) {
+      case '01':
+        {
+          message = (message) ? message.slice(message.indexOf('-') + 1) : '';
+        }
+        break;
+
+      case '96':
+        {
+          message = (message) ? message.slice(message.indexOf('-') + 1) : '';
+          console.log(message);
+        }
+        break;
+
+      case '03':
+        message = (message) ? message.slice(message.indexOf('-') + 1) : '';
+        break;
+
+      case '38':
+        {
+          message = message.slice(message.indexOf('-') + 1);
+          console.log('logout Successful');
+          this.notifications.notify(`Your session has expired`, 'info', 'login');
+          setTimeout(() => {
+            this.router.navigate(['/onboarding/login']);
+          }, 5000);
+        }
+        break;
+
+      case '25':
+        message = (message) ? message.slice(message.indexOf('-') + 1) : '';
+        break;
+
+      case '99':
+        message = (message) ? message.slice(message.indexOf('-') + 1) : '';
+        break;
+
+      default:
+        message = (message) ? message.slice(message.indexOf('-') + 1) : '';
+        break;
+    }
+
+    return message;
   }
 }

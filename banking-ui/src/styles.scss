@@ -4,7 +4,8 @@
 // body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 @import '~ngx-bar-rating/themes/br-movie-theme';
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
-@import "./scss/style.scss";
+@import "./scss/style";
+@import "./scss/widget";
 @import '~angular-notifier/styles';
 // @import '~angular-notifier/styles/core';
 // @import '~angular-notifier/styles/theme/theme-material';
