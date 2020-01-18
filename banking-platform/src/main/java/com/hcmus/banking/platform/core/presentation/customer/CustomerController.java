@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CustomerController {
     private final CustomerService customerService;
     @GetMapping
-    public Page<CustomerReponse> findAllBy(Pageable pageable){
+    public Page<CustomerResponse> findAllBy(Pageable pageable){
        Page<Customer> customers=customerService.findAllBy(pageable);
        return CustomerResponses.ofPage(customers,pageable);
     }

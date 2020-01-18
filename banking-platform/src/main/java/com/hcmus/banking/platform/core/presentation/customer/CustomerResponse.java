@@ -6,7 +6,7 @@ import com.hcmus.banking.platform.domain.customer.Customer;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-public class CustomerReponse {
+public class CustomerResponse {
     public String code;
     public String firstName;
     public String lastName;
@@ -17,7 +17,7 @@ public class CustomerReponse {
     public LocalDateTime createdAt;
     public String gender;
 
-    public CustomerReponse(Customer customer) {
+    public CustomerResponse(Customer customer) {
         this.code = customer.getCode();
         this.firstName = customer.getFirstName();
         this.lastName = customer.getLastName();

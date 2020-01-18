@@ -11,13 +11,13 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class CustomerResponses {
-    final List<CustomerReponse> customerResponses;
+    final List<CustomerResponse> customerResponses;
 
-    public static Page<CustomerReponse> ofPage(Page<Customer> customerPage, Pageable pageable) {
+    public static Page<CustomerResponse> ofPage(Page<Customer> customerPage, Pageable pageable) {
         List<Customer> customers = customerPage.getContent();
         long total = customerPage.getTotalElements();
-        List<CustomerReponse> responses = customers.stream()
-                .map(customer -> new CustomerReponse(customer))
+        List<CustomerResponse> responses = customers.stream()
+                .map(customer -> new CustomerResponse(customer))
                 .collect(Collectors.toList());
         return new PageImpl(responses, pageable, total);
     }
