@@ -1,5 +1,6 @@
 package com.hcmus.banking.platform.domain.user;
 
+import com.hcmus.banking.platform.domain.customer.Customer;
 import com.hcmus.banking.platform.domain.general.IDEntity;
 import lombok.*;
 
@@ -14,5 +15,8 @@ import javax.persistence.*;
 public class User extends IDEntity {
     private String email;
     private String password;
+    private String username;
+//    @OneToOne(mappedBy = "user")
+//    private Customer customer;
 
 }
