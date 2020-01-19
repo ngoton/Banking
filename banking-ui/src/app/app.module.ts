@@ -21,6 +21,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InterceptorService } from './_services/interceptor.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SessionTimeoutModalComponent } from './session-timeout-modal/session-timeout-modal.component';
+import { MDBBootstrapModule } from 'angular-bootstrap-md';
 
 @NgModule({
   declarations: [AppComponent, CustomerComponent, OnboardingComponent, SessionTimeoutModalComponent],
@@ -32,7 +33,8 @@ import { SessionTimeoutModalComponent } from './session-timeout-modal/session-ti
     NotifierModule.withConfig({
       // Custom options in here
     }),
-    NgbModule
+    NgbModule,
+    MDBBootstrapModule.forRoot()
   ],
   schemas: [NO_ERRORS_SCHEMA],
   providers: [

@@ -6,18 +6,18 @@ const routes: Routes = [
   {
     path: '',
     data: {
-      title: 'Customer',
+      title: 'Khách hàng',
       status: false
     },
     children: [
       {
         path: '',
-        redirectTo: 'dashboard',
+        redirectTo: 'accounts',
         pathMatch: 'full'
       },
       {
-        path: 'dashboard',
-        loadChildren: './dashboard/dashboard.module#DashboardModule'
+        path: 'accounts',
+        loadChildren: './accounts/accounts.module#AccountsModule'
       }
       /*
       {

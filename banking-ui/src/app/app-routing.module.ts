@@ -11,16 +11,16 @@ const routes: Routes = [
     // canActivate: [AuthGuard],
     children: [
       {
-        path: 'dashboard',
-        loadChildren: './customer/dashboard/dashboard.module#DashboardModule'
+        path: 'accounts',
+        loadChildren: './customer/accounts/accounts.module#AccountsModule'
       },
+      // {
+      //   path: 'dashboard',
+      //   loadChildren: './customer/dashboard/dashboard.module#DashboardModule'
+      // },
       // {
       //   path: 'transfers',
       //   loadChildren: './customer/transfers/transfers.module#TransfersModule'
-      // },
-      // {
-      //   path: 'accounts',
-      //   loadChildren: './customer/accounts/accounts.module#AccountsModule'
       // },
       // {
       //   path: 'cards',
@@ -57,7 +57,7 @@ const routes: Routes = [
       // },
       {
         path: '',
-        redirectTo: 'dashboard',
+        redirectTo: 'accounts',
         pathMatch: 'full'
       }
     ]
