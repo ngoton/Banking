@@ -3,27 +3,28 @@ package com.hcmus.banking.platform.core.presentation.customer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hcmus.banking.platform.domain.customer.Customer;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class CustomerResponse {
     public String code;
     public String firstName;
     public String lastName;
-    public String userName;
     @JsonFormat(pattern = "dd/MM/yyyy")
-    public Date birthDate;
+    public LocalDate birthDate;
+    public String gender;
+    public String username;
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     public LocalDateTime createdAt;
-    public String gender;
+
 
     public CustomerResponse(Customer customer) {
         this.code = customer.getCode();
         this.firstName = customer.getFirstName();
         this.lastName = customer.getLastName();
-        this.userName = customer.getUser().getUsername();
+        this.username = customer.getUser().getUsername();
         this.birthDate = customer.getBirthDate();
-        this.createdAt = customer.getCreatedAt().getValue();
+        this.createdAt = customer.getCreated().getCreatedAt().getValue();
         this.gender = customer.getGender().name();
 
     }
