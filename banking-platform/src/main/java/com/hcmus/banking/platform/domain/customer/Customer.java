@@ -1,14 +1,12 @@
 package com.hcmus.banking.platform.domain.customer;
 
-import com.hcmus.banking.platform.domain.general.CreatedAt;
-import com.hcmus.banking.platform.domain.general.Gender;
-import com.hcmus.banking.platform.domain.general.IDEntity;
+import com.hcmus.banking.platform.domain.general.*;
 import com.hcmus.banking.platform.domain.user.User;
 import lombok.*;
 
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "customers", schema = "banking")
@@ -17,21 +15,32 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Customer extends IDEntity {
+    private static final String EMPTY_STRING = "";
     private String code;
     private String firstName;
     private String lastName;
-    @Temporal(TemporalType.DATE)
-    private Date birthDate;
+    @Column(name = "birth_date", columnDefinition = "DATE")
+    private LocalDate birthDate;
     @Enumerated(EnumType.STRING)
     private Gender gender;
     private String phone;
     private String address;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinColumn(name = "users_id")
     private User user;
-    @Temporal(TemporalType.TIMESTAMP)
     @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "created_at"))
-    private CreatedAt createdAt;
+    @AttributeOverrides({
+            @AttributeOverride(name = "createdAt.value", column = @Column(name = "created_at")),
+            @AttributeOverride(name = "createdBy.value", column = @Column(name = "created_by")),
+            @AttributeOverride(name = "createProgram.value", column = @Column(name = "create_program"))
+    })
+    private Created created;
 
+    public static Customer ofEmpty(){
+        return new Customer(EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, LocalDate.now(), Gender.Male, EMPTY_STRING, EMPTY_STRING, User.ofEmpty(), Created.ofEmpty());
+    }
+
+    public boolean isEmpty(){
+        return code.equals(EMPTY_STRING);
+    }
 }

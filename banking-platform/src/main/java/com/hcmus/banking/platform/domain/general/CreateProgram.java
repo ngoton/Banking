@@ -5,16 +5,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
-import java.time.LocalDateTime;
 
 @Embeddable
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreatedAt {
-    private LocalDateTime value;
+public class CreateProgram {
+    private static final String EMPTY_VALUE = "";
+    private String value;
 
-    public static CreatedAt ofEmpty(){
-        return new CreatedAt(LocalDateTime.now());
+    public static CreateProgram ofEmpty(){
+        return new CreateProgram(EMPTY_VALUE);
     }
 }
