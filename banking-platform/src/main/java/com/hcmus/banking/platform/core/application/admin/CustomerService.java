@@ -46,4 +46,12 @@ public class CustomerService {
             customerRepository.save(oldCustomer);
         }
     }
+
+    @Transactional
+    public void delete(Long id){
+        Customer customer = findById(id);
+        if (!customer.isEmpty()){
+            customerRepository.delete(customer);
+        }
+    }
 }
