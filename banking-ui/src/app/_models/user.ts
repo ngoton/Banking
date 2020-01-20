@@ -1,19 +1,14 @@
+import { AcctDetails } from '../customer/_customer-model/customer.model';
+
 export class User {
 
   constructor(
-    public userId?: string,
+    public id?: string,
+    public username?: string,
+    public password?: string,
     public email?: string,
-    public userFullName?: string,
-    public preferredName?: string,
-    public customerType?: string,
-    public termsConditions?: boolean,
-    public customerSegment?: string,
-    public transferIndemnityStatus?: boolean,
-    public fxIndemnityStatus?: boolean,
-    public smsIndemnityStatus?: boolean,
-    public lastLogin?: string,
-    public userBVN?: string,
-    public userIp?: string
+    public role?: string,
+    public acctDetails?: AcctDetails[]
   ) { }
 
 }

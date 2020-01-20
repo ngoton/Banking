@@ -3,6 +3,7 @@ import { animate, AUTO_STYLE, state, style, transition, trigger } from '@angular
 import { MenuItems } from '../shared/menu-items/menu-items';
 import { Router } from '@angular/router';
 import { User } from '../_models/user';
+import { CustomerService } from './_customer-service/customer.service';
 
 @Component({
   selector: 'app-customer',
@@ -186,13 +187,14 @@ export class CustomerComponent implements OnInit, AfterViewInit, OnDestroy {
     window.open(url);
   }
 
-  constructor(public menuItems: MenuItems, private router: Router) { }
+  constructor(public menuItems: MenuItems, private router: Router, private customerService: CustomerService) { }
 
   ngOnInit() {
+
   }
 
   ngAfterViewInit() {
-    // this.updateAcctsToDebit();
+
   }
 
   // Session Management

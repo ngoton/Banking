@@ -1,0 +1,9 @@
+@import "../../../scss/custom-theme.scss";
+
+.mat-card {
+    background: $warn;
+
+    &-title, &-content {
+        color: white;
+    }
+}

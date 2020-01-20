@@ -104,8 +104,8 @@ export class AcctDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     const len = this.acctBalanceCarouselItems.length;
     if (len <= (accounts.length - 1)) {
       for (let i = len; i < len + accounts.length; i++) {
-        console.log('available Balance' + accounts[i].crnt_bal);
-        console.log('book Balance' + accounts[i].avail_bal);
+        // console.log('available Balance' + accounts[i].crnt_bal);
+        // console.log('book Balance' + accounts[i].avail_bal);
         this.acctBalanceCarouselItems.push(
           accounts[i]
         );

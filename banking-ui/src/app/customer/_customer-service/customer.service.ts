@@ -128,37 +128,42 @@ export class CustomerService implements OnDestroy {
   }
 
   getAcctDetailsData() {
-    debugger;
+    const userDetails = this.userService.getUserDetails();
+
     const body = {
       'email': '',
       'phoneNumber': '',
       'bvn': '',
       'category': 1,
-      'customerNumber': !this.userService.getUserDetails() ? '123456' : this.userService.getUserDetails().userId
+      'customerNumber': !userDetails ? '' : userDetails.id
     };
-    this.customerValidationUpdated(body).pipe(untilDestroyed(this))
-      .subscribe(
-        res => {
-          console.log(res);
-          console.log(res.accountDetails);
-          if (res.responseCode === '00') {
-            this.updateAcctDetailsError('');
-            this.updateAcctDetails(res.accountDetails);
-            this.updateSelectedAcctDetails(res.accountDetails[0]);
-          } else {
-            this.updateAcctDetailsError(res.responseDescription);
-            this.updateAcctDetails(null);
-            this.updateSelectedAcctDetails(null);
-            // alert('An Error Occured' + res.responseDescription);
-          }
-        },
-        (err: HttpErrorResponse) => {
-          console.log(err);
-          this.updateAcctDetailsError(`Oops! We couldn't reach this service at this time. Try again`);
-          this.updateAcctDetails(null);
-          this.updateSelectedAcctDetails(null);
-        }
-      );
+
+    let accountDetails = userDetails.acctDetails;
+    this.updateAcctDetails(accountDetails);
+    this.updateSelectedAcctDetails(accountDetails[0]);
+    // this.customerValidationUpdated(body).pipe(untilDestroyed(this))
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       console.log(res.accountDetails);
+    //       if (res.responseCode === '00') {
+    //         this.updateAcctDetailsError('');
+    //         this.updateAcctDetails(res.accountDetails);
+    //         this.updateSelectedAcctDetails(res.accountDetails[0]);
+    //       } else {
+    //         this.updateAcctDetailsError(res.responseDescription);
+    //         this.updateAcctDetails(null);
+    //         this.updateSelectedAcctDetails(null);
+    //         // alert('An Error Occured' + res.responseDescription);
+    //       }
+    //     },
+    //     (err: HttpErrorResponse) => {
+    //       console.log(err);
+    //       this.updateAcctDetailsError(`Oops! We couldn't reach this service at this time. Try again`);
+    //       this.updateAcctDetails(null);
+    //       this.updateSelectedAcctDetails(null);
+    //     }
+    //   );
 
   }
 

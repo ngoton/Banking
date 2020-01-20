@@ -21,7 +21,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InterceptorService } from './_services/interceptor.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SessionTimeoutModalComponent } from './session-timeout-modal/session-timeout-modal.component';
-import { MDBBootstrapModule } from 'angular-bootstrap-md';
 
 @NgModule({
   declarations: [AppComponent, CustomerComponent, OnboardingComponent, SessionTimeoutModalComponent],
@@ -34,7 +33,14 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
       // Custom options in here
     }),
     NgbModule,
-    MDBBootstrapModule.forRoot()
+    MatInputModule,
+    MatPaginatorModule,
+    MatProgressSpinnerModule,
+    MatSortModule,
+    MatIconModule,
+    MatButtonModule,
+    MatCardModule,
+    MatGridListModule
   ],
   schemas: [NO_ERRORS_SCHEMA],
   providers: [

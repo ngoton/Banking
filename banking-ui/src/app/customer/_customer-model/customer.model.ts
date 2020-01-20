@@ -1,35 +1,30 @@
+import { User } from 'src/app/_models/user';
+
 export class AcctDetails {
-    constructor (
-        public bvn: string,
-        public email: string,
-        public cusname: string,
-        public mob_num: string,
-        public fullaccountkey: string,
-        public map_acc_no: string,
-        public avail_bal: string,
-        public alt_cur_code: string,
-        public des_eng: string,
-        public date_open: string,
-        public las_tra_date: string,
-        public cle_bal: string,
-        public crnt_bal: string,
-        public sta_code: string,
-        public led_code: string,
-        public sub_acct_code: string,
-        public cust_seg: string,
-        public cust_type: string,
-        public residential_address: string,
-        public birthday: string,
+    constructor(
+        public id: string,
+        public code: string,
+        public first_name: string,
+        public last_name: string,
+        public birth_date: string,
         public gender: string,
-        public customer_type: string,
-        public customer_type_text: string,
-        public type_of_depositor: string,
-        public type_of_depositortext: string,
-        public customer_class: string,
-        public cus_class: string,
-        public rest_reason: string,
-        ) {}
+        public phone: string,
+        public address: string,
+        public users_id: string,
+        public payments_id: string,
+
+        public user: User,
+        public payment: Payment
+    ) {}
 }
+
+export class Payment {
+    constructor(
+        public account: string,
+        public balance: string
+    ) {}
+}
+
 export class AcctToDebit {
     fullAcctKey: string;
     nuban: string;

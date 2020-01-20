@@ -36,7 +36,7 @@ export class AuthService implements OnDestroy {
       const user = this.userService.getUserDetails();
       const data = {
         'requestID' : this.util.generateRequestId(),
-        'userID'  : user.userId
+        'userID'  : user.id
       };
       console.log(data);
       const PATH = this.AUTH_URL + `/Logout`;

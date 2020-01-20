@@ -1,0 +1,45 @@
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+$custom-theme-primary: mat-palette($mat-light-blue);
+$custom-theme-accent: mat-palette($mat-orange, A200, A100, A400);
+$custom-theme-warn: mat-palette($mat-red, 800);
+
+// Custom Sass colors vars (will be available in all the project)
+$primary: mat-color($custom-theme-primary);
+$accent: mat-color($custom-theme-accent);
+$warn: mat-color($custom-theme-warn);
+
+$custom-theme: mat-light-theme($custom-theme-primary, $custom-theme-accent, $custom-theme-warn);
+
+// @include angular-material-theme($custom-theme);
+
+@mixin angular-material-theme($theme) {
+  @include mat-core-theme($theme);
+  @include mat-autocomplete-theme($theme);
+  @include mat-button-theme($theme);
+  @include mat-button-toggle-theme($theme);
+  @include mat-card-theme($theme);
+  @include mat-checkbox-theme($theme);
+  @include mat-chips-theme($theme);
+  @include mat-datepicker-theme($theme);
+  @include mat-dialog-theme($theme);
+  @include mat-grid-list-theme($theme);
+  @include mat-icon-theme($theme);
+  @include mat-input-theme($theme);
+  @include mat-list-theme($theme);
+  @include mat-menu-theme($theme);
+  @include mat-progress-bar-theme($theme);
+  @include mat-progress-spinner-theme($theme);
+  @include mat-radio-theme($theme);
+  @include mat-select-theme($theme);
+  @include mat-sidenav-theme($theme);
+  @include mat-slide-toggle-theme($theme);
+  @include mat-slider-theme($theme);
+  @include mat-tabs-theme($theme);
+  @include mat-toolbar-theme($theme);
+  @include mat-tooltip-theme($theme);
+}
+
+@include angular-material-theme($custom-theme);

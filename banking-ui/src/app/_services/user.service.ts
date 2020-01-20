@@ -8,6 +8,65 @@ import { User } from '../_models/user';
 // import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 
+const tempUserDetails = {
+  id: '18424050',
+  email: 'nmphong0601@gmail.com',
+  role: 'personal',
+  acctDetails: [
+    {
+      id: "01",
+      code: "895835893523",
+      first_name: "Nguyen",
+      last_name: "Minh Phong",
+      birth_date: "06-01-1996",
+      gender: "Nam",
+      phone: "08049824383",
+      address: "TP.HCM",
+      users_id: "18424050",
+      payments_id: "1001",
+      payment: {
+        id: "1001",
+        account: "439823948398355",
+        balance: 200.000
+      }
+    },
+    {
+      id: "02",
+      code: "89583589334534",
+      first_name: "Nguyen",
+      last_name: "Minh Phong",
+      birth_date: "06-01-1996",
+      gender: "Nam",
+      phone: "08049824383",
+      address: "TP.HCM",
+      users_id: "18424050",
+      payments_id: "1002",
+      payment: {
+        id: "1002",
+        account: "439823948323523464",
+        balance: 200.000
+      }
+    },
+    {
+      id: "03",
+      code: "895835893242353",
+      first_name: "Nguyen",
+      last_name: "Minh Phong",
+      birth_date: "06-01-1996",
+      gender: "Nam",
+      phone: "08049824383",
+      address: "TP.HCM",
+      users_id: "18424050",
+      payments_id: "1003",
+      payment: {
+        id: "1003",
+        account: "439823952364564567",
+        balance: 200.000
+      }
+    }
+  ]
+};
+
 @Injectable({
   providedIn: 'root'
 })
@@ -43,6 +102,8 @@ export class UserService implements OnDestroy {
 
   getUserDetails(): User {
     let userDetails = null;
+    localStorage.setItem('userDetails', JSON.stringify(tempUserDetails));
+
     this.userDetail$.pipe(untilDestroyed(this)).subscribe(user => (userDetails = user));
     if (!userDetails) {
       userDetails = JSON.parse(localStorage.getItem('userDetails'));

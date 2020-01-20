@@ -25,14 +25,16 @@
             "aot": false,
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/scss"
             ],
             "styles": [
               "./node_modules/font-awesome/scss/font-awesome.scss",
               "./node_modules/angular-bootstrap-md/assets/scss/bootstrap/bootstrap.scss",
               "./node_modules/angular-bootstrap-md/assets/scss/mdb.scss",
               "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/scss/custom-theme.scss"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",

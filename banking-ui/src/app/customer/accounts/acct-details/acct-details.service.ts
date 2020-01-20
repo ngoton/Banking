@@ -24,7 +24,7 @@ export class AcctDetailsService {
     const PATH = this.CUST_URL + `/BalanceEnquiry`;
     this.user = JSON.parse(localStorage.getItem('userDetails'));
     if (this.user) {
-      const userID = this.user.userId;
+      const userID = this.user.id;
       const reqID = this.util.generateRequestId();
       const data = {
         'RequestID': reqID,

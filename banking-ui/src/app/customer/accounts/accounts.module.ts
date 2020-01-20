@@ -3,7 +3,26 @@ import { CommonModule } from '@angular/common';
 
 import { AccountsRoutingModule } from './accounts-routing.module';
 import { AccountsComponent } from './accounts.component';
-import { ButtonsModule, WavesModule, CardsModule, IconsModule } from 'angular-bootstrap-md'
+import {
+  MatButtonModule,
+  MatToolbarModule,
+  MatIconModule,
+  MatBadgeModule,
+  MatSidenavModule,
+  MatListModule,
+  MatGridListModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatSelectModule,
+  MatRadioModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
+  MatChipsModule,
+  MatTooltipModule,
+  MatTableModule,
+  MatPaginatorModule,
+  MatCardModule
+} from '@angular/material';
 
 
 @NgModule({
@@ -11,10 +30,24 @@ import { ButtonsModule, WavesModule, CardsModule, IconsModule } from 'angular-bo
   imports: [
     CommonModule,
     AccountsRoutingModule,
-    ButtonsModule,
-    WavesModule,
-    CardsModule,
-    IconsModule
+    MatButtonModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatBadgeModule,
+    MatSidenavModule,
+    MatListModule,
+    MatGridListModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatRadioModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatChipsModule,
+    MatTooltipModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatCardModule
   ]
 })
 export class AccountsModule { }
