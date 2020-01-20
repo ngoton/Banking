@@ -34,3 +34,11 @@ logging:
 server:
   port: 8800
   sessionTimeout: 30
+# Security
+banking:
+  security:
+    authentication:
+      jwt:
+        token-validity-in-seconds: 86400
+        token-validity-in-seconds-for-remember-me: 2592000
+        base64-secret: NjUzNzc0YTkxZmU0YzAyYzVjODUyYTcwNDM4MzQ2OTQ=

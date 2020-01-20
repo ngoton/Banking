@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,6 +16,7 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public Page<CustomerResponse> findAllBy(Pageable pageable){
        Page<Customer> customers = customerService.findAllBy(pageable);
        return CustomerResponses.ofPage(customers, pageable);
@@ -28,6 +30,7 @@ public class CustomerController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
     public void create(@RequestBody CustomerRequest customerRequest){
         Customer customer = CustomerRequest.toCustomer(customerRequest);
         customerService.create(customer);

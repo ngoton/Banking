@@ -20,6 +20,8 @@ public class User extends IDEntity {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @Enumerated(EnumType.STRING)
+    private Status status;
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     private Customer customer;
     @Embedded
@@ -31,14 +33,32 @@ public class User extends IDEntity {
     private Created created;
 
 
-    public User(String username, String email, String password, Role role, Created created){
+    public User(String username, String email, String password, Role role, Status status, Created created){
         this.username = username;
         this.email = email;
         this.password = password;
         this.role = role;
+        this.status = status;
         this.created = created;
     }
+
     public static User ofEmpty(){
-        return new User(EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, Role.NONE, Created.ofEmpty());
+        return new User(EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, Role.NONE, Status.LOCKED, Created.ofEmpty());
+    }
+
+    public boolean isEmpty(){
+        return username.equals(EMPTY_STRING);
+    }
+
+    public boolean isActive(){
+        return status.isActive();
+    }
+
+    public boolean isExpired(){
+        return status.isExpired();
+    }
+
+    public boolean isLocked(){
+        return status.isLocked();
     }
 }
