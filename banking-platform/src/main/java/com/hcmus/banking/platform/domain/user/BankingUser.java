@@ -62,6 +62,8 @@ public class BankingUser implements UserDetails {
         return new BankingUser(User.ofEmpty());
     }
 
+    public Long getId() {return this.user.getId();}
+
     public String getEmail() {
         return this.user.getEmail();
     }
