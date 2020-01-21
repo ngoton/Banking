@@ -3,6 +3,7 @@ package com.hcmus.banking.platform.core.application.admin;
 import com.hcmus.banking.platform.core.application.user.UserService;
 import com.hcmus.banking.platform.core.application.user.PasswordService;
 import com.hcmus.banking.platform.domain.exception.BankingServiceException;
+import com.hcmus.banking.platform.domain.exception.NotFoundException;
 import com.hcmus.banking.platform.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,12 +31,19 @@ public class UserUseCaseService {
 
     @Transactional(readOnly = true)
     public User findById(Long id){
-        return userService.findById(id);
+        User user = userService.findById(id);
+        if (user.isEmpty()){
+            throw new NotFoundException();
+        }
+        return user;
     }
 
     @Transactional
     public void changePassword(Long userId, String password, String currentPassword){
         User user = userService.findById(userId);
+        if (user.isEmpty()){
+            throw new NotFoundException();
+        }
         if (!passwordService.isMatchPassword(currentPassword, user.getPassword())) {
             throw new BankingServiceException("Password does not match");
         }

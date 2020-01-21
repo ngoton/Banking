@@ -1,7 +1,6 @@
 package com.hcmus.banking.platform.core.application.user;
 
 import com.hcmus.banking.platform.core.infrastructure.datasource.user.UserRepository;
-import com.hcmus.banking.platform.domain.exception.NotFoundException;
 import com.hcmus.banking.platform.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,11 +23,7 @@ public class UserService {
     }
 
     public User findById(Long id){
-        User user = userRepository.findById(id).orElse(User.ofEmpty());
-        if (user.isEmpty()){
-            throw new NotFoundException();
-        }
-        return user;
+        return userRepository.findById(id).orElse(User.ofEmpty());
     }
 
     public void changePassword(User user, String password){
