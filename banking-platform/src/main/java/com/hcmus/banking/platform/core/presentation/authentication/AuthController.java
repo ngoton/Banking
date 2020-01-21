@@ -2,6 +2,7 @@ package com.hcmus.banking.platform.core.presentation.authentication;
 
 import com.hcmus.banking.platform.config.jwt.JWTFilter;
 import com.hcmus.banking.platform.config.jwt.TokenProvider;
+import com.hcmus.banking.platform.domain.exception.UnauthorizedException;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -12,12 +13,16 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @RequiredArgsConstructor
 @RestController
@@ -29,26 +34,50 @@ public class AuthController {
     @NonNull
     private final AuthenticationManager authenticationManager;
 
+    @NotNull
+    private final UserDetailsService userDetailsService;
+
     @PostMapping("/authenticate")
     public ResponseEntity<JWTToken> authenticate(@Valid @RequestBody LoginRequest loginRequest) {
-
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
-
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
         Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
+        return token(authentication, loginRequest.getRememberMe());
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<JWTToken> refreshToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+        if (!tokenProvider.validateToken(refreshTokenRequest.getToken())) {
+            throw new UnauthorizedException();
+        }
+        String userName = this.tokenProvider.getUsername(refreshTokenRequest.getToken());
+        if (!StringUtils.hasText(userName)) {
+            throw new UnauthorizedException();
+        }
+        UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
+        if (!tokenProvider.isTokenTakeEffect(refreshTokenRequest.getToken(), userDetails)) {
+            throw new UnauthorizedException();
+        }
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+        return token(authentication, false);
+    }
+
+    private ResponseEntity<JWTToken> token(Authentication authentication, boolean remember){
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = tokenProvider.createToken(authentication, loginRequest.getRememberMe());
+        String token = tokenProvider.createToken(authentication, remember);
+        String refreshToken = tokenProvider.createRefreshToken(authentication);
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-        return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
+        httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + token);
+        return new ResponseEntity<>(new JWTToken(token, refreshToken), httpHeaders, HttpStatus.OK);
     }
 
     @Getter
     public class JWTToken {
         private String accessToken;
+        private String refreshToken;
 
-        JWTToken(String accessToken) {
+        JWTToken(String accessToken, String refreshToken) {
             this.accessToken = accessToken;
+            this.refreshToken = refreshToken;
         }
     }
 }
