@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FreqBeneficiaries } from '../_customer-model/customer.model';
 
 @Component({
   selector: 'app-notifications',
@@ -7,8 +6,6 @@ import { FreqBeneficiaries } from '../_customer-model/customer.model';
   styleUrls: ['./notifications.component.scss']
 })
 export class NotificationsComponent implements OnInit {
-
-  public freqBeneficiaries: Array<FreqBeneficiaries>;
   config: any;
 
   constructor() { }

@@ -1,20 +1,22 @@
-<div class="row">
-  <div class="col-sm-4" *ngFor="let acct of accounts">
-    <mat-card>
-      <mat-card-title>Tài khoản </mat-card-title>
-      <mat-card-content>Số dư khả dụng: </mat-card-content>
-    </mat-card>
+<ng-container>
+  <div class="row">
+    <div class="col-sm-4" *ngIf="debitAccount!==null">
+      <mat-card>
+        <mat-card-title>Tài khoản Debit</mat-card-title>
+        <mat-card-content>Số dư khả dụng: {{debitAccount.money}} VNĐ</mat-card-content>
+      </mat-card>
+    </div>
+    <div class="col-sm-4" *ngIf="creditAccount!==null">
+      <mat-card>
+        <mat-card-title>Tài khoản Credit</mat-card-title>
+        <mat-card-content>Số dư khả dụng: {{creditAccount.money}} VNĐ</mat-card-content>
+      </mat-card>
+    </div>
+    <div class="col-sm-4" *ngIf="savingAccount!==null">
+      <mat-card>
+        <mat-card-title>Tài khoản tiết kiệm</mat-card-title>
+        <mat-card-content>Khoản tiết kiệm: {{savingAccount.balance}} VNĐ</mat-card-content>
+      </mat-card>
+    </div>
   </div>
-  <!-- <div class="col-sm-4">
-    <mat-card>
-      <mat-card-title>Special title treatment</mat-card-title>
-      <mat-card-content>With supporting text below as a natural lead-in to additional content.</mat-card-content>
-    </mat-card>
-  </div>
-  <div class="col-sm-4">
-    <mat-card>
-      <mat-card-title>Special title treatment</mat-card-title>
-      <mat-card-content>With supporting text below as a natural lead-in to additional content.</mat-card-content>
-    </mat-card>
-  </div> -->
-</div>
+</ng-container>

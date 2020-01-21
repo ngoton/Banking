@@ -2,12 +2,7 @@ import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { CustomerService } from '../_customer-service/customer.service';
 import { untilDestroyed } from 'ngx-take-until-destroy';
-import {
-  Beneficiaries,
-  BeneficiariesResponse,
-  PreRegBeneficiariesResponse,
-  PreRegBeneficiaries
-} from '../_customer-model/customer.model';
+import { Beneficiarys } from '../_customer-model/customer.model';
 
 @Component({
   selector: 'app-transfer',

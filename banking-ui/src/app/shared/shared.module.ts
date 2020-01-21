@@ -4,7 +4,6 @@ import {SpinnerComponent} from './spinner/spinner.component';
 import { ModalAnimationComponent } from './modal-animation/modal-animation.component';
 import { AcctDetailsComponent } from '../customer/accounts/acct-details/acct-details.component';
 import { IbTrackitComponent } from '../customer/ib-trackit/ib-trackit.component';
-import { FrequentTransfersComponent } from '../customer/transfer/frequent-transfers/frequent-transfers.component';
 import {
   PaymentHistoryCardsComponent
 } from '../customer/bills-payment/payment-history/payment-history-cards/payment-history-cards.component';
@@ -22,7 +21,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ModalAnimationComponent,
     AcctDetailsComponent,
     IbTrackitComponent,
-    FrequentTransfersComponent,
     PaymentHistoryCardsComponent
   ],
   imports: [
@@ -36,7 +34,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ModalAnimationComponent,
     AcctDetailsComponent,
     IbTrackitComponent,
-    FrequentTransfersComponent,
     PaymentHistoryCardsComponent
   ],
   providers: [
