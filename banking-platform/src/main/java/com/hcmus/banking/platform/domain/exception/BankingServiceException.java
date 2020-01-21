@@ -6,4 +6,8 @@ public class BankingServiceException extends ServiceException {
     public BankingServiceException(){
         super("Banking service error");
     }
+
+    public BankingServiceException(String message){
+        super(message);
+    }
 }

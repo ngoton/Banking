@@ -1,4 +1,4 @@
-package com.hcmus.banking.platform.core.application.user.password;
+package com.hcmus.banking.platform.core.application.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
