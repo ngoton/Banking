@@ -23,16 +23,20 @@ public class TokenProvider {
     private final Logger log = LoggerFactory.getLogger(TokenProvider.class);
 
     private static final String AUTHORITIES_KEY = "auth";
+    private static final String REFRESH_TOKEN_KEY = "refresh";
     private Key key;
 
-    @Value("${banking.security.authentication.jwt.token-validity-in-seconds}")
-    private long tokenValidityInMilliseconds;
+    @Value("${banking.security.authentication.jwt.token-validity}")
+    private long tokenValidity;
 
-    @Value("${banking.security.authentication.jwt.token-validity-in-seconds-for-remember-me}")
-    private long tokenValidityInMillisecondsForRememberMe;
+    @Value("${banking.security.authentication.jwt.token-validity-for-remember-me}")
+    private long tokenValidityForRememberMe;
 
     @Value("${banking.security.authentication.jwt.base64-secret}")
     private String secretKey;
+
+    @Value("${banking.security.authentication.jwt.token-refresh-validity}")
+    private long tokenRefreshValidity;
 
 
     public TokenProvider() {
@@ -51,10 +55,9 @@ public class TokenProvider {
             keyBytes = Decoders.BASE64.decode(secretKey);
         }
         this.key = Keys.hmacShaKeyFor(keyBytes);
-        this.tokenValidityInMilliseconds =
-                1000 * tokenValidityInMilliseconds;
-        this.tokenValidityInMillisecondsForRememberMe =
-                1000 * tokenValidityInMillisecondsForRememberMe;
+        this.tokenValidity = 1000 * tokenValidity;
+        this.tokenRefreshValidity = 1000 * tokenRefreshValidity;
+        this.tokenValidityForRememberMe = 1000 * tokenValidityForRememberMe;
     }
 
     public String createToken(Authentication authentication, boolean rememberMe) {
@@ -65,14 +68,30 @@ public class TokenProvider {
         long now = (new Date()).getTime();
         Date validity;
         if (rememberMe) {
-            validity = new Date(now + this.tokenValidityInMillisecondsForRememberMe);
+            validity = new Date(now + this.tokenValidityForRememberMe);
         } else {
-            validity = new Date(now + this.tokenValidityInMilliseconds);
+            validity = new Date(now + this.tokenValidity);
         }
 
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
+                .signWith(key, SignatureAlgorithm.HS256)
+                .setExpiration(validity)
+                .compact();
+    }
+
+    public String createRefreshToken(Authentication authentication) {
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        long now = (new Date()).getTime();
+        Date validity = new Date(now + this.tokenRefreshValidity);
+
+        return Jwts.builder()
+                .setSubject(authentication.getName())
+                .claim(REFRESH_TOKEN_KEY, authorities)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .setExpiration(validity)
                 .compact();

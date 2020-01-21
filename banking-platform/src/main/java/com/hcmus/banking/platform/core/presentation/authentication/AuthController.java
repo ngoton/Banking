@@ -37,18 +37,21 @@ public class AuthController {
 
         Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = tokenProvider.createToken(authentication, loginRequest.getRememberMe());
+        String token = tokenProvider.createToken(authentication, loginRequest.getRememberMe());
+        String refreshToken = tokenProvider.createRefreshToken(authentication);
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-        return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
+        httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + token);
+        return new ResponseEntity<>(new JWTToken(token, refreshToken), httpHeaders, HttpStatus.OK);
     }
 
     @Getter
     public class JWTToken {
         private String accessToken;
+        private String refreshToken;
 
-        JWTToken(String accessToken) {
+        JWTToken(String accessToken, String refreshToken) {
             this.accessToken = accessToken;
+            this.refreshToken = refreshToken;
         }
     }
 }
