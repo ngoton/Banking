@@ -12,59 +12,42 @@ const tempUserDetails = {
   id: '18424050',
   email: 'nmphong0601@gmail.com',
   role: 'personal',
-  acctDetails: [
-    {
-      id: "01",
-      code: "895835893523",
-      first_name: "Nguyen",
-      last_name: "Minh Phong",
-      birth_date: "06-01-1996",
-      gender: "Nam",
-      phone: "08049824383",
-      address: "TP.HCM",
-      users_id: "18424050",
-      payments_id: "1001",
-      payment: {
-        id: "1001",
-        account: "439823948398355",
-        balance: 200.000
-      }
+  customer: {
+    id: 1000,
+    code: "895835893523",
+    first_name: "Nguyen",
+    last_name: "Minh Phong",
+    birth_date: "06-01-1996",
+    gender: "Nam",
+    phone: "08049824383",
+    address: "TP.HCM",
+    users_id: 18424050,
+    payments_id: 1001,
+    payment: {
+      id: 1001,
+      account: "439823948398355",
+      balance: "200.000"
     },
-    {
-      id: "02",
-      code: "89583589334534",
-      first_name: "Nguyen",
-      last_name: "Minh Phong",
-      birth_date: "06-01-1996",
-      gender: "Nam",
-      phone: "08049824383",
-      address: "TP.HCM",
-      users_id: "18424050",
-      payments_id: "1002",
-      payment: {
-        id: "1002",
-        account: "439823948323523464",
-        balance: 200.000
-      }
+    saving: {
+      id: 1101,
+      account: "28929480932840234",
+      balance: "1,500.000"
     },
-    {
-      id: "03",
-      code: "895835893242353",
-      first_name: "Nguyen",
-      last_name: "Minh Phong",
-      birth_date: "06-01-1996",
-      gender: "Nam",
-      phone: "08049824383",
-      address: "TP.HCM",
-      users_id: "18424050",
-      payments_id: "1003",
-      payment: {
-        id: "1003",
-        account: "439823952364564567",
-        balance: 200.000
-      }
+    credit: {
+      id: 1201,
+      account: "489328492839422942",
+      money: "12,000.000",
+      content: "",
+      status: 1
+    },
+    debit: {
+      id: 1301,
+      account: "8492398237874350293",
+      money: "5,000.000",
+      content: "",
+      status: 1
     }
-  ]
+  }
 };
 
 @Injectable({
@@ -78,8 +61,8 @@ export class UserService implements OnDestroy {
   private CUST_URL = environment.BASE_URL + environment.CUST_SERV;
   private Req_URL = environment.BASE_URL + environment.REQ_SERV;
   // Observable string sources: user
-  private userDetailSource = new BehaviorSubject<any[]>(null);
-  private userErrorSource = new BehaviorSubject<any[]>(null);
+  private userDetailSource = new BehaviorSubject<any>(null);
+  private userErrorSource = new BehaviorSubject<any>(null);
   // Observable string streams: user
   userDetail$ = this.userDetailSource.asObservable();
   userError$ = this.userErrorSource.asObservable();

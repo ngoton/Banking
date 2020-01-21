@@ -5,7 +5,7 @@ import { catchError, retry } from 'rxjs/operators';
 import { User } from '../../../_models/user';
 import { UtilitiesService } from '../../../_services/utilities.service';
 import { environment } from '../../../../environments/environment';
-import { AcctDetails } from '../../_customer-model/customer.model';
+import { Customers } from '../../_customer-model/customer.model';
 
 
 @Injectable({
@@ -14,8 +14,8 @@ import { AcctDetails } from '../../_customer-model/customer.model';
 export class AcctDetailsService {
   private CUST_URL = environment.BASE_URL + environment.CUST_SERV;
   user: User;
-  selectedAccount: AcctDetails;
-  accountsList: AcctDetails[];
+  selectedAccount: Customers;
+  accountsList: Customers[];
   public data = null;
 
   constructor(private http: HttpClient, public util: UtilitiesService) { }

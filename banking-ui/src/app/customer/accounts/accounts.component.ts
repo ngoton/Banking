@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AcctDetails, Payment } from '../_customer-model/customer.model';
+import { Customers, Payment, Savings, Credits, Debits } from '../_customer-model/customer.model';
 import { CustomerService } from '../_customer-service/customer.service';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 
@@ -10,22 +10,28 @@ import { untilDestroyed } from 'ngx-take-until-destroy';
   providers: [CustomerService]
 })
 export class AccountsComponent implements OnInit, OnDestroy {
-  public accounts: AcctDetails[];
-  public selectedAcct: AcctDetails;
+  public account: Customers;
+  public savingAccount: Savings;
+  public creditAccount: Credits;
+  public debitAccount: Debits;
 
   constructor(private customerService: CustomerService) {
     this.customerService.getAcctDetailsData();
 
     setTimeout(() => {
       this.customerService.acctDetail$.pipe(untilDestroyed(this))
-        .subscribe(accts => this.accounts = accts);
-      this.customerService.selectedAcctDetail$.pipe(untilDestroyed(this))
-        .subscribe(selected => this.selectedAcct = selected);
+        .subscribe((acct: Customers) => {
+          debugger;
+          this.account = acct;
+          this.savingAccount = acct.saving;
+          this.creditAccount = acct.credit;
+          this.debitAccount = acct.debit;
+          console.log("accounts: ", this.account);
+        });
     }, 1000);
   }
 
   ngOnInit(): void {
-    console.log("accounts: ", this.accounts);
   }
 
   ngOnDestroy(): void {

@@ -1,180 +1,162 @@
-import { User } from 'src/app/_models/user';
+export class Customers {
+    id: number;
+    code: string;
+    first_name: string;
+    last_name: string;
+    birth_date: string;
+    gender: string;
+    phone: string;
+    address: string;
+    users_id: number;
+    payments_id: number;
 
-export class AcctDetails {
-    constructor(
-        public id: string,
-        public code: string,
-        public first_name: string,
-        public last_name: string,
-        public birth_date: string,
-        public gender: string,
-        public phone: string,
-        public address: string,
-        public users_id: string,
-        public payments_id: string,
+    payment: Payment;
+    saving: Savings;
+    credit: Credits;
+    debit: Debits;
+    beneficiarys: Beneficiarys[];
+    
+    constructor(obj?: any) {
+        this.id = obj && obj.id || null;
+        this.code = obj && obj.code || null;
+        this.first_name = obj && obj.first_name || null;
+        this.last_name = obj && obj.last_name || null;
+        this.birth_date = obj && obj.birth_date || null;
+        this.gender = obj && obj.gender || null;
+        this.phone = obj && obj.phone || null;
+        this.address = obj && obj.address || null;
+        this.users_id = obj && obj.users_id || null;
+        this.payments_id = obj && obj.payments_id || null;
 
-        public user: User,
-        public payment: Payment
-    ) {}
+        this.payment = obj && new Payment(obj.payment) || null;
+        this.saving = obj && new Savings(obj.savings) || null;
+        this.credit = obj && new Credits(obj.credits) || null;
+        this.debit = obj && new Debits(obj.debits) || null;
+        this.beneficiarys = obj && obj.beneficiarys || null;
+    }
 }
 
 export class Payment {
-    constructor(
-        public account: string,
-        public balance: string
-    ) {}
-}
-
-export class AcctToDebit {
-    fullAcctKey: string;
-    nuban: string;
-    accountName: string;
-    accountBalance: string;
+    id: number;
+    account: string;
+    balance: string;
 
     constructor(obj?: any) {
-        this.fullAcctKey   = obj && obj.regNum  || null;
-        this.nuban   = obj && obj.nuban  || null;
-        this.accountName   = obj && obj.accountName  || null;
-        this.accountBalance   = obj && obj.accountName  || null;
+        this.id = obj && obj.id || null;
+        this.account = obj && obj.account || null;
+        this.balance = obj && obj.balance || null;
     }
 }
 
-export class AcctToDebitResponse {
-    acct: AcctToDebit[];
-    requestId: string;
-    responseCode: string;
-    responseDescription: string;
-    userId: string;
+export class PaymentTransactions {
+    id: number;
+    code: string;
+    money: string;
+    content: string;
+    payments_id: number;
+    beneficiarys_id: number;
 
     constructor(obj?: any) {
-        // this.acct      = AcctToDebit[0]  || null;
-        this.requestId              = obj && obj.requestId   || null;
-        this.responseCode           = obj && obj.responseCode  || null;
-        this.responseDescription    = obj && obj.responseDescription  || null;
-        this.userId                 = obj && obj.userId  || null;
+        this.id = obj && obj.id || null;
+        this.code = obj && obj.code || null;
+        this.money = obj && obj.money.toLocalString() || null;
+        this.content = obj && obj.content || null;
+        this.payments_id = obj && obj.payments_id || null;
+        this.beneficiarys_id = obj && obj.beneficiarys_id || null;
     }
 }
 
-export class Beneficiary {
-    accountName: string;
-    nuban: string;
-    oldAccountNo: string;
-    requestId: string;
-    responseCode: string;
-    responseDescription: string;
+export class Savings {
+    id: number;
+    account: string;
+    balance: string;
+    customers_id: number;
 
     constructor(obj?: any) {
-        this.accountName   = obj && obj.accountName  || null;
-        this.nuban   = obj && obj.nuban  || null;
-        this.oldAccountNo   = obj && obj.oldAccountNo  || null;
-        this.requestId   = obj && obj.requestId  || null;
-        this.responseCode   = obj && obj.responseCode  || null;
-        this.responseDescription   = obj && obj.responseDescription  || null;
+        this.id = obj && obj.id || null;
+        this.account = obj && obj.account || null;
+        this.balance = obj && obj.balance.toLocalString() || null;
+        this.customers_id = obj && obj.customers_id || null;
     }
 }
 
-export class Beneficiaries {
+export class SavingTransactions {
+    id: number;
+    code: string;
+    money: string;
+    content: string;
+    
+    constructor(obj?: any) {
+        this.id = obj && obj.id || null;
+        this.code = obj && obj.code || null;
+        this.money = obj && obj.money.toLocalString() || null;
+        this.content = obj && obj.content || null;
+    }
+}
+
+export class Beneficiarys {
+    id: number;
     name: string;
-    accountNumber: string;
-    bankCode: string;
-    bank: string;
-    transactionType: string;
-    imageString: string;
-    image: string;
+    short_name: string;
+    account: string;
+    bank_name: string;
+    customers_id: number;
 
     constructor(obj?: any) {
-        this.name   = obj && obj.accountName  || null;
-        this.accountNumber  = obj && obj.accountNumber || null;
-        this.bankCode   = obj && obj.bankCode  || null;
-        this.bank  = obj && obj.bank  || null;
-        this.transactionType  = obj && obj.transactionType  || null;
-        this.imageString  = obj && obj.imageString  || null;
-        this.image  = obj && obj.image  || null;
+        this.id = obj && obj.id || null;
+        this.name = obj && obj.name || null;
+        this.short_name = obj && obj.short_name || null;
+        this.account = obj && obj.account || null;
+        this.bank_name = obj && obj.bank_name || null;
+        this.customers_id = obj && obj.customers_id || null;
     }
 }
 
-export class BeneficiariesResponse {
-    beneficiaries: Beneficiaries[];
-    requestId: string;
-    responseCode: string;
-    responseDescription: string;
-    userId: string;
+export class Credits {
+    id: number;
+    account: string;
+    money: string;
+    content: string;
+    status: number;
+    customers_id: number;
 
     constructor(obj?: any) {
-        // this.acct      = AcctToDebit[0]  || null;
-        this.requestId              = obj && obj.requestId   || null;
-        this.responseCode           = obj && obj.responseCode  || null;
-        this.responseDescription    = obj && obj.responseDescription  || null;
-        this.userId                 = obj && obj.userId  || null;
+        this.id = obj && obj.id || null;
+        this.account = obj && obj.account || null;
+        this.money = obj && obj.money.toLocalString() || null;
+        this.content = obj && obj.content || null;
+        this.status = obj && obj.status || null;
+        this.customers_id = obj && obj.customers_id || null; 
     }
 }
 
-export class PreRegBeneficiaries {
+export class Debits {
+    id: number;
+    account: string;
+    money: string;
+    content: string;
+    status: number;
+    customers_id: number;
+
+    constructor(obj?: any) {
+        this.id = obj && obj.id || null;
+        this.account = obj && obj.account || null;
+        this.money = obj && obj.money.toLocalString() || null;
+        this.content = obj && obj.content || null;
+        this.status = obj && obj.status || null;
+        this.customers_id = obj && obj.customers_id || null;
+    }
+}
+
+export class Partners {
+    id: number;
     name: string;
-    accountNumber: string;
-    bankCode: string;
-    bank: string;
-    // transactionType?: string;
+    key: string;
 
     constructor(obj?: any) {
-        this.name   = obj && obj.accountName  || null;
-        this.accountNumber  = obj && obj.accountNumber || null;
-        this.bankCode   = obj && obj.bankCode  || null;
-        this.bank  = obj && obj.bank  || null;
-        // this.transactionType  = obj && obj.transactionType  || null;
-    }
-}
-
-export class PreRegBeneficiariesResponse {
-    beneficiaries: PreRegBeneficiaries[];
-    requestId: string;
-    responseCode: string;
-    responseDescription: string;
-    userId: string;
-
-    constructor(obj?: any) {
-        // this.acct      = AcctToDebit[0]  || null;
-        this.requestId              = obj && obj.requestId   || null;
-        this.responseCode           = obj && obj.responseCode  || null;
-        this.responseDescription    = obj && obj.responseDescription  || null;
-        this.userId                 = obj && obj.userId  || null;
-    }
-}
-
-export class FreqBeneficiaries {
-    customerName: string;
-    beneficiaryAcc: string;
-    transferType: string;
-    count: string;
-    amount: string;
-    bankName: string;
-    bankCode: string;
-    // transactionType?: string;
-
-    constructor(obj?: any) {
-        this.customerName   = obj && obj.customerName  || null;
-        this.beneficiaryAcc  = obj && obj.beneficiaryAcc || null;
-        this.transferType  = obj && obj.transferType  || null;
-        this.count  = obj && obj.count  || null;
-        this.amount  = obj && obj.amount  || null;
-        this.bankName   = obj && obj.bankName  || null;
-        this.bankCode   = obj && obj.bankCode  || null;
-    }
-}
-
-export class FreqBeneficiariesResponse {
-    mostFreq: FreqBeneficiaries[];
-    requestId: string;
-    responseCode: string;
-    responseDescription: string;
-    userId: string;
-
-    constructor(obj?: any) {
-        // this.acct      = AcctToDebit[0]  || null;
-        this.requestId              = obj && obj.requestId   || null;
-        this.responseCode           = obj && obj.responseCode  || null;
-        this.responseDescription    = obj && obj.responseDescription  || null;
-        this.userId                 = obj && obj.userId  || null;
+        this.id = obj && obj.id || null;
+        this.name = obj && obj.name || null;
+        this.key = obj && obj.key || null;
     }
 }
 
@@ -202,97 +184,13 @@ export class Banks {
     }
 }
 
-// Sola added this - 25/07/2018
-export class AcctToDebitFX {
-    fullAcctKey: string;
-    nuban: string;
-    accountName: string;
-    accountBalance: string;
-
-    constructor(obj?: any) {
-        this.fullAcctKey   = obj && obj.fullAcctKey  || null;
-        this.nuban   = obj && obj.nuban  || null;
-        this.accountName   = obj && obj.accountName  || null;
-        this.accountBalance   = obj && obj.accountBalance  || null;
-    }
-}
-
-// Sola added this - 25/07/2018
-export class FundsSource {
-    code: Number;
-    name: string;
-
-    constructor(obj?: any) {
-        this.code   = obj && obj.code  || null;
-        this.name   = obj && obj.name  || null;
-    }
-}
-
-export class BizNature {
-    code: Number;
-    name: string;
-
-    constructor(obj?: any) {
-        this.code   = obj && obj.code  || null;
-        this.name   = obj && obj.name  || null;
-    }
-}
-
-export class RelFxTrans {
-    code: Number;
-    name: string;
-
-    constructor(obj?: any) {
-        this.code   = obj && obj.code  || null;
-        this.name   = obj && obj.name  || null;
-    }
-}
-
-export class FxDropdownResponse {
-    fundsSource: FundsSource[];
-    bizNature: BizNature[];
-    relFxTrans: RelFxTrans[];
-    requestId: string;
-    responseCode: string;
-    responseDescription: string;
-    userId: string;
-
-    constructor(obj?: any) {
-        // this.acct      = AcctToDebit[0]  || null;
-        this.requestId              = obj && obj.requestId   || null;
-        this.responseCode           = obj && obj.responseCode  || null;
-        this.responseDescription    = obj && obj.responseDescription  || null;
-        this.userId                 = obj && obj.userId  || null;
-    }
-}
-
 export class Country {
-    code: Number;
+    code: number;
     name: string;
 
     constructor(obj?: any) {
         this.code   = obj && obj.code  || null;
         this.name   = obj && obj.name  || null;
-    }
-}
-
-export class Purpose {
-    code: Number;
-    name: string;
-
-    constructor(obj?: any) {
-        this.code   = obj && obj.code  || null;
-        this.name   = obj && obj.name  || null;
-    }
-}
-
-export class Frequency {
-    name: string;
-    code: string;
-
-    constructor(obj?: any) {
-        this.name   = obj && obj.name  || null;
-        this.code   = obj && obj.code  || null;
     }
 }
 
@@ -302,8 +200,8 @@ export class Notifications {
     message: string;
     notificationDate: number;
     customerSegment: string;
-    nextAction: String;
-    gif_url: String;
+    nextAction: string;
+    gif_url: string;
 
     constructor(obj?: any) {
         this.notificationType   = obj && obj.notificationType   || null;
@@ -313,76 +211,5 @@ export class Notifications {
         this.customerSegment  = obj && obj.customerSegment || null;
         this.nextAction  = obj && obj.nextAction || null;
         this.gif_url  = obj && obj.gif_url || null;
-    }
-}
-
-export class FxBeneficiaries {
-    benName: string;
-    benBankAcctIBAN: string;
-    sNo: string;
-    constructor(obj?: any) {
-        this.benName   = obj && obj.benName  || null;
-        this.benBankAcctIBAN  = obj && obj.benBankAcctIBAN || null;
-        this.sNo   = obj && obj.sNo  || null;
-    }
-}
-
-export class FxBeneficiariesResponse {
-    fxbeneficiaries: FxBeneficiaries[];
-    requestId: string;
-    responseCode: string;
-    responseDescription: string;
-    userId: string;
-
-    constructor(obj?: any) {
-        // this.acct      = AcctToDebit[0]  || null;
-        this.requestId              = obj && obj.requestId   || null;
-        this.responseCode           = obj && obj.responseCode  || null;
-        this.responseDescription    = obj && obj.responseDescription  || null;
-        this.userId                 = obj && obj.userId  || null;
-    }
-}
-
-export class FxBeneficiaryDetails {
-    benName: string;
-    benAddress: string;
-    beneCountryCode: string;
-    customerEmail: string;
-    benBICSwiftCode: string;
-    sortCode: string;
-    benBankAcctIBAN: string;
-    benBankName: string;
-    benBankAddress: string;
-    intBankName: string;
-    intBankAddress: string;
-    intBenBICSwiftCode: string;
-    intSortcode: string;
-    intBankAcctNo: string;
-    canadaTransitNo: string;
-    canadaInstName: string;
-    benNatureBusiness: string;
-    benInstitution: string;
-    relationship: string;
-
-        constructor(obj?: any) {
-        this.benName   = obj && obj.benName  || null;
-        this.benAddress  = obj && obj.benAddress || null;
-        this.beneCountryCode   = obj && obj.beneCountryCode  || null;
-        this.customerEmail   = obj && obj.customerEmail  || null;
-        this.benBICSwiftCode  = obj && obj.benBICSwiftCode || null;
-        this.sortCode   = obj && obj.sortCode  || null;
-        this.benBankAcctIBAN   = obj && obj.benBankAcctIBAN  || null;
-        this.benBankName  = obj && obj.benBankName || null;
-        this.benBankAddress   = obj && obj.benBankAddress  || null;
-        this.intBankName   = obj && obj.intBankName  || null;
-        this.intBankAddress  = obj && obj.intBankAddress || null;
-        this.intBenBICSwiftCode   = obj && obj.intBenBICSwiftCode  || null;
-        this.intSortcode   = obj && obj.intSortcode  || null;
-        this.intBankAcctNo   = obj && obj.intBankAcctNo  || null;
-        this.canadaTransitNo  = obj && obj.canadaTransitNo || null;
-        this.canadaInstName   = obj && obj.canadaInstName  || null;
-        this.benNatureBusiness   = obj && obj.benNatureBusiness  || null;
-        this.benInstitution  = obj && obj.benInstitution || null;
-        this.relationship   = obj && obj.relationship  || null;
     }
 }

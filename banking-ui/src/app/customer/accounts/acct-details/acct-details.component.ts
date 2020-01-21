@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit, Input, OnDestroy } from '@angular/cor
 import { NgxCarousel } from 'ngx-carousel';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { CustomerService } from '../../_customer-service/customer.service';
-import { AcctDetails } from '../../_customer-model/customer.model';
+import { Customers } from '../../_customer-model/customer.model';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { untilDestroyed } from 'ngx-take-until-destroy';
@@ -28,9 +28,9 @@ export class AcctDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   // input property for carousel. The value determines the number items to be displayed wrt screen size
   @Input() itemNo: any[];
 
-  public accounts: AcctDetails[];
+  public accounts: Customers[];
   public currencySymbol = { 'NGN': '₦', 'USD': 'USD', 'GBP': 'GBP', 'EUR': 'EUR' };
-  public selectedAcct: AcctDetails;
+  public selectedAcct: Customers;
   public acctBalanceCarouselItems: Array<any> = [];
   public acctBalanceCarousel: NgxCarousel;
   public errorMessage: string;
@@ -99,7 +99,7 @@ export class AcctDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.acctBalanceCarouselLoad(this.accounts);
   }
 
-  acctBalanceCarouselLoad(accounts: AcctDetails[]) {
+  acctBalanceCarouselLoad(accounts: Customers[]) {
     console.log(accounts);
     const len = this.acctBalanceCarouselItems.length;
     if (len <= (accounts.length - 1)) {

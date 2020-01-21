@@ -5,7 +5,7 @@ import { BillsPaymentService } from '../bills-payment/_services/bills-payment.se
 import { style, animate, transition, trigger, state } from '@angular/animations';
 import { Router } from '@angular/router';
 import { CustomerService } from '../_customer-service/customer.service';
-import { AcctDetails } from '../_customer-model/customer.model';
+import { Customers } from '../_customer-model/customer.model';
 import { UtilitiesService } from '../../_services/utilities.service';
 import { CardsService } from '../cards/cards.service';
 import { untilDestroyed } from 'ngx-take-until-destroy';
@@ -43,8 +43,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 public itemNo: any[];
   public userDetails: any;
   // public transactions: TransactionHistory[];
-  public accounts: AcctDetails[];
-  public selectedAcct: AcctDetails;
+  public accounts: Customers[];
+  public selectedAcct: Customers;
   public categories: Category[];
   public loading = false;
   public error: string;

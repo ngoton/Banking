@@ -5,23 +5,12 @@ import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import { UtilitiesService } from '../../_services/utilities.service';
 import {
-  AcctToDebit,
-  AcctToDebitResponse,
-  AcctToDebitFX,
-  // AcctToDebitFXResponse,
-  Beneficiaries,
-  Beneficiary,
+  Beneficiarys,
   Banks,
-  PreRegBeneficiariesResponse,
-  AcctDetails,
-  FxBeneficiaries
+  Customers
 } from '../_customer-model/customer.model';
 import { Router } from '@angular/router';
-// import { LocalStorage } from '@ng-idle/core';
-import { PreRegBeneficiaries } from '../_customer-model/customer.model';
 import { UserService } from '../../_services/user.service';
-// import { BankBranches } from '../cards/card-replacement/card-replacement.component';
-// import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Injectable({
@@ -33,49 +22,16 @@ export class CustomerService implements OnDestroy {
   private REQ_URL = environment.BASE_URL + environment.REQ_SERV;
 
   // Observable string sources: Account Details
-  private acctDetailSource = new BehaviorSubject<AcctDetails[]>(null);
+  private acctDetailSource = new BehaviorSubject<Customers>(null);
   acctDetail$ = this.acctDetailSource.asObservable();
-  private selectedAcctDetailSource = new BehaviorSubject<AcctDetails>(null);
-  selectedAcctDetail$ = this.selectedAcctDetailSource.asObservable();
   private acctDetailErrorSource = new BehaviorSubject<string>(null);
   acctDetailError$ = this.acctDetailErrorSource.asObservable();
   // End Observable string streams: Account Details
 
-  // Observable string sources: Account to debit
-  private acctToDebitSource = new BehaviorSubject<AcctToDebit[]>([]);
-  acctToDebit$ = this.acctToDebitSource.asObservable();
-  private selectedAcctToDebitSource = new BehaviorSubject<AcctToDebit>({
-    'accountBalance': '', 'accountName': '', 'fullAcctKey': '', 'nuban': ''
-  });
-  selectedAcctToDebit$ = this.selectedAcctToDebitSource.asObservable();
-  private acctToDebitErrorSource = new BehaviorSubject<string>('Empty');
-  acctToDebitError$ = this.acctToDebitErrorSource.asObservable();
-  // End Observable string streams: Account to debit
-
-  // Observable string sources: Account to debitFX added by Sola - 25/07/2018
-  private acctToDebitFXSource = new BehaviorSubject<AcctToDebitFX[]>([]);
-  acctToDebitFX$ = this.acctToDebitFXSource.asObservable();
-  private selectedAcctToDebitFXSource = new BehaviorSubject<AcctToDebitFX>({
-    'accountBalance': '', 'accountName': '', 'fullAcctKey': '', 'nuban': ''
-  });
-  selectedAcctToDebitFX$ = this.selectedAcctToDebitFXSource.asObservable();
-  private acctToDebitFXErrorSource = new BehaviorSubject<string>('Empty');
-  acctToDebitFXError$ = this.acctToDebitFXErrorSource.asObservable();
-  // End Observable string streams: Account to debitFX
-
   // Observable string sources: Pre registered Beneficiaries
-  private preRegBeneficiaries = new BehaviorSubject<Beneficiaries[]>(null);
-  preRegBeneficiaries$ = this.preRegBeneficiaries.asObservable();
-  private selectedPreRegBeneficiaries = new BehaviorSubject<Beneficiaries>(null);
-  selectedPreRegBeneficiaries$ = this.selectedPreRegBeneficiaries.asObservable();
-  private preRegBeneficiariesError = new BehaviorSubject<string>('Empty');
-  preRegBeneficiariesError$ = this.preRegBeneficiariesError.asObservable();
-  // End Observable string sources: Pre registered Beneficiaries
-
-  // Observable string sources: Pre registered Beneficiaries
-  private beneficiaries = new BehaviorSubject<Beneficiaries[]>(null);
+  private beneficiaries = new BehaviorSubject<Beneficiarys[]>(null);
   beneficiaries$ = this.beneficiaries.asObservable();
-  private selectedBeneficiary = new BehaviorSubject<Beneficiaries>(null);
+  private selectedBeneficiary = new BehaviorSubject<Beneficiarys>(null);
   selectedBeneficiaries$ = this.selectedBeneficiary.asObservable();
   private beneficiariesError = new BehaviorSubject<string>('Empty');
   beneficiariesError$ = this.beneficiariesError.asObservable();
@@ -94,13 +50,6 @@ export class CustomerService implements OnDestroy {
   private branchesSource = new Subject<any[]>();
   branchesObserver = this.branchesSource.asObservable();
 
-  // Observable string sources: Pre registered Beneficiaries
-  private fxbeneficiaries = new BehaviorSubject<FxBeneficiaries[]>(null);
-  fxbeneficiaries$ = this.fxbeneficiaries.asObservable();
-  private fxselectedBeneficiary = new BehaviorSubject<FxBeneficiaries>(null);
-  fxselectedBeneficiaries$ = this.fxselectedBeneficiary.asObservable();
-  private fxbeneficiariesError = new BehaviorSubject<string>('Empty');
-  fxbeneficiariesError$ = this.fxbeneficiariesError.asObservable();
   subscription: Subscription;
 
   constructor(
@@ -138,9 +87,8 @@ export class CustomerService implements OnDestroy {
       'customerNumber': !userDetails ? '' : userDetails.id
     };
 
-    let accountDetails = userDetails.acctDetails;
+    const accountDetails = userDetails.customer;
     this.updateAcctDetails(accountDetails);
-    this.updateSelectedAcctDetails(accountDetails[0]);
     // this.customerValidationUpdated(body).pipe(untilDestroyed(this))
     //   .subscribe(
     //     res => {
@@ -169,10 +117,6 @@ export class CustomerService implements OnDestroy {
 
   updateAcctDetails(accts) {
     this.acctDetailSource.next(accts);
-  }
-
-  updateSelectedAcctDetails(selectedAcct) {
-    this.selectedAcctDetailSource.next(selectedAcct);
   }
 
   updateAcctDetailsError(message) {

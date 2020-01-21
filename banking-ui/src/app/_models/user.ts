@@ -1,4 +1,4 @@
-import { AcctDetails } from '../customer/_customer-model/customer.model';
+import { Customers } from '../customer/_customer-model/customer.model';
 
 export class User {
 
@@ -8,7 +8,7 @@ export class User {
     public password?: string,
     public email?: string,
     public role?: string,
-    public acctDetails?: AcctDetails[]
+    public customer?: Customers
   ) { }
 
 }

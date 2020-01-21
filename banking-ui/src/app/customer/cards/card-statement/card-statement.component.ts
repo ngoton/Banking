@@ -6,7 +6,7 @@ import { CardsService } from '../cards.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { CustomerService } from '../../_customer-service/customer.service';
-import { AcctToDebit, AcctDetails } from '../../_customer-model/customer.model';
+import { Customers } from '../../_customer-model/customer.model';
 import { CardStatementService } from './card-statement.service';
 import { UtilitiesService } from '../../../_services/utilities.service';
 
@@ -42,7 +42,6 @@ declare var Date: any;
 })
 export class CardStatementComponent implements OnInit, AfterViewInit, OnDestroy {
   public acctLinkedToCard: Array<any> = [];
-  public acctToDebit: Array<AcctToDebit> = [];
   public cards: Array<Cards>;
   public selectedCard: Cards;
   errorMessage: string;
