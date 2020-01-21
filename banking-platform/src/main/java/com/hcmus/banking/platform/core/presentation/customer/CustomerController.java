@@ -1,7 +1,6 @@
 package com.hcmus.banking.platform.core.presentation.customer;
 
 import com.hcmus.banking.platform.core.application.admin.CustomerUseCaseService;
-import com.hcmus.banking.platform.core.application.customer.CustomerService;
 import com.hcmus.banking.platform.domain.customer.Customer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
