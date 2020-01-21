@@ -2,6 +2,7 @@ package com.hcmus.banking.platform.core.application.admin;
 
 import com.hcmus.banking.platform.core.application.customer.CustomerService;
 import com.hcmus.banking.platform.domain.customer.Customer;
+import com.hcmus.banking.platform.domain.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,12 +21,20 @@ public class CustomerUseCaseService {
 
     @Transactional(readOnly = true)
     public Customer findById(Long id){
-        return customerService.findById(id);
+        Customer customer = customerService.findById(id);
+        if (customer.isEmpty()){
+            throw new NotFoundException();
+        }
+        return customer;
     }
 
     @Transactional(readOnly = true)
     public Customer findByCode(String code){
-        return customerService.findByCode(code);
+        Customer customer = customerService.findByCode(code);
+        if (customer.isEmpty()){
+            throw new NotFoundException();
+        }
+        return customer;
     }
 
     @Transactional
@@ -35,11 +44,19 @@ public class CustomerUseCaseService {
 
     @Transactional
     public void update(Customer customer){
-        customerService.update(customer);
+        Customer oldCustomer = customerService.findByCode(customer.getCode());
+        if (oldCustomer.isEmpty()){
+            throw new NotFoundException();
+        }
+        customerService.update(oldCustomer, customer);
     }
 
     @Transactional
     public void delete(Long id){
-        customerService.delete(id);
+        Customer customer = customerService.findById(id);
+        if (customer.isEmpty()){
+            throw new NotFoundException();
+        }
+        customerService.delete(customer);
     }
 }
