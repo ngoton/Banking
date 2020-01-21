@@ -13,4 +13,6 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     Page<User> findAllBy(Pageable pageable);
     Optional<User> findByUsername(String username);
+    Optional<User> findById(Long id);
+    User save(User user);
 }
