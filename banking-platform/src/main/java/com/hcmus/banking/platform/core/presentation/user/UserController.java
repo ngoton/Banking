@@ -55,9 +55,4 @@ public class UserController {
     public void delete(@PathVariable Long id){
         userService.delete(id);
     }
-
-    @PostMapping("/forgot")
-    public void forgot(@Valid @RequestBody ForgotPasswordRequest forgotPasswordRequest) {
-        userService.forgot(forgotPasswordRequest.getEmail());
-    }
 }

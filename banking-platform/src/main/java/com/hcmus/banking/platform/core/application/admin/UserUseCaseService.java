@@ -95,7 +95,7 @@ public class UserUseCaseService {
         if (user.hasCustomer()){
             name = String.format("%s %s",user.getCustomer().getFirstName(), user.getCustomer().getLastName());
         }
-        Mail mail = new Mail(user.getEmail(), name, "[BANKING] Reset your password account", code);
+        Mail mail = Mail.otpTemplate(user.getEmail(), name, "[BANKING] Reset your account password", code);
         mailService.send(mail);
     }
 }
