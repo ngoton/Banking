@@ -8,7 +8,7 @@ import { AuthService } from '../../_services/auth.service';
 import { environment } from '../../../environments/environment';
 import { UtilitiesService } from '../../_services/utilities.service';
 import { NotifierModule, NotifierService } from 'angular-notifier';
-import { CustomerService } from '../../customer/_customer-service/customer.service';
+import { CustomerService } from '../../_services/customer.service';
 import { UserService } from '../../_services/user.service';
 // import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { untilDestroyed } from 'ngx-take-until-destroy';
@@ -16,7 +16,7 @@ import * as JsEncryptModule from 'jsencrypt';
 import { Template } from '@angular/compiler/src/render3/r3_ast';
 
 @Component({
-  selector: "app-login",
+  selector: "ngx-login",
   templateUrl: "./login.component.html",
   providers: [AuthService, UserService, UtilitiesService, CustomerService],
   styleUrls: [
@@ -31,6 +31,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   user: User;
   logindata: LoginData;
   loading: boolean;
+  submitted: boolean;
+  rememberMe: boolean;
   loginError: string;
   public options = {
     position: ["bottom", "right"]
@@ -47,6 +49,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private router: Router,
     private customerService: CustomerService
   ) {
+    this.submitted = false;
     this.createForm();
     this.keypadNumbers = this.shuffleKeyPad(this.keypadNumbers);
     let userName = localStorage.getItem("userName")
@@ -62,13 +65,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loginForm = this.fb.group({
       Username: ["", Validators.required],
       Password: ["", Validators.required],
-      RememberMe: "",
+      RememberMe: false,
       RequestID: reqID,
       Channel: environment.CHANNEL
     });
   }
 
   onSubmit(formdata) {
+    debugger;
     console.log(formdata);
     if (formdata.RememberMe === true) {
       const userName = this.util.encrypt(formdata.Username);
@@ -192,10 +196,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loginForm.controls["Password"].setValue(PwString);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // this.customerService.getAcctDetailsData();
     // this.auth.ibankLogout();
   }
 
   ngOnDestroy(): void {}
+
+  getConfigValue(key: string): any {};
 }
