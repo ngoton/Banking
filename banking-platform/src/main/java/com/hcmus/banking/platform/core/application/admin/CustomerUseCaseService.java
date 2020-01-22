@@ -2,6 +2,7 @@ package com.hcmus.banking.platform.core.application.admin;
 
 import com.hcmus.banking.platform.core.application.customer.CustomerService;
 import com.hcmus.banking.platform.domain.customer.Customer;
+import com.hcmus.banking.platform.domain.exception.BankingServiceException;
 import com.hcmus.banking.platform.domain.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -39,6 +40,10 @@ public class CustomerUseCaseService {
 
     @Transactional
     public void create(Customer customer){
+        Customer byCode = customerService.findByCode(customer.getCode());
+        if (!byCode.isEmpty()){
+            throw new BankingServiceException("Code is already exists");
+        }
         customerService.create(customer);
     }
 

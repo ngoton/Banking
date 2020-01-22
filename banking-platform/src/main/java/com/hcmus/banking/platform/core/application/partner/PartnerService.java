@@ -18,6 +18,10 @@ public class PartnerService {
         return partnerRepository.findByKey(key).orElse(Partner.ofEmpty());
     }
 
+    public Partner findByName(String name){
+        return partnerRepository.findByName(name).orElse(Partner.ofEmpty());
+    }
+
     public void create(Partner partner){
         partnerRepository.save(partner);
     }

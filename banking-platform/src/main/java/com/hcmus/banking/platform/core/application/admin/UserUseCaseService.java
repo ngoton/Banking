@@ -49,4 +49,27 @@ public class UserUseCaseService {
         }
         userService.changePassword(user, passwordService.encode(password));
     }
+
+    @Transactional
+    public void create(User user){
+        User byUsername = userService.findByUsername(user.getUsername());
+        if (!byUsername.isEmpty()){
+            throw new BankingServiceException("Username is already exists");
+        }
+        User byEmail = userService.findByEmail(user.getUsername());
+        if (!byEmail.isEmpty()){
+            throw new BankingServiceException("Email is already exists");
+        }
+        user.setPassword(passwordService.encode(user.getPassword()));
+        userService.create(user);
+    }
+
+    @Transactional
+    public void delete(Long id){
+        User user = userService.findById(id);
+        if (user.isEmpty()){
+            throw new NotFoundException();
+        }
+        userService.delete(user);
+    }
 }
