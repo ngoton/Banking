@@ -19,6 +19,8 @@ import { NbSecurityModule } from '@nebular/security';
 import {
   FooterComponent,
   HeaderComponent,
+  IBankingCustomerFooterComponent,
+  IBankingCustomerHeaderComponent,
   SearchInputComponent,
   TinyMCEComponent,
 } from './components';
@@ -58,6 +60,8 @@ const NB_MODULES = [
 const COMPONENTS = [
   HeaderComponent,
   FooterComponent,
+  IBankingCustomerFooterComponent,
+  IBankingCustomerHeaderComponent,
   SearchInputComponent,
   TinyMCEComponent,
   OneColumnLayoutComponent,

@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { CustomerPagesComponent } from './customer-pages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { AccountsComponent } from './accounts/accounts.component';
 import { ECommerceComponent } from './e-commerce/e-commerce.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 
@@ -13,6 +14,10 @@ const routes: Routes = [{
     {
       path: 'dashboard',
       component: ECommerceComponent,
+    },
+    {
+      path: 'accounts',
+      component: AccountsComponent,
     },
     {
       path: 'iot-dashboard',

@@ -6,16 +6,23 @@ import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
+import { UserService } from '../../../_services/user.service';
+import { CustomerService } from '../../../_services/customer.service';
+import { User } from '../../../_models/user';
+import { Customers } from '../../../_models/customer.model';
+
 @Component({
   selector: 'ngx-ibanking-customer-header',
   styleUrls: ['./ibanking-customer-header.component.scss'],
   templateUrl: './ibanking-customer-header.component.html',
 })
-export class IbankingCustomerHeaderComponent implements OnInit, OnDestroy {
+export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
 
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
-  user: any;
+  // user: any;
+  user: User;
+  customer: Customers;
 
   themes = [
     {
@@ -43,7 +50,8 @@ export class IbankingCustomerHeaderComponent implements OnInit, OnDestroy {
   constructor(private sidebarService: NbSidebarService,
               private menuService: NbMenuService,
               private themeService: NbThemeService,
-              private userService: UserData,
+              private userService: UserService,
+              private customerService: CustomerService,
               private layoutService: LayoutService,
               private breakpointService: NbMediaBreakpointsService) {
   }
@@ -51,9 +59,15 @@ export class IbankingCustomerHeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
 
-    this.userService.getUsers()
+    // this.userService.getUsers()
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe((users: any) => this.user = users.nick);
+    this.customerService.getAcctDetailsData();
+    this.customerService.acctDetail$
       .pipe(takeUntil(this.destroy$))
-      .subscribe((users: any) => this.user = users.nick);
+      .subscribe((userDetail: Customers) => {
+        this.customer = userDetail
+      });
 
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService.onMediaQueryChange()

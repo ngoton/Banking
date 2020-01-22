@@ -1,0 +1,26 @@
+<div class="row">
+  <div class="col-xxxl-3 col-md-6">
+    <ngx-status-card [title]="'Tài khoản Credit'" 
+                     [content]="'Số tài khoản: ' + credit.account"
+                     [subcontent] = "'Số dư khả dụng: ' + credit.money + ' VNĐ'"
+                     [type]="'primary'">
+      <i [ngClass]="'nb-checkmark-circle'"></i>
+    </ngx-status-card>
+  </div>
+  <div class="col-xxxl-3 col-md-6">
+    <ngx-status-card [title]="'Tài khoản Debit'" 
+                     [content]="'Số tài khoản: ' + debit.account"
+                     [subcontent] = "'Số dư khả dụng: ' + debit.money + ' VNĐ'"
+                     [type]="'primary'">
+      <i [ngClass]="'nb-checkmark-circle'"></i>
+    </ngx-status-card>
+  </div>
+  <div class="col-xxxl-3 col-md-6">
+    <ngx-status-card [title]="'Tài khoản tiết kiệm'" 
+                     [content]="'Số tài khoản: ' + saving.account"
+                     [subcontent] = "'Khoản tiết kiệm: ' + saving.balance + ' VNĐ'"
+                     [type]="'primary'">
+      <i [ngClass]="'nb-checkmark-circle'"></i>
+    </ngx-status-card>
+  </div>
+</div>
