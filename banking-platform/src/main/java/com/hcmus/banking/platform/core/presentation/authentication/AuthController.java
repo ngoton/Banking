@@ -4,6 +4,7 @@ import com.hcmus.banking.platform.config.jwt.JWTFilter;
 import com.hcmus.banking.platform.config.jwt.TokenProvider;
 import com.hcmus.banking.platform.core.application.admin.UserUseCaseService;
 import com.hcmus.banking.platform.domain.exception.UnauthorizedException;
+import com.hcmus.banking.platform.domain.user.User;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -76,6 +77,14 @@ public class AuthController {
     @PostMapping("/forgot")
     public void forgot(@Valid @RequestBody ForgotPasswordRequest forgotPasswordRequest) {
         userService.forgot(forgotPasswordRequest.getEmail());
+    }
+
+    @PostMapping("/otp-verify")
+    public ResponseEntity<JWTToken> otpVerify(@Valid @RequestBody OtpVerifyRequest otpVerifyRequest) {
+        User user = userService.otpVerify(otpVerifyRequest.getEmail(), otpVerifyRequest.getCode());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getEmail());
+        Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
+        return token(authentication, false);
     }
 
     @Getter

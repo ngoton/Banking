@@ -18,7 +18,15 @@ public class OtpService {
         return otpRepository.findByEmail(email).orElse(OTP.ofEmpty());
     }
 
+    public OTP findByEmailAndCode(String email, String code){
+        return otpRepository.findByEmailAndCode(email, code).orElse(OTP.ofEmpty());
+    }
+
     public void create(OTP otp){
         otpRepository.save(otp);
+    }
+
+    public void delete(OTP otp){
+        otpRepository.delete(otp);
     }
 }

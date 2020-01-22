@@ -46,8 +46,8 @@ public class UserUseCaseService {
     }
 
     @Transactional
-    public void changePassword(Long userId, String password, String currentPassword){
-        User user = userService.findById(userId);
+    public void changePassword(String email, String password, String currentPassword){
+        User user = userService.findByEmail(email);
         if (user.isEmpty()){
             throw new NotFoundException();
         }
@@ -97,5 +97,17 @@ public class UserUseCaseService {
         }
         Mail mail = Mail.otpTemplate(user.getEmail(), name, "[BANKING] Reset your account password", code);
         mailService.send(mail);
+    }
+
+    @Transactional
+    public User otpVerify(String email, String code){
+        OTP otp = otpService.findByEmailAndCode(email, code);
+        if (otp.isEmpty() || otp.isExpired()){
+            throw new BankingServiceException("OTP code is expired");
+        }
+        User user = userService.findByEmail(email);
+        userService.changePassword(user, passwordService.encode(user.getEmail()));
+        otpService.delete(otp);
+        return user;
     }
 }

@@ -9,8 +9,8 @@ import javax.validation.constraints.Size;
 
 @Getter
 public class ChangePasswordRequest {
-    @NotNull(message = "User id is required")
-    Long userId;
+    @NotNull(message = "Email is required")
+    String email;
     @NotBlank(message = "New password is required")
     @Size(min = 6, max = 100, message = "Password must be at least 6 characters")
     String newPassword;
