@@ -10,5 +10,6 @@ import java.util.Optional;
 public interface PartnerRepository extends JpaRepository<Partner, Long> {
     Optional<Partner> findById(Long id);
     Optional<Partner> findByKey(String key);
+    Optional<Partner> findByName(String name);
     Partner save(Partner partner);
 }

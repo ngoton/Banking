@@ -26,8 +26,24 @@ public class UserService {
         return userRepository.findById(id).orElse(User.ofEmpty());
     }
 
+    public User findByUsername(String username){
+        return userRepository.findByUsername(username).orElse(User.ofEmpty());
+    }
+
+    public User findByEmail(String email){
+        return userRepository.findByEmail(email).orElse(User.ofEmpty());
+    }
+
     public void changePassword(User user, String password){
         user.setPassword(password);
         userRepository.save(user);
+    }
+
+    public void create(User user){
+        userRepository.save(user);
+    }
+
+    public void delete(User user){
+        userRepository.delete(user);
     }
 }

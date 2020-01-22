@@ -6,14 +6,20 @@ import com.hcmus.banking.platform.domain.general.Gender;
 import com.hcmus.banking.platform.domain.user.User;
 import lombok.AllArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @AllArgsConstructor
 public class CustomerRequest {
+    @NotNull(message = "Customer code is required")
     public String code;
+    @NotNull(message = "First name is required")
     public String firstName;
+    @NotNull(message = "Last name is required")
     public String lastName;
+    @NotNull(message = "Date of birth is required")
     public LocalDate birthDate;
+    @NotNull(message = "Gender is required")
     public String gender;
     public String phone;
     public String address;

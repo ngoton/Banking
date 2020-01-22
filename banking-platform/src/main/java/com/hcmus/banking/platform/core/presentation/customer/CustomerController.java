@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/internal/customers")
 @RequiredArgsConstructor
@@ -16,7 +18,7 @@ public class CustomerController {
     private final CustomerUseCaseService customerService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public Page<CustomerResponse> findAllBy(Pageable pageable){
        Page<Customer> customers = customerService.findAllBy(pageable);
        return CustomerResponses.ofPage(customers, pageable);
@@ -30,19 +32,20 @@ public class CustomerController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasRole('ADMIN')")
-    public void create(@RequestBody CustomerRequest customerRequest){
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
+    public void create(@Valid @RequestBody CustomerRequest customerRequest){
         Customer customer = CustomerRequest.toCustomer(customerRequest);
         customerService.create(customer);
     }
 
     @PutMapping
-    public void update(@RequestBody CustomerRequest customerRequest){
+    public void update(@Valid @RequestBody CustomerRequest customerRequest){
         Customer customer = CustomerRequest.toCustomer(customerRequest);
         customerService.update(customer);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void delete(@PathVariable Long id){
         customerService.delete(id);
     }
