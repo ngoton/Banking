@@ -2,6 +2,7 @@ package com.hcmus.banking.platform.core.presentation.authentication;
 
 import com.hcmus.banking.platform.config.jwt.JWTFilter;
 import com.hcmus.banking.platform.config.jwt.TokenProvider;
+import com.hcmus.banking.platform.core.application.admin.UserUseCaseService;
 import com.hcmus.banking.platform.domain.exception.UnauthorizedException;
 import lombok.Getter;
 import lombok.NonNull;
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 @RequiredArgsConstructor
 @RestController
@@ -34,8 +34,11 @@ public class AuthController {
     @NonNull
     private final AuthenticationManager authenticationManager;
 
-    @NotNull
+    @NonNull
     private final UserDetailsService userDetailsService;
+
+    @NonNull
+    private final UserUseCaseService userService;
 
     @PostMapping("/authenticate")
     public ResponseEntity<JWTToken> authenticate(@Valid @RequestBody LoginRequest loginRequest) {
@@ -68,6 +71,11 @@ public class AuthController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + token);
         return new ResponseEntity<>(new JWTToken(token, refreshToken), httpHeaders, HttpStatus.OK);
+    }
+
+    @PostMapping("/forgot")
+    public void forgot(@Valid @RequestBody ForgotPasswordRequest forgotPasswordRequest) {
+        userService.forgot(forgotPasswordRequest.getEmail());
     }
 
     @Getter

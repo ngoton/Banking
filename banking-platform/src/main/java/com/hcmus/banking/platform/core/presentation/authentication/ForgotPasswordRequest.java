@@ -1,4 +1,4 @@
-package com.hcmus.banking.platform.core.presentation.user;
+package com.hcmus.banking.platform.core.presentation.authentication;
 
 import lombok.Getter;
 
