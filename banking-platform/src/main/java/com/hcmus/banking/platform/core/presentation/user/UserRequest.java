@@ -1,6 +1,5 @@
 package com.hcmus.banking.platform.core.presentation.user;
 
-import com.hcmus.banking.platform.domain.customer.Customer;
 import com.hcmus.banking.platform.domain.general.Created;
 import com.hcmus.banking.platform.domain.user.Role;
 import com.hcmus.banking.platform.domain.user.Status;
