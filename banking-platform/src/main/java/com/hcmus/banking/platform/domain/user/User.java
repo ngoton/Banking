@@ -50,6 +50,13 @@ public class User extends IDEntity {
         return username.equals(EMPTY_STRING);
     }
 
+    public boolean hasCustomer(){
+        if (customer == null){
+            return false;
+        }
+        return !customer.isEmpty();
+    }
+
     public boolean isActive(){
         return status.isActive();
     }

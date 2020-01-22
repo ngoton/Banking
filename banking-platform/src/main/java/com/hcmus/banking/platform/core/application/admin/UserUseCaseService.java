@@ -1,9 +1,14 @@
 package com.hcmus.banking.platform.core.application.admin;
 
+import com.hcmus.banking.platform.core.application.mail.MailService;
+import com.hcmus.banking.platform.core.application.otp.OtpService;
 import com.hcmus.banking.platform.core.application.user.UserService;
 import com.hcmus.banking.platform.core.application.user.PasswordService;
+import com.hcmus.banking.platform.core.utils.RandomUtil;
 import com.hcmus.banking.platform.domain.exception.BankingServiceException;
 import com.hcmus.banking.platform.domain.exception.NotFoundException;
+import com.hcmus.banking.platform.domain.mail.Mail;
+import com.hcmus.banking.platform.domain.otp.OTP;
 import com.hcmus.banking.platform.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,6 +23,8 @@ import java.util.List;
 public class UserUseCaseService {
     private final UserService userService;
     private final PasswordService passwordService;
+    private final OtpService otpService;
+    private final MailService mailService;
 
     @Transactional(readOnly = true)
     public List<User> findAll(){
@@ -71,5 +78,24 @@ public class UserUseCaseService {
             throw new NotFoundException();
         }
         userService.delete(user);
+    }
+
+    @Transactional
+    public void forgot(String email) {
+        User user = userService.findByEmail(email);
+        if (user.isEmpty()){
+            throw new NotFoundException();
+        }
+
+        String code = RandomUtil.generate();
+        OTP otp = OTP.with(code, email);
+        otpService.create(otp);
+
+        String name = "";
+        if (user.hasCustomer()){
+            name = String.format("%s %s",user.getCustomer().getFirstName(), user.getCustomer().getLastName());
+        }
+        Mail mail = new Mail(user.getEmail(), name, "[BANKING] Reset your password account", code);
+        mailService.send(mail);
     }
 }
