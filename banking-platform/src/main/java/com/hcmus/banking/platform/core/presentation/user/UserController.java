@@ -39,7 +39,7 @@ public class UserController {
 
     @PostMapping("/change-password")
     public void changePassword(@Valid @RequestBody ChangePasswordRequest request) {
-        userService.changePassword(request.getUserId(), request.getNewPassword(), request.getCurrentPassword());
+        userService.changePassword(request.getEmail(), request.getNewPassword(), request.getCurrentPassword());
     }
 
     @PostMapping

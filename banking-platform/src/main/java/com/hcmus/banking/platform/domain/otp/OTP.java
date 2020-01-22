@@ -39,6 +39,10 @@ public class OTP extends IDEntity {
         return code.equals(EMPTY_STRING);
     }
 
+    public boolean isExpired(){
+        return expired.isBefore(LocalDateTime.now());
+    }
+
     private static LocalDateTime expired(){
         return LocalDateTime.now().plusMinutes(EXPIRED_TIME);
     }
