@@ -20,7 +20,7 @@
                name="username"
                id="input-username"
                pattern=".+@.+\..+"
-               placeholder="Tên đăng nhập/ Mã OTP"
+               placeholder="Tên Đăng nhập/ Số điện thoại"
                fieldSize="large"
                autofocus
                [status]="loginForm.controls['Username'].dirty ? (loginForm.controls['Username'].invalid  ? 'danger' : 'success') : ''"
@@ -47,7 +47,7 @@
                name="password"
                type="password"
                id="input-Password"
-               placeholder="Mật khẩu"
+               placeholder="Mật khẩu/ Mã OTP"
                fieldSize="large"
                [status]="loginForm.controls['Password'].dirty ? (loginForm.controls['Password'].invalid  ? 'danger' : 'success') : ''"
                [required]="getConfigValue('forms.validation.password.required')"

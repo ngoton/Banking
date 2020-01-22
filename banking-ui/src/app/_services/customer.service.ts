@@ -87,8 +87,8 @@ export class CustomerService implements OnDestroy {
       'customerNumber': !userDetails ? '' : userDetails.id
     };
 
-    const accountDetails = userDetails.customer;
-    this.updateAcctDetails(accountDetails);
+    const customerInformation = userDetails.customer;
+    this.updateAcctDetails(customerInformation);
     // this.customerValidationUpdated(body).pipe(untilDestroyed(this))
     //   .subscribe(
     //     res => {

@@ -55,7 +55,7 @@ const routes: Routes = [
       },
     ],
   },
-  { path: '', redirectTo: 'pages', pathMatch: 'full' },
+  { path: '', redirectTo: 'onboarding', pathMatch: 'full' },
   { path: '**', redirectTo: 'pages' },
 ];
 
