@@ -1,35 +1,23 @@
-import { Component, OnInit, ElementRef, OnDestroy } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-import { AuthService } from './_services/auth.service';
-import { untilDestroyed } from 'ngx-take-until-destroy';
-import { NgxAnalyticsGoogleAnalytics } from 'ngx-analytics/ga';
-import * as JsEncryptModule from 'jsencrypt';
+/**
+ * @license
+ * Copyright Akveo. All Rights Reserved.
+ * Licensed under the MIT License. See License.txt in the project root for license information.
+ */
+import { Component, OnInit } from '@angular/core';
+import { AnalyticsService } from './@core/utils/analytics.service';
+import { SeoService } from './@core/utils/seo.service';
 
 @Component({
-  selector: "app-root",
-  templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.scss"]
+  selector: 'ngx-app',
+  template: '<router-outlet></router-outlet>',
 })
-export class AppComponent implements OnInit, OnDestroy {
-  title = "internet-banking-ui";
+export class AppComponent implements OnInit {
 
-  constructor(
-    // private auth: AuthService,
-    private router: Router
-    // private ngxAnalytics: NgxAnalyticsGoogleAnalytics
-  ) {
-    const encr = new JsEncryptModule.JSEncrypt();
-    console.log(encr);
+  constructor(private analytics: AnalyticsService, private seoService: SeoService) {
   }
 
-  ngOnInit() {
-    this.router.events.pipe(untilDestroyed(this)).subscribe(evt => {
-      if (!(evt instanceof NavigationEnd)) {
-        return;
-      }
-      window.scrollTo(0, 0);
-    });
+  ngOnInit(): void {
+    this.analytics.trackPageViews();
+    this.seoService.trackCanonicalChanges();
   }
-
-  ngOnDestroy(): void {}
 }

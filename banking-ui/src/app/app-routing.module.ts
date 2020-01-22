@@ -1,91 +1,71 @@
+import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { CustomerComponent } from './customer/customer.component';
-import { OnboardingComponent } from './onboarding/onboarding.component';
-import { AuthGuard } from './_guards/auth.guard';
+import {
+  NbAuthComponent,
+  NbLoginComponent,
+  NbLogoutComponent,
+  NbRegisterComponent,
+  NbRequestPasswordComponent,
+  NbResetPasswordComponent,
+} from '@nebular/auth';
 
 const routes: Routes = [
   {
-    path: 'customer',
-    component: CustomerComponent,
-    // canActivate: [AuthGuard],
-    children: [
-      {
-        path: 'accounts',
-        loadChildren: './customer/accounts/accounts.module#AccountsModule'
-      },
-      // {
-      //   path: 'dashboard',
-      //   loadChildren: './customer/dashboard/dashboard.module#DashboardModule'
-      // },
-      // {
-      //   path: 'transfers',
-      //   loadChildren: './customer/transfers/transfers.module#TransfersModule'
-      // },
-      // {
-      //   path: 'cards',
-      //   loadChildren: './customer/cards/cards.module#CardsModule'
-      // },
-      // {
-      //   path: 'investments',
-      //   loadChildren: './customer/investments/investments.module#InvestmentsModule'
-      // },
-      // {
-      //   path: 'payments',
-      //   loadChildren: './customer/bills-payment/bills-payment.module#BillsPaymentModule'
-      // },
-      // {
-      //   path: 'topup',
-      //   loadChildren: './customer/topup/topup.module#TopupModule'
-      // },
-      // {
-      //   path: 'fx',
-      //   loadChildren: './customer/fx/fx.module#FxModule'
-      // },
-      // {
-      //   path: 'acct-officer',
-      //   loadChildren: './customer/account-manager/account-manager.module#AccountManagerModule'
-      // },
-      // {
-      //   path: 'settings',
-      //   loadChildren: './customer/settings/settings.module#SettingsModule'
-      // },
-      // {
-      //   path: 'logout',
-      //   redirectTo: 'transfers',
-      //   pathMatch: 'full'
-      // },
-      {
-        path: '',
-        redirectTo: 'accounts',
-        pathMatch: 'full'
-      }
-    ]
+    path: 'pages',
+    loadChildren: () => import('app/pages/pages.module')
+      .then(m => m.PagesModule),
   },
   {
-    path: "",
-    component: OnboardingComponent,
+    path: 'customer',
+    loadChildren: () => import('app/customer-pages/customer-pages.module')
+      .then(m => m.CustomerPagesModule),
+  },
+  {
+    path: 'onboarding',
+    loadChildren: () => import('app/onboarding/onboarding.module')
+      .then(m => m.OnboardingModule),
+  },
+  {
+    path: 'auth',
+    component: NbAuthComponent,
     children: [
       {
-        path: "",
-        redirectTo: "onboarding",
-        pathMatch: "full"
+        path: '',
+        component: NbLoginComponent,
       },
       {
-        path: "onboarding",
-        loadChildren: "./onboarding/onboarding.module#OnboardingModule"
-      }
-      /*  {
-        path: 'maintenance/offline-ui',
-        loadChildren: './theme/maintenance/offline-ui/offline-ui.module#OfflineUiModule'
-      } */
-    ]
+        path: 'login',
+        component: NbLoginComponent,
+      },
+      {
+        path: 'register',
+        component: NbRegisterComponent,
+      },
+      {
+        path: 'logout',
+        component: NbLogoutComponent,
+      },
+      {
+        path: 'request-password',
+        component: NbRequestPasswordComponent,
+      },
+      {
+        path: 'reset-password',
+        component: NbResetPasswordComponent,
+      },
+    ],
   },
-  { path: "**", redirectTo: "dashboard", pathMatch: "full" }
+  { path: '', redirectTo: 'pages', pathMatch: 'full' },
+  { path: '**', redirectTo: 'pages' },
 ];
 
+const config: ExtraOptions = {
+  useHash: false,
+};
+
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  imports: [RouterModule.forRoot(routes, config)],
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

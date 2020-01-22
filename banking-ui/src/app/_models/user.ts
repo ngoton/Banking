@@ -1,4 +1,4 @@
-import { Customers } from '../customer/_customer-model/customer.model';
+import { Customers } from './customer.model';
 
 export class User {
 

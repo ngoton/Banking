@@ -7,6 +7,18 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {  SharedModule } from '../../shared/shared.module';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
 import { MatButtonModule, MatGridListModule } from '@angular/material';
+import {
+  NbActionsModule,
+  NbButtonModule,
+  NbCardModule,
+  NbCheckboxModule,
+  NbDatepickerModule, NbIconModule,
+  NbInputModule,
+  NbRadioModule,
+  NbSelectModule,
+  NbUserModule,
+  NbAlertModule
+} from '@nebular/theme';
 
 /**
  * Custom angular notifier options
@@ -61,7 +73,18 @@ const customNotifierOptions: NotifierOptions = {
     ReactiveFormsModule,
     NotifierModule.withConfig(customNotifierOptions),
     MatGridListModule,
-    MatButtonModule
+    MatButtonModule,
+    NbInputModule,
+    NbCardModule,
+    NbButtonModule,
+    NbActionsModule,
+    NbUserModule,
+    NbCheckboxModule,
+    NbRadioModule,
+    NbDatepickerModule,
+    NbSelectModule,
+    NbIconModule,
+    NbAlertModule
   ]
 })
 export class LoginModule {}
