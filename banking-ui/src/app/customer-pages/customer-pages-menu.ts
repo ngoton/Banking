@@ -4,27 +4,27 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Tài khoản',
     icon: 'credit-card',
-    link: '/customer-pages/accounts',
+    link: '/customer/accounts',
     home: true,
   },
   {
     title: 'Quản lý người thụ hưởng',
     icon: 'people',
-    link: '/customer-pages/beneficiary',
+    link: '/customer/beneficiary',
   },
   {
     title: 'Chuyển khoản',
     icon: 'corner-down-left',
-    link: '/customer-pages/tranfer',
+    link: '/customer/transfer',
   },
   {
     title: 'Quản lý nhắc nợ',
     icon: 'volume-up',
-    link: '/customer-pages/debt-reminder',
+    link: '/customer/debt-reminder',
   },
   {
     title: 'Quản lý giao dịch',
     icon: 'clipboard',
-    link: '/customer-pages/bill-payment',
+    link: '/customer/bill-payment',
   }
 ];

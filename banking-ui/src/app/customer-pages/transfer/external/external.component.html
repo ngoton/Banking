@@ -1,0 +1,76 @@
+<nb-card>
+    <nb-card-header>Chuyển khoản liên ngân hàng</nb-card-header>
+    <nb-card-body>
+      <form>
+        <div class="form-group row">
+          <label class="label col-sm-3 col-form-label">Chọn tài khoản</label>
+          <div class="col-sm-9">
+            <nb-select placeholder="Chọn tài khoản">
+              <nb-option value="1">Tài khoản 1</nb-option>
+              <nb-option value="2">Tài khoản 2</nb-option>
+            </nb-select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="inputAccount" class="label col-sm-3 col-form-label">Thông tin người nhận</label>
+          <div class="col-sm-3">
+            <input nbInput fullWidth id="inputAccount" placeholder="Số tài khoản người nhận">
+          </div>
+          <label class="label col-sm-2 col-form-label">Ngân hàng</label>
+          <div class="col-sm-4">
+            <nb-select placeholder="Chọn ngân hàng">
+                <nb-option value="1">Sacombank</nb-option>
+                <nb-option value="2">Techcombank</nb-option>
+                <nb-option value="3">Vietcombank</nb-option>
+              </nb-select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="offset-sm-3 col-sm-9">
+            <label class="label col-form-label"><span style="padding-right: 5px;">hoặc</span></label>
+            <nb-select placeholder="Chọn người thụ hưởng">
+              <nb-option value="1">Nguyễn Văn A</nb-option>
+              <nb-option value="2">Nguyễn Văn B</nb-option>
+              <nb-option value="3">Nguyễn Văn C</nb-option>
+              <nb-option value="4">Nguyễn Văn D</nb-option>
+            </nb-select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="inputMoney" class="label col-sm-3 col-form-label">Số tiền cần chuyển</label>
+          <div class="col-sm-3">
+            <!-- <input nbInput fullWidth id="inputMoney" placeholder="10000"> -->
+            <input nbInput id="inputMoney" currencyMask [options]="{ prefix: '', thousands: ',', decimal: '.', precision: '3', allowNegative: false }"
+                      id="airtimeamount" class="form-control form-primary form-control-lg form-control-right border-left-0 border-right-0 border-top-0"
+                      placeholder="0.000" formControlName="airtimeamount" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let option of keypadNumbers" [value]="option">
+                {{ option }}
+              </mat-option>
+            </mat-autocomplete>
+            <span class="form-bar"></span>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="inputContent" class="label col-sm-3 col-form-label">Nội dung</label>
+          <div class="col-sm-6">
+            <input nbInput fullWidth id="inputContent" placeholder="Nội dung chuyển khoản">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="label col-sm-3 col-form-label">Hình thức thanh toán phí</label>
+          <div class="col-sm-9">
+            <nb-radio-group>
+              <nb-radio>Người nhận trả phí</nb-radio>
+              <nb-radio>Người gửi trả phí</nb-radio>
+            </nb-radio-group>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="offset-sm-3 col-sm-9">
+            <button type="submit" nbButton status="primary">Chuyển tiền</button>
+          </div>
+        </div>
+      </form>
+    </nb-card-body>
+  </nb-card>
