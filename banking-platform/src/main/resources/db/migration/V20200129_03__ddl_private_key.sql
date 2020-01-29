@@ -1,7 +1,7 @@
 alter table banking.partners
     add api_key VARCHAR(255) NULL,
     add secret_key TEXT NULL,
-    add signature VARCHAR(255) NULL,
+    add signature TEXT NULL,
 	add private_key TEXT NULL,
 	add public_key TEXT NULL,
     add encryption VARCHAR(10) NULL;
