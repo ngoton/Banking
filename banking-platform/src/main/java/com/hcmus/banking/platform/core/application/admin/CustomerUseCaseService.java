@@ -1,9 +1,11 @@
 package com.hcmus.banking.platform.core.application.admin;
 
 import com.hcmus.banking.platform.core.application.customer.CustomerService;
+import com.hcmus.banking.platform.core.application.info.InfoService;
 import com.hcmus.banking.platform.domain.customer.Customer;
 import com.hcmus.banking.platform.domain.exception.BankingServiceException;
 import com.hcmus.banking.platform.domain.exception.NotFoundException;
+import com.hcmus.banking.platform.domain.info.Info;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CustomerUseCaseService {
     private final CustomerService customerService;
+    private final InfoService infoService;
 
     @Transactional(readOnly = true)
     public Page<Customer> findAllBy(Pageable pageable) {
@@ -52,6 +55,10 @@ public class CustomerUseCaseService {
         Customer oldCustomer = customerService.findByCode(customer.getCode());
         if (oldCustomer.isEmpty()){
             throw new NotFoundException();
+        }
+        Info info = infoService.findByCustomerCode(customer.getCode());
+        if (!info.isEmpty()){
+            infoService.update(info, customer.getInfo());
         }
         customerService.update(oldCustomer, customer);
     }

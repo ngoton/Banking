@@ -3,6 +3,7 @@ package com.hcmus.banking.platform.core.presentation.customer;
 import com.hcmus.banking.platform.domain.customer.Customer;
 import com.hcmus.banking.platform.domain.general.Created;
 import com.hcmus.banking.platform.domain.general.Gender;
+import com.hcmus.banking.platform.domain.info.Info;
 import com.hcmus.banking.platform.domain.user.User;
 import lombok.AllArgsConstructor;
 
@@ -25,15 +26,18 @@ public class CustomerRequest {
     public String address;
 
     public static Customer toCustomer(CustomerRequest customerRequest){
-        return new Customer(
-                customerRequest.code,
+        Info info = new Info(
                 customerRequest.firstName,
                 customerRequest.lastName,
                 customerRequest.birthDate,
                 Gender.valueOf(customerRequest.gender),
                 customerRequest.phone,
                 customerRequest.address,
-                User.ofEmpty(),
+                Created.ofEmpty()
+        );
+        return new Customer(
+                customerRequest.code,
+                info,
                 Created.ofEmpty()
         );
     }

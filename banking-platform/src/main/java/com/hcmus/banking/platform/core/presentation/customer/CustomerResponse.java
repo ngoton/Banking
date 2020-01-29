@@ -13,19 +13,20 @@ public class CustomerResponse {
     @JsonFormat(pattern = "dd/MM/yyyy")
     public LocalDate birthDate;
     public String gender;
-    public String username;
+    public String phone;
+    public String address;
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     public LocalDateTime createdAt;
 
 
     public CustomerResponse(Customer customer) {
         this.code = customer.getCode();
-        this.firstName = customer.getFirstName();
-        this.lastName = customer.getLastName();
-        this.username = customer.getUser().getUsername();
-        this.birthDate = customer.getBirthDate();
+        this.firstName = customer.getInfo().getFirstName();
+        this.lastName = customer.getInfo().getLastName();
+        this.birthDate = customer.getInfo().getBirthDate();
+        this.gender = customer.getInfo().getGender().name();
+        this.phone = customer.getInfo().getPhone();
+        this.address = customer.getInfo().getAddress();
         this.createdAt = customer.getCreated().getCreatedAt().getValue();
-        this.gender = customer.getGender().name();
-
     }
 }

@@ -92,8 +92,8 @@ public class UserUseCaseService {
         otpService.create(otp);
 
         String name = "";
-        if (user.hasCustomer()){
-            name = String.format("%s %s",user.getCustomer().getFirstName(), user.getCustomer().getLastName());
+        if (user.hasInfo()){
+            name = String.format("%s %s",user.getInfo().getFirstName(), user.getInfo().getLastName());
         }
         Mail mail = Mail.otpTemplate(user.getEmail(), name, "[BANKING] Reset your account password", code);
         mailService.send(mail);

@@ -69,14 +69,14 @@ public class BankingUser implements UserDetails {
     }
 
     public String getFirstName() {
-        return this.user.getCustomer().getFirstName();
+        return this.user.getInfo().getFirstName();
     }
 
     public String getLastName() {
-        return this.user.getCustomer().getLastName();
+        return this.user.getInfo().getLastName();
     }
 
     public String getPhone() {
-        return user.getCustomer().getPhone();
+        return user.getInfo().getPhone();
     }
 }

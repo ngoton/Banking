@@ -29,12 +29,7 @@ public class CustomerService {
     }
 
     public void update(Customer oldCustomer, Customer customer){
-        oldCustomer.setFirstName(customer.getFirstName());
-        oldCustomer.setLastName(customer.getLastName());
-        oldCustomer.setBirthDate(customer.getBirthDate());
-        oldCustomer.setGender(customer.getGender());
-        oldCustomer.setPhone(customer.getPhone());
-        oldCustomer.setAddress(customer.getAddress());
+        oldCustomer.setCode(customer.getCode());
         customerRepository.save(oldCustomer);
     }
 

@@ -1,0 +1,4 @@
+-- pass 1234567
+INSERT INTO banking.users(username, password, email, role, created_at, created_by, create_program, status) VALUES ('AD001', '$2a$10$aaGK3grB55n1O5Hzlp3rAOJHF3njedXy.QisNyegmLzndzxb/NCGu', 'ad@abc.com', 'ADMIN', '2020-01-20 17:10:24.562000', 0, 'initial', 'ACTIVE');
+INSERT INTO banking.infos(first_name, last_name, birth_date, gender, phone, address, users_id, created_at, created_by, create_program) VALUES ('Nguyễn Minh', 'Anh', '1999-01-20', 'Male', '0909909242', 'HCM', (SELECT MAX(id) FROM banking.users), '2020-01-20 17:10:24.562000', 0, 'initial');
+INSERT INTO banking.customers(code, created_at, created_by, create_program, infos_id) VALUES ('KH001', '2020-01-20 17:10:24.562000', 0, 'initial', (SELECT MAX(id) FROM banking.infos));
