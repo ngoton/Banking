@@ -20,8 +20,8 @@ public class Partner extends IDEntity {
     private String name;
     private String key;
     private String apiKey;
-    private String secretKey;
-    private String signature;
+    private String apiPrivateKey;
+    private String apiPublicKey;
     private String privateKey;
     private String publicKey;
     @Enumerated(EnumType.STRING)
@@ -34,11 +34,11 @@ public class Partner extends IDEntity {
     })
     private Created created;
 
-    public Partner(String name, String apiKey, String secretKey, String signature, Encryption encryption, Created created){
+    public Partner(String name, String apiKey, String apiPrivateKey, String apiPublicKey, Encryption encryption, Created created){
         this.name = name;
         this.apiKey = apiKey;
-        this.secretKey = secretKey;
-        this.signature = signature;
+        this.apiPrivateKey = apiPrivateKey;
+        this.apiPublicKey = apiPublicKey;
         this.encryption = encryption;
         this.created = created;
     }
