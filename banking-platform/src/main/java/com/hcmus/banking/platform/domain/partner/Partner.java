@@ -19,6 +19,13 @@ public class Partner extends IDEntity {
     private static final String EMPTY_STRING = "";
     private String name;
     private String key;
+    private String apiKey;
+    private String secretKey;
+    private String signature;
+    private String privateKey;
+    private String publicKey;
+    @Enumerated(EnumType.STRING)
+    private Encryption encryption;
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "createdAt.value", column = @Column(name = "created_at")),
@@ -27,15 +34,20 @@ public class Partner extends IDEntity {
     })
     private Created created;
 
+    public Partner(String name, String apiKey, String secretKey, String signature, Encryption encryption, Created created){
+        this.name = name;
+        this.apiKey = apiKey;
+        this.secretKey = secretKey;
+        this.signature = signature;
+        this.encryption = encryption;
+        this.created = created;
+    }
+
     public static Partner ofEmpty(){
-        return new Partner(EMPTY_STRING, EMPTY_STRING, Created.ofEmpty());
+        return new Partner(EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, Encryption.RSA, Created.ofEmpty());
     }
 
     public boolean isEmpty(){
         return name.equals(EMPTY_STRING);
-    }
-
-    public boolean sameCode(String code){
-        return name.equals(code);
     }
 }

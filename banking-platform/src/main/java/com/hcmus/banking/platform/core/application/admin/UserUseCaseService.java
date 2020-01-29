@@ -4,7 +4,7 @@ import com.hcmus.banking.platform.core.application.mail.MailService;
 import com.hcmus.banking.platform.core.application.otp.OtpService;
 import com.hcmus.banking.platform.core.application.user.UserService;
 import com.hcmus.banking.platform.core.application.user.PasswordService;
-import com.hcmus.banking.platform.core.utils.RandomUtil;
+import com.hcmus.banking.platform.core.utils.RandomUtils;
 import com.hcmus.banking.platform.domain.exception.BankingServiceException;
 import com.hcmus.banking.platform.domain.exception.NotFoundException;
 import com.hcmus.banking.platform.domain.mail.Mail;
@@ -95,7 +95,7 @@ public class UserUseCaseService {
             throw new NotFoundException();
         }
 
-        String code = RandomUtil.generate();
+        String code = RandomUtils.generate();
         OTP otp = OTP.with(code, email);
         otpService.create(otp);
 
