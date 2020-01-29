@@ -18,6 +18,10 @@ public class InfoService {
         return infoRepository.findByCustomerCode(code).orElse(Info.ofEmpty());
     }
 
+    public Info findByStaffCode(String code){
+        return infoRepository.findByStaffCode(code).orElse(Info.ofEmpty());
+    }
+
     public void create(Info info){
         infoRepository.save(info);
     }

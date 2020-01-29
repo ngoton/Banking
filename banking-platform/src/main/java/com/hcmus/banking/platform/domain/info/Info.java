@@ -4,6 +4,7 @@ import com.hcmus.banking.platform.domain.customer.Customer;
 import com.hcmus.banking.platform.domain.general.Created;
 import com.hcmus.banking.platform.domain.general.Gender;
 import com.hcmus.banking.platform.domain.general.IDEntity;
+import com.hcmus.banking.platform.domain.staff.Staff;
 import com.hcmus.banking.platform.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,6 +35,8 @@ public class Info extends IDEntity {
     private User user;
     @OneToOne(mappedBy = "info", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     private Customer customer;
+    @OneToOne(mappedBy = "info", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    private Staff staff;
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "createdAt.value", column = @Column(name = "created_at")),
