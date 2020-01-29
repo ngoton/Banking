@@ -20,7 +20,16 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Quản lý nhắc nợ',
     icon: 'volume-up',
-    link: '/customer/debt-reminder',
+    children: [
+      {
+        title: "Tạo nhắc nợ",
+        link: '/customer/reminder-debt/new'
+      },
+      {
+        title: "Danh sách nhắc nợ",
+        link: '/customer/reminder-debt'
+      }
+    ],
   },
   {
     title: 'Quản lý giao dịch',

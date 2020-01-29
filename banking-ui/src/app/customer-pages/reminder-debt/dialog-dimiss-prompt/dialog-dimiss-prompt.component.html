@@ -1,0 +1,10 @@
+<nb-card>
+  <nb-card-header>Nhập nội dung hủy nhắc nợ</nb-card-header>
+  <nb-card-body>
+    <input #content nbInput placeholder="Nội dung hủy">
+  </nb-card-body>
+  <nb-card-footer>
+    <button class="cancel" nbButton status="danger" (click)="cancel()">Hủy</button>
+    <button nbButton status="success" (click)="submit(content.value)" [disabled]="!content.value">Xác nhận</button>
+  </nb-card-footer>
+</nb-card>

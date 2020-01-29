@@ -24,7 +24,7 @@ import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
     MiscellaneousModule,
   ],
   declarations: [
-    CustomerPagesComponent,
+    CustomerPagesComponent
   ],
 })
 export class CustomerPagesModule {

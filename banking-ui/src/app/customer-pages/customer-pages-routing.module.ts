@@ -30,6 +30,11 @@ const routes: Routes = [{
         .then(m => m.TransferModule)
     },
     {
+      path: 'reminder-debt',
+      loadChildren: () => import('./reminder-debt/reminder-debt.module')
+        .then(m => m.ReminderDebtModule)
+    },
+    {
       path: 'iot-dashboard',
       component: DashboardComponent,
     },
