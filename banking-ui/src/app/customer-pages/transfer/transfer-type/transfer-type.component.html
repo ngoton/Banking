@@ -1,0 +1,14 @@
+<div class="row" *ngIf="!isChecked">
+    <div class="col-xxxl-3 col-md-6">
+        <ngx-status-card [title]="'Chuyển khoản nội bộ'" 
+                         [type]="'primary'" [link]="'customer/transfer/internal'">
+          <i [ngClass]="'nb-loop-circled'"></i>
+        </ngx-status-card>
+      </div>
+      <div class="col-xxxl-3 col-md-6">
+        <ngx-status-card [title]="'Chuyển khoản liên ngân hàng'" 
+                         [type]="'primary'" [link]="'customer/transfer/external'">
+          <i [ngClass]="'nb-loop'"></i>
+        </ngx-status-card>
+      </div>
+</div>

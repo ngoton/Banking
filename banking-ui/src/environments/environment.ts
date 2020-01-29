@@ -13,7 +13,7 @@ export const environment = {
   AUX_BENEFICIARY: "",
   AUX_URL: "",
   BASE_URL: "",
-  AUTH_API: "",
+  AUTH_API: "http://localhost:8800/auth",
   CUST_SERV: "",
   TRANSF_SERV: "",
   REQ_SERV: "",

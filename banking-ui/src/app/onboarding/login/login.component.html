@@ -13,14 +13,14 @@
     <form (ngSubmit)="onSubmit(loginForm.value)" #form="ngForm" aria-labelledby="title">
 
       <div class="form-control-group">
-        <label class="label" for="input-username">Tên Đăng nhập/ Số điện thoại:</label>
+        <label class="label" for="input-username">Tên Đăng nhập:</label>
         <input nbInput
                fullWidth
                [formControl]="loginForm.controls['Username']"
                name="username"
                id="input-username"
-               pattern=".+@.+\..+"
-               placeholder="Tên Đăng nhập/ Số điện thoại"
+               pattern="[a-z0-9_-]*"
+               placeholder="Tên Đăng nhập"
                fieldSize="large"
                autofocus
                [status]="loginForm.controls['Username'].dirty ? (loginForm.controls['Username'].invalid  ? 'danger' : 'success') : ''"
@@ -28,10 +28,10 @@
                [attr.aria-invalid]="loginForm.controls['Username'].invalid && loginForm.controls['Username'].touched ? true : null">
         <ng-container *ngIf="loginForm.controls['Username'].invalid && loginForm.controls['Username'].touched">
           <p class="caption status-danger" *ngIf="loginForm.controls['Username'].errors?.required">
-            Tên Đăng nhập/ Số điện thoại không được để trống!
+            Tên Đăng nhập không được để trống!
           </p>
           <p class="caption status-danger" *ngIf="loginForm.controls['Username'].errors?.pattern">
-            Tên Đăng nhập/ Số điện thoại sai định dạng!
+            Tên Đăng nhập bao gồm chữ số, không bao gồm kí tự đặc biệt
           </p>
         </ng-container>
       </div>

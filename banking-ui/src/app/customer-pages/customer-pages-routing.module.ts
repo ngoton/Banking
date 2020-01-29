@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { CustomerPagesComponent } from './customer-pages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AccountsComponent } from './accounts/accounts.component';
+import { BeneficiaryComponent } from './beneficiary/beneficiary.component';
 import { ECommerceComponent } from './e-commerce/e-commerce.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 
@@ -18,6 +19,15 @@ const routes: Routes = [{
     {
       path: 'accounts',
       component: AccountsComponent,
+    },
+    {
+      path: 'beneficiary',
+      component: BeneficiaryComponent,
+    },
+    {
+      path: 'transfer',
+      loadChildren: () => import('./transfer/transfer.module')
+        .then(m => m.TransferModule)
     },
     {
       path: 'iot-dashboard',
