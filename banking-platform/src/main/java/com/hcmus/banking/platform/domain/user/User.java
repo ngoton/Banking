@@ -1,8 +1,8 @@
 package com.hcmus.banking.platform.domain.user;
 
-import com.hcmus.banking.platform.domain.customer.Customer;
 import com.hcmus.banking.platform.domain.general.Created;
 import com.hcmus.banking.platform.domain.general.IDEntity;
+import com.hcmus.banking.platform.domain.info.Info;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,7 +23,7 @@ public class User extends IDEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
-    private Customer customer;
+    private Info info;
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "createdAt.value", column = @Column(name = "created_at")),
@@ -50,11 +50,11 @@ public class User extends IDEntity {
         return username.equals(EMPTY_STRING);
     }
 
-    public boolean hasCustomer(){
-        if (customer == null){
+    public boolean hasInfo(){
+        if (info == null){
             return false;
         }
-        return !customer.isEmpty();
+        return !info.isEmpty();
     }
 
     public boolean isActive(){
