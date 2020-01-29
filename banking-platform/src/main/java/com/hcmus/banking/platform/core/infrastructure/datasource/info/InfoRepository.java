@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface InfoRepository extends JpaRepository<Info, Long> {
     Optional<Info> findById(Long id);
     Optional<Info> findByCustomerCode(String code);
+    Optional<Info> findByStaffCode(String code);
     Info save(Info info);
     void delete(Info info);
 }
