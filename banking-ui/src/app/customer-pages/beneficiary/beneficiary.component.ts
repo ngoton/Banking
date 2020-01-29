@@ -28,10 +28,6 @@ export class BeneficiaryComponent implements OnInit, OnDestroy {
       confirmDelete: true,
     },
     columns: {
-      id: {
-        title: 'ID',
-        type: 'number',
-      },
       name: {
         title: 'Tên',
         type: 'string',

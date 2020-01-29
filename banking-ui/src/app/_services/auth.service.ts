@@ -24,7 +24,7 @@ export class AuthService implements OnDestroy {
 
     login(credentials): Observable<any> {
       console.log(credentials);
-      const PATH = this.AUTH_URL + `/IbankLogin`;
+      const PATH = this.AUTH_URL + `/authenticate`;
       return this.http.post<any>(PATH, credentials)
       .pipe(
         retry(3),
