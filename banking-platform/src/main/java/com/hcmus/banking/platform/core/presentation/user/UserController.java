@@ -41,6 +41,10 @@ public class UserController {
     public void changePassword(@Valid @RequestBody ChangePasswordRequest request) {
         userService.changePassword(request.getEmail(), request.getNewPassword(), request.getCurrentPassword());
     }
+    @PostMapping("/reset-password")
+    public void resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        userService.resetPassword(request.getEmail(), request.getNewPassword());
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

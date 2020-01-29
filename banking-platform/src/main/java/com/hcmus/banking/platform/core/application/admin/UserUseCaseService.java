@@ -56,6 +56,14 @@ public class UserUseCaseService {
         }
         userService.changePassword(user, passwordService.encode(password));
     }
+    @Transactional
+    public void resetPassword(String email, String password){
+        User user = userService.findByEmail(email);
+        if (user.isEmpty()){
+            throw new NotFoundException();
+        }
+        userService.changePassword(user, passwordService.encode(password));
+    }
 
     @Transactional
     public void create(User user){
