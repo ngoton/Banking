@@ -2,9 +2,8 @@ package com.hcmus.banking.platform.core.presentation.customer;
 
 import com.hcmus.banking.platform.domain.customer.Customer;
 import com.hcmus.banking.platform.domain.general.Created;
-import com.hcmus.banking.platform.domain.general.Gender;
+import com.hcmus.banking.platform.domain.info.Gender;
 import com.hcmus.banking.platform.domain.info.Info;
-import com.hcmus.banking.platform.domain.user.User;
 import lombok.AllArgsConstructor;
 
 import javax.validation.constraints.NotNull;

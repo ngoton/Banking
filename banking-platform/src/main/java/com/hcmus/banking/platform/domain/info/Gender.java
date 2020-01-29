@@ -1,4 +1,4 @@
-package com.hcmus.banking.platform.domain.general;
+package com.hcmus.banking.platform.domain.info;
 
 import lombok.Getter;
 
