@@ -1,7 +1,7 @@
 package com.hcmus.banking.platform.core.presentation.staff;
 
 import com.hcmus.banking.platform.domain.general.Created;
-import com.hcmus.banking.platform.domain.general.Gender;
+import com.hcmus.banking.platform.domain.info.Gender;
 import com.hcmus.banking.platform.domain.info.Info;
 import com.hcmus.banking.platform.domain.staff.Staff;
 import lombok.AllArgsConstructor;

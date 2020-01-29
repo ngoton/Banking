@@ -2,7 +2,6 @@ package com.hcmus.banking.platform.domain.info;
 
 import com.hcmus.banking.platform.domain.customer.Customer;
 import com.hcmus.banking.platform.domain.general.Created;
-import com.hcmus.banking.platform.domain.general.Gender;
 import com.hcmus.banking.platform.domain.general.IDEntity;
 import com.hcmus.banking.platform.domain.staff.Staff;
 import com.hcmus.banking.platform.domain.user.User;
