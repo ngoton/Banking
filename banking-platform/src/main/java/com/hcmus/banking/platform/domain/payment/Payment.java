@@ -1,5 +1,7 @@
 package com.hcmus.banking.platform.domain.payment;
 
+import com.hcmus.banking.platform.core.utils.RandomUtils;
+import com.hcmus.banking.platform.domain.customer.Customer;
 import com.hcmus.banking.platform.domain.general.Created;
 import com.hcmus.banking.platform.domain.general.IDEntity;
 import com.hcmus.banking.platform.domain.paymentTransaction.PaymentTransaction;
@@ -31,8 +33,10 @@ public class Payment extends IDEntity {
             @AttributeOverride(name = "createProgram.value", column = @Column(name = "create_program"))
     })
     private Created created;
-    @OneToMany(mappedBy = "payment")
+    @OneToMany(mappedBy = "payment", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     private List<PaymentTransaction> paymentTransactions;
+    @OneToOne(mappedBy = "payment", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    private Customer customer;
 
     public static Payment ofEmpty() {
         return new Payment(EMPTY_STRING, new BigDecimal(0), Created.ofEmpty());
@@ -43,7 +47,13 @@ public class Payment extends IDEntity {
         this.balance = balance;
         this.created = created;
     }
-    public boolean isEmpty(){
+
+    public boolean isEmpty() {
         return account.equals(EMPTY_STRING);
+    }
+
+    public static Payment generate() {
+        Payment payment = new Payment(RandomUtils.generateAccount(), BigDecimal.ZERO, Created.ofEmpty());
+        return payment;
     }
 }

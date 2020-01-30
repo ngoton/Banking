@@ -4,6 +4,7 @@ import com.hcmus.banking.platform.domain.customer.Customer;
 import com.hcmus.banking.platform.domain.general.Created;
 import com.hcmus.banking.platform.domain.info.Gender;
 import com.hcmus.banking.platform.domain.info.Info;
+import com.hcmus.banking.platform.domain.payment.Payment;
 import lombok.AllArgsConstructor;
 
 import javax.validation.constraints.NotNull;
@@ -24,7 +25,7 @@ public class CustomerRequest {
     public String phone;
     public String address;
 
-    public static Customer toCustomer(CustomerRequest customerRequest){
+    public static Customer toCustomer(CustomerRequest customerRequest) {
         Info info = new Info(
                 customerRequest.firstName,
                 customerRequest.lastName,
@@ -37,6 +38,7 @@ public class CustomerRequest {
         return new Customer(
                 customerRequest.code,
                 info,
+                Payment.generate(),
                 Created.ofEmpty()
         );
     }

@@ -16,28 +16,28 @@ public class PaymentTransactionController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
-    public Page<PaymentTransactionReponse> findAllBy(Pageable pageable){
+    public Page<PaymentTransactionResponse> findAllBy(Pageable pageable){
         Page<PaymentTransaction> paymentTransactions = PaymentTransactionService.findAllBy(pageable);
-        return PaymentTransactionReponses.ofPage(paymentTransactions, pageable);
+        return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
     }
     @GetMapping("/history/{id}")
     @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
-    public Page<PaymentTransactionReponse> findAllByPaymentId(@PathVariable Long id, Pageable pageable){
+    public Page<PaymentTransactionResponse> findAllByPaymentId(@PathVariable Long id, Pageable pageable){
         Page<PaymentTransaction> paymentTransactions = PaymentTransactionService.findAllByPaymentId(id,pageable);
-        return PaymentTransactionReponses.ofPage(paymentTransactions, pageable);
+        return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
     }
     @GetMapping("/historyBeneficiary/{id}")
     @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
-    public Page<PaymentTransactionReponse> findAllByBeneficiary(@PathVariable Long id, Pageable pageable){
+    public Page<PaymentTransactionResponse> findAllByBeneficiary(@PathVariable Long id, Pageable pageable){
         Page<PaymentTransaction> paymentTransactions = PaymentTransactionService.findAllByBeneficiary(id,pageable);
-        return PaymentTransactionReponses.ofPage(paymentTransactions, pageable);
+        return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
-    public PaymentTransactionReponse findBy(@PathVariable Long id){
+    public PaymentTransactionResponse findBy(@PathVariable Long id){
         PaymentTransaction paymentTransaction = PaymentTransactionService.findById(id);
-        return new PaymentTransactionReponse(paymentTransaction);
+        return new PaymentTransactionResponse(paymentTransaction);
     }
 
     @DeleteMapping("/{id}")
