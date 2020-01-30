@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class PaymentUserCaseService {
@@ -21,41 +23,47 @@ public class PaymentUserCaseService {
     }
 
     @Transactional(readOnly = true)
-    public Payment findById(Long id){
+    public Payment findById(Long id) {
         Payment payment = paymentService.findById(id);
-        if (payment.isEmpty()){
+        if (payment.isEmpty()) {
             throw new NotFoundException();
         }
         return payment;
     }
 
     @Transactional(readOnly = true)
-    public Payment findByAccount(String code){
+    public List<Payment> findAllByCustomerCode(String code) {
+        List<Payment> payments = paymentService.findAllByCustomerCode(code);
+        return payments;
+    }
+
+    @Transactional(readOnly = true)
+    public Payment findByAccount(String code) {
         Payment payment = paymentService.findByAccount(code);
-        if (payment.isEmpty()){
+        if (payment.isEmpty()) {
             throw new NotFoundException();
         }
         return payment;
     }
 
     @Transactional
-    public void create(Payment payment){
+    public void create(Payment payment) {
         paymentService.create(payment);
     }
 
     @Transactional
-    public void update(Payment payment){
+    public void update(Payment payment) {
         Payment oldStaff = paymentService.findByAccount(payment.getAccount());
-        if (oldStaff.isEmpty()){
+        if (oldStaff.isEmpty()) {
             throw new NotFoundException();
         }
         paymentService.update(oldStaff, payment);
     }
 
     @Transactional
-    public void delete(Long id){
+    public void delete(Long id) {
         Payment payment = paymentService.findById(id);
-        if (payment.isEmpty()){
+        if (payment.isEmpty()) {
             throw new NotFoundException();
         }
         paymentService.delete(payment);

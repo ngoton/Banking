@@ -8,6 +8,7 @@ import java.util.Random;
 public class RandomUtils {
     private static final String CODE_KEY = "9999";
     private static final Integer CODE_LENGTH = 6;
+    private static final Integer ACCOUNT_LENGTH = 12;
 
     public static String generate(){
         Long seed = Long.valueOf(CODE_KEY) * 1000 + ZonedDateTime.now().toInstant().toEpochMilli();
@@ -27,5 +28,9 @@ public class RandomUtils {
 
         Long randomLong = random.nextLong();
         return  Long.toString(randomLong).substring(1, length+1);
+    }
+    public static String generateAccount(){
+        Long seed = Long.valueOf(CODE_KEY) * 1000 + ZonedDateTime.now().toInstant().toEpochMilli();
+        return generateRandom(seed, ACCOUNT_LENGTH);
     }
 }

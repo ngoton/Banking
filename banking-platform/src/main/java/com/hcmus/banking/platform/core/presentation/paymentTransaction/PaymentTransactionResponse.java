@@ -4,12 +4,12 @@ import com.hcmus.banking.platform.domain.paymentTransaction.PaymentTransaction;
 
 import java.math.BigDecimal;
 
-public class PaymentTransactionReponse {
+public class PaymentTransactionResponse {
     public String code;
     public BigDecimal money;
     public String content;
 
-    public PaymentTransactionReponse(PaymentTransaction paymentTransaction) {
+    public PaymentTransactionResponse(PaymentTransaction paymentTransaction) {
         this.code = paymentTransaction.getCode();
         this.money = paymentTransaction.getMoney();
         this.content = paymentTransaction.getContent();

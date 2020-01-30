@@ -10,14 +10,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class PaymentTransactionReponses {
-    final List<PaymentTransactionReponse> paymentTransactionReponses;
+public class PaymentTransactionResponses {
+    final List<PaymentTransactionResponse> paymentTransactionReponses;
 
-    public static Page<PaymentTransactionReponse> ofPage(Page<PaymentTransaction> PaymentTransactionPage, Pageable pageable) {
+    public static Page<PaymentTransactionResponse> ofPage(Page<PaymentTransaction> PaymentTransactionPage, Pageable pageable) {
         List<PaymentTransaction> paymentTransactions = PaymentTransactionPage.getContent();
         long total = PaymentTransactionPage.getTotalElements();
-        List<PaymentTransactionReponse> responses = paymentTransactions.stream()
-                .map(paymentTransaction -> new PaymentTransactionReponse(paymentTransaction))
+        List<PaymentTransactionResponse> responses = paymentTransactions.stream()
+                .map(paymentTransaction -> new PaymentTransactionResponse(paymentTransaction))
                 .collect(Collectors.toList());
         return new PageImpl(responses, pageable, total);
     }

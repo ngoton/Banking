@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class PaymentService {
@@ -22,6 +24,9 @@ public class PaymentService {
 
     public Payment findByAccount(String account) {
         return paymentRepository.findByAccount(account).orElse(Payment.ofEmpty());
+    }
+    public List<Payment> findAllByCustomerCode(String code) {
+        return paymentRepository.findAllByCustomerCode(code);
     }
 
     public void create(Payment payment) {
