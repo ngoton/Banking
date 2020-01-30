@@ -12,8 +12,8 @@ public class PartnerRequest {
     @NotNull(message = "Partner is required")
     public String name;
     public String apiKey;
-    public String apiPrivateKey;
-    public String apiPublicKey;
+    public String privateKey;
+    public String publicKey;
     public String encryption;
 
     public static Partner toPartner(PartnerRequest partnerRequest){
@@ -24,8 +24,8 @@ public class PartnerRequest {
         return new Partner(
                 partnerRequest.name,
                 partnerRequest.apiKey,
-                partnerRequest.apiPrivateKey,
-                partnerRequest.apiPublicKey,
+                partnerRequest.privateKey,
+                partnerRequest.publicKey,
                 encryption,
                 Created.ofEmpty()
         );

@@ -23,14 +23,14 @@ public class PartnerUseCaseService {
             throw new BankingServiceException("Partner is already exists");
         }
 
-        try {
-            RSAGenerator rsaGenerator = new RSAGenerator();
-            rsaGenerator.createKeys();
-            partner.setPrivateKey(rsaGenerator.getPrivateKeyAsText());
-            partner.setPublicKey(rsaGenerator.getPublicKeyAsText());
-        } catch (NoSuchAlgorithmException e) {
-            throw new BankingServiceException("No such Algorithm");
-        }
+//        try {
+//            RSAGenerator rsaGenerator = new RSAGenerator();
+//            rsaGenerator.createKeys();
+//            partner.setPrivateKey(rsaGenerator.getPrivateKeyAsText());
+//            partner.setPublicKey(rsaGenerator.getPublicKeyAsText());
+//        } catch (NoSuchAlgorithmException e) {
+//            throw new BankingServiceException("No such Algorithm");
+//        }
 
         partner.setKey(RandomUtils.generateApiKey());
 
