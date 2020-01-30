@@ -58,34 +58,34 @@ export class RemiderListComponent implements OnInit, OnDestroy {
     hideSubHeader: true
   };
 
-  status = {0: "Chưa thanh toán", 1: "Đã thanh toán"};
+  status = {0: 'Chưa thanh toán', 1: 'Đã thanh toán'};
   source: LocalDataSource = new LocalDataSource();
   content_dimiss: string;
 
   constructor(private service: CustomerService, private dialogService: NbDialogService) {
     const data = [
       {
-        name_reminder: "Nguyễn Minh Phong",
-        account_reminder: "8492398237874350293",
-        account_debt: "80928539384534543",
-        money: "1,000.000",
-        content_debt: "Trả tiền mừng cưới",
+        name_reminder: 'Nguyễn Minh Phong',
+        account_reminder: '8492398237874350293',
+        account_debt: '80928539384534543',
+        money: '1,000.000',
+        content_debt: 'Trả tiền mừng cưới',
         status: this.status[0]
       },
       {
-        name_reminder: "Nguyễn Văn Nam",
-        account_reminder: "394893859345934923",
-        account_debt: "8492398237874350293",
-        money: "20.000",
-        content_debt: "Trả tiền xe ôm",
+        name_reminder: 'Nguyễn Văn Nam',
+        account_reminder: '394893859345934923',
+        account_debt: '8492398237874350293',
+        money: '20.000',
+        content_debt: 'Trả tiền xe ôm',
         status: this.status[1]
       },
       {
-        name_reminder: "Nguyễn Minh Phong",
-        account_reminder: "8492398237874350293",
-        account_debt: "2839823948234234025",
-        money: "15,000.000",
-        content_debt: "Thanh toán nghiệm thu hợp đồng",
+        name_reminder: 'Nguyễn Minh Phong',
+        account_reminder: '8492398237874350293',
+        account_debt: '2839823948234234025',
+        money: '15,000.000',
+        content_debt: 'Thanh toán nghiệm thu hợp đồng',
         status: this.status[0]
       }
     ];
@@ -106,7 +106,7 @@ export class RemiderListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    
+
   }
 
 }

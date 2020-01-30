@@ -25,7 +25,7 @@ import {
 } from '@nebular/theme';
 import { ThemeModule } from '../../@theme/theme.module';
 import { MatAutocompleteModule, MatOptionModule } from '@angular/material';
-import { CurrencyMaskModule } from "ngx-currency-mask";
+import { CurrencyMaskModule } from 'ngx-currency-mask';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { DialogDimissPromptComponent } from './dialog-dimiss-prompt/dialog-dimiss-prompt.component';
 

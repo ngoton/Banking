@@ -95,7 +95,7 @@ export class AccountsComponent implements OnDestroy {
       .subscribe(theme => {
         this.statusCards = this.statusCardsByThemes[theme.name];
     });
-    
+
     // Subscribe to user Details from UserService
     setTimeout(() => {
       this.accountsService.acctDetail$
@@ -108,7 +108,7 @@ export class AccountsComponent implements OnDestroy {
           this.debit = this.customerInfor.debit;
         });
     }, 5000);
-    
+
 
     this.solarService.getSolarData()
       .pipe(takeWhile(() => this.alive))
