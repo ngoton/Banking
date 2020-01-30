@@ -55,7 +55,7 @@ http://localhost:5432/banking
   
 * **Body:**
 
-  ```
+  ```c
     {
         "content": {},
         "sign": "",
@@ -70,7 +70,7 @@ http://localhost:5432/banking
 * **Response:**
   
   *Code: 200*
-  ```
+  ```c
   {
       "data": {},
       "sign": ""
@@ -90,3 +90,42 @@ http://localhost:5432/banking
       "path": "/api/v1/"
   }
   ```
+* **Example:**
+
+   ```c 
+   POST /api/v1/users HTTP/1.1
+    x-api-key: ABU992AG
+    x-time-code: 9999999999999
+    Content-Length: 1181
+    Host: localhost:8080
+    Content-Type: application/json
+
+    {
+        "content": {
+            "email": "ngoton.it@gmail.com"
+        },
+        "sign": "cuwDjqZCssHOAswqzwS7Y1epxmNCggyAW7xsZU0rQfv5INAOSVRwN1fcD0bKXeRIlmsrG8OpqHkVeeL4IepILEtDjg5oHKhJj66RgO3SU6671mmfqIi1qUKXU4ewQVI5Ha44AQqLovY6Aub7027MogsnYtrTqBenfNLQhXHOgBhNHrsLFifh6Dq0SpzCyL7stw5WIouGjsnJ6dDRNYLHKdr77fT6STsNHzyaatO4eqBGyLzbiiXIJu39wW9iMXBkmNwMCVik0e9MRKu+2TuL3LmMXDwIvhX4Jk/PRveRJSmJJsUIoyvHKWWkRp8CBM5kwXGcUuykOAPcblowzykjSw==",
+        "hash": "$2a$10$YhWxpuQChDb3YctEDQRO3Onz9SyBjPtfq8OuzRHRv8ey.vRjLZyWS"
+    }
+    ```
+    
+    ```c
+    HTTP/1.1 200
+    X-Content-Type-Options: nosniff
+    X-XSS-Protection: 1; mode=block
+    X-Frame-Options: SAMEORIGIN
+    Content-Type: application/json;charset=UTF-8
+    Transfer-Encoding: chunked
+    Date: Thu, 30 Jan 2020 06:20:26 GMT
+
+    {
+        "data": {
+            "content":[
+                {
+                    "email":"ngoton.it@gmail.com"
+                }
+            ]
+        },
+        "sign": "mt85eITgWg6SlMe+srCPfwLuAdMhIO2NXONyUDJXEpO/r4zlsBDov2LATazh//yp922+lTMMV2QOcMfH/q6bpHvteGpgYfbe5P75jfpm09YUmW+NpxQD3QNanvLZPfcPHJTW0xU5dJWHSL6bGLk6Xc76Sg+SOYT8qD4Sm3lWbbD4xRmrp9j4de/D5C7BL9b5ZLP8gpR3LivLVBLOGZ+jzBpmCLO0X1YvvbyxEiKqpSWw8h53SOx5TL49ySmvrNmZONCXT8hftQJPDhEaUb+gSEG1Pbord5xRI/1eKMETFhL6IX1eusyiBBSjijO56cYnq9fjT1qeWyH2VRRZU7QjZw=="
+    }
+   ```
