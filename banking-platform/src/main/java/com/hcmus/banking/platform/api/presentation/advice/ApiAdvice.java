@@ -49,18 +49,18 @@ public class ApiAdvice {
         ObjectMapper objectMapper = new ObjectMapper();
         String xApiKey = headers.get(X_API_KEY);
         String xTimeCode = headers.get(X_TIME_CODE);
-        String hashString = bodies.get(HASH_STRING).toString();
-        String signature = bodies.get(SIGNATURE).toString();
-        String content = bodies.get(CONTENT).toString();
-        try {
-            content = objectMapper.writeValueAsString(bodies.get(CONTENT));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
 
         if(StringUtils.isEmpty(xApiKey) || StringUtils.isEmpty(xTimeCode)) {
             throw new UnauthorizedException();
         }
+
+        if(bodies.get(HASH_STRING) == null || bodies.get(SIGNATURE) == null || bodies.get(CONTENT) == null) {
+            throw new UnauthorizedException();
+        }
+
+        String hashString = bodies.get(HASH_STRING).toString();
+        String signature = bodies.get(SIGNATURE).toString();
+        String content = bodies.get(CONTENT).toString();
 
         Partner partner = partnerUseCaseService.findByKey(xApiKey);
         if (partner.isEmpty()) {
@@ -77,6 +77,11 @@ public class ApiAdvice {
             throw new UnauthorizedException();
         }
 
+        try {
+            content = objectMapper.writeValueAsString(bodies.get(CONTENT));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         try {
             PublicKey publicKey = rsaCryptography.getPublicKey(partner.getPublicKey());
 
