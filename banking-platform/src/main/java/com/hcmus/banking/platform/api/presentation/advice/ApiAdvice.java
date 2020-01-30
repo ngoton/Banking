@@ -3,10 +3,13 @@ package com.hcmus.banking.platform.api.presentation.advice;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hcmus.banking.platform.api.application.partner.PartnerUseCaseService;
+import com.hcmus.banking.platform.config.security.PGPCryptography;
 import com.hcmus.banking.platform.config.security.RSACryptography;
 import com.hcmus.banking.platform.core.application.user.PasswordService;
 import com.hcmus.banking.platform.domain.exception.UnauthorizedException;
+import com.hcmus.banking.platform.domain.partner.Encryption;
 import com.hcmus.banking.platform.domain.partner.Partner;
+import org.bouncycastle.openpgp.PGPPublicKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -37,6 +40,9 @@ public class ApiAdvice {
 
     @Autowired
     RSACryptography rsaCryptography;
+
+    @Autowired
+    PGPCryptography pgpCryptography;
 
     @ModelAttribute("partner")
     Partner validateApiKey(@RequestHeader Map<String,String> headers, @RequestBody Map<String,Object> bodies) throws SecurityException {
@@ -83,11 +89,23 @@ public class ApiAdvice {
             e.printStackTrace();
         }
         try {
-            PublicKey publicKey = rsaCryptography.getPublicKey(partner.getPublicKey());
-
-            if (!rsaCryptography.verify(content, signature, publicKey)){
+            Encryption encryption = partner.getEncryption();
+            if(encryption.isRSA()){
+                PublicKey publicKey = rsaCryptography.getPublicKey(partner.getPublicKey());
+                if (!rsaCryptography.verify(content, signature, publicKey)){
+                    throw new UnauthorizedException();
+                }
+            }
+            else if (encryption.isPGP()){
+                PGPPublicKey publicKey = pgpCryptography.getPublicKey(partner.getPublicKey());
+                if (!pgpCryptography.verify(content, signature, publicKey)){
+                    throw new UnauthorizedException();
+                }
+            }
+            else {
                 throw new UnauthorizedException();
             }
+
         } catch (NoSuchAlgorithmException e) {
             throw new UnauthorizedException();
         } catch (NoSuchPaddingException e) {

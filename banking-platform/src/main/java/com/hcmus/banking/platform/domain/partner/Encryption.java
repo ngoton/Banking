@@ -4,5 +4,13 @@ import lombok.Getter;
 
 @Getter
 public enum Encryption {
-    RSA, PGP, NONE
+    RSA, PGP, NONE;
+
+    public boolean isRSA(){
+        return this == RSA;
+    }
+
+    public boolean isPGP(){
+        return this == PGP;
+    }
 }
