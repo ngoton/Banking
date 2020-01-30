@@ -81,7 +81,7 @@ http://localhost:5432/banking
 * **Error Response:**
 
   *Code: 401 UNAUTHORIZED*
-  ```
+  ```c
   {
       "timestamp": "2020-01-30T06:44:52.079+0000",
       "status": 401,
