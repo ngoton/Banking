@@ -20,8 +20,6 @@ public class Partner extends IDEntity {
     private String name;
     private String key;
     private String apiKey;
-    private String apiPrivateKey;
-    private String apiPublicKey;
     private String privateKey;
     private String publicKey;
     @Enumerated(EnumType.STRING)
@@ -34,17 +32,17 @@ public class Partner extends IDEntity {
     })
     private Created created;
 
-    public Partner(String name, String apiKey, String apiPrivateKey, String apiPublicKey, Encryption encryption, Created created){
+    public Partner(String name, String apiKey, String privateKey, String publicKey, Encryption encryption, Created created){
         this.name = name;
         this.apiKey = apiKey;
-        this.apiPrivateKey = apiPrivateKey;
-        this.apiPublicKey = apiPublicKey;
+        this.privateKey = privateKey;
+        this.publicKey = publicKey;
         this.encryption = encryption;
         this.created = created;
     }
 
     public static Partner ofEmpty(){
-        return new Partner(EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, Encryption.RSA, Created.ofEmpty());
+        return new Partner(EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, Encryption.RSA, Created.ofEmpty());
     }
 
     public boolean isEmpty(){

@@ -28,7 +28,7 @@ public class UserController {
         return UserResponses.ofPage(users, pageable);
     }
 
-    @PostMapping("/info")
+    @GetMapping("/info")
     public UserResponse info() {
         Optional<BankingUser> bankingUser = SecurityUtils.asBankingUser();
         if (!bankingUser.isPresent()){
