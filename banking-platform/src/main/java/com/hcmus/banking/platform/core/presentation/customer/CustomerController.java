@@ -30,6 +30,12 @@ public class CustomerController {
         return new CustomerResponse(customer);
     }
 
+    @GetMapping("/user/{id}")
+    public CustomerResponse findByUser(@PathVariable Long id){
+        Customer customer = customerService.findByUserId(id);
+        return new CustomerResponse(customer);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")

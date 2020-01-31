@@ -31,6 +31,13 @@ public class StaffController {
         return new StaffResponse(staff);
     }
 
+    @GetMapping("/user/{id}")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
+    public StaffResponse findByUserId(@PathVariable Long id){
+        Staff staff = staffService.findByUserId(id);
+        return new StaffResponse(staff);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ADMIN')")

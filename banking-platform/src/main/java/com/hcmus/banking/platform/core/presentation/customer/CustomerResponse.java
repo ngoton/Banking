@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class CustomerResponse {
+    public Long customerId;
     public String code;
     public String firstName;
     public String lastName;
@@ -20,6 +21,7 @@ public class CustomerResponse {
 
 
     public CustomerResponse(Customer customer) {
+        this.customerId = customer.getId();
         this.code = customer.getCode();
         this.firstName = customer.getInfo().getFirstName();
         this.lastName = customer.getInfo().getLastName();
