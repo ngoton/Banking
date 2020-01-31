@@ -50,7 +50,7 @@ banking:
   security:
     authentication:
       jwt:
-        token-validity: 900
+        token-validity: 2592000
         token-validity-for-remember-me: 2592000
         token-refresh-validity: 86400
         base64-secret: NjUzNzc0YTkxZmU0YzAyYzVjODUyYTcwNDM4MzQ2OTQ=

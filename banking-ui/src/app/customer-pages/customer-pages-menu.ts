@@ -22,18 +22,18 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'volume-up',
     children: [
       {
-        title: "Tạo nhắc nợ",
+        title: 'Tạo nhắc nợ',
         link: '/customer/reminder-debt/new'
       },
       {
-        title: "Danh sách nhắc nợ",
+        title: 'Danh sách nhắc nợ',
         link: '/customer/reminder-debt'
       }
     ],
   },
   {
-    title: 'Quản lý giao dịch',
+    title: 'Lịch sử giao dịch',
     icon: 'clipboard',
-    link: '/customer/bill-payment',
+    link: '/customer/transaction-history',
   }
 ];

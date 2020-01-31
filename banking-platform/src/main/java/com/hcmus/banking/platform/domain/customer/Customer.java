@@ -2,6 +2,7 @@ package com.hcmus.banking.platform.domain.customer;
 
 import com.hcmus.banking.platform.domain.general.*;
 import com.hcmus.banking.platform.domain.info.Info;
+import com.hcmus.banking.platform.domain.payment.Payment;
 import lombok.*;
 
 
@@ -19,6 +20,9 @@ public class Customer extends IDEntity {
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinColumn(name = "infos_id")
     private Info info;
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @JoinColumn(name = "payments_id")
+    private Payment payment;
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "createdAt.value", column = @Column(name = "created_at")),
@@ -27,11 +31,11 @@ public class Customer extends IDEntity {
     })
     private Created created;
 
-    public static Customer ofEmpty(){
-        return new Customer(EMPTY_STRING, Info.ofEmpty(), Created.ofEmpty());
+    public static Customer ofEmpty() {
+        return new Customer(EMPTY_STRING, Info.ofEmpty(), Payment.ofEmpty(), Created.ofEmpty());
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return code.equals(EMPTY_STRING);
     }
 }

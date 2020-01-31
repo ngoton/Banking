@@ -23,7 +23,7 @@ import { ThemeModule } from '../../@theme/theme.module';
 import { StatusCardComponent } from './status-card/status-card.component';
 import { TransferTypeComponent } from './transfer-type/transfer-type.component';
 import { MatAutocompleteModule, MatOptionModule } from '@angular/material';
-import { CurrencyMaskModule } from "ngx-currency-mask";
+import { CurrencyMaskModule } from 'ngx-currency-mask';
 
 @NgModule({
   declarations: [TransferComponent, InternalComponent, ExternalComponent, StatusCardComponent, TransferTypeComponent],

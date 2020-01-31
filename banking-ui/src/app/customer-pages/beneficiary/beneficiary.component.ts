@@ -62,7 +62,7 @@ export class BeneficiaryComponent implements OnInit, OnDestroy {
   }
 
   onDeleteConfirm(event): void {
-    if (window.confirm('Are you sure you want to delete?')) {
+    if (window.confirm('Bạn có chắc chắn muốn xóa?')) {
       event.confirm.resolve();
     } else {
       event.confirm.reject();
@@ -73,7 +73,7 @@ export class BeneficiaryComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    
+
   }
 
 }
