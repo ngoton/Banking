@@ -13,6 +13,7 @@ public interface StaffRepository extends JpaRepository<Staff, Long> {
     Page<Staff> findAllBy(Pageable pageable);
     Optional<Staff> findById(Long id);
     Optional<Staff> findByCode(String code);
+    Optional<Staff> findByInfoUserId(Long id);
     Staff save(Staff customer);
     void delete(Staff customer);
 }

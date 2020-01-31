@@ -41,6 +41,11 @@ public class StaffUseCaseService {
         return staff;
     }
 
+    @Transactional(readOnly = true)
+    public Staff findByUserId(Long id){
+        return staffService.findByUserId(id);
+    }
+
     @Transactional
     public void create(Staff staff){
         Staff byCode = staffService.findByCode(staff.getCode());

@@ -24,6 +24,10 @@ public class StaffService {
         return staffRepository.findByCode(code).orElse(Staff.ofEmpty());
     }
 
+    public Staff findByUserId(Long id){
+        return staffRepository.findByInfoUserId(id).orElse(Staff.ofEmpty());
+    }
+
     public void create(Staff staff){
         staffRepository.save(staff);
     }

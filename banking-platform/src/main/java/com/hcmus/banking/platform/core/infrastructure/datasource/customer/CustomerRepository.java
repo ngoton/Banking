@@ -13,6 +13,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     Page<Customer> findAllBy(Pageable pageable);
     Optional<Customer> findById(Long id);
     Optional<Customer> findByCode(String code);
+    Optional<Customer> findByInfoUserId(Long id);
     Customer save(Customer customer);
     void delete(Customer customer);
 }

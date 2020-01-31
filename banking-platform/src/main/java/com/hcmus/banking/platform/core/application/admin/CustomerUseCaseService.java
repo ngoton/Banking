@@ -71,4 +71,9 @@ public class CustomerUseCaseService {
         }
         customerService.delete(customer);
     }
+
+    @Transactional(readOnly = true)
+    public Customer findByUserId(Long id) {
+        return customerService.findByUserId(id);
+    }
 }
