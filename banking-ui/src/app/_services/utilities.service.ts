@@ -32,7 +32,6 @@ export class UtilitiesService {
     private http: HttpClient,
     private router: Router,
     private notifications: NotifierService,
-    private userService: UserService,
     private cp: CurrencyPipe
   ) {}
 
@@ -49,17 +48,6 @@ export class UtilitiesService {
     encrypt.setPublicKey(environment.PUB_ENC_KEY);
     const hash = encrypt.encrypt(data);
     return hash;
-  }
-
-  generateRequestId() {
-    let reqID = "";
-    this.user = this.userService.getUserDetails();
-    if (this.user) {
-      reqID = environment.CHANNEL_SHORTNAME + this.today + this.user.userId;
-    } else {
-      reqID = this.generateNumber();
-    }
-    return reqID;
   }
 
   generateNumber() {
@@ -92,37 +80,8 @@ export class UtilitiesService {
     return formated;
   }
 
-  addAuthParams(body) {
-    this.user = this.userService.getUserDetails();
-    console.log(this.user);
-    if (this.user) {
-      body.customerId = this.user.userId;
-      body.customerNumber = this.user.userId;
-      body.requestId = this.generateRequestId();
-      body.channel = environment.CHANNEL;
-      body.userId = this.user.userId;
-      body.sessionId = localStorage.getItem("userToken");
-    } else {
-      console.log("Session is Expired");
-      // this.notifications.html(
-      //   `Your session has expired`,
-      //   NotificationType.Info,
-      //   {
-      //     id: "login",
-      //     timeOut: 10000,
-      //     showProgressBar: true,
-      //     animate: "scale"
-      //   }
-      // );
-      this.notifications.notify(`info`, `Your session has expired`, `login`);
-      setTimeout(() => {
-        this.router.navigate(["/onboarding/login"]);
-      }, 5000);
-    }
-    return body;
-  }
-
   handleError(error?: HttpErrorResponse) {
+    debugger;
     console.log(error);
     let errormessage;
     if (error.error instanceof ErrorEvent) {

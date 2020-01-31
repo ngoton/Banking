@@ -59,17 +59,11 @@ export class CustomerService implements OnDestroy {
     private userService: UserService,
   ) { }
 
+  getCustomerData(userId): Observable<any> {
+    let accessToken = JSON.parse(localStorage.getItem('token'));
 
-  // =================== BALANCE ENQUIRY =======================
-  customerValidationUpdated(body): Observable<any> {
-    const PATH = this.CUST_URL + `/CustomerValidationMoreRecord`;
-    // Add customer related properties to the body object
-    const cusNum = body.customerNumber;
-    body = this.util.addAuthParams(body);
-    delete body.customerID;
-    body.customerNumber = cusNum;
-    console.log(body); // for debugging only
-    return this.http.post<Response>(PATH, body)
+    const PATH = this.CUST_URL + `/user/${userId}`;
+      return this.http.post<any>(PATH, accessToken)
       .pipe(
         retry(3),
         catchError(this.util.handleError)
@@ -79,39 +73,28 @@ export class CustomerService implements OnDestroy {
   getAcctDetailsData() {
     const userDetails = this.userService.getUserDetails();
 
-    const body = {
-      'email': '',
-      'phoneNumber': '',
-      'bvn': '',
-      'category': 1,
-      'customerNumber': !userDetails ? '' : userDetails.id
-    };
-
     const customerInformation = userDetails.customer;
     this.updateAcctDetails(customerInformation);
-    // this.customerValidationUpdated(body).pipe(untilDestroyed(this))
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       console.log(res.accountDetails);
-    //       if (res.responseCode === '00') {
-    //         this.updateAcctDetailsError('');
-    //         this.updateAcctDetails(res.accountDetails);
-    //         this.updateSelectedAcctDetails(res.accountDetails[0]);
-    //       } else {
-    //         this.updateAcctDetailsError(res.responseDescription);
-    //         this.updateAcctDetails(null);
-    //         this.updateSelectedAcctDetails(null);
-    //         // alert('An Error Occured' + res.responseDescription);
-    //       }
-    //     },
-    //     (err: HttpErrorResponse) => {
-    //       console.log(err);
-    //       this.updateAcctDetailsError(`Oops! We couldn't reach this service at this time. Try again`);
-    //       this.updateAcctDetails(null);
-    //       this.updateSelectedAcctDetails(null);
-    //     }
-    //   );
+    this.getCustomerData(userDetails.id).pipe(untilDestroyed(this))
+      .subscribe(
+        res => {
+          console.log(res);
+          // console.log(res.accountDetails);
+          if (res.responseCode === '00') {
+            this.updateAcctDetailsError('');
+            this.updateAcctDetails(res);
+          } else {
+            this.updateAcctDetailsError(res.responseDescription);
+            this.updateAcctDetails(null);
+            // alert('An Error Occured' + res.responseDescription);
+          }
+        },
+        (err: HttpErrorResponse) => {
+          console.log(err);
+          this.updateAcctDetailsError(`Oops! We couldn't reach this service at this time. Try again`);
+          this.updateAcctDetails(null);
+        }
+      );
 
   }
 
