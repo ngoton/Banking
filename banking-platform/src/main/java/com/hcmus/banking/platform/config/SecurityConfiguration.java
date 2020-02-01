@@ -81,11 +81,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http
                 .csrf()
-                .and()
-                .cors()
                 .disable()
                 .exceptionHandling()
                 .authenticationEntryPoint(unauthorizedHandler)
+                .and()
+                .cors()
                 .and()
                 .headers()
                 .frameOptions()
