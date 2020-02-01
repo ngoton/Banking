@@ -102,6 +102,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       .pipe(untilDestroyed(this))
       .subscribe(
         (res: any) => {
+          debugger;
           console.log(res);
           this.getOnboardingJourney(res);
         },
@@ -120,8 +121,17 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loginError = null;
     if (res.responseCode === "00" || res.responseCode === "04") {
       // if Login is successful
-      this.user = res.userDetails;
-      this.storeUserDetails(this.user);
+      localStorage.setItem("token", JSON.stringify(res.accessToken));
+      this.userService.getUserInforByToken()
+      .pipe(untilDestroyed(this)).subscribe(
+        (res: any) => {
+          this.user = res;
+          this.storeUserDetails(this.user);
+        },
+        (err: HttpErrorResponse) => {
+          console.log(err);
+        }
+      );
       //this.checkUserStatus(res);
     } else {
       this.notifications.hide("login"); // hide login notification
@@ -135,7 +145,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     } // Login returned error
   }
 
-  storeUserDetails(user: User) {
+  storeUserDetails(user) {
     this.userService.updateUser(user);
     localStorage.setItem("userDetails", JSON.stringify(user));
     // localStorage.removeItem('userDetails');

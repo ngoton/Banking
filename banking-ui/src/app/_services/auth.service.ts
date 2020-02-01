@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders , HttpErrorResponse } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import 'rxjs/add/observable/throw';
@@ -22,10 +22,22 @@ export class AuthService implements OnDestroy {
     public util: UtilitiesService,
     private userService: UserService ) { }
 
+    // Http Headers
+    httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    }
+
     login(credentials): Observable<any> {
+      debugger;
       console.log(credentials);
+      let loginData = {
+        username: credentials.Username,
+        password: credentials.Password
+      }
       const PATH = this.AUTH_URL + `/authenticate`;
-      return this.http.post<any>(PATH, credentials)
+      return this.http.post<any>(PATH, JSON.stringify(loginData), this.httpOptions)
       .pipe(
         retry(3),
         catchError(this.util.handleError)
@@ -35,7 +47,6 @@ export class AuthService implements OnDestroy {
     logout(): Observable<any> {
       const user = this.userService.getUserDetails();
       const data = {
-        'requestID' : this.util.generateRequestId(),
         'userID'  : user.id
       };
       console.log(data);
