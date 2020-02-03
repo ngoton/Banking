@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface BeneficiaryRepository extends JpaRepository<Beneficiary, Long> {
@@ -12,6 +13,7 @@ public interface BeneficiaryRepository extends JpaRepository<Beneficiary, Long> 
     Optional<Beneficiary> findById(Long id);
     Optional<Beneficiary> findByName(String name);
     Optional<Beneficiary> findByAccount(String account);
+    List<Beneficiary> findAllByCustomerCode(String code);
     Beneficiary save(Beneficiary beneficiary);
     void delete(Beneficiary beneficiary);
 }
