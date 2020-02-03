@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class BeneficiaryService {
@@ -16,29 +18,32 @@ public class BeneficiaryService {
         return beneficiaryRepository.findAllBy(pageable);
     }
 
-    public Beneficiary findById(Long id){
+    public Beneficiary findById(Long id) {
         return beneficiaryRepository.findById(id).orElse(Beneficiary.ofEmpty());
     }
 
-    public Beneficiary findByName(String name){
+    public Beneficiary findByName(String name) {
         return beneficiaryRepository.findByName(name).orElse(Beneficiary.ofEmpty());
     }
-    public Beneficiary findByAccount(String account){
+
+    public Beneficiary findByAccount(String account) {
         return beneficiaryRepository.findByAccount(account).orElse(Beneficiary.ofEmpty());
     }
-
-    public void create(Beneficiary customer){
-        beneficiaryRepository.save(customer);
+    public List<Beneficiary> findAllByCustomerCode(String code) {
+        return beneficiaryRepository.findAllByCustomerCode(code);
+    }
+    public void create(Beneficiary beneficiary) {
+        beneficiaryRepository.save(beneficiary);
     }
 
-    public void update(Beneficiary oldBeneficiary, Beneficiary beneficiary){
+    public void update(Beneficiary oldBeneficiary, Beneficiary beneficiary) {
         oldBeneficiary.setName(beneficiary.getName());
-        oldBeneficiary.setAccount(beneficiary.getAccount());
+        oldBeneficiary.setShortName(beneficiary.getShortName());
         oldBeneficiary.setBankName(beneficiary.getBankName());
         beneficiaryRepository.save(oldBeneficiary);
     }
 
-    public void delete(Beneficiary beneficiary){
+    public void delete(Beneficiary beneficiary) {
         beneficiaryRepository.delete(beneficiary);
     }
 }
