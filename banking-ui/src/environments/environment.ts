@@ -10,19 +10,19 @@
 
 export const environment = {
   production: false,
-  AUX_BENEFICIARY: "",
-  AUX_URL: "",
-  BASE_URL: "http://localhost:8800",
-  AUTH_API: "/auth",
-  USER_SERV: "/users",
-  CUST_SERV: "/customers",
-  TRANSF_SERV: "",
-  REQ_SERV: "",
-  PAYMENTS_SERV: "",
-  CHANNEL: "",
-  CHANNEL_SHORTNAME: "",
-  ENV_NAME: "localhost:4200",
-  ATM_LIMIT: "",
+  AUX_BENEFICIARY: '',
+  AUX_URL: '',
+  BASE_URL: 'http://localhost:4200',
+  AUTH_SERV: '/auth',
+  USER_SERV: '/users',
+  CUST_SERV: '/customers',
+  TRANSF_SERV: '',
+  REQ_SERV: '',
+  PAYMENTS_SERV: '',
+  CHANNEL: '',
+  CHANNEL_SHORTNAME: '',
+  ENV_NAME: 'localhost:4200',
+  ATM_LIMIT: '',
   PUB_ENC_KEY: `-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDlOJu6TyygqxfWT7eLtGDwajtN
 FOb9I5XRb7khyfD1Yt3YiCgQWMNW649887VGJiGr/L5i2osbl8C9+WJTeucF+S76
@@ -45,5 +45,5 @@ V7SwWvSK4WSMnGb1ZBbhgdg57DXaspcwHsFV7hByQ5BvMtIduHcT14ECfcECQATe
 aTgjFnqE/lQ22Rk0eGaYO80ec643BXVGafNfd9fcvwBMnk0iGX0XRsOozVt5Azil
 psLBYuApa66NcVHJpCECQQDTjI2AQhFc1yRnCU/YgDnSpJVm1nASoRUnU8Jfm3Oz
 uku7JUXcVpt08DFSceCEX9unCuMcT72rAQlLpdZir876
-  -----END RSA PRIVATE KEY-----`
+  -----END RSA PRIVATE KEY-----`,
 };

@@ -11,11 +11,11 @@ import { UserService } from './user.service';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService implements OnDestroy {
 
-  public AUTH_URL = environment.BASE_URL + environment.AUTH_API;
+  public AUTH_URL = environment.BASE_URL + environment.AUTH_SERV;
 
   constructor(
     private http: HttpClient,
@@ -25,36 +25,36 @@ export class AuthService implements OnDestroy {
     // Http Headers
     httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
-    }
+        'Content-Type': 'application/json',
+      }),
+    };
 
     login(credentials): Observable<any> {
       debugger;
       console.log(credentials);
-      let loginData = {
+      const loginData = {
         username: credentials.Username,
-        password: credentials.Password
-      }
+        password: credentials.Password,
+      };
       const PATH = this.AUTH_URL + `/authenticate`;
       return this.http.post<any>(PATH, JSON.stringify(loginData), this.httpOptions)
       .pipe(
         retry(3),
-        catchError(this.util.handleError)
+        catchError(this.util.handleError),
       );
     }
 
     logout(): Observable<any> {
       const user = this.userService.getUserDetails();
       const data = {
-        'userID'  : user.id
+        'userID'  : user.id,
       };
       console.log(data);
       const PATH = this.AUTH_URL + `/Logout`;
       return this.http.post<any>(PATH, data)
       .pipe(
         retry(3),
-        catchError(this.util.handleError)
+        catchError(this.util.handleError),
       );
     }
 
@@ -70,7 +70,7 @@ export class AuthService implements OnDestroy {
         },
         (err: HttpErrorResponse) => {
           console.log(err);
-        }
+        },
       );
     }
 
