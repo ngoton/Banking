@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject, Observable, Subject, Subscription, from } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import { UtilitiesService } from './utilities.service';
 import {
@@ -12,6 +12,7 @@ import {
 import { Router } from '@angular/router';
 import { UserService } from './user.service';
 import { untilDestroyed } from 'ngx-take-until-destroy';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -50,41 +51,53 @@ export class CustomerService implements OnDestroy {
   private branchesSource = new Subject<any[]>();
   branchesObserver = this.branchesSource.asObservable();
 
-  subscription: Subscription;
+  private subscription: Subscription = new Subscription();
 
   constructor(
     private http: HttpClient,
     private util: UtilitiesService,
+    private auth: AuthService,
     private router: Router,
     private userService: UserService,
   ) { }
 
-  getCustomerData(userId): Observable<any> {
-    let accessToken = JSON.parse(localStorage.getItem('token'));
+  // Http Headers
+  // httpOptions = {
+  //   headers: new HttpHeaders({
+  //     "Content-Type": "application/json",
+  //     "Authorization": `Bearer ${this.auth.getToken()}`
+  //   }),
+  // };
 
-    const PATH = this.CUST_URL + `/user/${userId}`;
-      return this.http.post<any>(PATH, accessToken)
+  getCustomerData(userId): Observable<any> {
+    let accessToken = this.auth.getToken();
+
+    if(accessToken){
+
+      const PATH = this.CUST_URL + `/user/${userId}`;
+      return this.http.get<any>(PATH)
       .pipe(
         retry(3),
         catchError(this.util.handleError)
       );
+    }
+    else{
+      this.router.navigate(['/onboarding/login']);
+    }
   }
 
   getAcctDetailsData() {
     const userDetails = this.userService.getUserDetails();
 
-    const customerInformation = userDetails.customer;
-    this.updateAcctDetails(customerInformation);
-    this.getCustomerData(userDetails.id).pipe(untilDestroyed(this))
+    this.getCustomerData(userDetails.userId).pipe(untilDestroyed(this))
       .subscribe(
-        res => {
-          console.log(res);
+        (res: Customers) => {
           // console.log(res.accountDetails);
-          if (res.responseCode === '00') {
+          if (res) {
             this.updateAcctDetailsError('');
             this.updateAcctDetails(res);
           } else {
-            this.updateAcctDetailsError(res.responseDescription);
+            this.updateAcctDetailsError("Can't get customer's data");
             this.updateAcctDetails(null);
             // alert('An Error Occured' + res.responseDescription);
           }

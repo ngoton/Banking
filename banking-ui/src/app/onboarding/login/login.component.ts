@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { User } from '../../_models/user';
 import { LoginData } from '../../_models/logindata';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../_services/auth.service';
@@ -14,6 +14,7 @@ import { UserService } from '../../_services/user.service';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import * as JsEncryptModule from 'jsencrypt';
 import { Template } from '@angular/compiler/src/render3/r3_ast';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: "ngx-login",
@@ -37,8 +38,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   public options = {
     position: ["bottom", "right"]
   };
+  returnUrl: string;
 
   public keypadNumbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
+  //private subscription: Subscription = new Subscription();
 
   constructor(
     private notifications: NotifierService,
@@ -47,17 +50,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     private util: UtilitiesService,
     private userService: UserService,
     private router: Router,
+    private activeRoute: ActivatedRoute,
     private customerService: CustomerService
   ) {
     this.submitted = false;
     this.createForm();
-    this.keypadNumbers = this.shuffleKeyPad(this.keypadNumbers);
-    let userName = localStorage.getItem("userName")
-      ? localStorage.getItem("userName")
-      : "";
-    console.log(userName);
-    userName = this.util.decrypt(userName);
-    this.loginForm.controls["Username"].setValue(userName);
+    
+    // get return url from route parameters or default to '/'
+    this.returnUrl = this.activeRoute.snapshot.queryParams['returnUrl'] || '/';
   }
 
   createForm() {
@@ -72,11 +72,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(formdata) {
-    debugger;
-    console.log(formdata);
     if (formdata.RememberMe === true) {
       const userName = this.util.encrypt(formdata.Username);
-      console.log(userName);
       localStorage.setItem("userName", userName);
     }
     this.loading = true;
@@ -102,12 +99,12 @@ export class LoginComponent implements OnInit, OnDestroy {
       .pipe(untilDestroyed(this))
       .subscribe(
         (res: any) => {
-          debugger;
           console.log(res);
-          this.getOnboardingJourney(res);
+          // if Login is successful
+          localStorage.setItem("token", JSON.stringify(res.accessToken));
+          this.getOnboardingJourney();
         },
         (err: HttpErrorResponse) => {
-          debugger;
           this.notifications.hide("login"); // remove login notification
           this.errorAlert(err.message === undefined ? "Đăng nhập thất bại!" : err);
           console.log(err);
@@ -117,41 +114,36 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   // User Authentication
-  getOnboardingJourney(res) {
-    this.loginError = null;
-    if (res.responseCode === "00" || res.responseCode === "04") {
-      // if Login is successful
-      localStorage.setItem("token", JSON.stringify(res.accessToken));
-      this.userService.getUserInforByToken()
+  getOnboardingJourney() {
+    this.userService.getUserInforByToken()
       .pipe(untilDestroyed(this)).subscribe(
         (res: any) => {
           this.user = res;
           this.storeUserDetails(this.user);
+          this.checkUserStatus(this.user);         
         },
         (err: HttpErrorResponse) => {
           console.log(err);
         }
       );
-      //this.checkUserStatus(res);
-    } else {
-      this.notifications.hide("login"); // hide login notification
-      this.loginError = res.responseDescription.replace(
-        "Validation Failure -",
-        ""
-      );
-      this.errorAlert(this.loginError);
-      console.log(res);
-      console.log(this.loginError); // Delete later
-    } // Login returned error
   }
 
   storeUserDetails(user) {
     this.userService.updateUser(user);
     localStorage.setItem("userDetails", JSON.stringify(user));
     // localStorage.removeItem('userDetails');
-    const users = JSON.parse(localStorage.getItem("userDetails"));
-    console.log("User details stored in local storage"); // delete later
-    console.log(users); // delete later
+  }
+
+  checkUserStatus(user) {
+    this.authenticateUser(user);
+  }
+
+  authenticateUser(user) {
+    this.notifications.hide('login'); // remove login notification
+    setTimeout(() => {
+      this.router.navigate(['/customer']);
+    }, 300);
+
   }
 
   shuffleKeyPad(keyArray: any[]) {
@@ -208,10 +200,12 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // this.customerService.getAcctDetailsData();
-    // this.auth.ibankLogout();
+    this.auth.ibankLogout();
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    //this.subscription.unsubscribe();
+  }
 
   getConfigValue(key: string): any {};
 }

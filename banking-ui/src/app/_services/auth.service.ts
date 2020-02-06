@@ -19,66 +19,39 @@ export class AuthService implements OnDestroy {
 
   constructor(
     private http: HttpClient,
-    public util: UtilitiesService,
-    private userService: UserService ) { }
-
-    // Http Headers
-    httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-    };
+    public util: UtilitiesService) { }
 
     login(credentials): Observable<any> {
-      debugger;
       console.log(credentials);
       const loginData = {
         username: credentials.Username,
         password: credentials.Password,
       };
       const PATH = this.AUTH_URL + `/authenticate`;
-      return this.http.post<any>(PATH, JSON.stringify(loginData), this.httpOptions)
+      return this.http.post<any>(PATH, JSON.stringify(loginData))
       .pipe(
         retry(3),
         catchError(this.util.handleError),
       );
     }
 
-    logout(): Observable<any> {
-      const user = this.userService.getUserDetails();
-      const data = {
-        'userID'  : user.id,
-      };
-      console.log(data);
-      const PATH = this.AUTH_URL + `/Logout`;
-      return this.http.post<any>(PATH, data)
-      .pipe(
-        retry(3),
-        catchError(this.util.handleError),
-      );
+    logout() {
+      // remove user from local storage to log user out
+        this.clearLocalStorage();
+    }
+
+    getToken(): string {
+      return JSON.parse(localStorage.getItem('token'));
     }
 
     ibankLogout() {
-      this.logout().pipe(untilDestroyed(this)) // <--- method to unsubscribe when comp destroys
-      .subscribe(
-        (res: any) => {
-          if (res.responseCode) { // if Login is successful
-            console.log(res); // this is only for debugging purpose
-            this.clearLocalStorage();
-            console.log('logout Successful');
-            }
-        },
-        (err: HttpErrorResponse) => {
-          console.log(err);
-        },
-      );
+      this.logout();
     }
 
     clearLocalStorage() {
-      const userName = (localStorage.getItem('userName') ? localStorage.getItem('userName') : '');
+      localStorage.removeItem('token');
+      localStorage.removeItem('userDetails');
       localStorage.clear();
-      localStorage.setItem('userName', userName);
-      this.userService.updateUser('');
     }
 
     ngOnDestroy(): void {}

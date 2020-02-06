@@ -1,6 +1,6 @@
 const PROXY_CONFIG = [
   {
-    context: ["/api", "/auth", "/users", "/customers"],
+    context: ["/api", "/auth", "/internal"],
     target: "http://localhost:8800",
     secure: false,
     changeOrigin: true,
