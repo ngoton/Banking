@@ -31,13 +31,18 @@ public class PaymentController {
         Payment payment = paymentService.findById(id);
         return new PaymentResponse(payment);
     }
-    @GetMapping("/customer/{code}")
+    @GetMapping("/customerCode/{code}")
     @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public List<PaymentResponse> findByCustomerCode(@PathVariable String code){
         List<Payment> payments = paymentService.findAllByCustomerCode(code);
         return PaymentResponses.ofList(payments);
     }
-
+    @GetMapping("/customerId/{id}")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
+    public List<PaymentResponse> findByCustomerCode(@PathVariable Long id){
+        List<Payment> payments = paymentService.findAllByCustomerId(id);
+        return PaymentResponses.ofList(payments);
+    }
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ADMIN')")
