@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/internal/payment")
+@RequestMapping("/internal/payments")
 public class PaymentController {
     private final PaymentUserCaseService paymentService;
 
