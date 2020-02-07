@@ -31,13 +31,22 @@ export class AuthService implements OnDestroy {
       return this.http.post<any>(PATH, JSON.stringify(loginData))
       .pipe(
         retry(3),
-        catchError(this.util.handleError),
+        catchError(this.util.handleError)
       );
     }
 
     logout() {
       // remove user from local storage to log user out
         this.clearLocalStorage();
+    }
+
+    requestPassword(email): Observable<any>{
+      const PATH = this.AUTH_URL + `/forgot`;
+      return this.http.post<any>(PATH, JSON.stringify({email: email}))
+      .pipe(
+        retry(3),
+        catchError(this.util.handleError)
+      );
     }
 
     getToken(): string {

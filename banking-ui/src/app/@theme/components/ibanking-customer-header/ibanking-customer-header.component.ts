@@ -47,7 +47,7 @@ export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
 
   currentTheme = 'default';
 
-  userMenu = [ { title: 'Thông tin' }, { title: 'Đăng xuất' } ];
+  userMenu = [ { title: 'Đổi mật khẩu' }, { title: 'Đăng xuất' } ];
 
   constructor(private sidebarService: NbSidebarService,
               private menuService: NbMenuService,
@@ -67,11 +67,16 @@ export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
     //   .pipe(takeUntil(this.destroy$))
     //   .subscribe((users: any) => this.user = users.nick);
 
+    this.user = JSON.parse(localStorage.getItem('userDetails'));
+    if(!this.user.avatar) {
+      this.user.avatar = 'assets/images/placeholder.png';
+    }
+
     this.customerService.acctDetail$
       .pipe(takeUntil(this.destroy$))
       .subscribe((userDetail: any) => {
         debugger;
-        this.customer = userDetail
+        this.customer = userDetail;
       });
 
     const { xl } = this.breakpointService.getBreakpointsMap();
@@ -96,9 +101,14 @@ export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
       )
       .subscribe(title => {
         debugger;
-        if(title === 'Đăng xuất'){
-          this.authService.ibankLogout();
-          this.router.navigate(['/onboarding/login']);
+        switch(title){
+          case 'Đăng xuất':
+            this.authService.ibankLogout();
+            this.router.navigate(['/onboarding/login']);
+            break;
+          case 'Đổi mật khẩu':
+            this.router.navigate(['/onboarding/change-password']);
+            break;
         }
       });
   }

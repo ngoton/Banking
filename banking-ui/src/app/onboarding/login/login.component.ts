@@ -12,6 +12,7 @@ import { CustomerService } from '../../_services/customer.service';
 import { UserService } from '../../_services/user.service';
 // import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { untilDestroyed } from 'ngx-take-until-destroy';
+import { Location } from '@angular/common';
 import * as JsEncryptModule from 'jsencrypt';
 import { Template } from '@angular/compiler/src/render3/r3_ast';
 import { Subscription } from 'rxjs';
@@ -44,6 +45,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   //private subscription: Subscription = new Subscription();
 
   constructor(
+    private location: Location,
     private notifications: NotifierService,
     private fb: FormBuilder,
     private auth: AuthService,
@@ -196,6 +198,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     let PwString = this.loginForm.controls["Password"].value;
     PwString = PwString.slice(0, -1);
     this.loginForm.controls["Password"].setValue(PwString);
+  }
+
+  goBack() {
+    this.location.back();
   }
 
   ngOnInit(): void {
