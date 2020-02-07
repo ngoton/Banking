@@ -7,6 +7,7 @@ export class User {
     public username?: string,
     public password?: string,
     public email?: string,
+    public avatar?: string, 
     public role?: string,
     public customer?: Customers
   ) { }
