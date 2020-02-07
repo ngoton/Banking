@@ -109,21 +109,12 @@ export class UserService implements OnDestroy {
   }
 
   getUserInforByToken(): Observable<any> {
-    let accessToken = this.auth.getToken();
-
-    if(accessToken){
-      
-      const PATH = this.USER_URL + `/info`;
+    const PATH = this.USER_URL + `/info`;
       return this.http.get<any>(PATH)
       .pipe(
         retry(3),
-        catchError(this.util.handleError)
+        //catchError(this.util.handleError)
       );
-    }
-    else{
-      this.router.navigate(['/onboarding/login']);
-    }
-    
   }
   
   changePassword(formData): Observable<any> {
@@ -131,27 +122,22 @@ export class UserService implements OnDestroy {
     if(formData.newPass !== formData.confirmPass){
       return throwError("Mật khẩu xác nhận và mật khẩu mới không khớp!");
     }
-
-    if(accessToken){
-      let userDetails = JSON.parse(localStorage.getItem('userDetails'));
-      let body = {
-        userId: userDetails.userId,
-        email: userDetails.email,
-        newPassword: formData.newPass,
-        confirmPassword: formData.confirmPass,
-        currentPassword: formData.currentPass
-      }
-
-      const PATH = this.USER_URL + `/change-password`;
-      return this.http.post<any>(PATH, JSON.stringify(body))
-      .pipe(
-        retry(3),
-        catchError(this.util.handleError)
-      );
+    
+    let userDetails = JSON.parse(localStorage.getItem('userDetails'));
+    let body = {
+      userId: userDetails.userId,
+      email: userDetails.email,
+      newPassword: formData.newPass,
+      confirmPassword: formData.confirmPass,
+      currentPassword: formData.currentPass
     }
-    else{
-      this.router.navigate(['/onboarding/login']);
-    }
+
+    const PATH = this.USER_URL + `/change-password`;
+    return this.http.post<any>(PATH, JSON.stringify(body))
+    .pipe(
+      retry(3),
+      //catchError(this.util.handleError)
+    );
   }
 
   ngOnDestroy(): void {}

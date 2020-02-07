@@ -78,7 +78,7 @@ export class CustomerService implements OnDestroy {
       return this.http.get<any>(PATH)
       .pipe(
         retry(3),
-        catchError(this.util.handleError)
+        //catchError(this.util.handleError)
       );
     }
     else{

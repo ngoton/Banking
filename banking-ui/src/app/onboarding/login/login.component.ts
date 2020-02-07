@@ -104,6 +104,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           console.log(res);
           // if Login is successful
           localStorage.setItem("token", JSON.stringify(res.accessToken));
+          localStorage.setItem("refreshToken", JSON.stringify(res.refreshToken));
           this.getOnboardingJourney();
         },
         (err: HttpErrorResponse) => {

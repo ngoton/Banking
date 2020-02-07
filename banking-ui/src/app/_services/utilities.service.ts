@@ -5,10 +5,11 @@ import { environment } from '../../environments/environment';
 import { NotifierModule, NotifierService } from 'angular-notifier';
 import { throwError as _throw, throwError, Subject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { retry, catchError } from 'rxjs/operators';
+import { retry, catchError, takeUntil } from 'rxjs/operators';
 import { UserService } from './user.service';
 import { CurrencyPipe } from '@angular/common';
 import * as JsEncryptModule from 'jsencrypt';
+import { CdkStepperNext } from '@angular/cdk/stepper';
 
 declare var Date: any;
 @Injectable({
@@ -27,6 +28,7 @@ export class UtilitiesService {
   charges$ = this.chargesSource.asObservable();
   private chargesErrorSource = new Subject<string>();
   chargesError$ = this.chargesErrorSource.asObservable();
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private http: HttpClient,
@@ -82,8 +84,8 @@ export class UtilitiesService {
 
   handleError(error?: HttpErrorResponse) {
     debugger;
-    console.log(error);
-    let errormessage;
+    let errormessage = null;
+
     if (error.error instanceof ErrorEvent) {
       console.error("Network Error", error.error.message);
       errormessage = `Network Error ${error.error.message}`;
@@ -94,8 +96,7 @@ export class UtilitiesService {
           `body was: ${JSON.stringify(error.error.responseDescription)}`
       );
       if (error.statusText === "Unknown Error") {
-        errormessage =
-          "Opps! We are sorry. Our service is currently down. Please try *737# or use our GT Mobile app.";
+        errormessage = "Opps! We are sorry. Our service is currently down. Please try *737# or use our GT Mobile app.";
       }
       errormessage = `${error.error.responseDescription || errormessage}`;
       console.log(errormessage);
