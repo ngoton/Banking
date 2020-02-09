@@ -6,6 +6,7 @@ import com.hcmus.banking.platform.domain.beneficiary.Beneficiary;
 import java.time.LocalDateTime;
 
 public class BeneficiaryResponse {
+    public Long id;
     public String name;
     public String shortName;
     public String bankName;
@@ -14,6 +15,7 @@ public class BeneficiaryResponse {
     public LocalDateTime createdAt;
 
     public BeneficiaryResponse(Beneficiary beneficiary) {
+        this.id = beneficiary.getId();
         this.name = beneficiary.getName();
         this.shortName = beneficiary.getShortName();
         this.bankName = beneficiary.getBankName();
