@@ -7,12 +7,14 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class SavingResponse {
+    public Long id;
     public String account;
     public BigDecimal balance;
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     public LocalDateTime createdAt;
 
     public SavingResponse(Saving saving) {
+        this.id = saving.getId();
         this.account = saving.getAccount();
         this.balance = saving.getBalance();
         this.createdAt = saving.getCreated().getCreatedAt().getValue();

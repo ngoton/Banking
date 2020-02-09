@@ -42,7 +42,7 @@ public class SavingTransactionUserCaseService {
     }
 
     @Transactional(readOnly = true)
-    public Page<SavingTransaction> findAllByPaymentId(Long id, Pageable pageable) {
+    public Page<SavingTransaction> findAllBySavingId(Long id, Pageable pageable) {
         Saving saving = savingService.findById(id);
         if (saving.isEmpty()) {
             throw new BankingServiceException("Saving does not exist!!!");
