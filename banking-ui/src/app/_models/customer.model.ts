@@ -11,7 +11,7 @@ export class Customers {
     paymentsId: number;
 
     payment: Payment;
-    saving: Savings;
+    savings: Savings[];
     credit: Credits;
     debit: Debits;
     beneficiarys: Beneficiarys[];
@@ -29,7 +29,7 @@ export class Customers {
         this.paymentsId = obj && obj.paymentsId || null;
 
         this.payment = obj && new Payment(obj.payment) || null;
-        this.saving = obj && new Savings(obj.savings) || null;
+        this.savings = obj && obj.savings || null;
         this.credit = obj && new Credits(obj.credits) || null;
         this.debit = obj && new Debits(obj.debits) || null;
         this.beneficiarys = obj && obj.beneficiarys || null;

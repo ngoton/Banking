@@ -7,12 +7,16 @@ import { UtilitiesService } from './utilities.service';
 import {
   Beneficiarys,
   Banks,
-  Customers
+  Customers,
+  Payment,
+  Savings
 } from '../_models/customer.model';
 import { Router } from '@angular/router';
 import { UserService } from './user.service';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { AuthService } from './auth.service';
+import { PaymentService } from './payment.service';
+import { SavingService } from './saving.service';
 
 @Injectable({
   providedIn: 'root'
@@ -59,6 +63,8 @@ export class CustomerService implements OnDestroy {
     private auth: AuthService,
     private router: Router,
     private userService: UserService,
+    private paymentService: PaymentService,
+    private savingService: SavingService
   ) { }
 
   // Http Headers
@@ -91,11 +97,42 @@ export class CustomerService implements OnDestroy {
 
     this.getCustomerData(userDetails.userId).pipe(untilDestroyed(this))
       .subscribe(
-        (res: Customers) => {
+        (customerRes: Customers) => {
           // console.log(res.accountDetails);
-          if (res) {
-            this.updateAcctDetailsError('');
-            this.updateAcctDetails(res);
+          if (customerRes) {
+            // setTimeout(() => {}, 2000);
+            setTimeout(() => {
+              this.paymentService.getPaymentsByCustomerId(customerRes.customerId).pipe(untilDestroyed(this))
+              .subscribe(
+                (paymentsRes: Payment[]) => {
+                  customerRes.payments = paymentsRes;
+                  this.paymentService.updatePayment(paymentsRes);
+
+                  this.updateAcctDetailsError('');
+                  this.updateAcctDetails(customerRes);
+                },
+                (err: HttpErrorResponse) => {
+
+                }
+              );
+            }, 2000);
+            
+            setTimeout(() => {
+              this.savingService.getSavingsByCustomerId(customerRes.customerId).pipe(untilDestroyed(this))
+              .subscribe(
+                (savingsRes: Savings[]) => {
+                  customerRes.savings = savingsRes;
+                  this.savingService.updateSaving(savingsRes);
+
+                  this.updateAcctDetailsError('');
+                  this.updateAcctDetails(customerRes);
+                },
+                (err: HttpErrorResponse) => {
+
+                }
+              );
+            }, 2000);
+            
           } else {
             this.updateAcctDetailsError("Can't get customer's data");
             this.updateAcctDetails(null);

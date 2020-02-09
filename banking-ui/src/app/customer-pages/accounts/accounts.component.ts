@@ -3,7 +3,7 @@ import { NbThemeService } from '@nebular/theme';
 import { takeWhile, takeUntil } from 'rxjs/operators' ;
 import { SolarData } from '../../@core/data/solar';
 import { AccountsService } from './accounts.service';
-import { Customers, Savings, Credits, Debits } from '../../_models/customer.model';
+import { Customers, Savings, Credits, Debits, Payment } from '../../_models/customer.model';
 import { CustomerService } from '../../_services/customer.service';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 
@@ -83,9 +83,8 @@ export class AccountsComponent implements OnDestroy {
   };
 
   customerInfor: Customers;
-  saving: Savings;
-  credit: Credits;
-  debit: Debits;
+  savings: Savings[];
+  payments: Payment[];
 
   constructor(private themeService: NbThemeService,
               private accountsService: AccountsService,
@@ -103,9 +102,8 @@ export class AccountsComponent implements OnDestroy {
         .subscribe((response: Customers) => {
           debugger;
           this.customerInfor = response;
-          this.saving = this.customerInfor.saving;
-          this.credit = this.customerInfor.credit;
-          this.debit = this.customerInfor.debit;
+          this.savings = this.customerInfor.savings;
+          this.payments = this.customerInfor.payments;
         });
     }, 5000);
 

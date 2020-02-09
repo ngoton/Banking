@@ -11,48 +11,6 @@ import { UtilitiesService } from './utilities.service';
 import { AuthService } from './auth.service';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 
-const tempUserDetails = {
-  id: '18424050',
-  email: 'nmphong0601@gmail.com',
-  role: 'personal',
-  customer: {
-    id: 1000,
-    code: "895835893523",
-    first_name: "Nguyen",
-    last_name: "Minh Phong",
-    birth_date: "06-01-1996",
-    gender: "Nam",
-    phone: "08049824383",
-    address: "TP.HCM",
-    users_id: 18424050,
-    payments_id: 1001,
-    payment: {
-      id: 1001,
-      account: "439823948398355",
-      balance: "200.000"
-    },
-    saving: {
-      id: 1101,
-      account: "28929480932840234",
-      balance: "1,500.000"
-    },
-    credit: {
-      id: 1201,
-      account: "489328492839422942",
-      money: "12,000.000",
-      content: "",
-      status: 1
-    },
-    debit: {
-      id: 1301,
-      account: "8492398237874350293",
-      money: "5,000.000",
-      content: "",
-      status: 1
-    }
-  }
-};
-
 @Injectable({
   providedIn: 'root'
 })
