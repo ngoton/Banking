@@ -104,8 +104,8 @@ export class CustomerService implements OnDestroy {
             setTimeout(() => {
               this.paymentService.getPaymentsByCustomerId(customerRes.customerId).pipe(untilDestroyed(this))
               .subscribe(
-                (paymentsRes: Payment[]) => {
-                  customerRes.payments = paymentsRes;
+                (paymentsRes: Payment) => {
+                  customerRes.payment = paymentsRes;
                   this.paymentService.updatePayment(paymentsRes);
 
                   this.updateAcctDetailsError('');

@@ -84,7 +84,7 @@ export class AccountsComponent implements OnDestroy {
 
   customerInfor: Customers;
   savings: Savings[];
-  payments: Payment[];
+  payment: Payment;
 
   constructor(private themeService: NbThemeService,
               private accountsService: AccountsService,
@@ -103,7 +103,7 @@ export class AccountsComponent implements OnDestroy {
           debugger;
           this.customerInfor = response;
           this.savings = this.customerInfor.savings;
-          this.payments = this.customerInfor.payments;
+          this.payment = this.customerInfor.payment;
         });
     }, 5000);
 

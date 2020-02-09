@@ -23,6 +23,11 @@ const routes: Routes = [
       .then(m => m.CustomerPagesModule),
   },
   {
+    path: 'employee',
+    loadChildren: () => import('app/employee-pages/employee-pages.module')
+      .then(m => m.EmployeePagesModule),
+  },
+  {
     path: 'onboarding',
     loadChildren: () => import('app/onboarding/onboarding.module')
       .then(m => m.OnboardingModule),

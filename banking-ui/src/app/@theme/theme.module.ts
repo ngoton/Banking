@@ -21,6 +21,8 @@ import {
   HeaderComponent,
   IBankingCustomerFooterComponent,
   IBankingCustomerHeaderComponent,
+  IBankingEmployeeFooterComponent,
+  IBankingEmployeeHeaderComponent,
   SearchInputComponent,
   TinyMCEComponent,
 } from './components';
@@ -36,6 +38,7 @@ import {
   ThreeColumnsLayoutComponent,
   TwoColumnsLayoutComponent,
   CustomerLayoutComponent,
+  EmployeeLayoutComponent,
   GeneralLayoutComponent
 } from './layouts';
 import { DEFAULT_THEME } from './styles/theme.default';
@@ -62,12 +65,15 @@ const COMPONENTS = [
   FooterComponent,
   IBankingCustomerFooterComponent,
   IBankingCustomerHeaderComponent,
+  IBankingEmployeeFooterComponent,
+  IBankingEmployeeHeaderComponent,
   SearchInputComponent,
   TinyMCEComponent,
   OneColumnLayoutComponent,
   ThreeColumnsLayoutComponent,
   TwoColumnsLayoutComponent,
   CustomerLayoutComponent,
+  EmployeeLayoutComponent,
   GeneralLayoutComponent
 ];
 const PIPES = [
