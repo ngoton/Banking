@@ -14,7 +14,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class PaymentUserCaseService {
+public class PaymentUseCaseService {
     private final PaymentService paymentService;
 
     @Transactional(readOnly = true)

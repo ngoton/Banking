@@ -1,42 +1,58 @@
 package com.hcmus.banking.platform.core.presentation.savingTransaction;
 
-import com.hcmus.banking.platform.core.application.admin.SavingTransactionUserCaseService;
-import com.hcmus.banking.platform.core.presentation.saving.SavingResponse;
+import com.hcmus.banking.platform.core.application.admin.SavingTransactionUseCaseService;
+import com.hcmus.banking.platform.core.application.admin.SavingUseCaseService;
+import com.hcmus.banking.platform.domain.exception.NotFoundException;
+import com.hcmus.banking.platform.domain.saving.Saving;
 import com.hcmus.banking.platform.domain.savingTransaction.SavingTransaction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/internal/savingTransaction")
 public class SavingTransactionController {
-    private final SavingTransactionUserCaseService SavingTransactionService;
+    private final SavingTransactionUseCaseService savingTransactionService;
+    private final SavingUseCaseService savingService;
+
     @GetMapping
-    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public Page<SavingTransactionResponse> findAllBy(Pageable pageable){
-        Page<SavingTransaction> savingTransactions = SavingTransactionService.findAllBy(pageable);
+        Page<SavingTransaction> savingTransactions = savingTransactionService.findAllBy(pageable);
         return SavingTransactionResponses.ofPage(savingTransactions, pageable);
     }
     @GetMapping("/saving/{id}")
-    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public Page<SavingTransactionResponse> findAllByPaymentId(@PathVariable Long id, Pageable pageable){
-        Page<SavingTransaction> savingTransactions = SavingTransactionService.findAllBySavingId(id,pageable);
+        Page<SavingTransaction> savingTransactions = savingTransactionService.findAllBySavingId(id,pageable);
         return SavingTransactionResponses.ofPage(savingTransactions, pageable);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public SavingTransactionResponse findBy(@PathVariable Long id){
-        SavingTransaction savingTransaction  = SavingTransactionService.findById(id);
+        SavingTransaction savingTransaction  = savingTransactionService.findById(id);
         return new SavingTransactionResponse(savingTransaction);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
+    public void create(@Valid @RequestBody SavingTransactionRequest savingTransactionRequest) {
+        Saving saving = savingService.findById(savingTransactionRequest.savingId);
+        if (saving.isEmpty()) {
+            throw new NotFoundException();
+        }
+        SavingTransaction savingTransaction = SavingTransactionRequest.toSavingTransaction(savingTransactionRequest, saving);
+        savingTransactionService.create(savingTransaction);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public void delete(@PathVariable Long id){
-        SavingTransactionService.delete(id);
+        savingTransactionService.delete(id);
     }
 }

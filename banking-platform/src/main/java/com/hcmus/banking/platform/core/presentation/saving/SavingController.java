@@ -26,21 +26,18 @@ public class SavingController {
     private final CustomerUseCaseService customerService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public Page<SavingResponse> findAllBy(Pageable pageable) {
         Page<Saving> savings = savingService.findAllBy(pageable);
         return SavingResponses.ofPage(savings, pageable);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public SavingResponse findById(@PathVariable Long id) {
         Saving saving = savingService.findById(id);
         return new SavingResponse(saving);
     }
 
     @GetMapping("/customer/{id}")
-    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public List<SavingResponse> findAllByCustomerId(@PathVariable Long id) {
         List<Saving> savings = savingService.findAllByCustomerId(id);
         return SavingResponses.ofList(savings);
@@ -48,7 +45,7 @@ public class SavingController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public void create(@Valid @RequestBody SavingRequest savingRequest) {
         Customer customer = customerService.findById(savingRequest.customerId);
         if (customer.isEmpty()) {
@@ -58,7 +55,7 @@ public class SavingController {
         savingService.create(saving);
     }
     @PutMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public void update(@Valid @RequestBody SavingRequest savingRequest) {
         Customer customer = customerService.findById(savingRequest.customerId);
         if (customer.isEmpty()) {
@@ -69,7 +66,7 @@ public class SavingController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public void delete(@PathVariable Long id) {
         savingService.delete(id);
     }

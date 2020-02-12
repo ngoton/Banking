@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class PaymentTransactionUserCaseService {
+public class PaymentTransactionUseCaseService {
     private final PaymentTransactionService paymentTransactionService;
     private final PaymentService paymentService;
     private final BeneficiaryService beneficiaryService;

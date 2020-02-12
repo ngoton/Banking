@@ -1,6 +1,6 @@
 package com.hcmus.banking.platform.core.presentation.payment;
 
-import com.hcmus.banking.platform.core.application.admin.PaymentUserCaseService;
+import com.hcmus.banking.platform.core.application.admin.PaymentUseCaseService;
 import com.hcmus.banking.platform.domain.payment.Payment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,43 +16,39 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/internal/payments")
 public class PaymentController {
-    private final PaymentUserCaseService paymentService;
+    private final PaymentUseCaseService paymentService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public Page<PaymentResponse> findAllBy(Pageable pageable){
         Page<Payment> payment = paymentService.findAllBy(pageable);
         return PaymentResponses.ofPage(payment, pageable);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public PaymentResponse findBy(@PathVariable Long id){
         Payment payment = paymentService.findById(id);
         return new PaymentResponse(payment);
     }
     @GetMapping("/customerCode/{code}")
-    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public List<PaymentResponse> findByCustomerCode(@PathVariable String code){
         List<Payment> payments = paymentService.findAllByCustomerCode(code);
         return PaymentResponses.ofList(payments);
     }
     @GetMapping("/customerId/{id}")
-    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public List<PaymentResponse> findByCustomerCode(@PathVariable Long id){
         List<Payment> payments = paymentService.findAllByCustomerId(id);
         return PaymentResponses.ofList(payments);
     }
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public void create(@Valid @RequestBody PaymentRequest paymentRequest){
         Payment payment = PaymentRequest.toPayment(paymentRequest);
         paymentService.create(payment);
     }
 
     @PutMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public void update(@Valid @RequestBody PaymentRequest paymentRequest){
         Payment payment = PaymentRequest.toPayment(paymentRequest);
         paymentService.update(payment);

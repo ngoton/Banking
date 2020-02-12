@@ -23,27 +23,23 @@ public class BeneficiaryController {
     private final CustomerUseCaseService customerService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public Page<BeneficiaryResponse> findAllBy(Pageable pageable) {
         Page<Beneficiary> beneficiaries = beneficiaryService.findAllBy(pageable);
         return BeneficiaryResponses.ofPage(beneficiaries, pageable);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public BeneficiaryResponse findById(@PathVariable Long id) {
         Beneficiary beneficiary = beneficiaryService.findById(id);
         return new BeneficiaryResponse(beneficiary);
     }
 
     @GetMapping("/customer/{code}")
-    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public List<BeneficiaryResponse> findByCustomerCode(@PathVariable String code) {
         List<Beneficiary> beneficiaries = beneficiaryService.findAllByCustomerCode(code);
         return BeneficiaryResponses.ofList(beneficiaries);
     }
     @GetMapping("/account/{account}")
-    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public BeneficiaryResponse findByAccount(@PathVariable String account) {
         Beneficiary  beneficiary = beneficiaryService.findByAccount(account);
         return new BeneficiaryResponse(beneficiary);
@@ -51,7 +47,6 @@ public class BeneficiaryController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasRole('ADMIN')")
     public void create(@Valid @RequestBody BeneficiaryRequest beneficiaryRequest) {
         Customer customer = customerService.findById(beneficiaryRequest.customerId);
         if (customer.isEmpty()) {
@@ -62,7 +57,6 @@ public class BeneficiaryController {
     }
 
     @PutMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public void update(@Valid @RequestBody BeneficiaryRequest beneficiaryRequest) {
         Customer customer = customerService.findById(beneficiaryRequest.customerId);
         if (customer.isEmpty()) {
@@ -73,7 +67,6 @@ public class BeneficiaryController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public void delete(@PathVariable Long id) {
         beneficiaryService.delete(id);
     }
