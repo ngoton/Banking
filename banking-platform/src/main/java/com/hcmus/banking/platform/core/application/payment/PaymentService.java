@@ -28,6 +28,9 @@ public class PaymentService {
     public List<Payment> findAllByCustomerCode(String code) {
         return paymentRepository.findAllByCustomerCode(code);
     }
+    public List<Payment> findAllByCustomerId(Long id) {
+        return paymentRepository.findAllByCustomerId(id);
+    }
 
     public void create(Payment payment) {
         paymentRepository.save(payment);

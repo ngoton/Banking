@@ -20,6 +20,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     Optional<Payment> findByAccount(String account);
 
     List<Payment> findAllByCustomerCode(String code);
+    List<Payment> findAllByCustomerId(Long id);
 
     Payment save(Payment payment);
 

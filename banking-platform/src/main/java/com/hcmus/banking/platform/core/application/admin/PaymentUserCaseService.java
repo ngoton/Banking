@@ -46,6 +46,12 @@ public class PaymentUserCaseService {
         return payment;
     }
 
+    @Transactional(readOnly = true)
+    public List<Payment> findAllByCustomerId(Long id) {
+        List<Payment> payments = paymentService.findAllByCustomerId(id);
+        return payments;
+    }
+
     @Transactional
     public void create(Payment payment) {
         paymentService.create(payment);

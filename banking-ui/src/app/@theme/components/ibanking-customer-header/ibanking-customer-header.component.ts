@@ -3,13 +3,15 @@ import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeServ
 
 import { UserData } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
-import { map, takeUntil } from 'rxjs/operators';
+import { map, takeUntil, filter } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
 import { UserService } from '../../../_services/user.service';
 import { CustomerService } from '../../../_services/customer.service';
 import { User } from '../../../_models/user';
 import { Customers } from '../../../_models/customer.model';
+import { AuthService } from '../../../_services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ngx-ibanking-customer-header',
@@ -45,15 +47,17 @@ export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
 
   currentTheme = 'default';
 
-  userMenu = [ { title: 'Profile' }, { title: 'Log out' } ];
+  userMenu = [ { title: 'Đổi mật khẩu' }, { title: 'Đăng xuất' } ];
 
   constructor(private sidebarService: NbSidebarService,
               private menuService: NbMenuService,
               private themeService: NbThemeService,
+              private authService: AuthService,
               private userService: UserService,
               private customerService: CustomerService,
               private layoutService: LayoutService,
-              private breakpointService: NbMediaBreakpointsService) {
+              private breakpointService: NbMediaBreakpointsService,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -62,11 +66,17 @@ export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
     // this.userService.getUsers()
     //   .pipe(takeUntil(this.destroy$))
     //   .subscribe((users: any) => this.user = users.nick);
-    this.customerService.getAcctDetailsData();
+
+    this.user = JSON.parse(localStorage.getItem('userDetails'));
+    if(!this.user.avatar) {
+      this.user.avatar = 'assets/images/placeholder.png';
+    }
+
     this.customerService.acctDetail$
       .pipe(takeUntil(this.destroy$))
-      .subscribe((userDetail: Customers) => {
-        this.customer = userDetail
+      .subscribe((userDetail: any) => {
+        debugger;
+        this.customer = userDetail;
       });
 
     const { xl } = this.breakpointService.getBreakpointsMap();
@@ -83,6 +93,24 @@ export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
       )
       .subscribe(themeName => this.currentTheme = themeName);
+
+    this.menuService.onItemClick()
+      .pipe(
+        filter(({ tag }) => tag === 'ibanking-context-menu'),
+        map(({ item: { title } }) => title),
+      )
+      .subscribe(title => {
+        debugger;
+        switch(title){
+          case 'Đăng xuất':
+            this.authService.ibankLogout();
+            this.router.navigate(['/onboarding/login']);
+            break;
+          case 'Đổi mật khẩu':
+            this.router.navigate(['/onboarding/change-password']);
+            break;
+        }
+      });
   }
 
   ngOnDestroy() {

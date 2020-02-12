@@ -1,35 +1,35 @@
 export class Customers {
-    id: number;
+    customerId: number;
     code: string;
-    first_name: string;
-    last_name: string;
-    birth_date: string;
+    firstName: string;
+    lastName: string;
+    birthDate: string;
     gender: string;
     phone: string;
     address: string;
-    users_id: number;
-    payments_id: number;
+    usersId: number;
+    paymentsId: number;
 
     payment: Payment;
-    saving: Savings;
+    savings: Savings[];
     credit: Credits;
     debit: Debits;
     beneficiarys: Beneficiarys[];
     
     constructor(obj?: any) {
-        this.id = obj && obj.id || null;
+        this.customerId = obj && obj.customerId || null;
         this.code = obj && obj.code || null;
-        this.first_name = obj && obj.first_name || null;
-        this.last_name = obj && obj.last_name || null;
-        this.birth_date = obj && obj.birth_date || null;
+        this.firstName = obj && obj.firstName || null;
+        this.lastName = obj && obj.lastName || null;
+        this.birthDate = obj && obj.birthDate || null;
         this.gender = obj && obj.gender || null;
         this.phone = obj && obj.phone || null;
         this.address = obj && obj.address || null;
-        this.users_id = obj && obj.users_id || null;
-        this.payments_id = obj && obj.payments_id || null;
+        this.usersId = obj && obj.usersId || null;
+        this.paymentsId = obj && obj.paymentsId || null;
 
         this.payment = obj && new Payment(obj.payment) || null;
-        this.saving = obj && new Savings(obj.savings) || null;
+        this.savings = obj && obj.savings || null;
         this.credit = obj && new Credits(obj.credits) || null;
         this.debit = obj && new Debits(obj.debits) || null;
         this.beneficiarys = obj && obj.beneficiarys || null;
@@ -37,12 +37,12 @@ export class Customers {
 }
 
 export class Payment {
-    id: number;
+    paymentId: number;
     account: string;
     balance: string;
 
     constructor(obj?: any) {
-        this.id = obj && obj.id || null;
+        this.paymentId = obj && obj.paymentId || null;
         this.account = obj && obj.account || null;
         this.balance = obj && obj.balance || null;
     }
@@ -53,16 +53,16 @@ export class PaymentTransactions {
     code: string;
     money: string;
     content: string;
-    payments_id: number;
-    beneficiarys_id: number;
+    paymentsId: number;
+    beneficiarysId: number;
 
     constructor(obj?: any) {
         this.id = obj && obj.id || null;
         this.code = obj && obj.code || null;
         this.money = obj && obj.money.toLocalString() || null;
         this.content = obj && obj.content || null;
-        this.payments_id = obj && obj.payments_id || null;
-        this.beneficiarys_id = obj && obj.beneficiarys_id || null;
+        this.paymentsId = obj && obj.paymentsId || null;
+        this.beneficiarysId = obj && obj.beneficiarysId || null;
     }
 }
 
@@ -70,13 +70,13 @@ export class Savings {
     id: number;
     account: string;
     balance: string;
-    customers_id: number;
+    customersId: number;
 
     constructor(obj?: any) {
         this.id = obj && obj.id || null;
         this.account = obj && obj.account || null;
         this.balance = obj && obj.balance.toLocalString() || null;
-        this.customers_id = obj && obj.customers_id || null;
+        this.customersId = obj && obj.customersId || null;
     }
 }
 
@@ -97,18 +97,18 @@ export class SavingTransactions {
 export class Beneficiarys {
     id: number;
     name: string;
-    short_name: string;
+    shortName: string;
     account: string;
-    bank_name: string;
-    customers_id: number;
+    bankName: string;
+    customersId: number;
 
     constructor(obj?: any) {
         this.id = obj && obj.id || null;
         this.name = obj && obj.name || null;
-        this.short_name = obj && obj.short_name || null;
+        this.shortName = obj && obj.shortName || null;
         this.account = obj && obj.account || null;
-        this.bank_name = obj && obj.bank_name || null;
-        this.customers_id = obj && obj.customers_id || null;
+        this.bankName = obj && obj.bankName || null;
+        this.customersId = obj && obj.customersId || null;
     }
 }
 

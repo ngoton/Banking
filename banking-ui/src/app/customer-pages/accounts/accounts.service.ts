@@ -31,9 +31,10 @@ export class AccountsService implements OnDestroy {
     private userService: UserService,
     private customerService: CustomerService
   ) {
-
+    debugger;
     customerService.getAcctDetailsData();
-    // Subscribe to user Details from UserService
+    
+    // Subscribe to customer Details from CustomerService
     setTimeout(() => {
       this.customerService.acctDetail$
         .pipe(untilDestroyed(this))
