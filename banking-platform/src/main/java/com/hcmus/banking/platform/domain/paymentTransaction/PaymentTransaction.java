@@ -20,6 +20,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class PaymentTransaction extends IDEntity {
     private static final String EMPTY_STRING = "";
+    private static final BigDecimal INTERNAL_FEE = BigDecimal.valueOf(10000);
+    private static final BigDecimal EXTERNAL_FEE = BigDecimal.valueOf(20000);
     private String code;
     private BigDecimal money;
     private String content;
@@ -52,4 +54,21 @@ public class PaymentTransaction extends IDEntity {
         this.created = created;
         this.payment = payment;
     }
+
+    public PaymentTransaction(String content, BigDecimal money, Created created, Payment payment, Beneficiary beneficiary) {
+        this.money = money;
+        this.content = content;
+        this.created = created;
+        this.payment = payment;
+        this.beneficiary = beneficiary;
+    }
+
+    public static BigDecimal internalFee() {
+        return BigDecimal.ZERO.subtract(INTERNAL_FEE);
+    }
+
+    public static BigDecimal externalFee() {
+        return BigDecimal.ZERO.subtract(EXTERNAL_FEE);
+    }
+
 }

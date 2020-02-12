@@ -2,12 +2,15 @@ package com.hcmus.banking.platform.core.presentation.saving;
 
 import com.hcmus.banking.platform.core.application.admin.CustomerUseCaseService;
 import com.hcmus.banking.platform.core.application.admin.SavingUseCaseService;
+import com.hcmus.banking.platform.core.constants.SecurityUtils;
+import com.hcmus.banking.platform.core.presentation.advice.UserAdvice;
 import com.hcmus.banking.platform.core.presentation.beneficiary.BeneficiaryResponse;
 import com.hcmus.banking.platform.core.presentation.beneficiary.BeneficiaryResponses;
 import com.hcmus.banking.platform.domain.beneficiary.Beneficiary;
 import com.hcmus.banking.platform.domain.customer.Customer;
 import com.hcmus.banking.platform.domain.exception.NotFoundException;
 import com.hcmus.banking.platform.domain.saving.Saving;
+import com.hcmus.banking.platform.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/internal/savings")
 @RequiredArgsConstructor
+@UserAdvice.On
 public class SavingController {
     private final SavingUseCaseService savingService;
     private final CustomerUseCaseService customerService;
@@ -46,18 +50,19 @@ public class SavingController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
-    public void create(@Valid @RequestBody SavingRequest savingRequest) {
-        Customer customer = customerService.findById(savingRequest.customerId);
+    public void create(@Valid @RequestBody SavingRequest savingRequest, @ModelAttribute("user") User user) {
+        Customer customer = customerService.findByUserId(user.getId());
         if (customer.isEmpty()) {
             throw new NotFoundException();
         }
         Saving saving = SavingRequest.toSaving(savingRequest, customer);
         savingService.create(saving);
     }
+
     @PutMapping
     @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
-    public void update(@Valid @RequestBody SavingRequest savingRequest) {
-        Customer customer = customerService.findById(savingRequest.customerId);
+    public void update(@Valid @RequestBody SavingRequest savingRequest, @ModelAttribute("user") User user) {
+        Customer customer = customerService.findByUserId(user.getId());
         if (customer.isEmpty()) {
             throw new NotFoundException();
         }

@@ -2,9 +2,11 @@ package com.hcmus.banking.platform.core.presentation.beneficiary;
 
 import com.hcmus.banking.platform.core.application.admin.BeneficiaryUserCaseService;
 import com.hcmus.banking.platform.core.application.admin.CustomerUseCaseService;
+import com.hcmus.banking.platform.core.presentation.advice.UserAdvice;
 import com.hcmus.banking.platform.domain.beneficiary.Beneficiary;
 import com.hcmus.banking.platform.domain.customer.Customer;
 import com.hcmus.banking.platform.domain.exception.NotFoundException;
+import com.hcmus.banking.platform.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/internal/beneficiaries")
 @RequiredArgsConstructor
+@UserAdvice.On
 public class BeneficiaryController {
     private final BeneficiaryUserCaseService beneficiaryService;
     private final CustomerUseCaseService customerService;
@@ -39,16 +42,17 @@ public class BeneficiaryController {
         List<Beneficiary> beneficiaries = beneficiaryService.findAllByCustomerCode(code);
         return BeneficiaryResponses.ofList(beneficiaries);
     }
+
     @GetMapping("/account/{account}")
     public BeneficiaryResponse findByAccount(@PathVariable String account) {
-        Beneficiary  beneficiary = beneficiaryService.findByAccount(account);
+        Beneficiary beneficiary = beneficiaryService.findByAccount(account);
         return new BeneficiaryResponse(beneficiary);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@Valid @RequestBody BeneficiaryRequest beneficiaryRequest) {
-        Customer customer = customerService.findById(beneficiaryRequest.customerId);
+    public void create(@Valid @RequestBody BeneficiaryRequest beneficiaryRequest, @ModelAttribute("user") User user) {
+        Customer customer = customerService.findByUserId(user.getId());
         if (customer.isEmpty()) {
             throw new NotFoundException();
         }
@@ -57,8 +61,8 @@ public class BeneficiaryController {
     }
 
     @PutMapping
-    public void update(@Valid @RequestBody BeneficiaryRequest beneficiaryRequest) {
-        Customer customer = customerService.findById(beneficiaryRequest.customerId);
+    public void update(@Valid @RequestBody BeneficiaryRequest beneficiaryRequest, @ModelAttribute("user") User user) {
+        Customer customer = customerService.findByUserId(user.getId());
         if (customer.isEmpty()) {
             throw new NotFoundException();
         }

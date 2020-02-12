@@ -16,7 +16,6 @@ public class BeneficiaryRequest {
     public String account;
     @NotNull(message = "Bank name code is required")
     public String bankName;
-    public Long customerId;
 
     public static Beneficiary toBeneficiary(BeneficiaryRequest beneficiaryRequest, Customer customer) {
         return new Beneficiary(beneficiaryRequest.name,

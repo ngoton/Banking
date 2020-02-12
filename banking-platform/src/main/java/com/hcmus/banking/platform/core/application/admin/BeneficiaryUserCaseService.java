@@ -34,9 +34,6 @@ public class BeneficiaryUserCaseService {
     @Transactional(readOnly = true)
     public Beneficiary findByAccount(String account) {
         Beneficiary beneficiary = beneficiaryService.findByAccount(account);
-        if (beneficiary.isEmpty()) {
-            throw new NotFoundException();
-        }
         return beneficiary;
     }
 
