@@ -2,6 +2,7 @@ package com.hcmus.banking.platform.core.application.admin;
 
 import com.hcmus.banking.platform.core.application.saving.SavingService;
 import com.hcmus.banking.platform.core.application.savingTransaction.SavingTransactionService;
+import com.hcmus.banking.platform.core.utils.RandomUtils;
 import com.hcmus.banking.platform.domain.exception.BankingServiceException;
 import com.hcmus.banking.platform.domain.exception.NotFoundException;
 import com.hcmus.banking.platform.domain.saving.Saving;
@@ -34,6 +35,7 @@ public class SavingTransactionUseCaseService {
 
     @Transactional
     public void create(SavingTransaction savingTransaction) {
+        savingTransaction.setCode(RandomUtils.generateTransactionCode());
         savingTransactionService.create(savingTransaction);
     }
 

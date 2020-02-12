@@ -1,6 +1,5 @@
 package com.hcmus.banking.platform.core.presentation.savingTransaction;
 
-import com.hcmus.banking.platform.core.utils.RandomUtils;
 import com.hcmus.banking.platform.domain.general.Created;
 import com.hcmus.banking.platform.domain.saving.Saving;
 import com.hcmus.banking.platform.domain.savingTransaction.SavingTransaction;
