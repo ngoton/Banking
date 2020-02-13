@@ -43,6 +43,24 @@ public class BeneficiaryController {
         return BeneficiaryResponses.ofList(beneficiaries);
     }
 
+    @GetMapping("/bank/{bankName}")
+    public List<BeneficiaryResponse> findByBankName(@PathVariable String bankName) {
+        List<Beneficiary> beneficiaries = beneficiaryService.findAllByBankName(bankName);
+        return BeneficiaryResponses.ofList(beneficiaries);
+    }
+
+    @GetMapping("/internal")
+    public List<BeneficiaryResponse> findInternal() {
+        List<Beneficiary> beneficiaries = beneficiaryService.findInternal();
+        return BeneficiaryResponses.ofList(beneficiaries);
+    }
+
+    @GetMapping("/external")
+    public List<BeneficiaryResponse> findExternal() {
+        List<Beneficiary> beneficiaries = beneficiaryService.findExternal();
+        return BeneficiaryResponses.ofList(beneficiaries);
+    }
+
     @GetMapping("/account/{account}")
     public BeneficiaryResponse findByAccount(@PathVariable String account) {
         Beneficiary beneficiary = beneficiaryService.findByAccount(account);

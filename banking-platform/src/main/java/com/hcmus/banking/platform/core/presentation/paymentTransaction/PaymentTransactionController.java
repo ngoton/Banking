@@ -16,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -93,7 +94,12 @@ public class PaymentTransactionController {
         Payment payment = paymentService.findById(paymentTransactionRequest.paymentId);
         if (beneficiary.isEmpty()) {
             Beneficiary newBeneficiary = new Beneficiary(paymentTransactionRequest.name, paymentTransactionRequest.shortName, paymentTransactionRequest.beneficiaryAccount, paymentTransactionRequest.bankName, customer, Created.ofEmpty());
+            if (newBeneficiary.isInternal()){
+                Payment newPayment = new Payment(newBeneficiary.getAccount(), BigDecimal.ZERO, Created.ofEmpty());
+                newBeneficiary.setPayment(newPayment);
+            }
             beneficiaryService.create(newBeneficiary);
+
             beneficiary = newBeneficiary;
         }
 

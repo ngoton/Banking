@@ -1,6 +1,7 @@
 package com.hcmus.banking.platform.core.application.admin;
 
 import com.hcmus.banking.platform.core.application.payment.PaymentService;
+import com.hcmus.banking.platform.domain.exception.BankingServiceException;
 import com.hcmus.banking.platform.domain.exception.NotFoundException;
 import com.hcmus.banking.platform.domain.payment.Payment;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class PaymentUseCaseService {
     public Payment findById(Long id) {
         Payment payment = paymentService.findById(id);
         if (payment.isEmpty()) {
-            throw new NotFoundException();
+            throw new BankingServiceException("Account not found");
         }
         return payment;
     }
@@ -41,7 +42,7 @@ public class PaymentUseCaseService {
     public Payment findByAccount(String code) {
         Payment payment = paymentService.findByAccount(code);
         if (payment.isEmpty()) {
-            throw new NotFoundException();
+            throw new BankingServiceException("Account not found");
         }
         return payment;
     }
@@ -61,7 +62,7 @@ public class PaymentUseCaseService {
     public void update(Payment payment) {
         Payment oldStaff = paymentService.findByAccount(payment.getAccount());
         if (oldStaff.isEmpty()) {
-            throw new NotFoundException();
+            throw new BankingServiceException("Account not found");
         }
         paymentService.update(oldStaff, payment);
     }
@@ -70,7 +71,7 @@ public class PaymentUseCaseService {
     public void delete(Long id) {
         Payment payment = paymentService.findById(id);
         if (payment.isEmpty()) {
-            throw new NotFoundException();
+            throw new BankingServiceException("Account not found");
         }
         paymentService.delete(payment);
     }

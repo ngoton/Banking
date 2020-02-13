@@ -2,12 +2,14 @@ package com.hcmus.banking.platform.domain.partner;
 
 import com.hcmus.banking.platform.domain.general.Created;
 import com.hcmus.banking.platform.domain.general.IDEntity;
+import com.hcmus.banking.platform.domain.paymentTransaction.PaymentTransaction;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "partners", schema = "banking")
@@ -31,9 +33,21 @@ public class Partner extends IDEntity {
             @AttributeOverride(name = "createProgram.value", column = @Column(name = "create_program"))
     })
     private Created created;
+    @OneToMany(mappedBy = "partner", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    private List<PaymentTransaction> paymentTransactions;
 
     public Partner(String name, String apiKey, String privateKey, String publicKey, Encryption encryption, Created created){
         this.name = name;
+        this.apiKey = apiKey;
+        this.privateKey = privateKey;
+        this.publicKey = publicKey;
+        this.encryption = encryption;
+        this.created = created;
+    }
+
+    public Partner(String name, String key, String apiKey, String privateKey, String publicKey, Encryption encryption, Created created) {
+        this.name = name;
+        this.key = key;
         this.apiKey = apiKey;
         this.privateKey = privateKey;
         this.publicKey = publicKey;

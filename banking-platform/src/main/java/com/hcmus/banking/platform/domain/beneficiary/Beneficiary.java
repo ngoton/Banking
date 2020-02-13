@@ -3,6 +3,7 @@ package com.hcmus.banking.platform.domain.beneficiary;
 import com.hcmus.banking.platform.domain.customer.Customer;
 import com.hcmus.banking.platform.domain.general.Created;
 import com.hcmus.banking.platform.domain.general.IDEntity;
+import com.hcmus.banking.platform.domain.payment.Payment;
 import com.hcmus.banking.platform.domain.paymentTransaction.PaymentTransaction;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,15 +21,19 @@ import java.util.List;
 @NoArgsConstructor
 public class Beneficiary extends IDEntity {
     private static final String EMPTY_STRING = "";
+    public static final String BANK_NAME = "HCB_BANK";
     private String name;
     @Column(name = "short_name")
     private String shortName;
     private String account;
     @Column(name = "bank_name")
-    private String BankName;
+    private String bankName;
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinColumn(name = "customers_id")
     private Customer customer;
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @JoinColumn(name = "payments_id")
+    private Payment payment;
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "createdAt.value", column = @Column(name = "created_at")),
@@ -47,12 +52,16 @@ public class Beneficiary extends IDEntity {
         this.name = name;
         this.shortName = shortName;
         this.account = account;
-        BankName = bankName;
+        this.bankName = bankName;
         this.customer = customer;
         this.created = created;
     }
 
     public boolean isEmpty() {
         return name.equals(EMPTY_STRING);
+    }
+
+    public boolean isInternal(){
+        return bankName.equals(BANK_NAME);
     }
 }

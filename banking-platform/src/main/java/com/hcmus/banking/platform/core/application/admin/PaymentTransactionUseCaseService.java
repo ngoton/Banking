@@ -70,7 +70,7 @@ public class PaymentTransactionUseCaseService {
         if (beneficiary.isEmpty()) {
             throw new BankingServiceException("Beneficiary does not exist!!!");
         }
-        return paymentTransactionService.findAllByPaymentId(id, pageable);
+        return paymentTransactionService.findAllByBeneficiary(id, pageable);
     }
 
     @Transactional
@@ -124,12 +124,13 @@ public class PaymentTransactionUseCaseService {
         } else {
             money = money.add(PaymentTransaction.internalFee());
         }
+
         PaymentTransaction receiptTransaction = new PaymentTransaction(
                 RandomUtils.generateTransactionCode(),
                 money,
                 toPaymentTransaction.getContent(),
                 Created.ofEmpty(),
-                toPaymentTransaction.getBeneficiary().getCustomer().getPayment()
+                toPaymentTransaction.getBeneficiary().getPayment()
         );
         paymentTransactionService.create(receiptTransaction);
 
@@ -141,6 +142,7 @@ public class PaymentTransactionUseCaseService {
         if (paymentTransaction.getMoney().signum() <= 0){
             throw new BankingServiceException("Money must be greater than zero");
         }
+        paymentTransaction.setCode(RandomUtils.generateTransactionCode());
         paymentTransactionService.create(paymentTransaction);
     }
 }

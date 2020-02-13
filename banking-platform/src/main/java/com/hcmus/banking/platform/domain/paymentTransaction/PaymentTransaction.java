@@ -3,6 +3,7 @@ package com.hcmus.banking.platform.domain.paymentTransaction;
 import com.hcmus.banking.platform.domain.beneficiary.Beneficiary;
 import com.hcmus.banking.platform.domain.general.Created;
 import com.hcmus.banking.platform.domain.general.IDEntity;
+import com.hcmus.banking.platform.domain.partner.Partner;
 import com.hcmus.banking.platform.domain.payment.Payment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,9 +39,21 @@ public class PaymentTransaction extends IDEntity {
     @ManyToOne
     @JoinColumn(name = "beneficiarys_id")
     private Beneficiary beneficiary;
+    @ManyToOne
+    @JoinColumn(name = "partners_id")
+    private Partner partner;
+
+    public PaymentTransaction(String code, BigDecimal money, String content, Created created, Payment payment, Beneficiary beneficiary) {
+        this.code = code;
+        this.money = money;
+        this.content = content;
+        this.created = created;
+        this.payment = payment;
+        this.beneficiary = beneficiary;
+    }
 
     public static PaymentTransaction ofEmpty() {
-        return new PaymentTransaction(EMPTY_STRING, new BigDecimal(0), EMPTY_STRING, Created.ofEmpty(), Payment.ofEmpty(), Beneficiary.ofEmpty());
+        return new PaymentTransaction(EMPTY_STRING, new BigDecimal(0), EMPTY_STRING, Created.ofEmpty(), Payment.ofEmpty());
     }
 
     public boolean isEmpty() {

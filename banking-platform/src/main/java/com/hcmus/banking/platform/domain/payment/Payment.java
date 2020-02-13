@@ -1,6 +1,7 @@
 package com.hcmus.banking.platform.domain.payment;
 
 import com.hcmus.banking.platform.core.utils.RandomUtils;
+import com.hcmus.banking.platform.domain.beneficiary.Beneficiary;
 import com.hcmus.banking.platform.domain.customer.Customer;
 import com.hcmus.banking.platform.domain.general.Created;
 import com.hcmus.banking.platform.domain.general.IDEntity;
@@ -37,6 +38,8 @@ public class Payment extends IDEntity {
     private List<PaymentTransaction> paymentTransactions;
     @OneToOne(mappedBy = "payment", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     private Customer customer;
+    @OneToOne(mappedBy = "payment", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    private Beneficiary beneficiary;
 
     public static Payment ofEmpty() {
         return new Payment(EMPTY_STRING, new BigDecimal(0), Created.ofEmpty());
