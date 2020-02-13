@@ -118,4 +118,12 @@ public class UserUseCaseService {
         otpService.delete(otp);
         return user;
     }
+
+    public User findByUsername(String username) {
+        User user = userService.findByUsername(username);
+        if (user.isEmpty()){
+            throw new BankingServiceException("User not found");
+        }
+        return user;
+    }
 }

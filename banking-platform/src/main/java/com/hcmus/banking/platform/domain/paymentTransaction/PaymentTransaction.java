@@ -63,6 +63,13 @@ public class PaymentTransaction extends IDEntity {
         this.beneficiary = beneficiary;
     }
 
+    public PaymentTransaction(String content, BigDecimal money, Created created, Payment payment) {
+        this.money = money;
+        this.content = content;
+        this.created = created;
+        this.payment = payment;
+    }
+
     public static BigDecimal internalFee() {
         return BigDecimal.ZERO.subtract(INTERNAL_FEE);
     }

@@ -1,16 +1,11 @@
 package com.hcmus.banking.platform.core.presentation.paymentTransaction;
 
-import com.hcmus.banking.platform.core.application.admin.BeneficiaryUserCaseService;
-import com.hcmus.banking.platform.core.application.admin.CustomerUseCaseService;
-import com.hcmus.banking.platform.core.application.admin.PaymentTransactionUseCaseService;
-import com.hcmus.banking.platform.core.application.admin.PaymentUseCaseService;
-import com.hcmus.banking.platform.core.application.otp.OtpService;
+import com.hcmus.banking.platform.core.application.admin.*;
 import com.hcmus.banking.platform.core.presentation.advice.UserAdvice;
 import com.hcmus.banking.platform.domain.beneficiary.Beneficiary;
 import com.hcmus.banking.platform.domain.customer.Customer;
 import com.hcmus.banking.platform.domain.exception.BankingServiceException;
 import com.hcmus.banking.platform.domain.general.Created;
-import com.hcmus.banking.platform.domain.otp.OTP;
 import com.hcmus.banking.platform.domain.payment.Payment;
 import com.hcmus.banking.platform.domain.paymentTransaction.PaymentTransaction;
 import com.hcmus.banking.platform.domain.user.User;
@@ -21,7 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.prefs.BackingStoreException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,7 +27,7 @@ public class PaymentTransactionController {
     private final BeneficiaryUserCaseService beneficiaryService;
     private final CustomerUseCaseService customerService;
     private final PaymentUseCaseService paymentService;
-    private final OtpService otpService;
+    private final UserUseCaseService userService;
 
     @GetMapping
     public Page<PaymentTransactionResponse> findAllBy(Pageable pageable) {
@@ -58,6 +53,39 @@ public class PaymentTransactionController {
         return new PaymentTransactionResponse(paymentTransaction);
     }
 
+    @PostMapping("/deposit")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
+    public void deposit(@Valid @RequestBody DepositRequest depositRequest){
+        if (depositRequest.hasAccount()){
+            Payment payment = paymentService.findByAccount(depositRequest.account);
+            if (payment.isEmpty()){
+                throw new BankingServiceException("Account not found");
+            }
+            paymentTransactionService.deposit(DepositRequest.toPaymentTransaction(depositRequest, payment));
+        }
+        else {
+            if (!depositRequest.hasUsername()){
+                throw new BankingServiceException("Account not found");
+            }
+
+            User user = userService.findByUsername(depositRequest.username);
+            if (user.isEmpty()){
+                throw new BankingServiceException("Account not found");
+            }
+            Customer customer = customerService.findByUserId(user.getId());
+            if (customer.isEmpty()){
+                throw new BankingServiceException("Account not found");
+            }
+            List<Payment> payments = paymentService.findAllByCustomerId(customer.getId());
+            if (payments.isEmpty()){
+                throw new BankingServiceException("Account not found");
+            }
+            Payment payment = payments.stream().findFirst().get();
+            paymentTransactionService.deposit(DepositRequest.toPaymentTransaction(depositRequest, payment));
+
+        }
+    }
+
     @PostMapping("/payment")
     public PaymentResponse payment(@Valid @RequestBody PaymentTransactionRequest paymentTransactionRequest, @ModelAttribute("user") User user) {
         Customer customer = customerService.findByUserId(user.getId());
@@ -66,12 +94,11 @@ public class PaymentTransactionController {
         if (beneficiary.isEmpty()) {
             Beneficiary newBeneficiary = new Beneficiary(paymentTransactionRequest.name, paymentTransactionRequest.shortName, paymentTransactionRequest.beneficiaryAccount, paymentTransactionRequest.bankName, customer, Created.ofEmpty());
             beneficiaryService.create(newBeneficiary);
-            PaymentTransaction paymentTransaction = paymentTransactionService.payment(paymentTransactionRequest.toPaymentTransaction(paymentTransactionRequest, newBeneficiary, payment), user);
-            return new PaymentResponse(paymentTransaction,paymentTransactionRequest.fee);
-        } else {
-            PaymentTransaction paymentTransaction = paymentTransactionService.payment(paymentTransactionRequest.toPaymentTransaction(paymentTransactionRequest, beneficiary, payment), user);
-            return new PaymentResponse(paymentTransaction,paymentTransactionRequest.fee);
+            beneficiary = newBeneficiary;
         }
+
+        PaymentTransaction paymentTransaction = paymentTransactionService.payment(paymentTransactionRequest.toPaymentTransaction(paymentTransactionRequest, beneficiary, payment), user);
+        return new PaymentResponse(paymentTransaction,paymentTransactionRequest.fee);
     }
 
     @PostMapping("/paymentVerify")
@@ -81,11 +108,8 @@ public class PaymentTransactionController {
         if (beneficiary.isEmpty() || payment.isEmpty()) {
             throw new BankingServiceException("PaymentId or beneficiaryId is empty!!!");
         }
-        OTP otp = otpService.findByEmailAndCode(user.getEmail(), paymentRequest.code);
-        if (otp.isEmpty() || otp.isExpired()) {
-            throw new BankingServiceException("OTP code is expired");
-        }
-        paymentTransactionService.paymentVerify(paymentRequest.toPaymentTransaction(paymentRequest, beneficiary, payment),paymentRequest.fee);
+
+        paymentTransactionService.paymentVerify(paymentRequest.toPaymentTransaction(paymentRequest, beneficiary, payment), paymentRequest.fee, user.getEmail(), paymentRequest.code);
 
     }
 

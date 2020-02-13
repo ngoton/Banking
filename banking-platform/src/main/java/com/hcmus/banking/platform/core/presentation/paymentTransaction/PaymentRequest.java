@@ -6,7 +6,6 @@ import com.hcmus.banking.platform.domain.payment.Payment;
 import com.hcmus.banking.platform.domain.paymentTransaction.PaymentTransaction;
 import lombok.Getter;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 

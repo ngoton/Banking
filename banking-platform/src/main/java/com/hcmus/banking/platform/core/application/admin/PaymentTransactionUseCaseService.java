@@ -94,7 +94,13 @@ public class PaymentTransactionUseCaseService {
     }
 
     @Transactional
-    public void paymentVerify(PaymentTransaction toPaymentTransaction, Boolean fee) {
+    public void paymentVerify(PaymentTransaction toPaymentTransaction, Boolean fee, String email, String code) {
+        OTP otp = otpService.findByEmailAndCode(email, code);
+        if (otp.isEmpty() || otp.isExpired()) {
+            throw new BankingServiceException("OTP code is expired");
+        }
+        otpService.delete(otp);
+
         PaymentTransaction paymentTransaction = new PaymentTransaction(
                 RandomUtils.generateTransactionCode(),
                 BigDecimal.ZERO.subtract(toPaymentTransaction.getMoney()),
@@ -128,5 +134,13 @@ public class PaymentTransactionUseCaseService {
         paymentTransactionService.create(receiptTransaction);
 
 
+    }
+
+    @Transactional
+    public void deposit(PaymentTransaction paymentTransaction) {
+        if (paymentTransaction.getMoney().signum() <= 0){
+            throw new BankingServiceException("Money must be greater than zero");
+        }
+        paymentTransactionService.create(paymentTransaction);
     }
 }
