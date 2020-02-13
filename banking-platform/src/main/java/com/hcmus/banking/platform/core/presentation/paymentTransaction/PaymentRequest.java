@@ -4,29 +4,27 @@ import com.hcmus.banking.platform.domain.beneficiary.Beneficiary;
 import com.hcmus.banking.platform.domain.general.Created;
 import com.hcmus.banking.platform.domain.payment.Payment;
 import com.hcmus.banking.platform.domain.paymentTransaction.PaymentTransaction;
+import lombok.Getter;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-public class PaymentTransactionRequest {
+@Getter
+public class PaymentRequest {
+    @NotNull(message = "Money account is required")
+    public BigDecimal money;
     @NotNull(message = "Content is required")
     public String content;
-    @NotNull(message = "Money is required")
-    public BigDecimal money;
     @NotNull
     public Long paymentId;
-    @NotNull(message = "Beneficiary account is required")
-    public String beneficiaryAccount;
-
-    @NotNull(message = "Name code is required")
-    public String name;
-    public String shortName;
-    @NotNull(message = "Bank name code is required")
-    public String bankName;
+    @NotNull
+    public Long beneficiaryId;
+    @NotNull(message = "OTP code is required")
+    public String code;
     @NotNull
     public Boolean fee;
 
-    public static PaymentTransaction toPaymentTransaction(PaymentTransactionRequest paymentTransactionRequest, Beneficiary beneficiary, Payment payment) {
+    public static PaymentTransaction toPaymentTransaction(PaymentRequest paymentTransactionRequest, Beneficiary beneficiary, Payment payment) {
         return new PaymentTransaction(
                 paymentTransactionRequest.content,
                 paymentTransactionRequest.money,

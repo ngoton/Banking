@@ -46,4 +46,12 @@ public class BeneficiaryService {
     public void delete(Beneficiary beneficiary) {
         beneficiaryRepository.delete(beneficiary);
     }
+
+    public List<Beneficiary> findAllByBankName(String bankName) {
+        return beneficiaryRepository.findAllByBankName(bankName);
+    }
+
+    public List<Beneficiary> findAll() {
+        return beneficiaryRepository.findAll();
+    }
 }

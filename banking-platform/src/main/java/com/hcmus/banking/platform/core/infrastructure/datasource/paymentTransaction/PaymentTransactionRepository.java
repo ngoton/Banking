@@ -13,7 +13,7 @@ public interface PaymentTransactionRepository extends JpaRepository<PaymentTrans
     Page<PaymentTransaction> findAllBy(Pageable pageable);
     Optional<PaymentTransaction> findById(Long id);
     Page<PaymentTransaction> findAllByPaymentId(Long id,Pageable pageable);
-    Page<PaymentTransaction> findAllByBeneficiary(Long id,Pageable pageable);
+    Page<PaymentTransaction> findAllByBeneficiaryId(Long id,Pageable pageable);
     PaymentTransaction save(PaymentTransaction paymentTransaction);
     void delete(PaymentTransaction paymentTransaction);
 }

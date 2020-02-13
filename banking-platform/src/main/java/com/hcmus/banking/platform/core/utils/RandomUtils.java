@@ -33,4 +33,11 @@ public class RandomUtils {
         Long seed = Long.valueOf(CODE_KEY) * 1000 + ZonedDateTime.now().toInstant().toEpochMilli();
         return generateRandom(seed, ACCOUNT_LENGTH);
     }
+
+    public static String generateTransactionCode(){
+        SecureRandom secureRandom = new SecureRandom();
+        byte[] token = new byte[16];
+        secureRandom.nextBytes(token);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(token).toUpperCase();
+    }
 }

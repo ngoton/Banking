@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,9 +35,6 @@ public class BeneficiaryUserCaseService {
     @Transactional(readOnly = true)
     public Beneficiary findByAccount(String account) {
         Beneficiary beneficiary = beneficiaryService.findByAccount(account);
-        if (beneficiary.isEmpty()) {
-            throw new NotFoundException();
-        }
         return beneficiary;
     }
 
@@ -51,8 +49,8 @@ public class BeneficiaryUserCaseService {
 
     @Transactional(readOnly = true)
     public List<Beneficiary> findAllByCustomerCode(String code) {
-        List<Beneficiary> Beneficiaries = beneficiaryService.findAllByCustomerCode(code);
-        return Beneficiaries;
+        List<Beneficiary> beneficiaries = beneficiaryService.findAllByCustomerCode(code);
+        return beneficiaries;
     }
 
     @Transactional
@@ -76,5 +74,25 @@ public class BeneficiaryUserCaseService {
             throw new NotFoundException();
         }
         beneficiaryService.delete(beneficiary);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Beneficiary> findAllByBankName(String bankName) {
+        List<Beneficiary> beneficiaries = beneficiaryService.findAllByBankName(bankName);
+        return beneficiaries;
+    }
+
+    public List<Beneficiary> findInternal() {
+        List<Beneficiary> beneficiaries = beneficiaryService.findAll();
+        return beneficiaries.stream()
+                .filter(beneficiary -> beneficiary.isInternal())
+                .collect(Collectors.toList());
+    }
+
+    public List<Beneficiary> findExternal() {
+        List<Beneficiary> beneficiaries = beneficiaryService.findAll();
+        return beneficiaries.stream()
+                .filter(beneficiary -> !beneficiary.isInternal())
+                .collect(Collectors.toList());
     }
 }

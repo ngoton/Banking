@@ -24,7 +24,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.time.Instant;
 import java.util.Map;
 
-@RestControllerAdvice(basePackages = "com.hcmus.banking.platform.api.presentation")
+@RestControllerAdvice(basePackages = "com.hcmus.banking.platform.api.presentation.secure")
 public class ApiAdvice {
     private final static String X_API_KEY = "x-api-key";
     private final static String X_TIME_CODE = "x-time-code";
@@ -44,14 +44,7 @@ public class ApiAdvice {
     @Autowired
     PGPCryptography pgpCryptography;
 
-    @ModelAttribute("partner")
-    Partner validateApiKey(@RequestHeader Map<String,String> headers, @RequestBody Map<String,Object> bodies) throws SecurityException {
-        Partner partner =  getPartner(headers, bodies);
-
-        return partner;
-    }
-
-    private Partner getPartner(Map<String, String> headers, Map<String,Object> bodies) {
+    void validateApiKey(@RequestHeader Map<String,String> headers, @RequestBody Map<String,Object> bodies) throws SecurityException {
         ObjectMapper objectMapper = new ObjectMapper();
         String xApiKey = headers.get(X_API_KEY);
         String xTimeCode = headers.get(X_TIME_CODE);
@@ -115,8 +108,11 @@ public class ApiAdvice {
         } catch (Exception e) {
             throw new UnauthorizedException();
         }
+    }
 
-
+    @ModelAttribute("partner")
+    Partner partner(@RequestHeader Map<String,String> headers) throws SecurityException {
+        Partner partner = partnerUseCaseService.findByKey(headers.get(X_API_KEY));
         return partner;
     }
 }

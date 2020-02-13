@@ -2,6 +2,7 @@ package com.hcmus.banking.platform.core.application.admin;
 
 import com.hcmus.banking.platform.core.application.saving.SavingService;
 import com.hcmus.banking.platform.core.application.savingTransaction.SavingTransactionService;
+import com.hcmus.banking.platform.core.utils.RandomUtils;
 import com.hcmus.banking.platform.domain.exception.BankingServiceException;
 import com.hcmus.banking.platform.domain.exception.NotFoundException;
 import com.hcmus.banking.platform.domain.saving.Saving;
@@ -14,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class SavingTransactionUserCaseService {
+public class SavingTransactionUseCaseService {
     private final SavingTransactionService savingTransactionService;
     private final SavingService savingService;
 
@@ -30,6 +31,12 @@ public class SavingTransactionUserCaseService {
             throw new NotFoundException();
         }
         return savingTransaction;
+    }
+
+    @Transactional
+    public void create(SavingTransaction savingTransaction) {
+        savingTransaction.setCode(RandomUtils.generateTransactionCode());
+        savingTransactionService.create(savingTransaction);
     }
 
     @Transactional

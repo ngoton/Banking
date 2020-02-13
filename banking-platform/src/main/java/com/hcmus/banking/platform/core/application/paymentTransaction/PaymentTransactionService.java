@@ -22,7 +22,7 @@ public class PaymentTransactionService {
     }
 
     public Page<PaymentTransaction> findAllByBeneficiary(Long id, Pageable pageable) {
-        return paymentTransactionRepository.findAllByBeneficiary(id, pageable);
+        return paymentTransactionRepository.findAllByBeneficiaryId(id, pageable);
     }
 
     public PaymentTransaction findById(Long id) {
