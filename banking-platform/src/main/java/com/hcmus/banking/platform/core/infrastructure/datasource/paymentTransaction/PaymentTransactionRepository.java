@@ -14,6 +14,7 @@ public interface PaymentTransactionRepository extends JpaRepository<PaymentTrans
     Optional<PaymentTransaction> findById(Long id);
     Page<PaymentTransaction> findAllByPaymentId(Long id,Pageable pageable);
     Page<PaymentTransaction> findAllByBeneficiaryId(Long id,Pageable pageable);
+    Page<PaymentTransaction> findAllByPartnerName(String name,Pageable pageable);
     PaymentTransaction save(PaymentTransaction paymentTransaction);
     void delete(PaymentTransaction paymentTransaction);
 }

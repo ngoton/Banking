@@ -21,6 +21,10 @@ public class PaymentTransactionService {
         return paymentTransactionRepository.findAllByPaymentId(id, pageable);
     }
 
+    public Page<PaymentTransaction> findAllByPartnerName(String name, Pageable pageable) {
+        return paymentTransactionRepository.findAllByPartnerName(name, pageable);
+    }
+
     public Page<PaymentTransaction> findAllByBeneficiary(Long id, Pageable pageable) {
         return paymentTransactionRepository.findAllByBeneficiaryId(id, pageable);
     }
