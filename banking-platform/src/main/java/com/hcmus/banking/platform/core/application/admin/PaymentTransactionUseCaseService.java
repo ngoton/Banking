@@ -3,6 +3,7 @@ package com.hcmus.banking.platform.core.application.admin;
 import com.hcmus.banking.platform.core.application.beneficiary.BeneficiaryService;
 import com.hcmus.banking.platform.core.application.mail.MailService;
 import com.hcmus.banking.platform.core.application.otp.OtpService;
+import com.hcmus.banking.platform.core.application.partner.PartnerService;
 import com.hcmus.banking.platform.core.application.payment.PaymentService;
 import com.hcmus.banking.platform.core.application.paymentTransaction.PaymentTransactionService;
 import com.hcmus.banking.platform.core.utils.RandomUtils;
@@ -12,6 +13,7 @@ import com.hcmus.banking.platform.domain.exception.NotFoundException;
 import com.hcmus.banking.platform.domain.general.Created;
 import com.hcmus.banking.platform.domain.mail.Mail;
 import com.hcmus.banking.platform.domain.otp.OTP;
+import com.hcmus.banking.platform.domain.partner.Partner;
 import com.hcmus.banking.platform.domain.payment.Payment;
 import com.hcmus.banking.platform.domain.paymentTransaction.PaymentTransaction;
 import com.hcmus.banking.platform.domain.user.User;
@@ -31,6 +33,7 @@ public class PaymentTransactionUseCaseService {
     private final BeneficiaryService beneficiaryService;
     private final OtpService otpService;
     private final MailService mailService;
+    private final PartnerService partnerService;
 
     @Transactional(readOnly = true)
     public Page<PaymentTransaction> findAllBy(Pageable pageable) {
@@ -62,6 +65,15 @@ public class PaymentTransactionUseCaseService {
             throw new BankingServiceException("Payment does not exist!!!");
         }
         return paymentTransactionService.findAllByPaymentId(id, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<PaymentTransaction> findAllByPartnerName(String name, Pageable pageable) {
+        Partner partner = partnerService.findByName(name);
+        if (partner.isEmpty()) {
+            throw new BankingServiceException("Partner does not exist!!!");
+        }
+        return paymentTransactionService.findAllByPartnerName(name, pageable);
     }
 
     @Transactional(readOnly = true)
@@ -145,6 +157,17 @@ public class PaymentTransactionUseCaseService {
             throw new BankingServiceException("Money must be greater than zero");
         }
         paymentTransaction.setCode(RandomUtils.generateTransactionCode());
+        paymentTransactionService.create(paymentTransaction);
+    }
+
+    @Transactional
+    public void externalPayment(PaymentTransaction paymentTransaction, Partner partner) {
+        if (paymentTransaction.getMoney().signum() == 0){
+            throw new BankingServiceException("Money is zero");
+        }
+
+        paymentTransaction.setCode(RandomUtils.generateTransactionCode());
+        paymentTransaction.setPartner(partner);
         paymentTransactionService.create(paymentTransaction);
     }
 }

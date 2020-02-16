@@ -42,6 +42,12 @@ public class PaymentTransactionController {
         return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
     }
 
+    @GetMapping("/history/partner/{name}")
+    public Page<PaymentTransactionResponse> findAllByPartnerName(@PathVariable String name, Pageable pageable) {
+        Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByPartnerName(name, pageable);
+        return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
+    }
+
     @GetMapping("/historyBeneficiary/{id}")
     public Page<PaymentTransactionResponse> findAllByBeneficiary(@PathVariable Long id, Pageable pageable) {
         Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByBeneficiary(id, pageable);
