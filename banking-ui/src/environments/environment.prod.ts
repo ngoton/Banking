@@ -5,7 +5,7 @@
  */
 export const environment = {
   production: true,
-  AUX_BENEFICIARY: '',
+  AUX_BENEFICIARY: '/internal/beneficiaries',
   AUX_URL: '',
   BASE_URL: 'http://localhost:4200',
   AUTH_SERV: '/auth',
