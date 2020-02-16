@@ -8,6 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/internal/partners")
@@ -21,5 +22,11 @@ public class PartnerController {
     public void create(@Valid @RequestBody PartnerRequest partnerRequest){
         Partner partner = PartnerRequest.toPartner(partnerRequest);
         partnerService.create(partner);
+    }
+
+    @GetMapping
+    public List<PartnerResponse> findAll(){
+        List<Partner> partners = partnerService.findAll();
+        return PartnerResponses.ofList(partners);
     }
 }
