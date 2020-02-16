@@ -19,10 +19,10 @@ public class TransactionController {
     private final PaymentTransactionUseCaseService paymentTransactionService;
 
     @PostMapping
-    public TransactionResponse transaction(@Valid @RequestBody TransactionRequest transactionRequest, @ModelAttribute("partner") Partner parner){
+    public TransactionResponse transaction(@Valid @RequestBody TransactionRequest transactionRequest, @ModelAttribute("partner") Partner partner){
         Payment payment = paymentService.findByAccount(transactionRequest.getContent().getAccount());
         PaymentTransaction paymentTransaction = new PaymentTransaction(transactionRequest.getContent().getContent(), transactionRequest.getContent().getAmount(), Created.ofEmpty(), payment);
-        paymentTransactionService.externalPayment(paymentTransaction, parner);
+        paymentTransactionService.externalPayment(paymentTransaction, partner);
         return TransactionResponse.of(paymentTransaction);
     }
 }
