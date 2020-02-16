@@ -4,3 +4,5 @@ export * from './three-columns/three-columns.layout';
 
 export * from './customer/customer.layout';
 export * from './general/general.layout';
+
+export * from './employee/employee.layout';
