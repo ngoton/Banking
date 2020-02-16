@@ -125,14 +125,16 @@ public class PaymentTransactionUseCaseService {
             money = money.add(PaymentTransaction.internalFee());
         }
 
-        PaymentTransaction receiptTransaction = new PaymentTransaction(
-                RandomUtils.generateTransactionCode(),
-                money,
-                toPaymentTransaction.getContent(),
-                Created.ofEmpty(),
-                toPaymentTransaction.getBeneficiary().getPayment()
-        );
-        paymentTransactionService.create(receiptTransaction);
+        if (toPaymentTransaction.getBeneficiary().isInternal()){
+            PaymentTransaction receiptTransaction = new PaymentTransaction(
+                    RandomUtils.generateTransactionCode(),
+                    money,
+                    toPaymentTransaction.getContent(),
+                    Created.ofEmpty(),
+                    toPaymentTransaction.getBeneficiary().getPayment()
+            );
+            paymentTransactionService.create(receiptTransaction);
+        }
 
 
     }

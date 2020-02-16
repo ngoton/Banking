@@ -5,6 +5,8 @@ import com.hcmus.banking.platform.domain.partner.Partner;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class PartnerService {
@@ -24,5 +26,9 @@ public class PartnerService {
 
     public void create(Partner partner){
         partnerRepository.save(partner);
+    }
+
+    public List<Partner> findAll() {
+        return partnerRepository.findAll();
     }
 }

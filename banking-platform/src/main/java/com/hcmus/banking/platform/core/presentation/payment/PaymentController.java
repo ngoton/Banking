@@ -1,7 +1,6 @@
 package com.hcmus.banking.platform.core.presentation.payment;
 
 import com.hcmus.banking.platform.core.application.admin.PaymentUseCaseService;
-import com.hcmus.banking.platform.core.presentation.advice.UserAdvice;
 import com.hcmus.banking.platform.domain.payment.Payment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

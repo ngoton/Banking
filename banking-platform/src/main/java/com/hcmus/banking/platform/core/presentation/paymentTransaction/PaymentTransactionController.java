@@ -95,9 +95,29 @@ public class PaymentTransactionController {
         if (beneficiary.isEmpty()) {
             Beneficiary newBeneficiary = new Beneficiary(paymentTransactionRequest.name, paymentTransactionRequest.shortName, paymentTransactionRequest.beneficiaryAccount, paymentTransactionRequest.bankName, customer, Created.ofEmpty());
             if (newBeneficiary.isInternal()){
-                Payment newPayment = new Payment(newBeneficiary.getAccount(), BigDecimal.ZERO, Created.ofEmpty());
+                Payment newPayment = paymentService.findByAccount(paymentTransactionRequest.beneficiaryAccount);
+                if (newPayment.isEmpty()){
+                    newPayment = new Payment(newBeneficiary.getAccount(), BigDecimal.ZERO, Created.ofEmpty());
+                }
+
                 newBeneficiary.setPayment(newPayment);
             }
+            beneficiaryService.create(newBeneficiary);
+
+            beneficiary = newBeneficiary;
+        }
+
+        PaymentTransaction paymentTransaction = paymentTransactionService.payment(paymentTransactionRequest.toPaymentTransaction(paymentTransactionRequest, beneficiary, payment), user);
+        return new PaymentResponse(paymentTransaction,paymentTransactionRequest.fee);
+    }
+
+    @PostMapping("/payment/external")
+    public PaymentResponse externalPayment(@Valid @RequestBody PaymentTransactionRequest paymentTransactionRequest, @ModelAttribute("user") User user) {
+        Customer customer = customerService.findByUserId(user.getId());
+        Beneficiary beneficiary = beneficiaryService.findByAccount(paymentTransactionRequest.beneficiaryAccount);
+        Payment payment = paymentService.findById(paymentTransactionRequest.paymentId);
+        if (beneficiary.isEmpty()) {
+            Beneficiary newBeneficiary = new Beneficiary(paymentTransactionRequest.name, paymentTransactionRequest.shortName, paymentTransactionRequest.beneficiaryAccount, paymentTransactionRequest.bankName, customer, Created.ofEmpty());
             beneficiaryService.create(newBeneficiary);
 
             beneficiary = newBeneficiary;
