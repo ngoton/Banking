@@ -21,4 +21,5 @@ public interface PaymentTransactionRepository extends JpaRepository<PaymentTrans
 
     Page<PaymentTransaction> findAllByPartnerNameAndCreatedCreatedAtGreaterThanEqualAndCreatedCreatedAtLessThanEqual(String partnerName, CreatedAt startDate, CreatedAt endDate, Pageable pageable);
     Page<PaymentTransaction> findAllByPartnerIsNotNullAndCreatedCreatedAtGreaterThanEqualAndCreatedCreatedAtLessThanEqual(CreatedAt startDate, CreatedAt endDate, Pageable pageable);
+    Page<PaymentTransaction> findAllByPartnerIsNotNull(Pageable pageable);
 }

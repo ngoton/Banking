@@ -56,4 +56,8 @@ public class PaymentTransactionService {
     public Page<PaymentTransaction> findAllByPartner(String name, CreatedAt startDate, CreatedAt endDate, Pageable pageable) {
         return paymentTransactionRepository.findAllByPartnerNameAndCreatedCreatedAtGreaterThanEqualAndCreatedCreatedAtLessThanEqual(name, startDate, endDate, pageable);
     }
+
+    public Page<PaymentTransaction> findAllByPartners(Pageable pageable) {
+        return paymentTransactionRepository.findAllByPartnerIsNotNull(pageable);
+    }
 }
