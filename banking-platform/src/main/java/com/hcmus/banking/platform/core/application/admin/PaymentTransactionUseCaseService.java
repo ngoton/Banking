@@ -9,8 +9,8 @@ import com.hcmus.banking.platform.core.application.paymentTransaction.PaymentTra
 import com.hcmus.banking.platform.core.utils.RandomUtils;
 import com.hcmus.banking.platform.domain.beneficiary.Beneficiary;
 import com.hcmus.banking.platform.domain.exception.BankingServiceException;
-import com.hcmus.banking.platform.domain.exception.NotFoundException;
 import com.hcmus.banking.platform.domain.general.Created;
+import com.hcmus.banking.platform.domain.general.CreatedAt;
 import com.hcmus.banking.platform.domain.mail.Mail;
 import com.hcmus.banking.platform.domain.otp.OTP;
 import com.hcmus.banking.platform.domain.partner.Partner;
@@ -24,6 +24,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -205,5 +208,19 @@ public class PaymentTransactionUseCaseService {
         paymentTransactionService.create(paymentTransaction);
 
         paymentService.create(payment);
+    }
+
+    public Page<PaymentTransaction> findAllByPartner(String partnerName, LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        if (Objects.isNull(partnerName) && Objects.isNull(startDate) && Objects.isNull(endDate)){
+            throw new BankingServiceException("Not enough request params");
+        }
+        if (Objects.nonNull(partnerName) && Objects.isNull(startDate) && Objects.isNull(endDate)){
+            return paymentTransactionService.findAllByPartnerName(partnerName, pageable);
+        }
+        if (Objects.isNull(partnerName) && Objects.nonNull(startDate) && Objects.nonNull(endDate)){
+            return paymentTransactionService.findAllByDate(new CreatedAt(startDate.atStartOfDay()), new CreatedAt(endDate.atStartOfDay()), pageable);
+        }
+
+        return paymentTransactionService.findAllByPartner(partnerName, new CreatedAt(startDate.atStartOfDay()), new CreatedAt(endDate.atStartOfDay()), pageable);
     }
 }

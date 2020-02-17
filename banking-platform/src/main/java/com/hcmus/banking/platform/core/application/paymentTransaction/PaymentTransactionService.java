@@ -1,11 +1,14 @@
 package com.hcmus.banking.platform.core.application.paymentTransaction;
 
 import com.hcmus.banking.platform.core.infrastructure.datasource.paymentTransaction.PaymentTransactionRepository;
+import com.hcmus.banking.platform.domain.general.CreatedAt;
 import com.hcmus.banking.platform.domain.paymentTransaction.PaymentTransaction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -44,5 +47,13 @@ public class PaymentTransactionService {
 
     public void delete(PaymentTransaction paymentTransaction) {
         paymentTransactionRepository.delete(paymentTransaction);
+    }
+
+    public Page<PaymentTransaction> findAllByDate(CreatedAt startDate, CreatedAt endDate, Pageable pageable) {
+        return paymentTransactionRepository.findAllByPartnerIsNotNullAndCreatedCreatedAtGreaterThanEqualAndCreatedCreatedAtLessThanEqual(startDate, endDate, pageable);
+    }
+
+    public Page<PaymentTransaction> findAllByPartner(String name, CreatedAt startDate, CreatedAt endDate, Pageable pageable) {
+        return paymentTransactionRepository.findAllByPartnerNameAndCreatedCreatedAtGreaterThanEqualAndCreatedCreatedAtLessThanEqual(name, startDate, endDate, pageable);
     }
 }
