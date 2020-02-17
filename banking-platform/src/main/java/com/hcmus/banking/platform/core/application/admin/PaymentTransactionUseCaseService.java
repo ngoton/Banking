@@ -212,7 +212,7 @@ public class PaymentTransactionUseCaseService {
 
     public Page<PaymentTransaction> findAllByPartner(String partnerName, LocalDate startDate, LocalDate endDate, Pageable pageable) {
         if (Objects.isNull(partnerName) && Objects.isNull(startDate) && Objects.isNull(endDate)){
-            throw new BankingServiceException("Not enough request params");
+            return paymentTransactionService.findAllByPartners(pageable);
         }
         if (Objects.nonNull(partnerName) && Objects.isNull(startDate) && Objects.isNull(endDate)){
             return paymentTransactionService.findAllByPartnerName(partnerName, pageable);
