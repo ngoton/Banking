@@ -1,6 +1,6 @@
 package com.hcmus.banking.platform.core.presentation.beneficiary;
 
-import com.hcmus.banking.platform.core.application.admin.BeneficiaryUserCaseService;
+import com.hcmus.banking.platform.core.application.admin.BeneficiaryUseCaseService;
 import com.hcmus.banking.platform.core.application.admin.CustomerUseCaseService;
 import com.hcmus.banking.platform.core.presentation.advice.UserAdvice;
 import com.hcmus.banking.platform.domain.beneficiary.Beneficiary;
@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @UserAdvice.On
 public class BeneficiaryController {
-    private final BeneficiaryUserCaseService beneficiaryService;
+    private final BeneficiaryUseCaseService beneficiaryService;
     private final CustomerUseCaseService customerService;
 
     @GetMapping

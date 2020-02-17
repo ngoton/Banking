@@ -44,7 +44,7 @@ public class PaymentTransactionUseCaseService {
     public PaymentTransaction findById(Long id) {
         PaymentTransaction paymentTransaction = paymentTransactionService.findById(id);
         if (paymentTransaction.isEmpty()) {
-            throw new NotFoundException();
+            throw new BankingServiceException("Transaction not found");
         }
         return paymentTransaction;
     }
@@ -53,7 +53,7 @@ public class PaymentTransactionUseCaseService {
     public void delete(Long id) {
         PaymentTransaction paymentTransaction = paymentTransactionService.findById(id);
         if (paymentTransaction.isEmpty()) {
-            throw new NotFoundException();
+            throw new BankingServiceException("Transaction not found");
         }
         paymentTransactionService.delete(paymentTransaction);
     }

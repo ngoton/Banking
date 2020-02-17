@@ -25,7 +25,7 @@ import java.util.List;
 @UserAdvice.On
 public class PaymentTransactionController {
     private final PaymentTransactionUseCaseService paymentTransactionService;
-    private final BeneficiaryUserCaseService beneficiaryService;
+    private final BeneficiaryUseCaseService beneficiaryService;
     private final CustomerUseCaseService customerService;
     private final PaymentUseCaseService paymentService;
     private final UserUseCaseService userService;

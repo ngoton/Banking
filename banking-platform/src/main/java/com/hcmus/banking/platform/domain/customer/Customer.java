@@ -1,6 +1,8 @@
 package com.hcmus.banking.platform.domain.customer;
 
 import com.hcmus.banking.platform.domain.beneficiary.Beneficiary;
+import com.hcmus.banking.platform.domain.credit.Credit;
+import com.hcmus.banking.platform.domain.debit.Debit;
 import com.hcmus.banking.platform.domain.general.*;
 import com.hcmus.banking.platform.domain.info.Info;
 import com.hcmus.banking.platform.domain.payment.Payment;
@@ -27,6 +29,10 @@ public class Customer extends IDEntity {
     private Payment payment;
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     private List<Beneficiary> beneficiaries;
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    private List<Debit> debits;
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    private List<Credit> credits;
 
     @Embedded
     @AttributeOverrides({

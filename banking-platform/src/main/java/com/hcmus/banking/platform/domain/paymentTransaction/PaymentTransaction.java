@@ -1,6 +1,8 @@
 package com.hcmus.banking.platform.domain.paymentTransaction;
 
 import com.hcmus.banking.platform.domain.beneficiary.Beneficiary;
+import com.hcmus.banking.platform.domain.credit.Credit;
+import com.hcmus.banking.platform.domain.debit.Debit;
 import com.hcmus.banking.platform.domain.general.Created;
 import com.hcmus.banking.platform.domain.general.IDEntity;
 import com.hcmus.banking.platform.domain.partner.Partner;
@@ -36,12 +38,16 @@ public class PaymentTransaction extends IDEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinColumn(name = "payments_id")
     private Payment payment;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinColumn(name = "beneficiarys_id")
     private Beneficiary beneficiary;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinColumn(name = "partners_id")
     private Partner partner;
+    @OneToOne(mappedBy = "paymentTransaction", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    private Debit debit;
+    @OneToOne(mappedBy = "paymentTransaction", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    private Credit credit;
 
     public PaymentTransaction(String code, BigDecimal money, String content, Created created, Payment payment, Beneficiary beneficiary) {
         this.code = code;

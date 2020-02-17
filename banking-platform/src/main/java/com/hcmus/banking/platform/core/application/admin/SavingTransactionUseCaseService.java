@@ -28,7 +28,7 @@ public class SavingTransactionUseCaseService {
     public SavingTransaction findById(Long id) {
         SavingTransaction savingTransaction = savingTransactionService.findById(id);
         if (savingTransaction.isEmpty()) {
-            throw new NotFoundException();
+            throw new BankingServiceException("Transaction not found");
         }
         return savingTransaction;
     }
@@ -43,7 +43,7 @@ public class SavingTransactionUseCaseService {
     public void delete(Long id) {
         SavingTransaction savingTransaction = savingTransactionService.findById(id);
         if (savingTransaction.isEmpty()) {
-            throw new NotFoundException();
+            throw new BankingServiceException("Transaction not found");
         }
         savingTransactionService.delete(savingTransaction);
     }
