@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
+import { EmployeePagesComponent } from './employee-pages.component';
 
 const routes: Routes = [
   {
@@ -10,8 +10,8 @@ const routes: Routes = [
       {
         path: 'accounts',
         loadChildren: () =>
-          import('./miscellaneous/miscellaneous.module').then(
-            m => m.MiscellaneousModule
+          import('./accounts/accounts.module').then(
+            m => m.AccountsModule
           )
       }
     ]
