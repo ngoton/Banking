@@ -1,0 +1,2 @@
+INSERT INTO banking.partners (name, key, created_at, created_by, create_program, api_key, private_key, public_key, encryption) VALUES ('GROUP_19', 'PVVZQKV-GFEV8EHT6U8PYQ', '2020-02-17 20:21:39.850879', 0, '', 'none', 'none', 'none', 'RSA') ON CONFLICT DO NOTHING;
+INSERT INTO banking.partners (name, key, created_at, created_by, create_program, api_key, private_key, public_key, encryption) VALUES ('GROUP_06', '46I8CRYOX6GZOHVQ4-6PMQ', '2020-02-17 20:23:02.979435', 0, '', 'none', 'none', 'none', 'PGP') ON CONFLICT DO NOTHING;
