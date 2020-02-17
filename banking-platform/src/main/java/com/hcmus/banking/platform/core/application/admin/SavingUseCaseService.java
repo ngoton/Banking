@@ -1,6 +1,7 @@
 package com.hcmus.banking.platform.core.application.admin;
 
 import com.hcmus.banking.platform.core.application.saving.SavingService;
+import com.hcmus.banking.platform.domain.exception.BankingServiceException;
 import com.hcmus.banking.platform.domain.exception.NotFoundException;
 import com.hcmus.banking.platform.domain.saving.Saving;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class SavingUseCaseService {
     public Saving findById(Long id) {
         Saving saving = savingService.findById(id);
         if (saving.isEmpty()) {
-            throw new NotFoundException();
+            throw new BankingServiceException("Saving not found");
         }
         return saving;
     }
@@ -46,7 +47,7 @@ public class SavingUseCaseService {
     public void update(Saving saving) {
         Saving oldSaving = savingService.findByAccount(saving.getAccount());
         if (oldSaving.isEmpty()) {
-            throw new NotFoundException();
+            throw new BankingServiceException("Saving not found");
         }
         savingService.update(oldSaving, saving);
     }
@@ -55,7 +56,7 @@ public class SavingUseCaseService {
     public void delete(Long id) {
         Saving saving = savingService.findById(id);
         if (saving.isEmpty()) {
-            throw new NotFoundException();
+            throw new BankingServiceException("Saving not found");
         }
         savingService.delete(saving);
     }

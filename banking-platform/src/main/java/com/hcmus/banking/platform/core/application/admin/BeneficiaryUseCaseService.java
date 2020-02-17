@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class BeneficiaryUserCaseService {
+public class BeneficiaryUseCaseService {
     private final BeneficiaryService beneficiaryService;
 
     @Transactional(readOnly = true)

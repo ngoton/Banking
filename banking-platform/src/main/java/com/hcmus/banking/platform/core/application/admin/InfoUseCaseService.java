@@ -1,6 +1,7 @@
 package com.hcmus.banking.platform.core.application.admin;
 
 import com.hcmus.banking.platform.core.application.info.InfoService;
+import com.hcmus.banking.platform.domain.exception.BankingServiceException;
 import com.hcmus.banking.platform.domain.exception.NotFoundException;
 import com.hcmus.banking.platform.domain.info.Info;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ public class InfoUseCaseService {
     public Info findById(Long id){
         Info info = infoService.findById(id);
         if (info.isEmpty()){
-            throw new NotFoundException();
+            throw new BankingServiceException("User not found");
         }
         return info;
     }
@@ -30,7 +31,7 @@ public class InfoUseCaseService {
     public void update(Info info){
         Info oldInfo = infoService.findById(info.getId());
         if (oldInfo.isEmpty()){
-            throw new NotFoundException();
+            throw new BankingServiceException("User not found");
         }
         infoService.update(oldInfo, info);
     }
@@ -39,7 +40,7 @@ public class InfoUseCaseService {
     public void delete(Long id){
         Info info = infoService.findById(id);
         if (info.isEmpty()){
-            throw new NotFoundException();
+            throw new BankingServiceException("User not found");
         }
         infoService.delete(info);
     }
