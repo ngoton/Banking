@@ -57,6 +57,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   ) {
     this.submitted = false;
     this.createForm();
+    let token = JSON.parse(localStorage.getItem('token'));
+    if(token){
+      auth.clearLocalStorage();
+    }
     
     // get return url from route parameters or default to '/'
     this.returnUrl = this.activeRoute.snapshot.queryParams['returnUrl'] || '/';

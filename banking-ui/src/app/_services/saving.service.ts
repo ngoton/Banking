@@ -11,25 +11,10 @@ import { Router } from '@angular/router';
 export class SavingService {
   private SAVING_URL = environment.BASE_URL + environment.SAVING_SERV;
 
-  // Observable string sources: user
-  private savingsSource = new BehaviorSubject<any>(null);
-  private savingsErrorSource = new BehaviorSubject<any>(null);
-  // Observable string streams: user
-  savings$ = this.savingsSource.asObservable();
-  savingsError$ = this.savingsErrorSource.asObservable();
-
   constructor(private http: HttpClient) { }
 
-  updateSaving(savings) {
-    this.savingsSource.next(savings);
-  }
-
-  updateSavingError(error) {
-    this.savingsSource.next(error);
-  }
-
   getSavingsByCustomerId(customerId) {
-    const PATH = this.SAVING_URL + `/customerId/${customerId}`;
+    const PATH = this.SAVING_URL + `/customer/${customerId}`;
       return this.http.get<any>(PATH)
       .pipe(
         retry(3),

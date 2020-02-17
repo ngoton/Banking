@@ -7,24 +7,24 @@ import { map, takeUntil, filter } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
 import { UserService } from '../../../_services/user.service';
-import { CustomerService } from '../../../_services/customer.service';
+// import { EmployeeService } from '../../../_services/employee.service';
 import { User } from '../../../_models/user';
-import { Customers } from '../../../_models/customer.model';
+// import { employees } from '../../../_models/employee.model';
 import { AuthService } from '../../../_services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'ngx-ibanking-customer-header',
-  styleUrls: ['./ibanking-customer-header.component.scss'],
-  templateUrl: './ibanking-customer-header.component.html',
+  selector: 'ngx-ibanking-employee-header',
+  styleUrls: ['./ibanking-employee-header.component.scss'],
+  templateUrl: './ibanking-employee-header.component.html',
 })
-export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
+export class IBankingEmployeeHeaderComponent implements OnInit, OnDestroy {
 
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
   // user: any;
   user: User;
-  customer: Customers;
+  // employee: employees;
 
   themes = [
     {
@@ -54,7 +54,7 @@ export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
               private themeService: NbThemeService,
               private authService: AuthService,
               private userService: UserService,
-              private customerService: CustomerService,
+              // private employeeService: EmployeeService,
               private layoutService: LayoutService,
               private breakpointService: NbMediaBreakpointsService,
               private router: Router) {
@@ -72,14 +72,12 @@ export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
       this.user.avatar = 'assets/images/placeholder.png';
     }
 
-    this.customerService.getAcctDetailsData();
-
-    this.customerService.acctDetail$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((userDetail: any) => {
-        debugger;
-        this.customer = userDetail;
-      });
+    // this.employeeService.acctDetail$
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe((userDetail: any) => {
+    //     debugger;
+    //     this.employee = userDetail;
+    //   });
 
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService.onMediaQueryChange()
