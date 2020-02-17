@@ -26,9 +26,10 @@ import { NotifierModule, NotifierService } from 'angular-notifier';
 import { CurrencyPipe } from '@angular/common';
 import { InterceptorService } from './_services/interceptor.service';
 import { CurrencyMaskModule } from "ngx-currency-mask";
+import { EmployeePagesComponent } from './employee-pages/employee-pages.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, EmployeePagesComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

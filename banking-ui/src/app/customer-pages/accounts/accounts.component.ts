@@ -6,6 +6,10 @@ import { AccountsService } from './accounts.service';
 import { Customers, Savings, Credits, Debits, Payment } from '../../_models/customer.model';
 import { CustomerService } from '../../_services/customer.service';
 import { untilDestroyed } from 'ngx-take-until-destroy';
+import { PaymentService } from '../../_services/payment.service';
+import { SavingService } from '../../_services/saving.service';
+import { DecimalPipe } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 
 interface CardSettings {
   title: string;
@@ -83,12 +87,18 @@ export class AccountsComponent implements OnDestroy {
   };
 
   customerInfor: Customers;
-  savings: Savings[];
-  payments: Payment[];
+  saving: Savings;
+  payment: Payment;
 
   constructor(private themeService: NbThemeService,
               private accountsService: AccountsService,
-              private solarService: SolarData) {
+              private solarService: SolarData,
+              private paymentService: PaymentService,
+              private savingService: SavingService,
+              private decimalPipe: DecimalPipe) {
+    this.saving = new Savings();
+    this.payment = new Payment();
+    
     this.themeService.getJsTheme()
       .pipe(takeWhile(() => this.alive))
       .subscribe(theme => {
@@ -100,12 +110,12 @@ export class AccountsComponent implements OnDestroy {
       this.accountsService.acctDetail$
         .pipe(untilDestroyed(this))
         .subscribe((response: Customers) => {
-          debugger;
           this.customerInfor = response;
-          this.savings = this.customerInfor.savings;
-          this.payments = this.customerInfor.payments;
+
+          this.getPayment(this.customerInfor.customerId);
+          this.getSaving(this.customerInfor.customerId);
         });
-    }, 5000);
+    }, 2000);
 
 
     this.solarService.getSolarData()
@@ -113,6 +123,34 @@ export class AccountsComponent implements OnDestroy {
       .subscribe((data) => {
         this.solarValue = data;
       });
+  }
+
+  getPayment(customerId){
+    this.paymentService.getPaymentsByCustomerId(customerId)
+    .pipe(untilDestroyed(this))
+    .subscribe(
+      (payment: Payment[]) => {
+        this.payment = payment[0];
+        this.payment.balance = this.decimalPipe.transform(this.payment.balance, '1.3-3');
+      },
+      (err: HttpErrorResponse)=> {
+        
+      }
+    );
+  }
+
+  getSaving(customerId){
+    this.savingService.getSavingsByCustomerId(customerId)
+    .pipe(untilDestroyed(this))
+    .subscribe(
+      (saving: Savings[]) => {
+        this.saving = saving[0];
+        this.saving.balance = this.decimalPipe.transform(this.saving.balance, '1.3-3');
+      },
+      (err: HttpErrorResponse)=> {
+        
+      }
+    );
   }
 
   ngOnDestroy() {

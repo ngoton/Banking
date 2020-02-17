@@ -11,7 +11,7 @@ export class Customers {
     paymentsId: number;
 
     payment: Payment;
-    savings: Savings[];
+    saving: Savings;
     credit: Credits;
     debit: Debits;
     beneficiarys: Beneficiarys[];
@@ -29,7 +29,7 @@ export class Customers {
         this.paymentsId = obj && obj.paymentsId || null;
 
         this.payment = obj && new Payment(obj.payment) || null;
-        this.savings = obj && obj.savings || null;
+        this.saving = obj && new Savings(obj.saving) || null;
         this.credit = obj && new Credits(obj.credits) || null;
         this.debit = obj && new Debits(obj.debits) || null;
         this.beneficiarys = obj && obj.beneficiarys || null;
@@ -42,9 +42,10 @@ export class Payment {
     balance: string;
 
     constructor(obj?: any) {
+        debugger;
         this.paymentId = obj && obj.paymentId || null;
-        this.account = obj && obj.account || null;
-        this.balance = obj && obj.balance || null;
+        this.account = obj && obj.account || "";
+        this.balance = obj && obj.balance || "";
     }
 }
 
@@ -59,7 +60,7 @@ export class PaymentTransactions {
     constructor(obj?: any) {
         this.id = obj && obj.id || null;
         this.code = obj && obj.code || null;
-        this.money = obj && obj.money.toLocalString() || null;
+        this.money = obj && obj.money || null;
         this.content = obj && obj.content || null;
         this.paymentsId = obj && obj.paymentsId || null;
         this.beneficiarysId = obj && obj.beneficiarysId || null;
@@ -73,9 +74,10 @@ export class Savings {
     customersId: number;
 
     constructor(obj?: any) {
+        debugger;
         this.id = obj && obj.id || null;
-        this.account = obj && obj.account || null;
-        this.balance = obj && obj.balance.toLocalString() || null;
+        this.account = obj && obj.account || "";
+        this.balance = obj && obj.balance || "";
         this.customersId = obj && obj.customersId || null;
     }
 }
@@ -89,7 +91,7 @@ export class SavingTransactions {
     constructor(obj?: any) {
         this.id = obj && obj.id || null;
         this.code = obj && obj.code || null;
-        this.money = obj && obj.money.toLocalString() || null;
+        this.money = obj && obj.money || null;
         this.content = obj && obj.content || null;
     }
 }
@@ -123,7 +125,7 @@ export class Credits {
     constructor(obj?: any) {
         this.id = obj && obj.id || null;
         this.account = obj && obj.account || null;
-        this.money = obj && obj.money.toLocalString() || null;
+        this.money = obj && obj.money || null;
         this.content = obj && obj.content || null;
         this.status = obj && obj.status || null;
         this.customers_id = obj && obj.customers_id || null; 
@@ -141,7 +143,7 @@ export class Debits {
     constructor(obj?: any) {
         this.id = obj && obj.id || null;
         this.account = obj && obj.account || null;
-        this.money = obj && obj.money.toLocalString() || null;
+        this.money = obj && obj.money || null;
         this.content = obj && obj.content || null;
         this.status = obj && obj.status || null;
         this.customers_id = obj && obj.customers_id || null;

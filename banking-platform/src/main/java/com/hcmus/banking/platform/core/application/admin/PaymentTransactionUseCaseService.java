@@ -87,6 +87,15 @@ public class PaymentTransactionUseCaseService {
 
     @Transactional
     public PaymentTransaction payment(PaymentTransaction paymentTransaction, User user) {
+        if (paymentTransaction.getMoney().signum() <= 0){
+            throw new BankingServiceException("Money must be greater than zero");
+        }
+        Payment payment = paymentTransaction.getPayment();
+        payment.setBalance(payment.getBalance().subtract(paymentTransaction.getMoney()));
+        if (payment.getBalance().signum() < 0){
+            throw new BankingServiceException("Not enough money");
+        }
+
         try {
             String code = RandomUtils.generate();
             OTP otp = OTP.with(code, user.getEmail());
@@ -113,6 +122,12 @@ public class PaymentTransactionUseCaseService {
         }
         otpService.delete(otp);
 
+        Payment payment = toPaymentTransaction.getPayment();
+        payment.setBalance(payment.getBalance().subtract(toPaymentTransaction.getMoney()));
+        if (payment.getBalance().signum() < 0){
+            throw new BankingServiceException("Not enough money");
+        }
+
         PaymentTransaction paymentTransaction = new PaymentTransaction(
                 RandomUtils.generateTransactionCode(),
                 BigDecimal.ZERO.subtract(toPaymentTransaction.getMoney()),
@@ -123,6 +138,9 @@ public class PaymentTransactionUseCaseService {
         );
 
         paymentTransactionService.create(paymentTransaction);
+
+        paymentService.create(payment);
+
         BigDecimal money = toPaymentTransaction.getMoney();
         if (fee) {
             PaymentTransaction paymentTransactionFee = new PaymentTransaction(
@@ -133,6 +151,9 @@ public class PaymentTransactionUseCaseService {
                     toPaymentTransaction.getPayment()
             );
             paymentTransactionService.create(paymentTransactionFee);
+
+            payment.setBalance(payment.getBalance().add(PaymentTransaction.internalFee()));
+            paymentService.create(payment);
         } else {
             money = money.add(PaymentTransaction.internalFee());
         }
@@ -146,6 +167,10 @@ public class PaymentTransactionUseCaseService {
                     toPaymentTransaction.getBeneficiary().getPayment()
             );
             paymentTransactionService.create(receiptTransaction);
+
+            Payment receiptPayment = toPaymentTransaction.getBeneficiary().getPayment();
+            receiptPayment.setBalance(receiptPayment.getBalance().add(money));
+            paymentService.create(payment);
         }
 
 
@@ -158,6 +183,10 @@ public class PaymentTransactionUseCaseService {
         }
         paymentTransaction.setCode(RandomUtils.generateTransactionCode());
         paymentTransactionService.create(paymentTransaction);
+
+        Payment payment = paymentTransaction.getPayment();
+        payment.setBalance(payment.getBalance().add(paymentTransaction.getMoney()));
+        paymentService.create(payment);
     }
 
     @Transactional
@@ -165,9 +194,16 @@ public class PaymentTransactionUseCaseService {
         if (paymentTransaction.getMoney().signum() == 0){
             throw new BankingServiceException("Money is zero");
         }
+        Payment payment = paymentTransaction.getPayment();
+        payment.setBalance(payment.getBalance().add(paymentTransaction.getMoney()));
+        if (payment.getBalance().signum() < 0){
+            throw new BankingServiceException("Not enough money");
+        }
 
         paymentTransaction.setCode(RandomUtils.generateTransactionCode());
         paymentTransaction.setPartner(partner);
         paymentTransactionService.create(paymentTransaction);
+
+        paymentService.create(payment);
     }
 }
