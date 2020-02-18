@@ -133,6 +133,23 @@ export class CustomerService implements OnDestroy {
 
   }
 
+  public getPaymentsData() {
+    this.getCustomerData().pipe(untilDestroyed(this)).subscribe(
+      (customerResponse: any) => {
+        this.paymentService.getPaymentsByCustomerId(customerResponse.customerId)
+        .pipe(untilDestroyed(this))
+        .subscribe(
+          (payments: Payment[]) => {
+            this.updatePayment(payments[0]);
+          },
+          (err: HttpErrorResponse)=> {
+            
+          }
+        );
+      }
+    );
+  }
+
   updatePayment(payments) {
     this.paymentsSource.next(payments);
   }
@@ -141,6 +158,22 @@ export class CustomerService implements OnDestroy {
     this.paymentsErrorSource.next(error);
   }
 
+  public getSavingsData() {
+    this.getCustomerData().pipe(untilDestroyed(this)).subscribe(
+      (customerResponse: any) => {
+        this.savingService.getSavingsByCustomerId(customerResponse.customerId)
+        .pipe(untilDestroyed(this))
+        .subscribe(
+          (savings: Savings[]) => {
+            this.updateSaving(savings[0]);
+          },
+          (err: HttpErrorResponse)=> {
+            
+          }
+        );
+      }
+    );
+  }
   
   updateSaving(savings) {
     this.savingsSource.next(savings);
