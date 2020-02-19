@@ -5,6 +5,9 @@ import com.hcmus.banking.platform.domain.general.Created;
 import com.hcmus.banking.platform.domain.info.Gender;
 import com.hcmus.banking.platform.domain.info.Info;
 import com.hcmus.banking.platform.domain.payment.Payment;
+import com.hcmus.banking.platform.domain.user.Role;
+import com.hcmus.banking.platform.domain.user.Status;
+import com.hcmus.banking.platform.domain.user.User;
 import lombok.AllArgsConstructor;
 
 import javax.validation.constraints.NotNull;
@@ -24,8 +27,17 @@ public class CustomerRequest {
     public String gender;
     public String phone;
     public String address;
+    public String email;
 
     public static Customer toCustomer(CustomerRequest customerRequest) {
+        User user = new User(
+                customerRequest.code,
+                customerRequest.email,
+                User.DEFAULT_PASSWORD,
+                Role.USER,
+                Status.ACTIVE,
+                Created.ofEmpty()
+        );
         Info info = new Info(
                 customerRequest.firstName,
                 customerRequest.lastName,
@@ -33,6 +45,7 @@ public class CustomerRequest {
                 Gender.valueOf(customerRequest.gender),
                 customerRequest.phone,
                 customerRequest.address,
+                user,
                 Created.ofEmpty()
         );
         return new Customer(

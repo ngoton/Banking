@@ -46,4 +46,8 @@ public class CreditService {
     public void delete(Credit credit) {
         creditRepository.delete(credit);
     }
+
+    public Page<Credit> findPending(Pageable pageable) {
+        return creditRepository.findAllByStatusIsNull(pageable);
+    }
 }

@@ -15,6 +15,7 @@ public class PartnerRequest {
     public String privateKey;
     public String publicKey;
     public String encryption;
+    public String baseUrl;
 
     public static Partner toPartner(PartnerRequest partnerRequest){
         Encryption encryption = Encryption.NONE;
@@ -27,6 +28,7 @@ public class PartnerRequest {
                 partnerRequest.privateKey,
                 partnerRequest.publicKey,
                 encryption,
+                partnerRequest.baseUrl,
                 Created.ofEmpty()
         );
     }

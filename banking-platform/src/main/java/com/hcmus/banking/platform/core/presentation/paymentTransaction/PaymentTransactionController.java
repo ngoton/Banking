@@ -109,7 +109,8 @@ public class PaymentTransactionController {
             if (newBeneficiary.isInternal()){
                 Payment newPayment = paymentService.findByAccount(paymentTransactionRequest.beneficiaryAccount);
                 if (newPayment.isEmpty()){
-                    newPayment = new Payment(newBeneficiary.getAccount(), BigDecimal.ZERO, Created.ofEmpty());
+                    throw new BankingServiceException("Beneficiary account not found");
+                    //newPayment = new Payment(newBeneficiary.getAccount(), BigDecimal.ZERO, Created.ofEmpty());
                 }
 
                 newBeneficiary.setPayment(newPayment);

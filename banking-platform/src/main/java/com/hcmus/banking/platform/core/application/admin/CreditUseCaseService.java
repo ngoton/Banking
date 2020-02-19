@@ -58,8 +58,8 @@ public class CreditUseCaseService {
     }
 
     @Transactional
-    public void update(Credit credit) {
-        Credit oldCredit = creditService.findByAccount(credit.getAccount());
+    public void update(Credit credit, Long id) {
+        Credit oldCredit = creditService.findById(id);
         if (oldCredit.isEmpty()) {
             throw new BankingServiceException("Credit not found");
         }
@@ -73,5 +73,9 @@ public class CreditUseCaseService {
             throw new BankingServiceException("Credit not found");
         }
         creditService.delete(credit);
+    }
+
+    public Page<Credit> findPending(Pageable pageable) {
+        return creditService.findPending(pageable);
     }
 }

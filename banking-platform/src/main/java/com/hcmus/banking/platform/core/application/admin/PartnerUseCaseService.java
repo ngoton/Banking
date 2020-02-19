@@ -39,4 +39,12 @@ public class PartnerUseCaseService {
     public List<Partner> findAll() {
         return partnerService.findAll();
     }
+
+    public void update(Partner partner) {
+        Partner oldPartner = partnerService.findByName(partner.getName());
+        if (oldPartner.isEmpty()){
+            throw new BankingServiceException("Partner not found");
+        }
+        partnerService.update(oldPartner, partner);
+    }
 }

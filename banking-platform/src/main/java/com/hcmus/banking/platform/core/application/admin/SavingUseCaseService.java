@@ -40,6 +40,10 @@ public class SavingUseCaseService {
 
     @Transactional
     public void create(Saving saving) {
+        Saving oldSaving = savingService.findByAccount(saving.getAccount());
+        if (!oldSaving.isEmpty()) {
+            throw new BankingServiceException("Saving account is already exists");
+        }
         savingService.create(saving);
     }
 
