@@ -55,7 +55,9 @@ export class PaymentTransactions {
     money: string;
     content: string;
     paymentsId: number;
+    beneficiaryAccount: string;
     beneficiarysId: number;
+    fee: boolean;
 
     constructor(obj?: any) {
         this.id = obj && obj.id || null;
@@ -63,7 +65,9 @@ export class PaymentTransactions {
         this.money = obj && obj.money || null;
         this.content = obj && obj.content || null;
         this.paymentsId = obj && obj.paymentsId || null;
+        this.beneficiaryAccount = obj && obj.beneficiaryAccount || null;
         this.beneficiarysId = obj && obj.beneficiarysId || null;
+        this.fee = obj && obj.fee || true;
     }
 }
 

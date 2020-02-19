@@ -110,6 +110,10 @@ export class CustomerService implements OnDestroy {
     }
   }
 
+  findCustomerByAccount(account) {
+    
+  }
+
   getAcctDetailsData() {
     this.getCustomerData().pipe(untilDestroyed(this))
       .subscribe(

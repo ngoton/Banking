@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { CustomerService } from '../../../_services/customer.service';
 import { untilDestroyed } from 'ngx-take-until-destroy';
-import { Customers, Beneficiarys, Payment, Savings } from '../../../_models/customer.model';
+import { Customers, Beneficiarys, Payment, Savings, PaymentTransactions } from '../../../_models/customer.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PaymentService } from '../../../_services/payment.service';
 import { SavingService } from '../../../_services/saving.service';
@@ -21,11 +22,15 @@ export class InternalComponent implements OnInit, OnDestroy {
   benificiary: Beneficiarys[] = new Array();
   selectedBenificiary: Beneficiarys = new Beneficiarys();
 
+  paymentTransaction: PaymentTransactions = new PaymentTransactions();
+
   constructor(private customerService: CustomerService,
               private decimalPipe: DecimalPipe) {}
 
-  benificiaryChange(item) {
+  benificiaryChange(item: Beneficiarys) {
     this.selectedBenificiary = item;
+    this.paymentTransaction.beneficiarysId = item.id;
+    this.paymentTransaction.beneficiaryAccount = item.account;
     this.customerService.updateSelectedBeneficiaries(item);
   }
 
@@ -35,14 +40,6 @@ export class InternalComponent implements OnInit, OnDestroy {
       (payment: Payment) => {
         // payment.balance = this.decimalPipe.transform(payment.balance, '1.3-3');
         this.internalAccounts.push(payment);
-      }
-    );
-
-    this.customerService.savings$.pipe(untilDestroyed(this))
-    .subscribe(
-      (saving: Savings) => {
-        // saving.balance = this.decimalPipe.transform(saving.balance, '1.3-3');
-        this.internalAccounts.push(saving);
       }
     );
     

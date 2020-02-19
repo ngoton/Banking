@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
 import {
   NbActionsModule,
   NbButtonModule,
@@ -29,6 +30,8 @@ import { CurrencyMaskModule } from 'ngx-currency-mask';
   declarations: [TransferComponent, InternalComponent, ExternalComponent, StatusCardComponent, TransferTypeComponent],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     ThemeModule,
     NbCardModule,
     NbUserModule,
