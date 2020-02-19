@@ -36,6 +36,12 @@ public class CustomerController {
         return new CustomerResponse(customer);
     }
 
+    @GetMapping("/payment/{account}")
+    public CustomerResponse findByAccount(@PathVariable String account){
+        Customer customer = customerService.findByAccount(account);
+        return new CustomerResponse(customer);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")

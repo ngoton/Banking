@@ -94,6 +94,12 @@ public class DebitUseCaseService {
         if (oldDebit.isEmpty()) {
             throw new BankingServiceException("Debit not found");
         }
+
+        Credit oldCredit = creditService.findById(oldDebit.getCredit().getId());
+        if (!oldDebit.isEmpty()) {
+            creditService.update(oldCredit, debit.getCredit());
+        }
+
         debitService.update(oldDebit, debit);
     }
 

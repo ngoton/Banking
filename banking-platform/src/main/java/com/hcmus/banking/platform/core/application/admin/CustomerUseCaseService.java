@@ -93,4 +93,12 @@ public class CustomerUseCaseService {
         }
         return customer;
     }
+
+    public Customer findByAccount(String account) {
+        Customer customer = customerService.findByAccount(account);
+        if (customer.isEmpty()){
+            throw new BankingServiceException("Customer not found");
+        }
+        return customer;
+    }
 }
