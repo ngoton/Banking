@@ -119,8 +119,9 @@ public class PaymentTransactionController {
             Beneficiary newBeneficiary = new Beneficiary(paymentTransactionRequest.name, paymentTransactionRequest.shortName, paymentTransactionRequest.beneficiaryAccount, paymentTransactionRequest.bankName, customer, Created.ofEmpty());
             if (newBeneficiary.isInternal()) {
                 Payment newPayment = paymentService.findByAccount(paymentTransactionRequest.beneficiaryAccount);
-                if (newPayment.isEmpty()) {
-                    newPayment = new Payment(newBeneficiary.getAccount(), BigDecimal.ZERO, Created.ofEmpty());
+                if (newPayment.isEmpty()){
+                    throw new BankingServiceException("Beneficiary account not found");
+                    //newPayment = new Payment(newBeneficiary.getAccount(), BigDecimal.ZERO, Created.ofEmpty());
                 }
 
                 newBeneficiary.setPayment(newPayment);

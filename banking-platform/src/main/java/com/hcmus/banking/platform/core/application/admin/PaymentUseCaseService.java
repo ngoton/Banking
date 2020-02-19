@@ -55,6 +55,10 @@ public class PaymentUseCaseService {
 
     @Transactional
     public void create(Payment payment) {
+        Payment oldPayment = paymentService.findByAccount(payment.getAccount());
+        if (!oldPayment.isEmpty()) {
+            throw new BankingServiceException("Payment account is already exists");
+        }
         paymentService.create(payment);
     }
 

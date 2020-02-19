@@ -31,4 +31,13 @@ public class PartnerService {
     public List<Partner> findAll() {
         return partnerRepository.findAll();
     }
+
+    public void update(Partner oldPartner, Partner partner) {
+        oldPartner.setApiKey(partner.getApiKey());
+        oldPartner.setPublicKey(partner.getPublicKey());
+        oldPartner.setPrivateKey(partner.getPrivateKey());
+        oldPartner.setEncryption(partner.getEncryption());
+        oldPartner.setBaseUrl(partner.getBaseUrl());
+        partnerRepository.save(oldPartner);
+    }
 }

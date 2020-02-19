@@ -1,5 +1,6 @@
 package com.hcmus.banking.platform.core.presentation.credit;
 
+
 import com.hcmus.banking.platform.domain.credit.Credit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -11,7 +12,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class CreditResponses {
-    final List<Credit> credits;
+    final List<CreditResponse> debitResponses;
 
     public static Page<CreditResponse> ofPage(Page<Credit> creditPage, Pageable pageable) {
         List<Credit> credits = creditPage.getContent();
@@ -28,4 +29,5 @@ public class CreditResponses {
                 .collect(Collectors.toList());
         return responses;
     }
+
 }

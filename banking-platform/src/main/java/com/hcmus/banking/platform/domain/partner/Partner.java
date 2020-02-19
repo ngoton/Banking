@@ -26,6 +26,7 @@ public class Partner extends IDEntity {
     private String publicKey;
     @Enumerated(EnumType.STRING)
     private Encryption encryption;
+    private String baseUrl;
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "createdAt.value", column = @Column(name = "created_at")),
@@ -36,27 +37,29 @@ public class Partner extends IDEntity {
     @OneToMany(mappedBy = "partner", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     private List<PaymentTransaction> paymentTransactions;
 
-    public Partner(String name, String apiKey, String privateKey, String publicKey, Encryption encryption, Created created){
+    public Partner(String name, String apiKey, String privateKey, String publicKey, Encryption encryption, String baseUrl, Created created){
         this.name = name;
         this.apiKey = apiKey;
         this.privateKey = privateKey;
         this.publicKey = publicKey;
         this.encryption = encryption;
+        this.baseUrl = baseUrl;
         this.created = created;
     }
 
-    public Partner(String name, String key, String apiKey, String privateKey, String publicKey, Encryption encryption, Created created) {
+    public Partner(String name, String key, String apiKey, String privateKey, String publicKey, Encryption encryption, String baseUrl, Created created) {
         this.name = name;
         this.key = key;
         this.apiKey = apiKey;
         this.privateKey = privateKey;
         this.publicKey = publicKey;
         this.encryption = encryption;
+        this.baseUrl = baseUrl;
         this.created = created;
     }
 
     public static Partner ofEmpty(){
-        return new Partner(EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, Encryption.RSA, Created.ofEmpty());
+        return new Partner(EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, Encryption.RSA, EMPTY_STRING, Created.ofEmpty());
     }
 
     public boolean isEmpty(){

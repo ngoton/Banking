@@ -1,5 +1,6 @@
 package com.hcmus.banking.platform.core.presentation.debit;
 
+
 import com.hcmus.banking.platform.domain.debit.Debit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -11,7 +12,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class DebitResponses {
-    final List<Debit> debits;
+    final List<DebitResponse> debitResponses;
 
     public static Page<DebitResponse> ofPage(Page<Debit> debitPage, Pageable pageable) {
         List<Debit> debits = debitPage.getContent();
@@ -28,4 +29,5 @@ public class DebitResponses {
                 .collect(Collectors.toList());
         return responses;
     }
+
 }

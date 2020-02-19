@@ -2,7 +2,6 @@ package com.hcmus.banking.platform.core.application.admin;
 
 import com.hcmus.banking.platform.core.application.credit.CreditService;
 import com.hcmus.banking.platform.domain.credit.Credit;
-import com.hcmus.banking.platform.domain.debit.Debit;
 import com.hcmus.banking.platform.domain.exception.BankingServiceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,11 +19,6 @@ public class CreditUseCaseService {
     @Transactional(readOnly = true)
     public Page<Credit> findAllBy(Pageable pageable) {
         return creditService.findAllBy(pageable);
-    }
-
-    @Transactional(readOnly = true)
-    public Page<Credit> findAllByCustomerIdAndPaymentTransactionNotNull(Long id, Pageable pageable) {
-        return creditService.findAllByCustomerIdAndPaymentTransactionNotNull(id, pageable);
     }
 
     @Transactional(readOnly = true)
@@ -63,8 +57,8 @@ public class CreditUseCaseService {
     }
 
     @Transactional
-    public void update(Credit credit) {
-        Credit oldCredit = creditService.findByAccount(credit.getAccount());
+    public void update(Credit credit, Long id) {
+        Credit oldCredit = creditService.findById(id);
         if (oldCredit.isEmpty()) {
             throw new BankingServiceException("Credit not found");
         }
@@ -78,5 +72,9 @@ public class CreditUseCaseService {
             throw new BankingServiceException("Credit not found");
         }
         creditService.delete(credit);
+    }
+
+    public Page<Credit> findPending(Pageable pageable) {
+        return creditService.findPending(pageable);
     }
 }

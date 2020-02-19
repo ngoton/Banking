@@ -24,6 +24,7 @@ public class Debit extends IDEntity {
     private String account;
     private BigDecimal money;
     private String content;
+    private Integer status;
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "createdAt.value", column = @Column(name = "created_at")),
@@ -38,6 +39,14 @@ public class Debit extends IDEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinColumn(name = "customers_id")
     private Customer customer;
+
+    public Debit(String account, BigDecimal money, String content, Customer customer, Created created) {
+        this.account = account;
+        this.money = money;
+        this.content = content;
+        this.customer = customer;
+        this.created = created;
+    }
 
     public static Debit ofEmpty() {
         return new Debit(EMPTY_STRING, new BigDecimal(0), EMPTY_STRING, Created.ofEmpty());
@@ -54,4 +63,7 @@ public class Debit extends IDEntity {
         return account.equals(EMPTY_STRING);
     }
 
+    public boolean isPaid() {
+        return status.equals(1);
+    }
 }

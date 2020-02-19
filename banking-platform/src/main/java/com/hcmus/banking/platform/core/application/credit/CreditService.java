@@ -18,10 +18,6 @@ public class CreditService {
         return creditRepository.findAllBy(pageable);
     }
 
-    public Page<Credit> findAllByCustomerIdAndPaymentTransactionNotNull(Long id, Pageable pageable) {
-        return creditRepository.findAllByCustomerIdAndPaymentTransactionNotNull(id, pageable);
-    }
-
     public Credit findById(Long id) {
         return creditRepository.findById(id).orElse(Credit.ofEmpty());
     }
@@ -51,5 +47,9 @@ public class CreditService {
 
     public void delete(Credit credit) {
         creditRepository.delete(credit);
+    }
+
+    public Page<Credit> findPending(Pageable pageable) {
+        return creditRepository.findAllByStatusIsNull(pageable);
     }
 }

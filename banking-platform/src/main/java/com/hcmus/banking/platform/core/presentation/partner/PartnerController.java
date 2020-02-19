@@ -24,6 +24,13 @@ public class PartnerController {
         partnerService.create(partner);
     }
 
+    @PutMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public void update(@Valid @RequestBody PartnerRequest partnerRequest){
+        Partner partner = PartnerRequest.toPartner(partnerRequest);
+        partnerService.update(partner);
+    }
+
     @GetMapping
     public List<PartnerResponse> findAll(){
         List<Partner> partners = partnerService.findAll();

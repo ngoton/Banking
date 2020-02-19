@@ -15,6 +15,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class User extends IDEntity {
     private static final String EMPTY_STRING = "";
+    public static final String DEFAULT_PASSWORD = "$2a$10$aaGK3grB55n1O5Hzlp3rAOJHF3njedXy.QisNyegmLzndzxb/NCGu";//1234567
     private String username;
     private String email;
     private String password;
