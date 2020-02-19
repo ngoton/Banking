@@ -71,6 +71,24 @@ public class PaymentTransactionUseCaseService {
     }
 
     @Transactional(readOnly = true)
+    public Page<PaymentTransaction> findAllByPaymentIdAndMoneyGreaterThan(Long id, Pageable pageable) {
+        Payment payment = paymentService.findById(id);
+        if (payment.isEmpty()) {
+            throw new BankingServiceException("Payment does not exist!!!");
+        }
+        return paymentTransactionService.findAllByPaymentIdAndMoneyGreaterThan(id, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<PaymentTransaction> findAllByPaymentIdAndMoneyLessThan(Long id, Pageable pageable) {
+        Payment payment = paymentService.findById(id);
+        if (payment.isEmpty()) {
+            throw new BankingServiceException("Payment does not exist!!!");
+        }
+        return paymentTransactionService.findAllByPaymentIdAndMoneyLessThan(id, pageable);
+    }
+
+    @Transactional(readOnly = true)
     public Page<PaymentTransaction> findAllByPartnerName(String name, Pageable pageable) {
         Partner partner = partnerService.findByName(name);
         if (partner.isEmpty()) {
@@ -90,12 +108,12 @@ public class PaymentTransactionUseCaseService {
 
     @Transactional
     public PaymentTransaction payment(PaymentTransaction paymentTransaction, User user) {
-        if (paymentTransaction.getMoney().signum() <= 0){
+        if (paymentTransaction.getMoney().signum() <= 0) {
             throw new BankingServiceException("Money must be greater than zero");
         }
         Payment payment = paymentTransaction.getPayment();
         payment.setBalance(payment.getBalance().subtract(paymentTransaction.getMoney()));
-        if (payment.getBalance().signum() < 0){
+        if (payment.getBalance().signum() < 0) {
             throw new BankingServiceException("Not enough money");
         }
 
@@ -127,7 +145,7 @@ public class PaymentTransactionUseCaseService {
 
         Payment payment = toPaymentTransaction.getPayment();
         payment.setBalance(payment.getBalance().subtract(toPaymentTransaction.getMoney()));
-        if (payment.getBalance().signum() < 0){
+        if (payment.getBalance().signum() < 0) {
             throw new BankingServiceException("Not enough money");
         }
 
@@ -161,7 +179,7 @@ public class PaymentTransactionUseCaseService {
             money = money.add(PaymentTransaction.internalFee());
         }
 
-        if (toPaymentTransaction.getBeneficiary().isInternal()){
+        if (toPaymentTransaction.getBeneficiary().isInternal()) {
             PaymentTransaction receiptTransaction = new PaymentTransaction(
                     RandomUtils.generateTransactionCode(),
                     money,
@@ -181,7 +199,7 @@ public class PaymentTransactionUseCaseService {
 
     @Transactional
     public void deposit(PaymentTransaction paymentTransaction) {
-        if (paymentTransaction.getMoney().signum() <= 0){
+        if (paymentTransaction.getMoney().signum() <= 0) {
             throw new BankingServiceException("Money must be greater than zero");
         }
         paymentTransaction.setCode(RandomUtils.generateTransactionCode());
@@ -194,12 +212,12 @@ public class PaymentTransactionUseCaseService {
 
     @Transactional
     public void externalPayment(PaymentTransaction paymentTransaction, Partner partner) {
-        if (paymentTransaction.getMoney().signum() == 0){
+        if (paymentTransaction.getMoney().signum() == 0) {
             throw new BankingServiceException("Money is zero");
         }
         Payment payment = paymentTransaction.getPayment();
         payment.setBalance(payment.getBalance().add(paymentTransaction.getMoney()));
-        if (payment.getBalance().signum() < 0){
+        if (payment.getBalance().signum() < 0) {
             throw new BankingServiceException("Not enough money");
         }
 
@@ -211,13 +229,13 @@ public class PaymentTransactionUseCaseService {
     }
 
     public Page<PaymentTransaction> findAllByPartner(String partnerName, LocalDate startDate, LocalDate endDate, Pageable pageable) {
-        if (Objects.isNull(partnerName) && Objects.isNull(startDate) && Objects.isNull(endDate)){
+        if (Objects.isNull(partnerName) && Objects.isNull(startDate) && Objects.isNull(endDate)) {
             return paymentTransactionService.findAllByPartners(pageable);
         }
-        if (Objects.nonNull(partnerName) && Objects.isNull(startDate) && Objects.isNull(endDate)){
+        if (Objects.nonNull(partnerName) && Objects.isNull(startDate) && Objects.isNull(endDate)) {
             return paymentTransactionService.findAllByPartnerName(partnerName, pageable);
         }
-        if (Objects.isNull(partnerName) && Objects.nonNull(startDate) && Objects.nonNull(endDate)){
+        if (Objects.isNull(partnerName) && Objects.nonNull(startDate) && Objects.nonNull(endDate)) {
             return paymentTransactionService.findAllByDate(new CreatedAt(startDate.atStartOfDay()), new CreatedAt(endDate.atStartOfDay()), pageable);
         }
 

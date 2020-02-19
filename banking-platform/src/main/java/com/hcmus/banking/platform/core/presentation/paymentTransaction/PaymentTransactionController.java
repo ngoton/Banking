@@ -42,6 +42,18 @@ public class PaymentTransactionController {
         return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
     }
 
+    @GetMapping("/history/paymentTransfer/{id}")
+    public Page<PaymentTransactionResponse> findAllByPaymentIdAndMoneyLessThan(@PathVariable Long id, Pageable pageable) {
+        Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByPaymentIdAndMoneyLessThan(id, pageable);
+        return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
+    }
+
+    @GetMapping("/history/paymentReceive/{id}")
+    public Page<PaymentTransactionResponse> findAllByPaymentIdAndMoneyGreaterThan(@PathVariable Long id, Pageable pageable) {
+        Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByPaymentIdAndMoneyGreaterThan(id, pageable);
+        return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
+    }
+
     @GetMapping("/history/partner/{name}")
     public Page<PaymentTransactionResponse> findAllByPartnerName(@PathVariable String name, Pageable pageable) {
         Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByPartnerName(name, pageable);
@@ -68,29 +80,28 @@ public class PaymentTransactionController {
 
     @PostMapping("/deposit")
     @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
-    public void deposit(@Valid @RequestBody DepositRequest depositRequest){
-        if (depositRequest.hasAccount()){
+    public void deposit(@Valid @RequestBody DepositRequest depositRequest) {
+        if (depositRequest.hasAccount()) {
             Payment payment = paymentService.findByAccount(depositRequest.account);
-            if (payment.isEmpty()){
+            if (payment.isEmpty()) {
                 throw new BankingServiceException("Account not found");
             }
             paymentTransactionService.deposit(DepositRequest.toPaymentTransaction(depositRequest, payment));
-        }
-        else {
-            if (!depositRequest.hasUsername()){
+        } else {
+            if (!depositRequest.hasUsername()) {
                 throw new BankingServiceException("Account not found");
             }
 
             User user = userService.findByUsername(depositRequest.username);
-            if (user.isEmpty()){
+            if (user.isEmpty()) {
                 throw new BankingServiceException("Account not found");
             }
             Customer customer = customerService.findByUserId(user.getId());
-            if (customer.isEmpty()){
+            if (customer.isEmpty()) {
                 throw new BankingServiceException("Account not found");
             }
             List<Payment> payments = paymentService.findAllByCustomerId(customer.getId());
-            if (payments.isEmpty()){
+            if (payments.isEmpty()) {
                 throw new BankingServiceException("Account not found");
             }
             Payment payment = payments.stream().findFirst().get();
@@ -106,9 +117,9 @@ public class PaymentTransactionController {
         Payment payment = paymentService.findById(paymentTransactionRequest.paymentId);
         if (beneficiary.isEmpty()) {
             Beneficiary newBeneficiary = new Beneficiary(paymentTransactionRequest.name, paymentTransactionRequest.shortName, paymentTransactionRequest.beneficiaryAccount, paymentTransactionRequest.bankName, customer, Created.ofEmpty());
-            if (newBeneficiary.isInternal()){
+            if (newBeneficiary.isInternal()) {
                 Payment newPayment = paymentService.findByAccount(paymentTransactionRequest.beneficiaryAccount);
-                if (newPayment.isEmpty()){
+                if (newPayment.isEmpty()) {
                     newPayment = new Payment(newBeneficiary.getAccount(), BigDecimal.ZERO, Created.ofEmpty());
                 }
 
@@ -120,7 +131,7 @@ public class PaymentTransactionController {
         }
 
         PaymentTransaction paymentTransaction = paymentTransactionService.payment(paymentTransactionRequest.toPaymentTransaction(paymentTransactionRequest, beneficiary, payment), user);
-        return new PaymentResponse(paymentTransaction,paymentTransactionRequest.fee);
+        return new PaymentResponse(paymentTransaction, paymentTransactionRequest.fee);
     }
 
     @PostMapping("/payment/external")
@@ -136,7 +147,7 @@ public class PaymentTransactionController {
         }
 
         PaymentTransaction paymentTransaction = paymentTransactionService.payment(paymentTransactionRequest.toPaymentTransaction(paymentTransactionRequest, beneficiary, payment), user);
-        return new PaymentResponse(paymentTransaction,paymentTransactionRequest.fee);
+        return new PaymentResponse(paymentTransaction, paymentTransactionRequest.fee);
     }
 
     @PostMapping("/paymentVerify")

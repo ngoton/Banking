@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Service
@@ -22,6 +23,14 @@ public class PaymentTransactionService {
 
     public Page<PaymentTransaction> findAllByPaymentId(Long id, Pageable pageable) {
         return paymentTransactionRepository.findAllByPaymentId(id, pageable);
+    }
+
+    public Page<PaymentTransaction> findAllByPaymentIdAndMoneyLessThan(Long id, Pageable pageable) {
+        return paymentTransactionRepository.findAllByPaymentIdAndMoneyLessThan(id, BigDecimal.ZERO, pageable);
+    }
+
+    public Page<PaymentTransaction> findAllByPaymentIdAndMoneyGreaterThan(Long id, Pageable pageable) {
+        return paymentTransactionRepository.findAllByPaymentIdAndMoneyGreaterThan(id, BigDecimal.ZERO, pageable);
     }
 
     public Page<PaymentTransaction> findAllByPartnerName(String name, Pageable pageable) {
