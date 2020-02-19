@@ -23,7 +23,7 @@ public class Saving extends IDEntity {
     private static final String EMPTY_STRING = "";
     private String account;
     private BigDecimal balance;
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customers_id")
     private Customer customer;
     @Embedded

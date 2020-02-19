@@ -40,4 +40,8 @@ public class CustomerService {
     public Customer findByUserId(Long id) {
         return customerRepository.findByInfoUserId(id).orElse(Customer.ofEmpty());
     }
+
+    public Customer findByAccount(String account) {
+        return customerRepository.findByPaymentAccount(account).orElse(Customer.ofEmpty());
+    }
 }

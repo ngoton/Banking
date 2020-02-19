@@ -4,6 +4,9 @@ import com.hcmus.banking.platform.domain.general.Created;
 import com.hcmus.banking.platform.domain.info.Gender;
 import com.hcmus.banking.platform.domain.info.Info;
 import com.hcmus.banking.platform.domain.staff.Staff;
+import com.hcmus.banking.platform.domain.user.Role;
+import com.hcmus.banking.platform.domain.user.Status;
+import com.hcmus.banking.platform.domain.user.User;
 import lombok.AllArgsConstructor;
 
 import javax.validation.constraints.NotNull;
@@ -23,8 +26,17 @@ public class StaffRequest {
     public String gender;
     public String phone;
     public String address;
+    public String email;
 
     public static Staff toStaff(StaffRequest staffRequest){
+        User user = new User(
+                staffRequest.code,
+                staffRequest.email,
+                User.DEFAULT_PASSWORD,
+                Role.STAFF,
+                Status.ACTIVE,
+                Created.ofEmpty()
+        );
         Info info = new Info(
                 staffRequest.firstName,
                 staffRequest.lastName,
@@ -32,6 +44,7 @@ public class StaffRequest {
                 Gender.valueOf(staffRequest.gender),
                 staffRequest.phone,
                 staffRequest.address,
+                user,
                 Created.ofEmpty()
         );
         return new Staff(

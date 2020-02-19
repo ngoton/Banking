@@ -46,4 +46,9 @@ public class UserService {
     public void delete(User user) {
         userRepository.delete(user);
     }
+
+    public void update(User oldUser, User user) {
+        oldUser.setEmail(user.getEmail());
+        userRepository.save(oldUser);
+    }
 }

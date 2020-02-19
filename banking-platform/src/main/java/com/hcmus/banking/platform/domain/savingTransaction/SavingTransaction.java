@@ -28,7 +28,7 @@ public class SavingTransaction extends IDEntity {
             @AttributeOverride(name = "createProgram.value", column = @Column(name = "create_program"))
     })
     private Created created;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "savings_id")
     private Saving saving;
 

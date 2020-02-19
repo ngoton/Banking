@@ -1,6 +1,7 @@
 package com.hcmus.banking.platform.domain.credit;
 
 import com.hcmus.banking.platform.domain.customer.Customer;
+import com.hcmus.banking.platform.domain.debit.Debit;
 import com.hcmus.banking.platform.domain.general.Created;
 import com.hcmus.banking.platform.domain.general.IDEntity;
 import com.hcmus.banking.platform.domain.paymentTransaction.PaymentTransaction;
@@ -33,12 +34,14 @@ public class Credit extends IDEntity {
     })
     private Created created;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_transactions_id")
     private PaymentTransaction paymentTransaction;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customers_id")
     private Customer customer;
+    @OneToOne(mappedBy = "credit", fetch = FetchType.LAZY)
+    private Debit debit;
 
     public Credit(String account, BigDecimal money, String content, Customer customer, Created created) {
         this.account = account;
