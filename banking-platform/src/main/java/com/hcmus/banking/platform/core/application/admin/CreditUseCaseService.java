@@ -23,6 +23,11 @@ public class CreditUseCaseService {
     }
 
     @Transactional(readOnly = true)
+    public Page<Credit> findAllByCustomerIdAndPaymentTransactionNotNull(Long id, Pageable pageable) {
+        return creditService.findAllByCustomerIdAndPaymentTransactionNotNull(id, pageable);
+    }
+
+    @Transactional(readOnly = true)
     public Credit findById(Long id) {
         Credit credit = creditService.findById(id);
         if (credit.isEmpty()) {

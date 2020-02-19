@@ -18,6 +18,10 @@ public class CreditService {
         return creditRepository.findAllBy(pageable);
     }
 
+    public Page<Credit> findAllByCustomerIdAndPaymentTransactionNotNull(Long id, Pageable pageable) {
+        return creditRepository.findAllByCustomerIdAndPaymentTransactionNotNull(id, pageable);
+    }
+
     public Credit findById(Long id) {
         return creditRepository.findById(id).orElse(Credit.ofEmpty());
     }
@@ -25,9 +29,11 @@ public class CreditService {
     public Credit findByAccount(String account) {
         return creditRepository.findByAccount(account).orElse(Credit.ofEmpty());
     }
+
     public List<Credit> findAllByCustomerCode(String code) {
         return creditRepository.findAllByCustomerCode(code);
     }
+
     public List<Credit> findAllByCustomerId(Long id) {
         return creditRepository.findAllByCustomerId(id);
     }

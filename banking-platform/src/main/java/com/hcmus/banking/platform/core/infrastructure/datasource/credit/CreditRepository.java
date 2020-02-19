@@ -12,10 +12,18 @@ import java.util.Optional;
 @Repository
 public interface CreditRepository extends JpaRepository<Credit, Long> {
     Page<Credit> findAllBy(Pageable pageable);
+
+    Page<Credit> findAllByCustomerIdAndPaymentTransactionNotNull(Long id, Pageable pageable);
+
     Optional<Credit> findById(Long id);
+
     Optional<Credit> findByAccount(String account);
+
     List<Credit> findAllByCustomerCode(String code);
+
     List<Credit> findAllByCustomerId(Long id);
+
     Credit save(Credit credit);
+
     void delete(Credit credit);
 }
