@@ -32,12 +32,11 @@ public class SavingTransaction extends IDEntity {
     @JoinColumn(name = "savings_id")
     private Saving saving;
 
-    public boolean isEmpty() {
-        return code.equals(EMPTY_STRING);
-    }
-
-    public static SavingTransaction ofEmpty() {
-        return new SavingTransaction(EMPTY_STRING, new BigDecimal(0), EMPTY_STRING, Created.ofEmpty(), Saving.ofEmpty());
+    public SavingTransaction(BigDecimal money, String content, Saving saving, Created created) {
+        this.money = money;
+        this.content = content;
+        this.created = created;
+        this.saving = saving;
     }
 
     public SavingTransaction(String code, BigDecimal money, String content, Created created, Saving saving) {
@@ -46,5 +45,13 @@ public class SavingTransaction extends IDEntity {
         this.content = content;
         this.created = created;
         this.saving = saving;
+    }
+
+    public boolean isEmpty() {
+        return code.equals(EMPTY_STRING);
+    }
+
+    public static SavingTransaction ofEmpty() {
+        return new SavingTransaction(EMPTY_STRING, BigDecimal.ZERO, EMPTY_STRING, Created.ofEmpty(), Saving.ofEmpty());
     }
 }

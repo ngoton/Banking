@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { EmployeePagesComponent } from './employee-pages.component';
 
-
 const routes: Routes = [
   {
     path: '',

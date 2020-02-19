@@ -16,6 +16,7 @@ import { ThemeModule } from '../../@theme/theme.module';
 import { AccountsComponent } from './accounts.component';
 import { StatusCardComponent } from './status-card/status-card.component';
 import { FormsModule } from '@angular/forms';
+import { DecimalPipe } from '@angular/common';
 
 @NgModule({
   imports: [
@@ -37,5 +38,6 @@ import { FormsModule } from '@angular/forms';
     AccountsComponent,
     StatusCardComponent
   ],
+  providers: [DecimalPipe]
 })
 export class AccountsModule { }

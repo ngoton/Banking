@@ -33,7 +33,6 @@ export class InterceptorService implements HttpInterceptor {
   //   return next.handle(req);
   // }
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    debugger;
     let observable = fromPromise(this.handleAccess(request, next));
 
     return observable.pipe(

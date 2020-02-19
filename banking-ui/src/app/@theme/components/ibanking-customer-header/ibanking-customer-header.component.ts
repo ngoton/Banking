@@ -72,6 +72,8 @@ export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
       this.user.avatar = 'assets/images/placeholder.png';
     }
 
+    this.customerService.getAcctDetailsData();
+
     this.customerService.acctDetail$
       .pipe(takeUntil(this.destroy$))
       .subscribe((userDetail: any) => {

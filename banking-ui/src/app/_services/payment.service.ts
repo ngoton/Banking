@@ -11,22 +11,7 @@ import { Router } from '@angular/router';
 export class PaymentService {
   private PAYMENT_URL = environment.BASE_URL + environment.PAYMENT_SERV;
 
-  // Observable string sources: user
-  private paymentsSource = new BehaviorSubject<any>(null);
-  private paymentsErrorSource = new BehaviorSubject<any>(null);
-  // Observable string streams: user
-  payments$ = this.paymentsSource.asObservable();
-  paymentError$ = this.paymentsErrorSource.asObservable();
-
   constructor(private http: HttpClient) { }
-
-  updatePayment(payments) {
-    this.paymentsSource.next(payments);
-  }
-
-  updatePaymentError(error) {
-    this.paymentsSource.next(error);
-  }
 
   getPaymentsByCustomerId(customerId) {
     const PATH = this.PAYMENT_URL + `/customerId/${customerId}`;

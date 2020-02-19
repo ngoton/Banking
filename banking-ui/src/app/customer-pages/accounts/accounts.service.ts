@@ -18,7 +18,7 @@ export class AccountsService implements OnDestroy {
   private cust_URL = environment.BASE_URL + environment.CUST_SERV;
   private Req_URL = environment.BASE_URL + environment.REQ_SERV;
   user: User;
-  sessionId = localStorage.getItem('userToken');
+  sessionId = localStorage.getItem('token');
   currentUserEmail: string[];
 
   private acctDetailSource = new BehaviorSubject<Customers>(null);
@@ -31,7 +31,6 @@ export class AccountsService implements OnDestroy {
     private userService: UserService,
     private customerService: CustomerService
   ) {
-    debugger;
     customerService.getAcctDetailsData();
     
     // Subscribe to customer Details from CustomerService
@@ -41,7 +40,7 @@ export class AccountsService implements OnDestroy {
         .subscribe((response: Customers) => {
           this.updateAcctDetails(response);
         });
-    }, 5000);
+    }, 2000);
   }
 
   updateAcctDetails(accts) {

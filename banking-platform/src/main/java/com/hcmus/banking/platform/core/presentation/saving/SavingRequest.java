@@ -14,7 +14,6 @@ public class SavingRequest {
     public String account;
     @NotNull(message = "balance is required")
     public BigDecimal balance;
-    public Long customerId;
 
     public static Saving toSaving(SavingRequest savingRequest, Customer customer) {
         return new Saving(

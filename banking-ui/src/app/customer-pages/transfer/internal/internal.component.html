@@ -5,27 +5,23 @@
       <div class="form-group row">
         <label class="label col-sm-3 col-form-label">Chọn tài khoản</label>
         <div class="col-sm-3">
-          <nb-select fullWidth placeholder="Chọn tài khoản">
-            <nb-option value="1">Tài khoản 1</nb-option>
-            <nb-option value="2">Tài khoản 2</nb-option>
+          <nb-select fullWidth placeholder="Chọn tài khoản" class="text-center">
+            <nb-option *ngFor="let item of internalAccounts" [value]="item.account">{{item.account}}</nb-option>
           </nb-select>
         </div>
       </div>
       <div class="form-group row">
         <label for="inputAccount" class="label col-sm-3 col-form-label">Thông tin người nhận</label>
         <div class="col-sm-3">
-          <input nbInput fullWidth id="inputAccount" placeholder="Số tài khoản người nhận">
+          <input nbInput fullWidth [disabled]="selectedBenificiary.name!==null" id="inputAccount" placeholder="Số tài khoản người nhận">
         </div>
-        <label class="label col-sm-3 col-form-label"><span>Tên người thụ hưởng</span></label>
+        <label class="label col-sm-3 col-form-label"><span>{{selectedBenificiary.name}}</span></label>
       </div>
       <div class="form-group row">
         <div class="offset-sm-3 col-sm-9">
           <label class="label col-form-label"><span style="padding-right: 5px;">hoặc</span></label>
           <nb-select placeholder="Chọn người thụ hưởng">
-            <nb-option value="1">Nguyễn Văn A</nb-option>
-            <nb-option value="2">Nguyễn Văn B</nb-option>
-            <nb-option value="3">Nguyễn Văn C</nb-option>
-            <nb-option value="4">Nguyễn Văn D</nb-option>
+            <nb-option *ngFor="let item of benificiary" [value]="item.account" (selectionChange)="benificiaryChange(item)">{{item.account}}</nb-option>
           </nb-select>
         </div>
       </div>

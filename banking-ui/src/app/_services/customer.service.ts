@@ -17,9 +17,10 @@ import { untilDestroyed } from 'ngx-take-until-destroy';
 import { AuthService } from './auth.service';
 import { PaymentService } from './payment.service';
 import { SavingService } from './saving.service';
+import { BenificiaryService } from './benificiary.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CustomerService implements OnDestroy {
 
@@ -32,6 +33,20 @@ export class CustomerService implements OnDestroy {
   private acctDetailErrorSource = new BehaviorSubject<string>(null);
   acctDetailError$ = this.acctDetailErrorSource.asObservable();
   // End Observable string streams: Account Details
+
+  // Observable string sources: user
+  private paymentsSource = new BehaviorSubject<any>(null);
+  private paymentsErrorSource = new BehaviorSubject<any>(null);
+  // Observable string streams: user
+  payments$ = this.paymentsSource.asObservable();
+  paymentError$ = this.paymentsErrorSource.asObservable();
+
+  // Observable string sources: user
+  private savingsSource = new BehaviorSubject<any>(null);
+  private savingsErrorSource = new BehaviorSubject<any>(null);
+  // Observable string streams: user
+  savings$ = this.savingsSource.asObservable();
+  savingsError$ = this.savingsErrorSource.asObservable();
 
   // Observable string sources: Pre registered Beneficiaries
   private beneficiaries = new BehaviorSubject<Beneficiarys[]>(null);
@@ -64,7 +79,8 @@ export class CustomerService implements OnDestroy {
     private router: Router,
     private userService: UserService,
     private paymentService: PaymentService,
-    private savingService: SavingService
+    private savingService: SavingService,
+    private benificiaryService: BenificiaryService
   ) { }
 
   // Http Headers
@@ -75,7 +91,9 @@ export class CustomerService implements OnDestroy {
   //   }),
   // };
 
-  getCustomerData(userId): Observable<any> {
+  getCustomerData(): Observable<any> {
+    const userDetails = this.userService.getUserDetails();
+    const userId = userDetails.userId;
     let accessToken = this.auth.getToken();
 
     if(accessToken){
@@ -93,51 +111,18 @@ export class CustomerService implements OnDestroy {
   }
 
   getAcctDetailsData() {
-    const userDetails = this.userService.getUserDetails();
-
-    this.getCustomerData(userDetails.userId).pipe(untilDestroyed(this))
+    this.getCustomerData().pipe(untilDestroyed(this))
       .subscribe(
         (customerRes: Customers) => {
-          // console.log(res.accountDetails);
           if (customerRes) {
-            // setTimeout(() => {}, 2000);
-            setTimeout(() => {
-              this.paymentService.getPaymentsByCustomerId(customerRes.customerId).pipe(untilDestroyed(this))
-              .subscribe(
-                (paymentsRes: Payment) => {
-                  customerRes.payment = paymentsRes;
-                  this.paymentService.updatePayment(paymentsRes);
-
-                  this.updateAcctDetailsError('');
-                  this.updateAcctDetails(customerRes);
-                },
-                (err: HttpErrorResponse) => {
-
-                }
-              );
-            }, 2000);
-            
-            setTimeout(() => {
-              this.savingService.getSavingsByCustomerId(customerRes.customerId).pipe(untilDestroyed(this))
-              .subscribe(
-                (savingsRes: Savings[]) => {
-                  customerRes.savings = savingsRes;
-                  this.savingService.updateSaving(savingsRes);
-
-                  this.updateAcctDetailsError('');
-                  this.updateAcctDetails(customerRes);
-                },
-                (err: HttpErrorResponse) => {
-
-                }
-              );
-            }, 2000);
-            
+            this.updateAcctDetailsError('');
+            this.updateAcctDetails(customerRes);
           } else {
             this.updateAcctDetailsError("Can't get customer's data");
             this.updateAcctDetails(null);
-            // alert('An Error Occured' + res.responseDescription);
           }
+
+
         },
         (err: HttpErrorResponse) => {
           console.log(err);
@@ -148,6 +133,56 @@ export class CustomerService implements OnDestroy {
 
   }
 
+  public getPaymentsData() {
+    this.getCustomerData().pipe(untilDestroyed(this)).subscribe(
+      (customerResponse: any) => {
+        this.paymentService.getPaymentsByCustomerId(customerResponse.customerId)
+        .pipe(untilDestroyed(this))
+        .subscribe(
+          (payments: Payment[]) => {
+            this.updatePayment(payments[0]);
+          },
+          (err: HttpErrorResponse)=> {
+
+          }
+        );
+      }
+    );
+  }
+
+  updatePayment(payments) {
+    this.paymentsSource.next(payments);
+  }
+
+  updatePaymentError(error) {
+    this.paymentsErrorSource.next(error);
+  }
+
+  public getSavingsData() {
+    this.getCustomerData().pipe(untilDestroyed(this)).subscribe(
+      (customerResponse: any) => {
+        this.savingService.getSavingsByCustomerId(customerResponse.customerId)
+        .pipe(untilDestroyed(this))
+        .subscribe(
+          (savings: Savings[]) => {
+            this.updateSaving(savings[0]);
+          },
+          (err: HttpErrorResponse)=> {
+
+          }
+        );
+      }
+    );
+  }
+
+  updateSaving(savings) {
+    this.savingsSource.next(savings);
+  }
+
+  updateSavingError(error) {
+    this.savingsSource.next(error);
+  }
+
   updateAcctDetails(accts) {
     this.acctDetailSource.next(accts);
   }
@@ -156,92 +191,22 @@ export class CustomerService implements OnDestroy {
     this.acctDetailErrorSource.next(message);
   }
 
-  // Query funtion that returns beneficiaries from the API.
-  // getBeneficiaries(type): Observable<any> {
-  //   const PATH = this.CUST_URL + `/GetBeneficiaryList`;
-  //   const user = this.userService.getUserDetails();
-  //   console.log(user);
-
-  //   if (user) {
-  //     let body = {
-  //       'transactionType': type,
-  //     };
-  //     body = this.util.addAuthParams(body);
-  //     console.log(body); // for debugging only
-  //     return this.http.post<Response>(PATH, body)
-  //       .pipe(
-  //         retry(3),
-  //         catchError(this.util.handleError)
-  //       );
-  //   } else {
-  //     this.router.navigate(['/onboarding/login']);
-  //     alert('Your session has expired');
-  //   }
-
-  // }
-
   public getBeneficiariesData() {
-    let beneficiaries = [
-      {
-        id: 1,
-        name: "Nguyễn Quang Phát",
-        short_name: "NQP",
-        account: "219840928320941",
-        bank_name: "IBank",
-        customer_id: 14824050
-      },
-      {
-        id: 2,
-        name: "Hồng Kim Ngân",
-        short_name: "Ngân Hồng",
-        account: "4092380985358204",
-        bank_name: "Sacombank",
-        customer_id: 14824050
-      },
-      {
-        id: 3,
-        name: "Lê Minh Quân",
-        short_name: "Minh Quân",
-        account: "3984902834091823",
-        bank_name: "Vietcombank",
-        customer_id: 14824050
-      },
-      {
-        id: 4,
-        name: "Hồ Thị Thu Thảo",
-        short_name: "HTTT",
-        account: "23049203490394934",
-        bank_name: "Techcombank",
-        customer_id: 14824050
-      },
-      {
-        id: 5,
-        name: "Nguyễn Bá Đạt",
-        short_name: "Đạt Bá",
-        account: "29481948140912834",
-        bank_name: "VBBank",
-        customer_id: 14824050
+    this.getCustomerData().pipe(untilDestroyed(this)).subscribe(
+      (customerResponse: any) => {
+        this.benificiaryService.getByCustomerCode(customerResponse.code).pipe(untilDestroyed(this))
+        .subscribe(
+          (beneficiariesResponse: any[]) => {
+            this.updateBeneficiariesError('');
+            this.updateBeneficiaries(beneficiariesResponse);
+          },
+          (err: HttpErrorResponse) => {
+            console.log(err);
+            this.updateBeneficiariesError(err);
+          }
+        );
       }
-    ];
-
-    this.updateBeneficiaries(beneficiaries);
-
-    // this.getBeneficiaries(type).pipe(untilDestroyed(this))
-    //   .subscribe(
-    //     (res: any) => {
-    //       console.log(res); // Delete later
-    //       if (res.responseCode === '00') {
-    //         this.updateBeneficiariesError('');
-    //         this.updateBeneficiaries(res.beneficiaries);
-    //       } else {
-    //         this.updateBeneficiariesError(res.responseDescription);
-    //       }
-    //     },
-    //     (err: HttpErrorResponse) => {
-    //       console.log(err);
-    //       this.updateBeneficiariesError(err);
-    //     }
-    //   );
+    );
   }
 
   updateBeneficiaries(newBeneficiaries) {

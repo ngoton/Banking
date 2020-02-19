@@ -27,7 +27,7 @@ public class StaffUseCaseService {
     public Staff findById(Long id){
         Staff staff = staffService.findById(id);
         if (staff.isEmpty()){
-            throw new NotFoundException();
+            throw new BankingServiceException("Staff not found");
         }
         return staff;
     }
@@ -36,7 +36,7 @@ public class StaffUseCaseService {
     public Staff findByCode(String code){
         Staff staff = staffService.findByCode(code);
         if (staff.isEmpty()){
-            throw new NotFoundException();
+            throw new BankingServiceException("Staff not found");
         }
         return staff;
     }
@@ -59,7 +59,7 @@ public class StaffUseCaseService {
     public void update(Staff staff){
         Staff oldStaff = staffService.findByCode(staff.getCode());
         if (oldStaff.isEmpty()){
-            throw new NotFoundException();
+            throw new BankingServiceException("Staff not found");
         }
         Info info = infoService.findByStaffCode(staff.getCode());
         if (!info.isEmpty()){
@@ -72,7 +72,7 @@ public class StaffUseCaseService {
     public void delete(Long id){
         Staff staff = staffService.findById(id);
         if (staff.isEmpty()){
-            throw new NotFoundException();
+            throw new BankingServiceException("Staff not found");
         }
         staffService.delete(staff);
     }

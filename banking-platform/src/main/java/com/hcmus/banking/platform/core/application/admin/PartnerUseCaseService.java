@@ -1,7 +1,6 @@
 package com.hcmus.banking.platform.core.application.admin;
 
 import com.hcmus.banking.platform.core.application.partner.PartnerService;
-import com.hcmus.banking.platform.config.security.RSAGenerator;
 import com.hcmus.banking.platform.core.utils.RandomUtils;
 import com.hcmus.banking.platform.domain.exception.BankingServiceException;
 import com.hcmus.banking.platform.domain.partner.Partner;
@@ -9,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -35,5 +34,9 @@ public class PartnerUseCaseService {
         partner.setKey(RandomUtils.generateApiKey());
 
         partnerService.create(partner);
+    }
+
+    public List<Partner> findAll() {
+        return partnerService.findAll();
     }
 }

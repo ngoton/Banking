@@ -2,9 +2,9 @@ import { NbMenuItem } from '@nebular/theme';
 
 export const MENU_ITEMS: NbMenuItem[] = [
   {
-    title: 'Tài khoản người dùng',
+    title: 'Tài khoản',
     icon: 'credit-card',
-    link: '/employee/accounts',
+    link: '/customer/accounts',
     home: true,
   },
   {

@@ -1,0 +1,2 @@
+INSERT INTO banking.payments(account, balance, created_at, created_by, create_program) VALUES ('120010000042', 0, '2020-01-20 17:10:24.562000', 0, 'initial');
+UPDATE banking.customers SET payments_id = (SELECT MAX(id) FROM banking.payments) WHERE id = 1;

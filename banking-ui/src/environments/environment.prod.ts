@@ -5,7 +5,8 @@
  */
 export const environment = {
   production: true,
-  AUX_BENEFICIARY: '',
+  BANK_NAME: 'HCB_BANK',
+  AUX_BENEFICIARY: '/internal/beneficiaries',
   AUX_URL: '',
   BASE_URL: 'http://localhost:4200',
   AUTH_SERV: '/auth',

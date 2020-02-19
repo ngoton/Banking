@@ -40,7 +40,7 @@ public class UserUseCaseService {
     public User findById(Long id){
         User user = userService.findById(id);
         if (user.isEmpty()){
-            throw new NotFoundException();
+            throw new BankingServiceException("User not found");
         }
         return user;
     }
@@ -49,7 +49,7 @@ public class UserUseCaseService {
     public void changePassword(String email, String password, String currentPassword){
         User user = userService.findByEmail(email);
         if (user.isEmpty()){
-            throw new NotFoundException();
+            throw new BankingServiceException("User not found");
         }
         if (!passwordService.isMatchPassword(currentPassword, user.getPassword())) {
             throw new BankingServiceException("Password does not match");
@@ -60,7 +60,7 @@ public class UserUseCaseService {
     public void resetPassword(String email, String password){
         User user = userService.findByEmail(email);
         if (user.isEmpty()){
-            throw new NotFoundException();
+            throw new BankingServiceException("User not found");
         }
         userService.changePassword(user, passwordService.encode(password));
     }
@@ -83,7 +83,7 @@ public class UserUseCaseService {
     public void delete(Long id){
         User user = userService.findById(id);
         if (user.isEmpty()){
-            throw new NotFoundException();
+            throw new BankingServiceException("User not found");
         }
         userService.delete(user);
     }
@@ -92,7 +92,7 @@ public class UserUseCaseService {
     public void forgot(String email) {
         User user = userService.findByEmail(email);
         if (user.isEmpty()){
-            throw new NotFoundException();
+            throw new BankingServiceException("User not found");
         }
 
         String code = RandomUtils.generate();
@@ -116,6 +116,14 @@ public class UserUseCaseService {
         User user = userService.findByEmail(email);
         userService.changePassword(user, passwordService.encode(user.getEmail()));
         otpService.delete(otp);
+        return user;
+    }
+
+    public User findByUsername(String username) {
+        User user = userService.findByUsername(username);
+        if (user.isEmpty()){
+            throw new BankingServiceException("User not found");
+        }
         return user;
     }
 }
