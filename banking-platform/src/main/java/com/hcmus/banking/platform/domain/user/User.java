@@ -23,7 +23,7 @@ public class User extends IDEntity {
     private Role role;
     @Enumerated(EnumType.STRING)
     private Status status;
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private Info info;
     @Embedded
     @AttributeOverrides({

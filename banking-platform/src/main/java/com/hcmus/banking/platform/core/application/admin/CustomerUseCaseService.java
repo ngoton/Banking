@@ -2,10 +2,12 @@ package com.hcmus.banking.platform.core.application.admin;
 
 import com.hcmus.banking.platform.core.application.customer.CustomerService;
 import com.hcmus.banking.platform.core.application.info.InfoService;
+import com.hcmus.banking.platform.core.application.user.UserService;
 import com.hcmus.banking.platform.domain.customer.Customer;
 import com.hcmus.banking.platform.domain.exception.BankingServiceException;
 import com.hcmus.banking.platform.domain.exception.NotFoundException;
 import com.hcmus.banking.platform.domain.info.Info;
+import com.hcmus.banking.platform.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CustomerUseCaseService {
     private final CustomerService customerService;
     private final InfoService infoService;
+    private final UserService userService;
 
     @Transactional(readOnly = true)
     public Page<Customer> findAllBy(Pageable pageable) {
@@ -47,6 +50,11 @@ public class CustomerUseCaseService {
         if (!byCode.isEmpty()){
             throw new BankingServiceException("Code is already exists");
         }
+        User user = userService.findByUsername(customer.getCode());
+        if (!user.isEmpty()){
+            throw new BankingServiceException("Code is already exists");
+        }
+
         customerService.create(customer);
     }
 
@@ -60,6 +68,11 @@ public class CustomerUseCaseService {
         if (!info.isEmpty()){
             infoService.update(info, customer.getInfo());
         }
+        User user = userService.findByUsername(customer.getCode());
+        if (!user.isEmpty()){
+            userService.update(user, customer.getInfo().getUser());
+        }
+
         customerService.update(oldCustomer, customer);
     }
 

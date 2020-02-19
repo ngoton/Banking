@@ -68,8 +68,6 @@ public class DebitUseCaseService {
         if (payment.isEmpty()){
             throw new BankingServiceException("Account not found");
         }
-        debitService.create(debit);
-
         Credit credit = new Credit(
                 debit.getCustomer().getPayment().getAccount(),
                 debit.getMoney(),
@@ -78,6 +76,9 @@ public class DebitUseCaseService {
                 Created.ofEmpty()
         );
         creditService.create(credit);
+
+        debit.setCredit(credit);
+        debitService.create(debit);
 
         Notification notification = new Notification(
                 String.format("%s %s", debit.getCustomer().getInfo().getFirstName(), debit.getCustomer().getInfo().getLastName()),
@@ -102,6 +103,15 @@ public class DebitUseCaseService {
         if (debit.isEmpty()) {
             throw new BankingServiceException("Debit not found");
         }
+
+        Notification notification = new Notification(
+                String.format("%s %s", debit.getCustomer().getInfo().getFirstName(), debit.getCustomer().getInfo().getLastName()),
+                String.format("%s %s", debit.getContent(), "[Canceled]"),
+                LocalDateTime.now()
+        );
+        notificationService.notify(notification, debit.getCredit().getCustomer().getInfo().getUser().getUsername());
+
+        creditService.delete(debit.getCredit());
         debitService.delete(debit);
     }
 }

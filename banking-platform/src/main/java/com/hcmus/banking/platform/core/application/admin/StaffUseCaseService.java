@@ -2,10 +2,12 @@ package com.hcmus.banking.platform.core.application.admin;
 
 import com.hcmus.banking.platform.core.application.info.InfoService;
 import com.hcmus.banking.platform.core.application.staff.StaffService;
+import com.hcmus.banking.platform.core.application.user.UserService;
 import com.hcmus.banking.platform.domain.exception.BankingServiceException;
 import com.hcmus.banking.platform.domain.exception.NotFoundException;
 import com.hcmus.banking.platform.domain.info.Info;
 import com.hcmus.banking.platform.domain.staff.Staff;
+import com.hcmus.banking.platform.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class StaffUseCaseService {
     private final StaffService staffService;
     private final InfoService infoService;
+    private final UserService userService;
 
     @Transactional(readOnly = true)
     public Page<Staff> findAllBy(Pageable pageable) {
@@ -52,6 +55,11 @@ public class StaffUseCaseService {
         if (!byCode.isEmpty()){
             throw new BankingServiceException("Code is already exists");
         }
+        User user = userService.findByUsername(staff.getCode());
+        if (!user.isEmpty()){
+            throw new BankingServiceException("Code is already exists");
+        }
+
         staffService.create(staff);
     }
 
@@ -65,6 +73,11 @@ public class StaffUseCaseService {
         if (!info.isEmpty()){
             infoService.update(info, staff.getInfo());
         }
+        User user = userService.findByUsername(staff.getCode());
+        if (!user.isEmpty()){
+            userService.update(user, staff.getInfo().getUser());
+        }
+
         staffService.update(oldStaff, staff);
     }
 

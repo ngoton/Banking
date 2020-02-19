@@ -28,7 +28,7 @@ public class Beneficiary extends IDEntity {
     private String account;
     @Column(name = "bank_name")
     private String bankName;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customers_id")
     private Customer customer;
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})

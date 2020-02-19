@@ -36,9 +36,9 @@ public class Payment extends IDEntity {
     private Created created;
     @OneToMany(mappedBy = "payment", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     private List<PaymentTransaction> paymentTransactions;
-    @OneToOne(mappedBy = "payment", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @OneToOne(mappedBy = "payment", fetch = FetchType.LAZY)
     private Customer customer;
-    @OneToOne(mappedBy = "payment", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @OneToOne(mappedBy = "payment", fetch = FetchType.LAZY)
     private Beneficiary beneficiary;
 
     public static Payment ofEmpty() {

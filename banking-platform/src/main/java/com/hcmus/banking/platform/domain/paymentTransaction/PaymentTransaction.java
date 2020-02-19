@@ -35,18 +35,18 @@ public class PaymentTransaction extends IDEntity {
             @AttributeOverride(name = "createProgram.value", column = @Column(name = "create_program"))
     })
     private Created created;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payments_id")
     private Payment payment;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "beneficiarys_id")
     private Beneficiary beneficiary;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "partners_id")
     private Partner partner;
-    @OneToOne(mappedBy = "paymentTransaction", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @OneToOne(mappedBy = "paymentTransaction", fetch = FetchType.LAZY)
     private Debit debit;
-    @OneToOne(mappedBy = "paymentTransaction", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @OneToOne(mappedBy = "paymentTransaction", fetch = FetchType.LAZY)
     private Credit credit;
 
     public PaymentTransaction(String code, BigDecimal money, String content, Created created, Payment payment, Beneficiary beneficiary) {

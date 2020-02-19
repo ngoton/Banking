@@ -32,9 +32,9 @@ public class Info extends IDEntity {
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinColumn(name = "users_id")
     private User user;
-    @OneToOne(mappedBy = "info", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @OneToOne(mappedBy = "info", fetch = FetchType.LAZY)
     private Customer customer;
-    @OneToOne(mappedBy = "info", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @OneToOne(mappedBy = "info", fetch = FetchType.LAZY)
     private Staff staff;
     @Embedded
     @AttributeOverrides({
