@@ -2,7 +2,6 @@ package com.hcmus.banking.platform.core.application.admin;
 
 import com.hcmus.banking.platform.core.application.credit.CreditService;
 import com.hcmus.banking.platform.domain.credit.Credit;
-import com.hcmus.banking.platform.domain.debit.Debit;
 import com.hcmus.banking.platform.domain.exception.BankingServiceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

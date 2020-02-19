@@ -6,6 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { PaymentService } from '../../../_services/payment.service';
 import { SavingService } from '../../../_services/saving.service';
 import { DecimalPipe } from '@angular/common';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'ngx-internal',
@@ -16,59 +17,12 @@ export class InternalComponent implements OnInit, OnDestroy {
 
   public keypadNumbers = ['10.000', '20.000', '50.000', '100.000', '500.000', '1,000.000', '2,000.000', '3,000.000'];
   amountSubmitted = false;
-  accounts: any[] = new Array();
+  internalAccounts: any[] = new Array();
   benificiary: Beneficiarys[] = new Array();
   selectedBenificiary: Beneficiarys = new Beneficiarys();
 
-  constructor(private customerService: CustomerService, 
-              private paymentService: PaymentService,
-              private savingService: SavingService,
-              private decimalPipe: DecimalPipe) {
-    this.customerService.getAcctDetailsData();
-
-    setTimeout(() => {
-      this.customerService.acctDetail$.pipe(untilDestroyed(this)).subscribe(
-        (customerResponse: Customers) => {
-          debugger;
-          this.getPayment(customerResponse.customerId);
-          this.getSaving(customerResponse.customerId);
-          this.customerService.getBeneficiariesData();
-        },
-        (err: HttpErrorResponse) => {
-          
-        }
-      );
-    }, 2000);
-
-  }
-
-  getPayment(customerId){
-    this.paymentService.getPaymentsByCustomerId(customerId)
-    .pipe(untilDestroyed(this))
-    .subscribe(
-      (payment: Payment[]) => {
-        payment[0].balance = this.decimalPipe.transform(payment[0].balance, '1.3-3');
-        this.accounts.push(payment[0]);
-      },
-      (err: HttpErrorResponse)=> {
-        
-      }
-    );
-  }
-
-  getSaving(customerId){
-    this.savingService.getSavingsByCustomerId(customerId)
-    .pipe(untilDestroyed(this))
-    .subscribe(
-      (saving: Savings[]) => {
-        saving[0].balance = this.decimalPipe.transform(saving[0].balance, '1.3-3');
-        this.accounts.push(saving[0]);
-      },
-      (err: HttpErrorResponse)=> {
-        
-      }
-    );
-  }
+  constructor(private customerService: CustomerService,
+              private decimalPipe: DecimalPipe) {}
 
   benificiaryChange(item) {
     this.selectedBenificiary = item;
@@ -76,13 +30,29 @@ export class InternalComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    setTimeout(() => {
-      this.customerService.beneficiaries$
-        .pipe(untilDestroyed(this))
-        .subscribe((benificiaryResponse: Beneficiarys[]) => {
-          this.benificiary = benificiaryResponse;
-        });
-    }, 2000);
+    this.customerService.payments$.pipe(untilDestroyed(this))
+    .subscribe(
+      (payment: Payment) => {
+        // payment.balance = this.decimalPipe.transform(payment.balance, '1.3-3');
+        this.internalAccounts.push(payment);
+      }
+    );
+
+    this.customerService.savings$.pipe(untilDestroyed(this))
+    .subscribe(
+      (saving: Savings) => {
+        // saving.balance = this.decimalPipe.transform(saving.balance, '1.3-3');
+        this.internalAccounts.push(saving);
+      }
+    );
+    
+    this.customerService.beneficiaries$.pipe(untilDestroyed(this))
+    .subscribe(
+      (benificiaries: Beneficiarys[]) => {
+        debugger;
+        this.benificiary = benificiaries.filter(b => b.bankName == environment.BANK_NAME);
+      }
+    );
   }
 
   ngOnDestroy() {

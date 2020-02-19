@@ -25,9 +25,11 @@ public class CreditService {
     public Credit findByAccount(String account) {
         return creditRepository.findByAccount(account).orElse(Credit.ofEmpty());
     }
+
     public List<Credit> findAllByCustomerCode(String code) {
         return creditRepository.findAllByCustomerCode(code);
     }
+
     public List<Credit> findAllByCustomerId(Long id) {
         return creditRepository.findAllByCustomerId(id);
     }
