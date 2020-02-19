@@ -1,5 +1,6 @@
 package com.hcmus.banking.platform.core.infrastructure.datasource.paymentTransaction;
 
+import com.hcmus.banking.platform.domain.general.CreatedAt;
 import com.hcmus.banking.platform.domain.paymentTransaction.PaymentTransaction;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,4 +18,8 @@ public interface PaymentTransactionRepository extends JpaRepository<PaymentTrans
     Page<PaymentTransaction> findAllByPartnerName(String name,Pageable pageable);
     PaymentTransaction save(PaymentTransaction paymentTransaction);
     void delete(PaymentTransaction paymentTransaction);
+
+    Page<PaymentTransaction> findAllByPartnerNameAndCreatedCreatedAtGreaterThanEqualAndCreatedCreatedAtLessThanEqual(String partnerName, CreatedAt startDate, CreatedAt endDate, Pageable pageable);
+    Page<PaymentTransaction> findAllByPartnerIsNotNullAndCreatedCreatedAtGreaterThanEqualAndCreatedCreatedAtLessThanEqual(CreatedAt startDate, CreatedAt endDate, Pageable pageable);
+    Page<PaymentTransaction> findAllByPartnerIsNotNull(Pageable pageable);
 }

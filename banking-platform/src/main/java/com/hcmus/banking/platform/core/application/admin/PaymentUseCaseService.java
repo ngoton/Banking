@@ -27,7 +27,7 @@ public class PaymentUseCaseService {
     public Payment findById(Long id) {
         Payment payment = paymentService.findById(id);
         if (payment.isEmpty()) {
-            throw new BankingServiceException("Account not found");
+            throw new BankingServiceException("Payment not found");
         }
         return payment;
     }
@@ -42,7 +42,7 @@ public class PaymentUseCaseService {
     public Payment findByAccount(String code) {
         Payment payment = paymentService.findByAccount(code);
         if (payment.isEmpty()) {
-            throw new BankingServiceException("Account not found");
+            throw new BankingServiceException("Payment not found");
         }
         return payment;
     }
@@ -60,18 +60,18 @@ public class PaymentUseCaseService {
 
     @Transactional
     public void update(Payment payment) {
-        Payment oldStaff = paymentService.findByAccount(payment.getAccount());
-        if (oldStaff.isEmpty()) {
-            throw new BankingServiceException("Account not found");
+        Payment oldPayment = paymentService.findByAccount(payment.getAccount());
+        if (oldPayment.isEmpty()) {
+            throw new BankingServiceException("Payment not found");
         }
-        paymentService.update(oldStaff, payment);
+        paymentService.update(oldPayment, payment);
     }
 
     @Transactional
     public void delete(Long id) {
         Payment payment = paymentService.findById(id);
         if (payment.isEmpty()) {
-            throw new BankingServiceException("Account not found");
+            throw new BankingServiceException("Payment not found");
         }
         paymentService.delete(payment);
     }

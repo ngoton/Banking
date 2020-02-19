@@ -25,7 +25,7 @@ import java.util.List;
 @UserAdvice.On
 public class PaymentTransactionController {
     private final PaymentTransactionUseCaseService paymentTransactionService;
-    private final BeneficiaryUserCaseService beneficiaryService;
+    private final BeneficiaryUseCaseService beneficiaryService;
     private final CustomerUseCaseService customerService;
     private final PaymentUseCaseService paymentService;
     private final UserUseCaseService userService;
@@ -45,6 +45,12 @@ public class PaymentTransactionController {
     @GetMapping("/history/partner/{name}")
     public Page<PaymentTransactionResponse> findAllByPartnerName(@PathVariable String name, Pageable pageable) {
         Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByPartnerName(name, pageable);
+        return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
+    }
+
+    @GetMapping("/history/partners")
+    public Page<PaymentTransactionResponse> findAllByPartner(PartnerHistoryRequest partnerHistoryRequest, Pageable pageable) {
+        Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByPartner(partnerHistoryRequest.getPartnerName(), partnerHistoryRequest.getStartDate(), partnerHistoryRequest.getEndDate(), pageable);
         return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
     }
 
