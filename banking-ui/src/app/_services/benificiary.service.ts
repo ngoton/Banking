@@ -24,6 +24,15 @@ export class BenificiaryService {
       );
   }
 
+  insert(data): Observable<any> {
+    const PATH = this.BENIFI_URL;
+      return this.http.post<any>(PATH, JSON.stringify(data))
+      .pipe(
+        retry(3),
+        //catchError(this.util.handleError)
+      );
+  }
+
   update(data): Observable<any> {
     const PATH = this.BENIFI_URL;
       return this.http.put<any>(PATH, JSON.stringify(data))

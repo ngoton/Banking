@@ -17,6 +17,7 @@ import { CustomerPagesRoutingModule } from './customer-pages-routing.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { TransactionHistoryComponent } from './transaction-history/transaction-history.component';
 import { FsIconComponent } from './transaction-history/transaction-history.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -32,7 +33,8 @@ import { FsIconComponent } from './transaction-history/transaction-history.compo
     BeneficiaryModule,
     TransferModule,
     ECommerceModule,
-    MiscellaneousModule
+    MiscellaneousModule,
+    SharedModule
   ],
   declarations: [
     CustomerPagesComponent,

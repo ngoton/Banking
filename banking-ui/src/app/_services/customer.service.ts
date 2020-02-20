@@ -144,7 +144,8 @@ export class CustomerService implements OnDestroy {
         .pipe(untilDestroyed(this))
         .subscribe(
           (payments: Payment[]) => {
-            this.updatePayment(payments[0]);
+            let payment = new Payment(payments[0]);
+            this.updatePayment(payment);
           },
           (err: HttpErrorResponse)=> {
             
@@ -169,7 +170,8 @@ export class CustomerService implements OnDestroy {
         .pipe(untilDestroyed(this))
         .subscribe(
           (savings: Savings[]) => {
-            this.updateSaving(savings[0]);
+            let saving = new Savings(savings[0]);
+            this.updateSaving(saving);
           },
           (err: HttpErrorResponse)=> {
             

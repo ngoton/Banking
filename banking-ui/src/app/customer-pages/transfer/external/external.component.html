@@ -33,7 +33,7 @@
         <div class="form-group row">
           <label for="inputMoney" class="label col-sm-3 col-form-label">Số tiền cần chuyển</label>
           <div class="col-sm-3">
-            <input nbInput currencyMask [(ngModel)]="paymentTransaction.money" [options]="{ prefix: '', thousands: ',', decimal: '.', precision: '3', allowNegative: false }"
+            <input nbInput currencyMask [(ngModel)]="paymentTransaction.money" name="money" [options]="{ prefix: '', thousands: ',', decimal: '.', precision: '3', allowNegative: false }"
                         class="form-control form-primary form-control-lg form-control-right border-left-0 border-right-0 border-top-0"
                         placeholder="0.000">
           <!-- <input nbInput currencyMask [(ngModel)]="paymentTransaction.money" [options]="{ prefix: '', thousands: ',', decimal: '.', precision: '3', allowNegative: false }"
@@ -56,7 +56,7 @@
         <div class="form-group row">
           <label class="label col-sm-3 col-form-label">Hình thức thanh toán phí</label>
           <div class="col-sm-9">
-            <nb-radio-group [(ngModel)]="paymentTransaction.fee">
+            <nb-radio-group [(ngModel)]="paymentTransaction.fee" name="fee">
               <nb-radio value="false">Người nhận trả phí</nb-radio>
               <nb-radio value="true">Người gửi trả phí</nb-radio>
             </nb-radio-group>
