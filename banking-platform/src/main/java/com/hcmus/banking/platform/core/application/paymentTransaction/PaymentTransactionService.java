@@ -69,4 +69,8 @@ public class PaymentTransactionService {
     public Page<PaymentTransaction> findAllByPartners(Pageable pageable) {
         return paymentTransactionRepository.findAllByPartnerIsNotNull(pageable);
     }
+
+    public Page<PaymentTransaction> findAllByCredit(Long id, Pageable pageable) {
+        return paymentTransactionRepository.findAllByCreditPaymentTransactionIsNotNullAndCreditCustomerId(id, pageable);
+    }
 }
