@@ -16,30 +16,35 @@ public class CustomerService {
         return customerRepository.findAllBy(pageable);
     }
 
-    public Customer findById(Long id){
+    public Customer findById(Long id) {
         return customerRepository.findById(id).orElse(Customer.ofEmpty());
     }
 
-    public Customer findByCode(String code){
+    public Customer findByCode(String code) {
         return customerRepository.findByCode(code).orElse(Customer.ofEmpty());
     }
 
-    public void create(Customer customer){
+    public void create(Customer customer) {
         customerRepository.save(customer);
     }
 
-    public void update(Customer oldCustomer, Customer customer){
+    public void update(Customer oldCustomer, Customer customer) {
         oldCustomer.setCode(customer.getCode());
         customerRepository.save(oldCustomer);
     }
 
-    public void delete(Customer customer){
+    public void delete(Customer customer) {
         customerRepository.delete(customer);
     }
 
     public Customer findByUserId(Long id) {
         return customerRepository.findByInfoUserId(id).orElse(Customer.ofEmpty());
     }
+
+    public Customer findByPaymentId(Long id) {
+        return customerRepository.findByPaymentId(id).orElse(Customer.ofEmpty());
+    }
+
 
     public Customer findByAccount(String account) {
         return customerRepository.findByPaymentAccount(account).orElse(Customer.ofEmpty());

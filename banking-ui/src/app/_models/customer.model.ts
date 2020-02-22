@@ -3,6 +3,7 @@ export class Customers {
     code: string;
     firstName: string;
     lastName: string;
+    fullName: string;
     birthDate: string;
     gender: string;
     phone: string;
@@ -19,8 +20,8 @@ export class Customers {
     constructor(obj?: any) {
         this.customerId = obj && obj.customerId || null;
         this.code = obj && obj.code || null;
-        this.firstName = obj && obj.firstName || null;
-        this.lastName = obj && obj.lastName || null;
+        this.firstName = obj && obj.firstName || "";
+        this.lastName = obj && obj.lastName || "";
         this.birthDate = obj && obj.birthDate || null;
         this.gender = obj && obj.gender || null;
         this.phone = obj && obj.phone || null;
@@ -43,7 +44,7 @@ export class Payment {
 
     constructor(obj?: any) {
         debugger;
-        this.paymentId = obj && obj.paymentId || null;
+        this.paymentId = obj && obj.paymentId || obj && obj.id || null;
         this.account = obj && obj.account || "";
         this.balance = obj && obj.balance || "";
     }
@@ -52,10 +53,12 @@ export class Payment {
 export class PaymentTransactions {
     id: number;
     code: string;
-    money: string;
+    money: number;
     content: string;
     paymentsId: number;
+    beneficiaryAccount: string;
     beneficiarysId: number;
+    fee: boolean;
 
     constructor(obj?: any) {
         this.id = obj && obj.id || null;
@@ -63,7 +66,9 @@ export class PaymentTransactions {
         this.money = obj && obj.money || null;
         this.content = obj && obj.content || null;
         this.paymentsId = obj && obj.paymentsId || null;
+        this.beneficiaryAccount = obj && obj.beneficiaryAccount || null;
         this.beneficiarysId = obj && obj.beneficiarysId || null;
+        this.fee = obj && obj.fee || true;
     }
 }
 

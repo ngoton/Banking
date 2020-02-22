@@ -27,31 +27,31 @@ public class CustomerUseCaseService {
     }
 
     @Transactional(readOnly = true)
-    public Customer findById(Long id){
+    public Customer findById(Long id) {
         Customer customer = customerService.findById(id);
-        if (customer.isEmpty()){
+        if (customer.isEmpty()) {
             throw new BankingServiceException("Customer not found");
         }
         return customer;
     }
 
     @Transactional(readOnly = true)
-    public Customer findByCode(String code){
+    public Customer findByCode(String code) {
         Customer customer = customerService.findByCode(code);
-        if (customer.isEmpty()){
+        if (customer.isEmpty()) {
             throw new BankingServiceException("Customer not found");
         }
         return customer;
     }
 
     @Transactional
-    public void create(Customer customer){
+    public void create(Customer customer) {
         Customer byCode = customerService.findByCode(customer.getCode());
-        if (!byCode.isEmpty()){
+        if (!byCode.isEmpty()) {
             throw new BankingServiceException("Code is already exists");
         }
         User user = userService.findByUsername(customer.getCode());
-        if (!user.isEmpty()){
+        if (!user.isEmpty()) {
             throw new BankingServiceException("Code is already exists");
         }
 
@@ -59,17 +59,17 @@ public class CustomerUseCaseService {
     }
 
     @Transactional
-    public void update(Customer customer){
+    public void update(Customer customer) {
         Customer oldCustomer = customerService.findByCode(customer.getCode());
-        if (oldCustomer.isEmpty()){
+        if (oldCustomer.isEmpty()) {
             throw new BankingServiceException("Customer not found");
         }
         Info info = infoService.findByCustomerCode(customer.getCode());
-        if (!info.isEmpty()){
+        if (!info.isEmpty()) {
             infoService.update(info, customer.getInfo());
         }
         User user = userService.findByUsername(customer.getCode());
-        if (!user.isEmpty()){
+        if (!user.isEmpty()) {
             userService.update(user, customer.getInfo().getUser());
         }
 
@@ -77,9 +77,9 @@ public class CustomerUseCaseService {
     }
 
     @Transactional
-    public void delete(Long id){
+    public void delete(Long id) {
         Customer customer = customerService.findById(id);
-        if (customer.isEmpty()){
+        if (customer.isEmpty()) {
             throw new BankingServiceException("Customer not found");
         }
         customerService.delete(customer);
@@ -88,7 +88,16 @@ public class CustomerUseCaseService {
     @Transactional(readOnly = true)
     public Customer findByUserId(Long id) {
         Customer customer = customerService.findByUserId(id);
-        if (customer.isEmpty()){
+        if (customer.isEmpty()) {
+            throw new BankingServiceException("Customer not found");
+        }
+        return customer;
+    }
+
+    @Transactional(readOnly = true)
+    public Customer findByPaymentId(Long id) {
+        Customer customer = customerService.findByPaymentId(id);
+        if (customer.isEmpty()) {
             throw new BankingServiceException("Customer not found");
         }
         return customer;
@@ -96,7 +105,7 @@ public class CustomerUseCaseService {
 
     public Customer findByAccount(String account) {
         Customer customer = customerService.findByAccount(account);
-        if (customer.isEmpty()){
+        if (customer.isEmpty()) {
             throw new BankingServiceException("Customer not found");
         }
         return customer;

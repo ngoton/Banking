@@ -1,6 +1,8 @@
 package com.hcmus.banking.platform.core.application.admin;
 
 import com.hcmus.banking.platform.core.application.beneficiary.BeneficiaryService;
+import com.hcmus.banking.platform.core.application.credit.CreditService;
+import com.hcmus.banking.platform.core.application.customer.CustomerService;
 import com.hcmus.banking.platform.core.application.mail.MailService;
 import com.hcmus.banking.platform.core.application.otp.OtpService;
 import com.hcmus.banking.platform.core.application.partner.PartnerService;
@@ -8,6 +10,7 @@ import com.hcmus.banking.platform.core.application.payment.PaymentService;
 import com.hcmus.banking.platform.core.application.paymentTransaction.PaymentTransactionService;
 import com.hcmus.banking.platform.core.utils.RandomUtils;
 import com.hcmus.banking.platform.domain.beneficiary.Beneficiary;
+import com.hcmus.banking.platform.domain.customer.Customer;
 import com.hcmus.banking.platform.domain.exception.BankingServiceException;
 import com.hcmus.banking.platform.domain.general.Created;
 import com.hcmus.banking.platform.domain.general.CreatedAt;
@@ -37,6 +40,7 @@ public class PaymentTransactionUseCaseService {
     private final OtpService otpService;
     private final MailService mailService;
     private final PartnerService partnerService;
+    private final CustomerService customerService;
 
     @Transactional(readOnly = true)
     public Page<PaymentTransaction> findAllBy(Pageable pageable) {
@@ -77,6 +81,15 @@ public class PaymentTransactionUseCaseService {
             throw new BankingServiceException("Payment does not exist!!!");
         }
         return paymentTransactionService.findAllByPaymentIdAndMoneyGreaterThan(id, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<PaymentTransaction> findAllByCredit(Long id, Pageable pageable) {
+        Customer customer = customerService.findByPaymentId(id);
+        if (customer.isEmpty()) {
+            throw new BankingServiceException("Customer does not exist!!!");
+        }
+        return paymentTransactionService.findAllByCredit(customer.getId(), pageable);
     }
 
     @Transactional(readOnly = true)
