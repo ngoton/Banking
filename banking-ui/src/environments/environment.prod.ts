@@ -8,7 +8,7 @@ export const environment = {
   BANK_NAME: 'HCB_BANK',
   AUX_BENEFICIARY: '/internal/beneficiaries',
   AUX_URL: '',
-  BASE_URL: 'http://localhost:4200',
+  BASE_URL: 'https://banking-hcmus.herokuapp.com',
   AUTH_SERV: '/auth',
   USER_SERV: '/internal/users',
   CUST_SERV: '/internal/customers',

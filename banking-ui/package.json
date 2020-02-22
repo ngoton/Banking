@@ -9,10 +9,17 @@
   "bugs": {
     "url": "https://github.com/akveo/ngx-admin/issues"
   },
+  "engines": {
+    "node": "10.15.1",
+    "npm": "6.4.1",
+    "express": "^4.17.1",
+    "cors": "^2.8.5"
+  },
   "scripts": {
     "ng": "ng",
     "conventional-changelog": "conventional-changelog",
-    "start": "ng serve --host 0.0.0.0 --disable-host-check",
+    "start": "node app/server.js",
+    "postinstall": "ng build --aot --prod",
     "build": "ng build",
     "build:prod": "npm run build -- --prod --aot",
     "test": "ng test",
@@ -57,8 +64,10 @@
     "ckeditor": "4.7.3",
     "classlist.js": "1.1.20150312",
     "core-js": "2.5.1",
+    "cors": "^2.8.5",
     "echarts": "^4.0.2",
     "eva-icons": "^1.1.0",
+    "express": "^4.17.1",
     "font-awesome": "^4.7.0",
     "intl": "1.2.5",
     "ionicons": "2.0.1",
@@ -77,6 +86,7 @@
     "node-sass": "^4.13.1",
     "normalize.css": "6.0.0",
     "pace-js": "1.0.2",
+    "path": "^0.12.7",
     "roboto-fontface": "0.8.0",
     "rxjs": "6.5.4",
     "rxjs-compat": "6.3.0",
