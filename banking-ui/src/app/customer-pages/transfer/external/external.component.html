@@ -1,23 +1,23 @@
-<nb-card>
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="primary">
     <nb-card-header>Chuyển khoản liên ngân hàng</nb-card-header>
     <nb-card-body>
       <form>
         <div class="form-group row">
           <label class="label col-sm-3 col-form-label">Chọn tài khoản</label>
           <div class="col-sm-3">
-            <nb-select fullWidth placeholder="Chọn tài khoản" class="text-center">
-              <nb-option *ngFor="let item of accounts" [value]="item.account">{{item.account}}</nb-option>
+            <nb-select [disabled]="finished===true" fullWidth placeholder="Chọn tài khoản" class="text-center">
+              <nb-option *ngFor="let item of accounts" [value]="item.account" (selectionChange)="paymentChange(item)">{{item.account}}</nb-option>
             </nb-select>
           </div>
         </div>
         <div class="form-group row">
           <label for="inputAccount" class="label col-sm-3 col-form-label">Thông tin người nhận</label>
           <div class="col-sm-3">
-            <input nbInput [(ngModel)]="paymentTransaction.beneficiaryAccount" #beneficiaryAccount="ngModel" fullWidth id="beneficiary-account" name="beneficiaryAccount" fullWidth placeholder="Số tài khoản người nhận">
+            <input [disabled]="finished===true" nbInput [(ngModel)]="paymentTransaction.beneficiaryAccount" #beneficiaryAccount="ngModel" fullWidth id="beneficiary-account" name="beneficiaryAccount" fullWidth placeholder="Số tài khoản người nhận">
           </div>
           <label class="label col-sm-2 col-form-label">Ngân hàng</label>
           <div class="col-sm-4">
-            <nb-select placeholder="Chọn ngân hàng">
+            <nb-select [disabled]="finished===true" placeholder="Chọn ngân hàng">
               <nb-option *ngFor="let item of partners" [value]="item.name" (selectionChange)="partnerChange(item)">{{item.name}}</nb-option>
               </nb-select>
           </div>
@@ -25,15 +25,15 @@
         <div class="form-group row">
           <div class="offset-sm-3 col-sm-9">
             <label class="label col-form-label"><span style="padding-right: 5px;">hoặc</span></label>
-            <nb-select placeholder="Chọn người thụ hưởng" [disabled]="selectedPartner!=null">
-              <nb-option *ngFor="let item of benificiary" [value]="item.account">{{item.account}}</nb-option>
+            <nb-select [disabled]="finished===true" placeholder="Chọn người thụ hưởng" [disabled]="selectedPartner!=null">
+              <nb-option *ngFor="let item of benificiary" [value]="item.account" (selectionChange)="benificiaryChange(item)">{{item.account}}</nb-option>
             </nb-select>
           </div>
         </div>
         <div class="form-group row">
           <label for="inputMoney" class="label col-sm-3 col-form-label">Số tiền cần chuyển</label>
           <div class="col-sm-3">
-            <input nbInput currencyMask [(ngModel)]="paymentTransaction.money" name="money" [options]="{ prefix: '', thousands: ',', decimal: '.', precision: '3', allowNegative: false }"
+            <input [disabled]="finished===true" nbInput currencyMask [(ngModel)]="paymentTransaction.money" name="money" [options]="{ prefix: '', thousands: ',', decimal: '.', precision: '0', allowNegative: false }"
                         class="form-control form-primary form-control-lg form-control-right border-left-0 border-right-0 border-top-0"
                         placeholder="0.000">
           <!-- <input nbInput currencyMask [(ngModel)]="paymentTransaction.money" [options]="{ prefix: '', thousands: ',', decimal: '.', precision: '3', allowNegative: false }"
@@ -50,13 +50,13 @@
         <div class="form-group row">
           <label for="inputContent" class="label col-sm-3 col-form-label">Nội dung</label>
           <div class="col-sm-6">
-            <input nbInput [(ngModel)]="paymentTransaction.content" #content="ngModel" fullWidth id="input-content" name="content" placeholder="Nội dung chuyển khoản">
+            <input [disabled]="finished===true" nbInput [(ngModel)]="paymentTransaction.content" #content="ngModel" fullWidth id="input-content" name="content" placeholder="Nội dung chuyển khoản">
           </div>
         </div>
         <div class="form-group row">
           <label class="label col-sm-3 col-form-label">Hình thức thanh toán phí</label>
           <div class="col-sm-9">
-            <nb-radio-group [(ngModel)]="paymentTransaction.fee" name="fee">
+            <nb-radio-group [disabled]="finished===true" [(ngModel)]="paymentTransaction.fee" name="fee">
               <nb-radio value="false">Người nhận trả phí</nb-radio>
               <nb-radio value="true">Người gửi trả phí</nb-radio>
             </nb-radio-group>
@@ -64,7 +64,8 @@
         </div>
         <div class="form-group row">
           <div class="offset-sm-3 col-sm-9">
-            <button type="submit" nbButton status="primary">Chuyển tiền</button>
+            <button type="submit" *ngIf="finished===false" nbButton status="primary">Chuyển tiền</button>
+            <button type="submit" *ngIf="finished===true" nbButton status="warning" (click)="goHome()">Trang chủ</button>
           </div>
         </div>
       </form>

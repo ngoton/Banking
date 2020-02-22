@@ -111,10 +111,10 @@ export class Beneficiarys {
 
     constructor(obj?: any) {
         this.id = obj && obj.id || null;
-        this.name = obj && obj.name || null;
-        this.shortName = obj && obj.shortName || null;
-        this.account = obj && obj.account || null;
-        this.bankName = obj && obj.bankName || null;
+        this.name = obj && obj.name || "";
+        this.shortName = obj && obj.shortName || "";
+        this.account = obj && obj.account || "";
+        this.bankName = obj && obj.bankName || "";
         this.customersId = obj && obj.customersId || null;
     }
 }
