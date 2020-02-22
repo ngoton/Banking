@@ -42,7 +42,7 @@ public class PaymentUseCaseService {
     public Payment findByAccount(String code) {
         Payment payment = paymentService.findByAccount(code);
         if (payment.isEmpty()) {
-            throw new BankingServiceException("Payment not found");
+            throw new BankingServiceException("Account not found");
         }
         return payment;
     }

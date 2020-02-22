@@ -125,8 +125,7 @@ public class PaymentTransactionUseCaseService {
             throw new BankingServiceException("Money must be greater than zero");
         }
         Payment payment = paymentTransaction.getPayment();
-        payment.setBalance(payment.getBalance().subtract(paymentTransaction.getMoney()));
-        if (payment.getBalance().signum() < 0) {
+        if ((payment.getBalance().subtract(paymentTransaction.getMoney())).signum() < 0) {
             throw new BankingServiceException("Not enough money");
         }
 
@@ -176,20 +175,29 @@ public class PaymentTransactionUseCaseService {
         paymentService.create(payment);
 
         BigDecimal money = toPaymentTransaction.getMoney();
+
+        BigDecimal transFee;
+        if (toPaymentTransaction.getBeneficiary().isInternal()) {
+            transFee = PaymentTransaction.internalFee();
+        }
+        else {
+            transFee = PaymentTransaction.externalFee();
+        }
+
         if (fee) {
             PaymentTransaction paymentTransactionFee = new PaymentTransaction(
                     RandomUtils.generateTransactionCode(),
                     PaymentTransaction.internalFee(),
-                    String.format("Phí Chuyển Khoản ref: %s", paymentTransaction.getCode()),
+                    String.format("Phí chuyển khoản ref: %s", paymentTransaction.getCode()),
                     Created.ofEmpty(),
                     toPaymentTransaction.getPayment()
             );
             paymentTransactionService.create(paymentTransactionFee);
 
-            payment.setBalance(payment.getBalance().add(PaymentTransaction.internalFee()));
+            payment.setBalance(payment.getBalance().add(transFee));
             paymentService.create(payment);
         } else {
-            money = money.add(PaymentTransaction.internalFee());
+            money = money.add(transFee);
         }
 
         if (toPaymentTransaction.getBeneficiary().isInternal()) {
