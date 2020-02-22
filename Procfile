@@ -1,1 +1,1 @@
-web: java -jar banking-platform/target/banking-platform-0.0.1-SNAPSHOT.jar
+web: java -jar banking-platform/target/banking-platform-0.0.1-SNAPSHOT.jar -Dserver.port=$PORT
