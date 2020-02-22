@@ -4,9 +4,9 @@ spring:
     name: banking
   # Database
   datasource:
-    url: jdbc:postgresql://banking-postgres:5432/banking
-    username: banking
-    password: banking
+    url: jdbc:postgresql://ec2-184-72-235-159.compute-1.amazonaws.com:5432/d2rlhn3ekcevr3?sslmode=require
+    username: hibspswzsaatif
+    password: 83aab305bfbc47043610b5482a1f61fb7df9884d2d244a69d5ae29f79922a9a9
     driverClassName: org.postgresql.Driver
     hikari:
       connectionTimeout: 20000
