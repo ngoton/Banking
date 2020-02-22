@@ -43,7 +43,7 @@ logging:
     org.hibernate: DEBUG
 # Server configuration
 server:
-  port: 8800
+  port: 80
   sessionTimeout: 30
 # Security
 banking:
