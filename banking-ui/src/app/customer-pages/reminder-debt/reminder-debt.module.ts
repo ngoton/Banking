@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ReminderDebtRoutingModule } from './reminder-debt-routing.module';
@@ -21,21 +21,26 @@ import {
   NbDialogModule,
   NbPopoverModule,
   NbTooltipModule,
-  NbWindowModule
+  NbWindowModule,
+  NbSpinnerModule
 } from '@nebular/theme';
 import { ThemeModule } from '../../@theme/theme.module';
 import { MatAutocompleteModule, MatOptionModule } from '@angular/material';
 import { CurrencyMaskModule } from 'ngx-currency-mask';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { DialogDimissPromptComponent } from './dialog-dimiss-prompt/dialog-dimiss-prompt.component';
+import { SharedModule } from '../../shared/shared.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [ReminderDebtComponent, RemiderListComponent, RemiderDetailComponent, DialogDimissPromptComponent],
   entryComponents: [DialogDimissPromptComponent],
   imports: [
     CommonModule,
+    FormsModule,
     ReminderDebtRoutingModule,
     ThemeModule,
+    NbSpinnerModule,
     NbCardModule,
     NbUserModule,
     NbButtonModule,
@@ -55,7 +60,9 @@ import { DialogDimissPromptComponent } from './dialog-dimiss-prompt/dialog-dimis
     CurrencyMaskModule,
     MatAutocompleteModule,
     MatOptionModule,
-    Ng2SmartTableModule
-  ]
+    Ng2SmartTableModule,
+    SharedModule
+  ],
+  schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ReminderDebtModule { }
