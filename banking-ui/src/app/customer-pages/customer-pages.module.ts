@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NbMenuModule } from '@nebular/theme';
+import { NbMenuModule, NbSpinnerModule } from '@nebular/theme';
 import {
   NbCardModule,
   NbIconModule,
@@ -18,11 +18,56 @@ import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { TransactionHistoryComponent } from './transaction-history/transaction-history.component';
 import { FsIconComponent } from './transaction-history/transaction-history.component';
 import { SharedModule } from '../shared/shared.module';
+import { NotifierModule, NotifierOptions } from 'angular-notifier';
+
+/**
+ * Custom angular notifier options
+ */
+const customNotifierOptions: NotifierOptions = {
+  position: {
+    horizontal: {
+      position: 'left',
+      distance: 12
+    },
+    vertical: {
+      position: 'top',
+      distance: 12,
+      gap: 10
+    }
+  },
+  theme: 'material',
+  behaviour: {
+    autoHide: 3000,
+    onClick: false,
+    onMouseover: 'pauseAutoHide',
+    showDismissButton: true,
+    stacking: 4
+  },
+  animations: {
+    enabled: true,
+    show: {
+      preset: 'slide',
+      speed: 300,
+      easing: 'ease'
+    },
+    hide: {
+    preset: 'fade',
+    speed: 300,
+    easing: 'ease',
+      offset: 50
+    },
+    shift: {
+      speed: 300,
+      easing: 'ease'
+    }
+  }
+};
 
 @NgModule({
   imports: [
     CustomerPagesRoutingModule,
     ThemeModule,
+    NbSpinnerModule,
     NbMenuModule,
     NbCardModule,
     NbIconModule,
@@ -34,6 +79,7 @@ import { SharedModule } from '../shared/shared.module';
     TransferModule,
     ECommerceModule,
     MiscellaneousModule,
+    NotifierModule.withConfig(customNotifierOptions),
     SharedModule
   ],
   declarations: [

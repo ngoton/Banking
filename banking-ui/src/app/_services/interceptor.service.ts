@@ -36,10 +36,10 @@ export class InterceptorService implements HttpInterceptor {
     let observable = fromPromise(this.handleAccess(request, next));
 
     return observable.pipe(
-      catchError((error: HttpErrorResponse) => {
-        switch(error.status) {
+      catchError((response: HttpErrorResponse) => {
+        switch(response.status) {
           case 400:
-            return Observable.throw("Dữ liệu yêu cầu không hợp lệ!");
+            return Observable.throw(response.error.message);
           case 401:
             let token = JSON.parse(localStorage.getItem('token'));
             let refreshToken = JSON.parse(localStorage.getItem('refreshToken'));
@@ -65,7 +65,7 @@ export class InterceptorService implements HttpInterceptor {
               return Observable.throw("Phương thức yêu cầu không hợp lệ!");
         }
 
-        return Observable.throwError(error);
+        return Observable.throwError(response);
       })
     );
   }

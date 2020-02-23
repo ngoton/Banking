@@ -17,7 +17,8 @@ import {
   NbRadioModule,
   NbSelectModule,
   NbUserModule,
-  NbAlertModule
+  NbAlertModule,
+  NbSpinnerModule
 } from '@nebular/theme';
 
 /**
@@ -26,7 +27,7 @@ import {
 const customNotifierOptions: NotifierOptions = {
   position: {
     horizontal: {
-      position: 'left',
+      position: 'middle',
       distance: 12
     },
     vertical: {
@@ -67,6 +68,7 @@ const customNotifierOptions: NotifierOptions = {
   declarations: [LoginComponent],
   imports: [
     CommonModule,
+    NbSpinnerModule,
     LoginRoutingModule,
     SharedModule,
     FormsModule,

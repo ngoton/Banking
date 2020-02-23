@@ -1,5 +1,10 @@
-<nb-card>
-  <nb-card-header>Nhập mã OTP</nb-card-header>
+<nb-card class="text-center" [nbSpinner]="sendingOTP" nbSpinnerStatus="primary">
+  <nb-card-header>
+    <div>
+      Chúng tôi đã gửi mã OTP đến địa chỉ email của bạn.
+    </div><br/>
+     Vui lòng kiểm tra email và nhập mã OTP
+  </nb-card-header>
   <nb-card-body>
     <input #content nbInput placeholder="Mã OTP">
   </nb-card-body>
