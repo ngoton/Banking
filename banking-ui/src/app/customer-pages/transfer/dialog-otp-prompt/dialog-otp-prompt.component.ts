@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { PaymentTransactions } from '../../../_models/customer.model';
 import { PaymentTransactionService } from '../../../_services/payment-transaction.service';
@@ -9,7 +9,8 @@ import { untilDestroyed } from 'ngx-take-until-destroy';
   templateUrl: 'dialog-otp-prompt.component.html',
   styleUrls: ['dialog-otp-prompt.component.scss'],
 })
-export class DialogOTPPromptComponent {
+export class DialogOTPPromptComponent implements OnInit, OnDestroy {
+  sendingOTP = false;
   paymentInfor: PaymentTransactions;
 
   constructor(protected ref: NbDialogRef<DialogOTPPromptComponent>,
@@ -21,13 +22,23 @@ export class DialogOTPPromptComponent {
 
   submit(code) {
     debugger;
+    this.sendingOTP = true;
     this.paymentTransactionService.verifyPayment(this.paymentInfor, code)
     .pipe(untilDestroyed(this))
     .subscribe(
       (res: any) => {
+        this.sendingOTP = false;
         this.ref.close(code);
       }
     );
     
+  }
+
+  ngOnInit() {
+
+  }
+
+  ngOnDestroy() {
+
   }
 }

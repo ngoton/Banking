@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
 import { User } from '../../_models/user';
 import { LoginData } from '../../_models/logindata';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -22,13 +22,14 @@ import { Subscription } from 'rxjs';
   templateUrl: "./login.component.html",
   providers: [AuthService, UserService, UtilitiesService, CustomerService],
   styleUrls: [
-    "./login.component.scss",
-    "../../../../node_modules/sweetalert2/src/sweetalert2.scss"
-  ]
+    "./login.component.scss"
+  ],
+  encapsulation: ViewEncapsulation.None
 })
 export class LoginComponent implements OnInit, OnDestroy {
   @ViewChild("customNotification", { static: true }) customNotificationTmpl;
-
+  private readonly notifi: NotifierService;
+  logging = false;
   loginForm: FormGroup;
   user: User;
   logindata: LoginData;
@@ -55,6 +56,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private activeRoute: ActivatedRoute,
     private customerService: CustomerService
   ) {
+    this.notifi = notifications;
     this.submitted = false;
     this.createForm();
     let token = JSON.parse(localStorage.getItem('token'));
@@ -83,7 +85,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       localStorage.setItem("userName", userName);
     }
     this.loading = true;
-    this.notifications.hide("loginError"); // remove login notification
+    this.notifi.hide("loginError"); // remove login notification
     // this.notifications.html(
     //   `Logging in... <i class="fas fa-spin fa-circle-notch ml-3"></i>`,
     //   NotificationType.Info,
@@ -94,13 +96,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     //     animate: "scale"
     //   }
     // );
-    this.notifications.show({
+    this.notifi.show({
       id: `login`,
       message: `Đang đăng nhập vào hệ thống...`,
       type: `info`,
       template: this.customNotificationTmpl
     });
-
+    this.logging = true;
     this.auth.login(formdata)
       .pipe(untilDestroyed(this))
       .subscribe(
@@ -110,9 +112,10 @@ export class LoginComponent implements OnInit, OnDestroy {
           localStorage.setItem("token", JSON.stringify(res.accessToken));
           localStorage.setItem("refreshToken", JSON.stringify(res.refreshToken));
           this.getOnboardingJourney();
+          this.logging = false;
         },
         (err: HttpErrorResponse) => {
-          this.notifications.hide("login"); // remove login notification
+          this.notifi.hide("login"); // remove login notification
           this.errorAlert(err.message === undefined ? "Đăng nhập thất bại!" : err);
           console.log(err);
         }
@@ -176,7 +179,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     //     animate: "scale"
     //   }
     // );
-    this.notifications.show({
+    this.notifi.show({
       id: `LoginError`,
       message: messageAlert,
       type: `error`,

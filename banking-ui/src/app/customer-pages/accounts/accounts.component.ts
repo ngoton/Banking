@@ -131,7 +131,7 @@ export class AccountsComponent implements OnDestroy {
     .subscribe(
       (payment: Payment[]) => {
         this.payment = payment[0];
-        this.payment.balance = this.decimalPipe.transform(this.payment.balance, '1.3-3');
+        this.payment.balance = this.decimalPipe.transform(this.payment.balance, '1.0-3');
       },
       (err: HttpErrorResponse)=> {
         
@@ -145,7 +145,7 @@ export class AccountsComponent implements OnDestroy {
     .subscribe(
       (saving: Savings[]) => {
         this.saving = saving[0];
-        this.saving.balance = this.decimalPipe.transform(this.saving.balance, '1.3-3');
+        this.saving.balance = this.decimalPipe.transform(this.saving.balance, '1.0-3');
       },
       (err: HttpErrorResponse)=> {
         

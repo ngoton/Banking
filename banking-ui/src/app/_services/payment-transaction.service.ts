@@ -15,9 +15,29 @@ export class PaymentTransactionService {
 
   internalPayment(paymentTransaction, benificiary) {
     const body = {
-      conten: paymentTransaction.content,
+      content: paymentTransaction.content,
       money: paymentTransaction.money,
-      paymentId: paymentTransaction.paymentId,
+      paymentId: paymentTransaction.paymentsId,
+      beneficiaryAccount: paymentTransaction.beneficiaryAccount,
+      name: benificiary.name,
+      shortName: benificiary.shortName != null ? benificiary.shortName : "",
+      bankName: benificiary.bankName,
+      fee: JSON.parse(paymentTransaction.fee)
+    }
+
+    const PATH = this.TRANSFER_URL + `/payment`;
+      return this.http.post<any>(PATH, JSON.stringify(body))
+      .pipe(
+        //retry(3),
+        //catchError(this.util.handleError)
+      );
+  }
+
+  externalPayment(paymentTransaction, benificiary) {
+    const body = {
+      content: paymentTransaction.content,
+      money: paymentTransaction.money,
+      paymentId: paymentTransaction.paymentsId,
       beneficiaryAccount: paymentTransaction.beneficiaryAccount,
       name: benificiary.name,
       shortName: benificiary.shortName,
@@ -25,17 +45,17 @@ export class PaymentTransactionService {
       fee: paymentTransaction.fee
     }
 
-    const PATH = this.TRANSFER_URL + `/payment`;
+    const PATH = this.TRANSFER_URL + `/payment/external`;
       return this.http.post<any>(PATH, JSON.stringify(body))
       .pipe(
-        retry(3),
+        // retry(3),
         //catchError(this.util.handleError)
       );
   }
 
   verifyPayment(paymentInfor, code) {
     const body = {
-      conten: paymentInfor.content,
+      content: paymentInfor.content,
       money: paymentInfor.money,
       paymentId: paymentInfor.paymentId,
       beneficiaryId: paymentInfor.beneficiaryId,
@@ -46,7 +66,7 @@ export class PaymentTransactionService {
     const PATH = this.TRANSFER_URL + `/paymentVerify`;
       return this.http.post<any>(PATH, JSON.stringify(body))
       .pipe(
-        retry(3),
+        // retry(3),
         //catchError(this.util.handleError)
       );
   }

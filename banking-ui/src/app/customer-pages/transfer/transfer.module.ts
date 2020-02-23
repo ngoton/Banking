@@ -17,7 +17,8 @@ import {
   NbDialogModule,
   NbPopoverModule,
   NbTooltipModule,
-  NbWindowModule
+  NbWindowModule,
+  NbSpinnerModule
 } from '@nebular/theme';
 import { TransferRoutingModule } from './transfer-routing.module';
 import { TransferComponent } from './transfer.component';
@@ -31,6 +32,50 @@ import { MatAutocompleteModule, MatOptionModule } from '@angular/material';
 import { CurrencyMaskModule } from 'ngx-currency-mask';
 import { SharedModule } from '../../shared/shared.module';
 import { DialogOTPPromptComponent } from './dialog-otp-prompt/dialog-otp-prompt.component';
+import { NotifierModule, NotifierOptions } from 'angular-notifier';
+
+/**
+ * Custom angular notifier options
+ */
+const customNotifierOptions: NotifierOptions = {
+  position: {
+    horizontal: {
+      position: 'left',
+      distance: 12
+    },
+    vertical: {
+      position: 'top',
+      distance: 12,
+      gap: 10
+    }
+  },
+  theme: 'material',
+  behaviour: {
+    autoHide: 3000,
+    onClick: false,
+    onMouseover: 'pauseAutoHide',
+    showDismissButton: true,
+    stacking: 4
+  },
+  animations: {
+    enabled: true,
+    show: {
+      preset: 'slide',
+      speed: 300,
+      easing: 'ease'
+    },
+    hide: {
+    preset: 'fade',
+    speed: 300,
+    easing: 'ease',
+      offset: 50
+    },
+    shift: {
+      speed: 300,
+      easing: 'ease'
+    }
+  }
+};
 
 @NgModule({
   declarations: [
@@ -46,6 +91,7 @@ import { DialogOTPPromptComponent } from './dialog-otp-prompt/dialog-otp-prompt.
     FormsModule,
     ReactiveFormsModule,
     ThemeModule,
+    NbSpinnerModule,
     NbCardModule,
     NbUserModule,
     NbButtonModule,
@@ -67,6 +113,7 @@ import { DialogOTPPromptComponent } from './dialog-otp-prompt/dialog-otp-prompt.
     CurrencyMaskModule,
     MatAutocompleteModule,
     MatOptionModule,
+    NotifierModule.withConfig(customNotifierOptions),
     SharedModule
   ],
   schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA]

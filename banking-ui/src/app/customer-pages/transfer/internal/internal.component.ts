@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { CustomerService } from '../../../_services/customer.service';
 import { untilDestroyed } from 'ngx-take-until-destroy';
@@ -12,13 +12,20 @@ import { DialogOTPPromptComponent } from '../dialog-otp-prompt/dialog-otp-prompt
 import { NbDialogService } from '@nebular/theme';
 import { PaymentTransactionService } from '../../../_services/payment-transaction.service';
 import { BenificiaryService } from '../../../_services/benificiary.service';
+import { NotifierService } from 'angular-notifier';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ngx-internal',
   templateUrl: './internal.component.html',
-  styleUrls: ['./internal.component.scss']
+  styleUrls: ['./internal.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class InternalComponent implements OnInit, OnDestroy {
+  //@ViewChild("customNotification", { static: true }) customNotificationTmpl;
+  loading = false;
+  finished = false;
+  private readonly notifier: NotifierService;
 
   public keypadNumbers = ['10.000', '20.000', '50.000', '100.000', '500.000', '1,000.000', '2,000.000', '3,000.000'];
   amountSubmitted = false;
@@ -35,8 +42,11 @@ export class InternalComponent implements OnInit, OnDestroy {
               private decimalPipe: DecimalPipe,
               private dialogService: NbDialogService,
               private paymentTransactionService: PaymentTransactionService,
-              private benificiaryService: BenificiaryService) {
+              private benificiaryService: BenificiaryService,
+              private notifications: NotifierService,
+              private router: Router) {
                 this.source = environment.BASE_URL + environment.CUST_SERV + '/payment';
+                this.notifier = notifications;
               }
 
   benificiaryChange(item: Beneficiarys) {
@@ -71,43 +81,61 @@ export class InternalComponent implements OnInit, OnDestroy {
 
   callBack(data: any): void {
     debugger;
-    this.resultCustomer = data;
-    this.resultCustomer.fullName = this.resultCustomer.firstName + ' ' + this.resultCustomer.lastName;
+    if(data != null){
+      this.resultCustomer = data;
 
-    let benificiary = new Beneficiarys();
-    benificiary.name = this.resultCustomer.fullName;
-    benificiary.account = this.paymentTransaction.beneficiaryAccount;
-    benificiary.bankName = environment.BANK_NAME;
-    let savedBenificiary = this.benificiary.find(x => x.account == benificiary.account);
-    if(savedBenificiary == null){
-      this.benificiaryService.insert(benificiary).pipe(untilDestroyed(this))
-      .subscribe(
-        (response: any) => {
-          this.selectedBenificiary = benificiary;
-        }
-      );
+      let benificiary = new Beneficiarys();
+      benificiary.name = this.resultCustomer.firstName + ' ' + this.resultCustomer.lastName;
+      benificiary.account = this.paymentTransaction.beneficiaryAccount;
+      benificiary.bankName = environment.BANK_NAME;
+      let savedBenificiary = this.benificiary.find(x => x.account == benificiary.account);
+      if(savedBenificiary == null){
+        this.benificiaryService.insert(benificiary).pipe(untilDestroyed(this))
+        .subscribe(
+          (response: any) => {
+            this.selectedBenificiary = benificiary;
+          }
+        );
+      }
+      this.selectedBenificiary = benificiary;
     }
-    this.selectedBenificiary = benificiary;
+    else{
+      this.selectedBenificiary = new Beneficiarys();
+    }
+    
   }
 
   onSubmit() {
     debugger;
-    this.paymentTransaction.money = Number(this.paymentTransaction.money) * 1000;
-
+    this.loading = true;
     this.paymentTransactionService.internalPayment(this.paymentTransaction, this.selectedBenificiary)
     .pipe(untilDestroyed(this))
     .subscribe(
       (response: any) => {
+        this.loading = false;
         this.dialogService.open(DialogOTPPromptComponent, { 
           context: {
             paymentInfor: response
           } 
-        }).onClose.subscribe((content: string ) => {});
+        }).onClose.subscribe((code: string ) => {
+          if(code){
+            this.finished = true;
+            this.notifier.show({
+              type: "success",
+              message: "Chuyển tiền thành công!",
+              id: "verify-success" // Again, this is optional
+            });
+          }
+        });
       },
       (error: HttpErrorResponse) => {
 
       }
     );
+  }
+
+  goHome() {
+    this.router.navigate(['customer/accounts']);
   }
 
   ngOnDestroy() {

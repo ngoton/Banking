@@ -1,5 +1,5 @@
 <div>
-    <input nbInput [value]="keywork" (input)="keywork = $event.target.value" (change)="keyworkChanged($event)" name="keywork"
+    <input [disabled]="disabled===true" nbInput [value]="keywork" (input)="keywork = $event.target.value" (change)="keyworkChanged($event)" name="keywork"
         [placeholder]="placeholder"
         class="form-control">
     <nb-card *ngIf="showResult" (click)="selectResult()" class="result">
