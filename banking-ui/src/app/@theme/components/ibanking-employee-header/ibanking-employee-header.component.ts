@@ -68,9 +68,9 @@ export class IBankingEmployeeHeaderComponent implements OnInit, OnDestroy {
     //   .subscribe((users: any) => this.user = users.nick);
 
     this.user = JSON.parse(localStorage.getItem('userDetails'));
-    if(!this.user.avatar) {
-      this.user.avatar = 'assets/images/placeholder.png';
-    }
+    // if(!this.user.avatar) {
+    //   this.user.avatar = 'assets/images/placeholder.png';
+    // }
 
     // this.employeeService.acctDetail$
     //   .pipe(takeUntil(this.destroy$))
