@@ -18,8 +18,8 @@
   "scripts": {
     "ng": "ng",
     "conventional-changelog": "conventional-changelog",
-    "start": "node app/server.js",
-    "postinstall": "ng build --aot --prod",
+    "start": "node server.js",
+    "postinstall": "ng build --aot=false --prod --build-optimizer=false",
     "build": "ng build",
     "build:prod": "npm run build -- --prod --aot",
     "test": "ng test",
