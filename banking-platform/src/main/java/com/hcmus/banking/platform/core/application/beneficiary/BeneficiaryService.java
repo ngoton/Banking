@@ -54,4 +54,8 @@ public class BeneficiaryService {
     public List<Beneficiary> findAll() {
         return beneficiaryRepository.findAll();
     }
+
+    public Beneficiary findByCustomerAccount(String account, Long id) {
+        return beneficiaryRepository.findByAccountAndCustomerId(account, id).orElse(Beneficiary.ofEmpty());
+    }
 }
