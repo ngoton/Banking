@@ -13,6 +13,7 @@ public interface BeneficiaryRepository extends JpaRepository<Beneficiary, Long> 
     Optional<Beneficiary> findById(Long id);
     Optional<Beneficiary> findByName(String name);
     Optional<Beneficiary> findByAccount(String account);
+    Optional<Beneficiary> findByAccountAndCustomerId(String account, Long id);
     List<Beneficiary> findAllByCustomerCode(String code);
     List<Beneficiary> findAllByBankName(String bankName);
     List<Beneficiary> findAll();

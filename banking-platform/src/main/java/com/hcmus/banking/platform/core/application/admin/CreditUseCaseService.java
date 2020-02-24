@@ -89,6 +89,7 @@ public class CreditUseCaseService {
         creditService.delete(credit);
     }
 
+    @Transactional(readOnly = true)
     public Page<Credit> findPending(Pageable pageable) {
         return creditService.findPending(pageable);
     }
