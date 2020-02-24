@@ -43,14 +43,14 @@ public class CreditController {
     }
 
     @GetMapping("/customerCode/{code}")
-    public List<CreditResponse> findByCustomerCode(@PathVariable String code){
-        List<Credit> credits = creditService.findAllByCustomerCode(code);
-        return CreditResponses.ofList(credits);
+    public Page<CreditResponse> findByCustomerCode(@PathVariable String code, Pageable pageable){
+        Page<Credit> credits = creditService.findAllByCustomerCode(code, pageable);
+        return CreditResponses.ofPage(credits, pageable);
     }
     @GetMapping("/customerId/{id}")
-    public List<CreditResponse> findByCustomerCode(@PathVariable Long id){
-        List<Credit> credits = creditService.findAllByCustomerId(id);
-        return CreditResponses.ofList(credits);
+    public Page<CreditResponse> findByCustomerCode(@PathVariable Long id, Pageable pageable){
+        Page<Credit> credits = creditService.findAllByCustomerId(id, pageable);
+        return CreditResponses.ofPage(credits, pageable);
     }
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

@@ -13,6 +13,7 @@ public class DebitResponse {
     public String content;
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     public LocalDateTime createdAt;
+    public String status;
 
     public DebitResponse(Debit debit) {
         this.id = debit.getId();
@@ -20,5 +21,6 @@ public class DebitResponse {
         this.money = debit.getMoney();
         this.content = debit.getContent();
         this.createdAt = debit.getCreated().getCreatedAt().getValue();
+        this.status = debit.isPaid() ? "Paid" : "Waiting" ;
     }
 }

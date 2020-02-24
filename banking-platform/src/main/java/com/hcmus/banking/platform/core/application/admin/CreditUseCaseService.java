@@ -37,8 +37,8 @@ public class CreditUseCaseService {
     }
 
     @Transactional(readOnly = true)
-    public List<Credit> findAllByCustomerCode(String code) {
-        List<Credit> credits = creditService.findAllByCustomerCode(code);
+    public Page<Credit> findAllByCustomerCode(String code, Pageable pageable) {
+        Page<Credit> credits = creditService.findAllByCustomerCode(code, pageable);
         return credits;
     }
 
@@ -52,8 +52,8 @@ public class CreditUseCaseService {
     }
 
     @Transactional(readOnly = true)
-    public List<Credit> findAllByCustomerId(Long id) {
-        List<Credit> credits = creditService.findAllByCustomerId(id);
+    public Page<Credit> findAllByCustomerId(Long id, Pageable pageable) {
+        Page<Credit> credits = creditService.findAllByCustomerId(id, pageable);
         return credits;
     }
 

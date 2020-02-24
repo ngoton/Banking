@@ -36,14 +36,14 @@ public class DebitController {
         return new DebitResponse(debit);
     }
     @GetMapping("/customerCode/{code}")
-    public List<DebitResponse> findByCustomerCode(@PathVariable String code){
-        List<Debit> debits = debitService.findAllByCustomerCode(code);
-        return DebitResponses.ofList(debits);
+    public Page<DebitResponse> findByCustomerCode(@PathVariable String code, Pageable pageable){
+        Page<Debit> debits = debitService.findAllByCustomerCode(code, pageable);
+        return DebitResponses.ofPage(debits, pageable);
     }
     @GetMapping("/customerId/{id}")
-    public List<DebitResponse> findByCustomerCode(@PathVariable Long id){
-        List<Debit> debits = debitService.findAllByCustomerId(id);
-        return DebitResponses.ofList(debits);
+    public Page<DebitResponse> findByCustomerCode(@PathVariable Long id, Pageable pageable){
+        Page<Debit> debits = debitService.findAllByCustomerId(id, pageable);
+        return DebitResponses.ofPage(debits, pageable);
     }
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
