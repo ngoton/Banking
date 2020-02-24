@@ -65,7 +65,7 @@ export class InterceptorService implements HttpInterceptor {
               return Observable.throw("Phương thức yêu cầu không hợp lệ!");
         }
 
-        return Observable.throwError(response);
+        return Observable.throwError(response.error.message);
       })
     );
   }
