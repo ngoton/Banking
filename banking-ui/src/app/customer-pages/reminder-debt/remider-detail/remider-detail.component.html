@@ -1,12 +1,14 @@
-<nb-card>
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="primary">
     <nb-card-header>Tạo mới nhắc nợ</nb-card-header>
     <nb-card-body>
-      <form>
+      <form (ngSubmit)="sendDebit()">
         <div class="form-group row">
           <label for="inputAccount" class="label col-sm-3 col-form-label">Thông tin người nợ</label>
           <div class="col-sm-3">
-            <input nbInput fullWidth id="inputAccount" placeholder="Số tài khoản người nợ">
+            <!-- <input nbInput fullWidth id="inputAccount" placeholder="Số tài khoản người nợ"> -->
+            <ngx-auto-complete [placeholder]="'Số tài khoản người nợ'" [(loading)]="loading" [(keywork)]="debitData.account" [(valueshow)]="customerInfo.fullName" [(response)]="customerInfo" [dataSource]="source" (callBackFunc)="callBack($event)"></ngx-auto-complete>
           </div>
+          <label class="label col-sm-3 col-form-label"><span>{{customerInfo.fullName}}</span></label>
         </div>
         <div class="form-group row">
             <div class="offset-sm-3 col-sm-3 text-center">
@@ -15,32 +17,29 @@
           </div>
         <div class="form-group row">
           <div class="offset-sm-3 col-sm-3">
-            <nb-select fullWidth placeholder="Chọn người nợ">
-              <nb-option value="1">Nguyễn Văn A</nb-option>
-              <nb-option value="2">Nguyễn Văn B</nb-option>
-              <nb-option value="3">Nguyễn Văn C</nb-option>
-              <nb-option value="4">Nguyễn Văn D</nb-option>
+            <nb-select [(ngModel)]="debitData.account" name="account" fullWidth placeholder="Chọn người nợ" [disabled]="customerInfo.fullName!=''">
+              <nb-option *ngFor="let item of debits" [value]="item.account" (selectionChange)="accountChange(item)">{{item.account}}</nb-option>
             </nb-select>
           </div>
         </div>
         <div class="form-group row">
           <label for="inputMoney" class="label col-sm-3 col-form-label">Số tiền chuyển</label>
           <div class="col-sm-3">
-            <input nbInput id="inputMoney" currencyMask [options]="{ prefix: '', thousands: ',', decimal: '.', precision: '3', allowNegative: false }"
-                      id="airtimeamount" class="form-control form-primary form-control-lg form-control-right border-left-0 border-right-0 border-top-0"
-                      placeholder="0.000" formControlName="airtimeamount" [matAutocomplete]="auto">
-            <mat-autocomplete #auto="matAutocomplete">
+            <input nbInput currencyMask [(ngModel)]="debitData.money" name="money" [options]="{ prefix: '', thousands: ',', decimal: '.', precision: '0', allowNegative: false }"
+                      class="form-control form-primary form-control-lg form-control-right border-left-0 border-right-0 border-top-0"
+                      placeholder="0.000">
+            <!-- <mat-autocomplete #auto="matAutocomplete">
               <mat-option *ngFor="let option of keypadNumbers" [value]="option">
                 {{ option }}
               </mat-option>
             </mat-autocomplete>
-            <span class="form-bar"></span>
+            <span class="form-bar"></span> -->
           </div>
         </div>
         <div class="form-group row">
           <label for="inputContent" class="label col-sm-3 col-form-label">Nội dung</label>
           <div class="col-sm-6">
-            <input nbInput fullWidth id="inputContent" placeholder="Nội dung nhắc nợ">
+            <input nbInput [(ngModel)]="debitData.content" name="content" fullWidth id="inputContent" placeholder="Nội dung nhắc nợ">
           </div>
         </div>
         <div class="form-group row">

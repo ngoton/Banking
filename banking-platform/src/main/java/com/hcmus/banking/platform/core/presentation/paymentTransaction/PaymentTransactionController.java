@@ -118,7 +118,7 @@ public class PaymentTransactionController {
     @PostMapping("/payment")
     public PaymentResponse payment(@Valid @RequestBody PaymentTransactionRequest paymentTransactionRequest, @ModelAttribute("user") User user) {
         Customer customer = customerService.findByUserId(user.getId());
-        Beneficiary beneficiary = beneficiaryService.findByAccount(paymentTransactionRequest.beneficiaryAccount);
+        Beneficiary beneficiary = beneficiaryService.findByCustomerAccount(paymentTransactionRequest.beneficiaryAccount, customer.getId());
         Payment payment = paymentService.findById(paymentTransactionRequest.paymentId);
         if (beneficiary.isEmpty()) {
             Beneficiary newBeneficiary = new Beneficiary(paymentTransactionRequest.name, paymentTransactionRequest.shortName, paymentTransactionRequest.beneficiaryAccount, paymentTransactionRequest.bankName, customer, Created.ofEmpty());
@@ -143,7 +143,7 @@ public class PaymentTransactionController {
     @PostMapping("/payment/external")
     public PaymentResponse externalPayment(@Valid @RequestBody PaymentTransactionRequest paymentTransactionRequest, @ModelAttribute("user") User user) {
         Customer customer = customerService.findByUserId(user.getId());
-        Beneficiary beneficiary = beneficiaryService.findByAccount(paymentTransactionRequest.beneficiaryAccount);
+        Beneficiary beneficiary = beneficiaryService.findByCustomerAccount(paymentTransactionRequest.beneficiaryAccount, customer.getId());
         Payment payment = paymentService.findById(paymentTransactionRequest.paymentId);
         if (beneficiary.isEmpty()) {
             Beneficiary newBeneficiary = new Beneficiary(paymentTransactionRequest.name, paymentTransactionRequest.shortName, paymentTransactionRequest.beneficiaryAccount, paymentTransactionRequest.bankName, customer, Created.ofEmpty());
@@ -164,7 +164,7 @@ public class PaymentTransactionController {
             throw new BankingServiceException("PaymentId or beneficiaryId is empty!!!");
         }
 
-        paymentTransactionService.paymentVerify(paymentRequest.toPaymentTransaction(paymentRequest, beneficiary, payment), paymentRequest.fee, user.getEmail(), paymentRequest.code);
+        paymentTransactionService.paymentVerify(paymentRequest.toPaymentTransaction(paymentRequest, beneficiary, payment), paymentRequest.fee, user.getEmail(), paymentRequest.code, paymentRequest.asDebit());
 
     }
 
