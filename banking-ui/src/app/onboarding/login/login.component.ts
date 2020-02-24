@@ -33,7 +33,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
   user: User;
   logindata: LoginData;
-  loading: boolean;
   submitted: boolean;
   rememberMe: boolean;
   loginError: string;
@@ -84,7 +83,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       const userName = this.util.encrypt(formdata.Username);
       localStorage.setItem("userName", userName);
     }
-    this.loading = true;
     this.notifi.hide("loginError"); // remove login notification
     // this.notifications.html(
     //   `Logging in... <i class="fas fa-spin fa-circle-notch ml-3"></i>`,
@@ -115,12 +113,12 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.logging = false;
         },
         (err: HttpErrorResponse) => {
+          this.logging = false;
           this.notifi.hide("login"); // remove login notification
           this.errorAlert(err.message === undefined ? "Đăng nhập thất bại!" : err);
           console.log(err);
         }
       );
-    this.loading = false;
   }
 
   // User Authentication
