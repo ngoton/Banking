@@ -22,7 +22,7 @@
       <div class="form-group row">
         <div class="offset-sm-3 col-sm-9">
           <label class="label col-form-label"><span style="padding-right: 5px;">hoặc</span></label>
-          <nb-select [disabled]="finished===true" placeholder="Chọn người thụ hưởng" [disabled]="paymentTransaction.beneficiaryAccount!=null&&paymentTransaction.beneficiaryAccount!==''">
+          <nb-select placeholder="Chọn người thụ hưởng" [disabled]="(paymentTransaction.beneficiaryAccount!=null&&paymentTransaction.beneficiaryAccount!=='')||finished===true">
             <nb-option *ngFor="let item of benificiary" [value]="item.account" (selectionChange)="benificiaryChange(item)">{{item.account}}</nb-option>
           </nb-select>
         </div>

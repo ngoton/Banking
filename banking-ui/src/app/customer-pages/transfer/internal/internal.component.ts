@@ -57,7 +57,6 @@ export class InternalComponent implements OnInit, OnDestroy {
   }
 
   paymentChange(item: Payment){
-    debugger;
     this.paymentTransaction.paymentsId = item.paymentId;
   }
 
@@ -73,14 +72,12 @@ export class InternalComponent implements OnInit, OnDestroy {
     this.customerService.beneficiaries$.pipe(untilDestroyed(this))
     .subscribe(
       (benificiaries: Beneficiarys[]) => {
-        debugger;
         this.benificiary = benificiaries.filter(b => b.bankName == environment.BANK_NAME);
       }
     );
   }
 
   callBack(data: any): void {
-    debugger;
     if(data != null){
       this.resultCustomer = data;
 
@@ -106,7 +103,6 @@ export class InternalComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    debugger;
     this.loading = true;
     this.paymentTransactionService.internalPayment(this.paymentTransaction, this.selectedBenificiary)
     .pipe(untilDestroyed(this))
