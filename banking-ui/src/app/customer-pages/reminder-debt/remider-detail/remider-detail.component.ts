@@ -26,7 +26,7 @@ export class RemiderDetailComponent implements OnInit, OnDestroy {
               private debitService: DebitService) {
                 debugger;
                 this.source = environment.BASE_URL + environment.CUST_SERV + '/payment'; 
-                this.customerService.getDebitsData();
+                //this.customerService.getDebitsData();
 
                 setTimeout(()=>{
                   this.customerService.debits$

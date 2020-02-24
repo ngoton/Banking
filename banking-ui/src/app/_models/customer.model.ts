@@ -22,7 +22,7 @@ export class Customers {
         this.code = obj && obj.code || null;
         this.firstName = obj && obj.firstName || "";
         this.lastName = obj && obj.lastName || "";
-        this.fullName = obj && obj.fullName || "";
+        this.fullName = obj && obj.firstName + " " + obj.lastName || "";
         this.birthDate = obj && obj.birthDate || null;
         this.gender = obj && obj.gender || null;
         this.phone = obj && obj.phone || null;
