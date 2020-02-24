@@ -9,7 +9,9 @@ import {
   Banks,
   Customers,
   Payment,
-  Savings
+  Savings,
+  Debits,
+  Credits
 } from '../_models/customer.model';
 import { Router } from '@angular/router';
 import { UserService } from './user.service';
@@ -18,6 +20,7 @@ import { AuthService } from './auth.service';
 import { PaymentService } from './payment.service';
 import { SavingService } from './saving.service';
 import { BenificiaryService } from './benificiary.service';
+import { DebitService } from './debit.service';
 
 @Injectable({
   providedIn: 'root',
@@ -34,17 +37,17 @@ export class CustomerService implements OnDestroy {
   acctDetailError$ = this.acctDetailErrorSource.asObservable();
   // End Observable string streams: Account Details
 
-  // Observable string sources: user
+  // Observable string sources: payments
   private paymentsSource = new BehaviorSubject<any>(null);
   private paymentsErrorSource = new BehaviorSubject<any>(null);
-  // Observable string streams: user
+  // Observable string streams: payments
   payments$ = this.paymentsSource.asObservable();
   paymentError$ = this.paymentsErrorSource.asObservable();
 
-  // Observable string sources: user
+  // Observable string sources: savings
   private savingsSource = new BehaviorSubject<any>(null);
   private savingsErrorSource = new BehaviorSubject<any>(null);
-  // Observable string streams: user
+  // Observable string streams: savings
   savings$ = this.savingsSource.asObservable();
   savingsError$ = this.savingsErrorSource.asObservable();
 
@@ -56,6 +59,20 @@ export class CustomerService implements OnDestroy {
   private beneficiariesError = new BehaviorSubject<string>('Empty');
   beneficiariesError$ = this.beneficiariesError.asObservable();
   // Observable string sources: Pre registered Beneficiaries
+
+  // Observable string sources: debit
+  private debits = new BehaviorSubject<Debits[]>(null);
+  private debitsError = new BehaviorSubject<any>(null);
+  // Observable string streams: debit
+  debits$ = this.debits.asObservable();
+  debitsError$ = this.debitsError.asObservable();
+
+  // Observable string sources: credit
+  private credits = new BehaviorSubject<Credits[]>(null);
+  private creditsError = new BehaviorSubject<any>(null);
+  // Observable string streams: credit
+  credits$ = this.credits.asObservable();
+  creditsError$ = this.creditsError.asObservable();
 
   // Observable string sources: Banks
   private banks = new BehaviorSubject<Banks[]>(null);
@@ -80,7 +97,8 @@ export class CustomerService implements OnDestroy {
     private userService: UserService,
     private paymentService: PaymentService,
     private savingService: SavingService,
-    private benificiaryService: BenificiaryService
+    private benificiaryService: BenificiaryService,
+    private debitService: DebitService
   ) { }
 
   // Http Headers
@@ -108,6 +126,14 @@ export class CustomerService implements OnDestroy {
     else{
       this.router.navigate(['/onboarding/login']);
     }
+  }
+
+  getByPaymentAccount(account): Observable<any> {
+    const PATH = this.CUST_URL + `/payment/${account}`;
+
+    return this.http.get<any>(PATH).pipe(
+      retry(3)
+    );
   }
 
   findCustomerByAccount(account) {
@@ -225,6 +251,31 @@ export class CustomerService implements OnDestroy {
 
   updateBeneficiariesError(message) {
     this.beneficiariesError.next(message);
+  }
+
+  public getDebitsData() {
+    this.getCustomerData().pipe(untilDestroyed(this)).subscribe(
+      (customerResponse: any) => {
+        this.debitService.getByCustomerId(customerResponse.customerId)
+        .pipe(untilDestroyed(this))
+        .subscribe(
+          (debits: Debits[]) => {
+            this.updateDebit(debits);
+          },
+          (err: HttpErrorResponse)=> {
+            
+          }
+        );
+      }
+    );
+  }
+
+  updateDebit(debits) {
+    this.debits.next(debits);
+  }
+
+  updateDebitError(error) {
+    this.debitsError.next(error);
   }
 
   ngOnDestroy(): void {
