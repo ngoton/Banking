@@ -14,8 +14,8 @@ public interface DebitRepository extends JpaRepository<Debit, Long> {
     Page<Debit> findAllBy(Pageable pageable);
     Optional<Debit> findById(Long id);
     Optional<Debit> findByAccount(String account);
-    List<Debit> findAllByCustomerCode(String code);
-    List<Debit> findAllByCustomerId(Long id);
+    Page<Debit> findAllByCustomerCode(String code, Pageable pageable);
+    Page<Debit> findAllByCustomerId(Long id, Pageable pageable);
     Debit save(Debit debit);
     void delete(Debit debit);
 }

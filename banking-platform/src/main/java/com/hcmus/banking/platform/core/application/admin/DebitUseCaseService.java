@@ -42,8 +42,8 @@ public class DebitUseCaseService {
     }
 
     @Transactional(readOnly = true)
-    public List<Debit> findAllByCustomerCode(String code) {
-        List<Debit> debits = debitService.findAllByCustomerCode(code);
+    public Page<Debit> findAllByCustomerCode(String code, Pageable pageable) {
+        Page<Debit> debits = debitService.findAllByCustomerCode(code, pageable);
         return debits;
     }
 
@@ -57,8 +57,8 @@ public class DebitUseCaseService {
     }
 
     @Transactional(readOnly = true)
-    public List<Debit> findAllByCustomerId(Long id) {
-        List<Debit> debits = debitService.findAllByCustomerId(id);
+    public Page<Debit> findAllByCustomerId(Long id, Pageable pageable) {
+        Page<Debit> debits = debitService.findAllByCustomerId(id, pageable);
         return debits;
     }
 

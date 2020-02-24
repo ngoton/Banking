@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 
 @Entity
@@ -67,6 +68,6 @@ public class Credit extends IDEntity {
     }
 
     public boolean isPaid() {
-        return status.equals(1);
+        return Objects.nonNull(status) && status.equals(1);
     }
 }
