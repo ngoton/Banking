@@ -20,6 +20,10 @@ public interface SavingTransactionRepository extends JpaRepository<SavingTransac
 
     Page<SavingTransaction> findAllBySavingIdAndMoneyLessThan(Long id, BigDecimal money, Pageable pageable);
 
+    Page<SavingTransaction> findAllBySavingCustomerIdAndMoneyLessThan(Long id, BigDecimal money, Pageable pageable);
+
+    Page<SavingTransaction> findAllBySavingCustomerIdAndMoneyGreaterThan(Long id, BigDecimal money, Pageable pageable);
+
     SavingTransaction save(SavingTransaction saving);
 
     void delete(SavingTransaction saving);

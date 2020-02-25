@@ -36,5 +36,9 @@ public interface PaymentTransactionRepository extends JpaRepository<PaymentTrans
 
     Page<PaymentTransaction> findAllByPaymentIdAndMoneyGreaterThan(Long paymentId, BigDecimal decimal, Pageable pageable);
 
+    Page<PaymentTransaction> findAllByPaymentCustomerIdAndMoneyGreaterThan(Long id, BigDecimal decimal, Pageable pageable);
+
+    Page<PaymentTransaction> findAllByPaymentCustomerIdAndMoneyLessThan(Long id, BigDecimal decimal, Pageable pageable);
+
     Page<PaymentTransaction> findAllByCreditPaymentTransactionIsNotNullAndCreditCustomerId(Long id, Pageable pageable);
 }
