@@ -32,6 +32,17 @@ public class SavingTransactionController {
         return SavingTransactionResponses.ofPage(savingTransactions, pageable);
     }
 
+    @GetMapping("/savingTransfer/saving/{id}")
+    public Page<SavingTransactionResponse> findAllBySavingIdAnAndMoneyGreaterThan(@PathVariable Long id, Pageable pageable){
+        Page<SavingTransaction> savingTransactions = savingTransactionService.findAllBySavingIdAnAndMoneyGreaterThan(id,pageable);
+        return SavingTransactionResponses.ofPage(savingTransactions, pageable);
+    }
+    @GetMapping("/savingReceive/saving/{id}")
+    public Page<SavingTransactionResponse> findAllBySavingIdAnAndMoneyLessThan(@PathVariable Long id, Pageable pageable){
+        Page<SavingTransaction> savingTransactions = savingTransactionService.findAllBySavingIdAnAndMoneyLessThan(id,pageable);
+        return SavingTransactionResponses.ofPage(savingTransactions, pageable);
+    }
+
     @GetMapping("/{id}")
     public SavingTransactionResponse findBy(@PathVariable Long id){
         SavingTransaction savingTransaction  = savingTransactionService.findById(id);

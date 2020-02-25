@@ -56,4 +56,20 @@ public class SavingTransactionUseCaseService {
         }
         return savingTransactionService.findAllBySavingId(id, pageable);
     }
+    @Transactional(readOnly = true)
+    public Page<SavingTransaction> findAllBySavingIdAnAndMoneyGreaterThan(Long id, Pageable pageable) {
+        Saving saving = savingService.findById(id);
+        if (saving.isEmpty()) {
+            throw new BankingServiceException("Saving does not exist!!!");
+        }
+        return savingTransactionService.findAllBySavingIdAndMoneyGreaterThan(id, pageable);
+    }
+    @Transactional(readOnly = true)
+    public Page<SavingTransaction> findAllBySavingIdAnAndMoneyLessThan(Long id, Pageable pageable) {
+        Saving saving = savingService.findById(id);
+        if (saving.isEmpty()) {
+            throw new BankingServiceException("Saving does not exist!!!");
+        }
+        return savingTransactionService.findAllBySavingIdAndMoneyLessThan(id, pageable);
+    }
 }
