@@ -33,6 +33,7 @@ export class RemiderDetailComponent implements OnInit, OnDestroy {
                   .pipe(untilDestroyed(this))
                   .subscribe(
                     (debits: Debits[]) => {
+                      this.loading = false;
                       this.debits = debits;
                     }
                   );
@@ -47,7 +48,6 @@ export class RemiderDetailComponent implements OnInit, OnDestroy {
   }
 
   callBack(data: any): void {
-    debugger;
     if(data != null){
       this.customerInfo = data;
       this.customerInfo.fullName = this.customerInfo.firstName + " " + this.customerInfo.lastName;
@@ -59,7 +59,6 @@ export class RemiderDetailComponent implements OnInit, OnDestroy {
   }
 
   sendDebit() {
-    debugger;
     this.loading = true;
     this.debitService.add(this.debitData).pipe(untilDestroyed(this))
     .subscribe(

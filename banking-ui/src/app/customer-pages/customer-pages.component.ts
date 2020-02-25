@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { MENU_ITEMS } from './customer-pages-menu';
+import { CustomerService } from '../_services/customer.service';
 
 @Component({
   selector: 'ngx-customer-pages',
@@ -15,4 +16,8 @@ import { MENU_ITEMS } from './customer-pages-menu';
 export class CustomerPagesComponent {
 
   menu = MENU_ITEMS;
+
+  constructor (private customerService: CustomerService){
+      
+  }
 }

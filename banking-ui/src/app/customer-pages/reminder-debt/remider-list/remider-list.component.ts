@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 
 import { LocalDataSource } from 'ng2-smart-table';
 import { NbDialogService } from '@nebular/theme';
@@ -6,6 +6,7 @@ import { CustomerService } from '../../../_services/customer.service';
 import { Customers, Debits, Payment, Credits } from '../../../_models/customer.model';
 import { DialogDimissPromptComponent } from '../dialog-dimiss-prompt/dialog-dimiss-prompt.component';
 import { untilDestroyed } from 'ngx-take-until-destroy';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'ngx-remider-list',
@@ -13,11 +14,13 @@ import { untilDestroyed } from 'ngx-take-until-destroy';
   styleUrls: ['./remider-list.component.scss']
 })
 export class RemiderListComponent implements OnInit, OnDestroy {
+  loadingList: boolean = false;
+
   customer: Customers = new Customers();
   payment: Payment = new Payment();
   debits: Debits[] = new Array();
   credits: Credits[] = new Array();
-  debitsData: any[] = new Array();
+  debitsData: debitData[] = new Array();
 
   settings = {
     add: {
@@ -60,6 +63,23 @@ export class RemiderListComponent implements OnInit, OnDestroy {
         type: 'string',
       }
     },
+    actions: {
+      columnTitle: 'Thao tác',
+      add: false,
+      edit: false,
+      delete: true,
+      custom: [
+        { name: 'payment', title: '<i class="nb-checkmark"></i>'}
+      ]
+    //   custom: [
+    //   { name: 'viewrecord', title: '<i class="fa fa-eye"></i>'},
+    //   { name: 'editrecord', title: '&nbsp;&nbsp;<i class="fa  fa-pencil"></i>' }
+    // ],
+    //   position: 'right'
+    },
+    attr: {
+      class: 'table table-bordered'
+    },
     hideSubHeader: true
   };
 
@@ -68,16 +88,6 @@ export class RemiderListComponent implements OnInit, OnDestroy {
   content_dimiss: string;
 
   constructor(private customerService: CustomerService, private dialogService: NbDialogService) {
-    setTimeout(()=>{
-      this.customerService.acctDetail$
-      .pipe(untilDestroyed(this))
-      .subscribe(
-        (customer: Customers) => {
-          debugger;
-          this.customer = new Customers(customer);
-        }
-      );
-    }, 1000);
 
     // const data = [
     //   {
@@ -106,6 +116,28 @@ export class RemiderListComponent implements OnInit, OnDestroy {
     //   }
     // ];
     // this.source.load(data);
+    this.customerService.acctDetail$
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        (customer: Customers) => {
+          this.customer = new Customers(customer);
+          this.getPayment();
+          this.getDebits();
+          this.getCredits();
+        }
+      );
+  }
+
+  onCustomAction(event) {
+    switch ( event.action) {
+      case 'payment':
+        this.paymentCredit(event.data);
+        break;
+    }
+  }
+
+  paymentCredit(data) {
+
   }
 
   getPayment() {
@@ -126,7 +158,7 @@ export class RemiderListComponent implements OnInit, OnDestroy {
           this.debits = debits;
           if(debits != null && debits.length != 0){
             debits.forEach(element => {
-              let debit = {
+              let debit: debitData = {
                 id: element.id,
                 name_reminder: this.customer.fullName,
                 account_reminder: this.payment.account,
@@ -136,12 +168,22 @@ export class RemiderListComponent implements OnInit, OnDestroy {
                 status: element.status,
                 type: 'debit'
               }
-  
+              
+              // const existsDebit = this.debitsData.find(x => x.id == debit.id);
+              // if(existsDebit === null){
+              //   this.debitsData.push(debit);
+              // }
+
+              this.debitsData.splice(this.debitsData.indexOf(debit), 1);
               this.debitsData.push(debit);
             });
 
+            this.loadingList = false;
             this.source.load(this.debitsData);
           }
+        },
+        (err: any) => {
+          this.loadingList = false;
         }
       );
   }
@@ -160,7 +202,7 @@ export class RemiderListComponent implements OnInit, OnDestroy {
                 (customerCredit: Customers) => {
                   customerCredit = new Customers(customerCredit);
   
-                  let credits = {
+                  let credits: debitData = {
                     id: element.id,
                     name_reminder: customerCredit.fullName,
                     account_reminder: element.account,
@@ -170,11 +212,17 @@ export class RemiderListComponent implements OnInit, OnDestroy {
                     status: element.status,
                     type: 'credit'
                   }
-      
+                  
+                  this.debitsData.splice(this.debitsData.indexOf(credits), 1);
                   this.debitsData.push(credits);
+                },
+                (err: any) => {
+                  this.loadingList = false;
                 }
               );
             });
+
+            this.loadingList = false;
             this.source.load(this.debitsData);
           }
         }
@@ -182,7 +230,6 @@ export class RemiderListComponent implements OnInit, OnDestroy {
   }
 
   onDeleteConfirm(event): void {
-    debugger;
     this.dialogService.open(DialogDimissPromptComponent, { 
       context: {
         creditId: event.data.type === 'credit' ? event.data.id : null,
@@ -198,9 +245,7 @@ export class RemiderListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.getPayment();
-    this.getDebits();
-    this.getCredits();
+    //this.loadingList = true;
 
     //this.source.load(this.debitsData);
   }
@@ -209,4 +254,15 @@ export class RemiderListComponent implements OnInit, OnDestroy {
 
   }
 
+}
+
+export interface debitData {
+  id: number,
+  name_reminder: string,
+  account_reminder: string,
+  account: string,
+  money: number,
+  content: string,
+  status: string,
+  type: string
 }
