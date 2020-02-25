@@ -45,6 +45,10 @@ public class DebitController {
         Page<Debit> debits = debitService.findAllByCustomerId(id, pageable);
         return DebitResponses.ofPage(debits, pageable);
     }
+    @PostMapping("/cancel")
+    public void cancel(@Valid @RequestBody CancelRequest cancelRequest){
+        debitService.cancel(cancelRequest.debitId, cancelRequest.content);
+    }
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void create(@Valid @RequestBody DebitRequest debitRequest, @ModelAttribute("user") User user){

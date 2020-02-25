@@ -4,6 +4,7 @@ import com.hcmus.banking.platform.core.application.credit.CreditService;
 import com.hcmus.banking.platform.core.application.debit.DebitService;
 import com.hcmus.banking.platform.core.application.notification.NotificationService;
 import com.hcmus.banking.platform.domain.credit.Credit;
+import com.hcmus.banking.platform.domain.debit.Debit;
 import com.hcmus.banking.platform.domain.exception.BankingServiceException;
 import com.hcmus.banking.platform.domain.notification.Notification;
 import lombok.RequiredArgsConstructor;
@@ -92,5 +93,27 @@ public class CreditUseCaseService {
     @Transactional(readOnly = true)
     public Page<Credit> findPending(Pageable pageable) {
         return creditService.findPending(pageable);
+    }
+
+    @Transactional
+    public void cancel(Long id, String content) {
+        Credit credit = creditService.findById(id);
+        if (credit.isEmpty()) {
+            throw new BankingServiceException("Credit not found");
+        }
+
+        Notification notification = new Notification(
+                String.format("%s %s", credit.getCustomer().getInfo().getFirstName(), credit.getCustomer().getInfo().getLastName()),
+                String.format("[%s] %s", credit.getContent(), content),
+                LocalDateTime.now()
+        );
+        notificationService.notify(notification, credit.getDebit().getCustomer().getInfo().getUser().getUsername());
+
+        Debit debit = credit.getDebit();
+        debit.setStatus(2);
+        debitService.create(debit);
+
+        credit.setStatus(2);
+        creditService.create(credit);
     }
 }

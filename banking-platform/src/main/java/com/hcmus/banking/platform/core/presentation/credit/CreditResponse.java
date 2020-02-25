@@ -21,6 +21,6 @@ public class CreditResponse {
         this.money = credit.getMoney();
         this.content = credit.getContent();
         this.createdAt = credit.getCreated().getCreatedAt().getValue();
-        this.status = credit.isPaid() ? "Paid" : "Waiting" ;
+        this.status = credit.isPaid() ? "Paid" : (credit.isCanceled() ? "Canceled" : "Waiting") ;
     }
 }
