@@ -40,6 +40,10 @@ public class SavingTransactionUseCaseService {
     public void create(SavingTransaction savingTransaction) {
         savingTransaction.setCode(RandomUtils.generateTransactionCode());
         savingTransactionService.create(savingTransaction);
+
+        Saving saving = savingTransaction.getSaving();
+        saving.setBalance(saving.getBalance().add(savingTransaction.getMoney()));
+        savingService.create(saving);
     }
 
     @Transactional
