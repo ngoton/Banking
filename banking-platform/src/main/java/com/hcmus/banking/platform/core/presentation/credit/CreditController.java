@@ -89,6 +89,11 @@ public class CreditController {
         return new PaymentResponse(paymentTransactionService.payment(paymentTransaction, user), creditPaymentRequest.fee, credit.getDebit());
     }
 
+    @PostMapping("/cancel")
+    public void cancel(@Valid @RequestBody CancelRequest cancelRequest){
+        creditService.cancel(cancelRequest.creditId, cancelRequest.content);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void create(@Valid @RequestBody CreditRequest creditRequest, @ModelAttribute("user") User user){

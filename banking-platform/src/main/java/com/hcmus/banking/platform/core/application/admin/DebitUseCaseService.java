@@ -120,4 +120,26 @@ public class DebitUseCaseService {
         creditService.delete(debit.getCredit());
         debitService.delete(debit);
     }
+
+    @Transactional
+    public void cancel(Long id, String content) {
+        Debit debit = debitService.findById(id);
+        if (debit.isEmpty()) {
+            throw new BankingServiceException("Debit not found");
+        }
+
+        Notification notification = new Notification(
+                String.format("%s %s", debit.getCustomer().getInfo().getFirstName(), debit.getCustomer().getInfo().getLastName()),
+                String.format("[%s] %s", debit.getContent(), content),
+                LocalDateTime.now()
+        );
+        notificationService.notify(notification, debit.getCredit().getCustomer().getInfo().getUser().getUsername());
+
+        Credit credit = debit.getCredit();
+        credit.setStatus(2);
+        creditService.create(credit);
+
+        debit.setStatus(2);
+        debitService.create(debit);
+    }
 }

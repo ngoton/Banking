@@ -21,6 +21,6 @@ public class DebitResponse {
         this.money = debit.getMoney();
         this.content = debit.getContent();
         this.createdAt = debit.getCreated().getCreatedAt().getValue();
-        this.status = debit.isPaid() ? "Paid" : "Waiting" ;
+        this.status = debit.isPaid() ? "Paid" : (debit.isCanceled() ? "Canceled" : "Waiting") ;
     }
 }
