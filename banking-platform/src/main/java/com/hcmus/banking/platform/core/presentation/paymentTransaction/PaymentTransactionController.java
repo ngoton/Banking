@@ -47,6 +47,7 @@ public class PaymentTransactionController {
         Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByPaymentIdAndMoneyLessThan(id, pageable);
         return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
     }
+
     @GetMapping("/history/paymentCredit/{id}")
     public Page<PaymentTransactionResponse> findAllByPaymentCredit(@PathVariable Long id, Pageable pageable) {
         Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByCredit(id, pageable);
@@ -56,6 +57,18 @@ public class PaymentTransactionController {
     @GetMapping("/history/paymentReceive/{id}")
     public Page<PaymentTransactionResponse> findAllByPaymentIdAndMoneyGreaterThan(@PathVariable Long id, Pageable pageable) {
         Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByPaymentIdAndMoneyGreaterThan(id, pageable);
+        return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
+    }
+
+    @GetMapping("/history/paymentTransfer/customer/{id}")
+    public Page<PaymentTransactionResponse> findAllByPaymentCustomerIdAndMoneyLessThan(@PathVariable Long id, Pageable pageable) {
+        Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByPaymentCustomerIdAndMoneyLessThan(id, pageable);
+        return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
+    }
+
+    @GetMapping("/history/paymentReceive/customer/{id}")
+    public Page<PaymentTransactionResponse> findAllByPaymentCustomerIdAndMoneyGreaterThan(@PathVariable Long id, Pageable pageable) {
+        Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByPaymentCustomerIdAndMoneyGreaterThan(id, pageable);
         return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
     }
 
@@ -124,7 +137,7 @@ public class PaymentTransactionController {
             Beneficiary newBeneficiary = new Beneficiary(paymentTransactionRequest.name, paymentTransactionRequest.shortName, paymentTransactionRequest.beneficiaryAccount, paymentTransactionRequest.bankName, customer, Created.ofEmpty());
             if (newBeneficiary.isInternal()) {
                 Payment newPayment = paymentService.findByAccount(paymentTransactionRequest.beneficiaryAccount);
-                if (newPayment.isEmpty()){
+                if (newPayment.isEmpty()) {
                     throw new BankingServiceException("Beneficiary account not found");
                     //newPayment = new Payment(newBeneficiary.getAccount(), BigDecimal.ZERO, Created.ofEmpty());
                 }

@@ -89,6 +89,24 @@ public class PaymentTransactionUseCaseService {
     }
 
     @Transactional(readOnly = true)
+    public Page<PaymentTransaction> findAllByPaymentCustomerIdAndMoneyGreaterThan(Long id, Pageable pageable) {
+        Customer customer = customerService.findById(id);
+        if (customer.isEmpty()) {
+            throw new BankingServiceException("Customer does not exist!!!");
+        }
+        return paymentTransactionService.findAllByPaymentCustomerIdAndMoneyGreaterThan(id, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<PaymentTransaction> findAllByPaymentCustomerIdAndMoneyLessThan(Long id, Pageable pageable) {
+        Customer customer = customerService.findById(id);
+        if (customer.isEmpty()) {
+            throw new BankingServiceException("Customer does not exist!!!");
+        }
+        return paymentTransactionService.findAllByPaymentCustomerIdAndMoneyLessThan(id, pageable);
+    }
+
+    @Transactional(readOnly = true)
     public Page<PaymentTransaction> findAllByCredit(Long id, Pageable pageable) {
         Customer customer = customerService.findByPaymentId(id);
         if (customer.isEmpty()) {
@@ -184,8 +202,7 @@ public class PaymentTransactionUseCaseService {
         BigDecimal transFee;
         if (toPaymentTransaction.getBeneficiary().isInternal()) {
             transFee = PaymentTransaction.internalFee();
-        }
-        else {
+        } else {
             transFee = PaymentTransaction.externalFee();
         }
 
@@ -220,7 +237,7 @@ public class PaymentTransactionUseCaseService {
             paymentService.create(payment);
         }
 
-        if (!debitId.equals(Long.MIN_VALUE)){
+        if (!debitId.equals(Long.MIN_VALUE)) {
             Debit debit = debitService.findById(debitId);
             debit.setStatus(1);
             debit.setPaymentTransaction(paymentTransaction);
