@@ -21,6 +21,7 @@ import { PaymentService } from './payment.service';
 import { SavingService } from './saving.service';
 import { BenificiaryService } from './benificiary.service';
 import { DebitService } from './debit.service';
+import { CreditService } from './credit.service';
 
 @Injectable({
   providedIn: 'root',
@@ -98,7 +99,8 @@ export class CustomerService implements OnDestroy {
     private paymentService: PaymentService,
     private savingService: SavingService,
     private benificiaryService: BenificiaryService,
-    private debitService: DebitService
+    private debitService: DebitService,
+    private creditService: CreditService
   ) { }
 
   // Http Headers
@@ -134,10 +136,6 @@ export class CustomerService implements OnDestroy {
     return this.http.get<any>(PATH).pipe(
       retry(3)
     );
-  }
-
-  findCustomerByAccount(account) {
-    
   }
 
   getAcctDetailsData() {
@@ -259,8 +257,8 @@ export class CustomerService implements OnDestroy {
         this.debitService.getByCustomerId(customerResponse.customerId)
         .pipe(untilDestroyed(this))
         .subscribe(
-          (debits: Debits[]) => {
-            this.updateDebit(debits);
+          (response: any) => {
+            this.updateDebit(response.content);
           },
           (err: HttpErrorResponse)=> {
             
@@ -276,6 +274,31 @@ export class CustomerService implements OnDestroy {
 
   updateDebitError(error) {
     this.debitsError.next(error);
+  }
+
+  public getCreditsData() {
+    this.getCustomerData().pipe(untilDestroyed(this)).subscribe(
+      (customerResponse: any) => {
+        this.creditService.getByCustomerId(customerResponse.customerId)
+        .pipe(untilDestroyed(this))
+        .subscribe(
+          (response: any) => {
+            this.updateCredit(response.content);
+          },
+          (err: HttpErrorResponse)=> {
+            
+          }
+        );
+      }
+    );
+  }
+
+  updateCredit(credits) {
+    this.credits.next(credits);
+  }
+
+  updateCreditError(error) {
+    this.creditsError.next(error);
   }
 
   ngOnDestroy(): void {

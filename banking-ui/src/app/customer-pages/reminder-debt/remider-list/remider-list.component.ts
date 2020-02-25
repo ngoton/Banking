@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { NbDialogService } from '@nebular/theme';
 import { CustomerService } from '../../../_services/customer.service';
-import { Customers } from '../../../_models/customer.model';
+import { Customers, Debits, Payment, Credits } from '../../../_models/customer.model';
 import { DialogDimissPromptComponent } from '../dialog-dimiss-prompt/dialog-dimiss-prompt.component';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 
@@ -13,6 +13,11 @@ import { untilDestroyed } from 'ngx-take-until-destroy';
   styleUrls: ['./remider-list.component.scss']
 })
 export class RemiderListComponent implements OnInit, OnDestroy {
+  customer: Customers = new Customers();
+  payment: Payment = new Payment();
+  debits: Debits[] = new Array();
+  credits: Credits[] = new Array();
+  debitsData: any[] = new Array();
 
   settings = {
     add: {
@@ -38,7 +43,7 @@ export class RemiderListComponent implements OnInit, OnDestroy {
         title: 'Tài khoản gửi',
         type: 'string',
       },
-      account_debt: {
+      account: {
         title: 'Tài khoản nợ',
         type: 'string',
       },
@@ -46,7 +51,7 @@ export class RemiderListComponent implements OnInit, OnDestroy {
         title: 'Số tiền (VNĐ)',
         type: 'string',
       },
-      content_debt: {
+      content: {
         title: 'Nội dung',
         type: 'string',
       },
@@ -62,38 +67,128 @@ export class RemiderListComponent implements OnInit, OnDestroy {
   source: LocalDataSource = new LocalDataSource();
   content_dimiss: string;
 
-  constructor(private service: CustomerService, private dialogService: NbDialogService) {
-    const data = [
-      {
-        name_reminder: 'Nguyễn Minh Phong',
-        account_reminder: '8492398237874350293',
-        account_debt: '80928539384534543',
-        money: '1,000.000',
-        content_debt: 'Trả tiền mừng cưới',
-        status: this.status[0]
-      },
-      {
-        name_reminder: 'Nguyễn Văn Nam',
-        account_reminder: '394893859345934923',
-        account_debt: '8492398237874350293',
-        money: '20.000',
-        content_debt: 'Trả tiền xe ôm',
-        status: this.status[1]
-      },
-      {
-        name_reminder: 'Nguyễn Minh Phong',
-        account_reminder: '8492398237874350293',
-        account_debt: '2839823948234234025',
-        money: '15,000.000',
-        content_debt: 'Thanh toán nghiệm thu hợp đồng',
-        status: this.status[0]
-      }
-    ];
-    this.source.load(data);
+  constructor(private customerService: CustomerService, private dialogService: NbDialogService) {
+    setTimeout(()=>{
+      this.customerService.acctDetail$
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        (customer: Customers) => {
+          debugger;
+          this.customer = new Customers(customer);
+        }
+      );
+    }, 1000);
+
+    // const data = [
+    //   {
+    //     name_reminder: 'Nguyễn Minh Phong',
+    //     account_reminder: '8492398237874350293',
+    //     account_debt: '80928539384534543',
+    //     money: '1,000.000',
+    //     content_debt: 'Trả tiền mừng cưới',
+    //     status: this.status[0]
+    //   },
+    //   {
+    //     name_reminder: 'Nguyễn Văn Nam',
+    //     account_reminder: '394893859345934923',
+    //     account_debt: '8492398237874350293',
+    //     money: '20.000',
+    //     content_debt: 'Trả tiền xe ôm',
+    //     status: this.status[1]
+    //   },
+    //   {
+    //     name_reminder: 'Nguyễn Minh Phong',
+    //     account_reminder: '8492398237874350293',
+    //     account_debt: '2839823948234234025',
+    //     money: '15,000.000',
+    //     content_debt: 'Thanh toán nghiệm thu hợp đồng',
+    //     status: this.status[0]
+    //   }
+    // ];
+    // this.source.load(data);
+  }
+
+  getPayment() {
+    this.customerService.payments$
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        (payment: Payment) => {
+          this.payment = new Payment(payment);
+        }
+      );
+  }
+
+  getDebits() {
+    this.customerService.debits$
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        (debits: Debits[]) => {
+          this.debits = debits;
+          if(debits != null && debits.length != 0){
+            debits.forEach(element => {
+              let debit = {
+                id: element.id,
+                name_reminder: this.customer.fullName,
+                account_reminder: this.payment.account,
+                account: element.account,
+                money: element.money,
+                content: element.content,
+                status: element.status,
+                type: 'debit'
+              }
+  
+              this.debitsData.push(debit);
+            });
+
+            this.source.load(this.debitsData);
+          }
+        }
+      );
+  }
+
+  getCredits() {
+    this.customerService.credits$
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        (credits: Credits[]) => {
+          this.credits = credits;
+          if(credits != null && credits.length != 0) {
+            credits.forEach(element => {
+              this.customerService.getByPaymentAccount(element.account)
+              .pipe(untilDestroyed(this))
+              .subscribe(
+                (customerCredit: Customers) => {
+                  customerCredit = new Customers(customerCredit);
+  
+                  let credits = {
+                    id: element.id,
+                    name_reminder: customerCredit.fullName,
+                    account_reminder: element.account,
+                    account: this.payment.account,
+                    money: element.money,
+                    content: element.content,
+                    status: element.status,
+                    type: 'credit'
+                  }
+      
+                  this.debitsData.push(credits);
+                }
+              );
+            });
+            this.source.load(this.debitsData);
+          }
+        }
+      );
   }
 
   onDeleteConfirm(event): void {
-    this.dialogService.open(DialogDimissPromptComponent)
+    debugger;
+    this.dialogService.open(DialogDimissPromptComponent, { 
+      context: {
+        creditId: event.data.type === 'credit' ? event.data.id : null,
+        debitId: event.data.type === 'debit' ? event.data.id : null
+      } 
+    })
       .onClose.subscribe((content: string ) => this.content_dimiss = content);
     // if (window.confirm('Are you sure you want to delete?')) {
     //   event.confirm.resolve();
@@ -103,6 +198,11 @@ export class RemiderListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.getPayment();
+    this.getDebits();
+    this.getCredits();
+
+    //this.source.load(this.debitsData);
   }
 
   ngOnDestroy() {

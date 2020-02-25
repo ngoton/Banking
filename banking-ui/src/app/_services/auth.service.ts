@@ -32,7 +32,7 @@ export class AuthService implements OnDestroy {
       const PATH = this.AUTH_URL + `/authenticate`;
       return this.http.post<any>(PATH, JSON.stringify(loginData))
       .pipe(
-        retry(3),
+        //retry(3),
         //catchError(this.util.handleError)
       );
     }
@@ -47,7 +47,7 @@ export class AuthService implements OnDestroy {
       const PATH = this.AUTH_URL + `/forgot`;
       return this.http.post<any>(PATH, JSON.stringify({email: email}))
       .pipe(
-        retry(3),
+        //retry(3),
         //catchError(this.util.handleError)
       );
     }
@@ -85,7 +85,7 @@ export class AuthService implements OnDestroy {
       const PATH = this.AUTH_URL + `/refresh-token`;
       return this.http.post<any>(PATH, JSON.stringify({token: token}))
       .pipe(
-        retry(3),
+        //retry(3),
         //catchError(this.util.handleError)
       );
     }

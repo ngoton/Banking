@@ -119,13 +119,18 @@ export class InternalComponent implements OnInit, OnDestroy {
             this.notifier.show({
               type: "success",
               message: "Chuyển tiền thành công!",
-              id: "verify-success" // Again, this is optional
+              id: "verify-success"
             });
           }
         });
       },
       (error: HttpErrorResponse) => {
-
+        this.loading = false;
+        this.notifier.show({
+          type: "error",
+          message: "Chuyển tiền không thành công!",
+          id: "error-payment"
+        });
       }
     );
   }

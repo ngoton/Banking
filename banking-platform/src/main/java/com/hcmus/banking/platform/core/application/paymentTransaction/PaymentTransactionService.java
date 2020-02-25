@@ -33,6 +33,14 @@ public class PaymentTransactionService {
         return paymentTransactionRepository.findAllByPaymentIdAndMoneyGreaterThan(id, BigDecimal.ZERO, pageable);
     }
 
+    public Page<PaymentTransaction> findAllByPaymentCustomerIdAndMoneyLessThan(Long id, Pageable pageable) {
+        return paymentTransactionRepository.findAllByPaymentCustomerIdAndMoneyLessThan(id, BigDecimal.ZERO, pageable);
+    }
+
+    public Page<PaymentTransaction> findAllByPaymentCustomerIdAndMoneyGreaterThan(Long id, Pageable pageable) {
+        return paymentTransactionRepository.findAllByPaymentCustomerIdAndMoneyGreaterThan(id, BigDecimal.ZERO, pageable);
+    }
+
     public Page<PaymentTransaction> findAllByPartnerName(String name, Pageable pageable) {
         return paymentTransactionRepository.findAllByPartnerName(name, pageable);
     }

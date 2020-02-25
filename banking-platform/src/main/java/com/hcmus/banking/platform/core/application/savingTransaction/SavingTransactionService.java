@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -22,8 +23,24 @@ public class SavingTransactionService {
         return savingTransactionRepository.findById(id).orElse(SavingTransaction.ofEmpty());
     }
 
-    public Page<SavingTransaction> findAllBySavingId(Long id,Pageable pageable) {
-        return savingTransactionRepository.findAllBySavingId(id,pageable);
+    public Page<SavingTransaction> findAllBySavingId(Long id, Pageable pageable) {
+        return savingTransactionRepository.findAllBySavingId(id, pageable);
+    }
+
+    public Page<SavingTransaction> findAllBySavingIdAndMoneyGreaterThan(Long id, Pageable pageable) {
+        return savingTransactionRepository.findAllBySavingIdAndMoneyGreaterThan(id, BigDecimal.ZERO, pageable);
+    }
+
+    public Page<SavingTransaction> findAllBySavingIdAndMoneyLessThan(Long id, Pageable pageable) {
+        return savingTransactionRepository.findAllBySavingIdAndMoneyLessThan(id, BigDecimal.ZERO, pageable);
+    }
+
+    public Page<SavingTransaction> findAllBySavingCustomerIdAndMoneyGreaterThan(Long id, Pageable pageable) {
+        return savingTransactionRepository.findAllBySavingCustomerIdAndMoneyGreaterThan(id, BigDecimal.ZERO, pageable);
+    }
+
+    public Page<SavingTransaction> findAllBySavingCustomerIdAndMoneyLessThan(Long id, Pageable pageable) {
+        return savingTransactionRepository.findAllBySavingCustomerIdAndMoneyLessThan(id, BigDecimal.ZERO, pageable);
     }
 
     public void create(SavingTransaction savingTransaction) {

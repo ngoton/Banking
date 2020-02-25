@@ -71,4 +71,7 @@ public class Debit extends IDEntity {
     public boolean isPaid() {
         return Objects.nonNull(status) && status.equals(1);
     }
+    public boolean isCanceled() {
+        return Objects.nonNull(status) && status.equals(2);
+    }
 }
