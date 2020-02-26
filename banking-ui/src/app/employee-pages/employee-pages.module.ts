@@ -13,10 +13,11 @@ import { ThemeModule } from '../@theme/theme.module';
 
 import { EmployeePagesRoutingModule } from './employee-pages-routing.module';
 import {EmployeePagesComponent} from './employee-pages.component';
+import { TransactionHistoryComponent } from './transaction-history/transaction-history.component';
 
 
 @NgModule({
-  declarations: [EmployeePagesComponent],
+  declarations: [EmployeePagesComponent, TransactionHistoryComponent,],
   imports: [
     CommonModule,
     NbMenuModule,

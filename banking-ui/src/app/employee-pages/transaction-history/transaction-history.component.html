@@ -1,0 +1,29 @@
+<nb-card>
+    <nb-card-body>
+
+        <label class="search-label" for="search">Tìm kiếm:</label>
+        <input nbInput id="search" class="search-input">
+
+        <table [nbTreeGrid]="dataSource">
+
+            <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allColumns"></tr>
+            <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allColumns"></tr>
+
+            <ng-container [nbTreeGridColumnDef]="customColumn.bindingName">
+                <th nbTreeGridHeaderCell  *nbTreeGridHeaderCellDef>
+                </th>
+                <td nbTreeGridCell *nbTreeGridCellDef="let row">
+                    <ngx-fs-icon ></ngx-fs-icon>
+                </td>
+            </ng-container>
+
+            <ng-container>
+                <th nbTreeGridHeaderCell>
+                </th>
+                <td nbTreeGridCell *nbTreeGridCellDef="let row"></td>
+            </ng-container>
+
+        </table>
+
+    </nb-card-body>
+</nb-card>
