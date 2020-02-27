@@ -16,6 +16,7 @@ export const environment = {
   BASE_URL: 'https://banking-hcmus.herokuapp.com',
   AUTH_SERV: '/auth',
   USER_SERV: '/internal/users',
+  ACC_SERV: '/internal/accounts',
   CUST_SERV: '/internal/customers',
   SAVING_SERV: '/internal/savings',
   PAYMENT_SERV: '/internal/payments',

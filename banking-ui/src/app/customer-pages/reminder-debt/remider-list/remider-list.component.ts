@@ -69,7 +69,7 @@ export class RemiderListComponent implements OnInit, OnDestroy {
       edit: false,
       delete: true,
       custom: [
-        { name: 'payment', title: '<i class="nb-checkmark"></i>'}
+        { name: 'payment', title: '<i class="nb-checkmark" ngIf=""></i>', }
       ]
     //   custom: [
     //   { name: 'viewrecord', title: '<i class="fa fa-eye"></i>'},
@@ -176,10 +176,9 @@ export class RemiderListComponent implements OnInit, OnDestroy {
 
               this.debitsData.splice(this.debitsData.indexOf(debit), 1);
               this.debitsData.push(debit);
+              this.source.load(this.debitsData);
+              this.loadingList = false;
             });
-
-            this.loadingList = false;
-            this.source.load(this.debitsData);
           }
         },
         (err: any) => {
@@ -196,16 +195,14 @@ export class RemiderListComponent implements OnInit, OnDestroy {
           this.credits = credits;
           if(credits != null && credits.length != 0) {
             credits.forEach(element => {
-              this.customerService.getByPaymentAccount(element.account)
+              this.customerService.getAccountInfo(element.account, "HCB_BANK")
               .pipe(untilDestroyed(this))
               .subscribe(
-                (customerCredit: Customers) => {
-                  customerCredit = new Customers(customerCredit);
-  
+                (accountCredit: any) => { 
                   let credits: debitData = {
                     id: element.id,
-                    name_reminder: customerCredit.fullName,
-                    account_reminder: element.account,
+                    name_reminder: accountCredit.name,
+                    account_reminder: accountCredit.account,
                     account: this.payment.account,
                     money: element.money,
                     content: element.content,
@@ -215,15 +212,15 @@ export class RemiderListComponent implements OnInit, OnDestroy {
                   
                   this.debitsData.splice(this.debitsData.indexOf(credits), 1);
                   this.debitsData.push(credits);
+                  this.source.load(this.debitsData);
+                  this.loadingList = false;
                 },
                 (err: any) => {
                   this.loadingList = false;
                 }
               );
-            });
-
-            this.loadingList = false;
-            this.source.load(this.debitsData);
+            });            
+            
           }
         }
       );

@@ -31,10 +31,11 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { DialogDimissPromptComponent } from './dialog-dimiss-prompt/dialog-dimiss-prompt.component';
 import { SharedModule } from '../../shared/shared.module';
 import { FormsModule } from '@angular/forms';
+import { PayButtonRenderComponent } from './remider-list/pay-button.render.component';
 
 @NgModule({
-  declarations: [ReminderDebtComponent, RemiderListComponent, RemiderDetailComponent, DialogDimissPromptComponent],
-  entryComponents: [DialogDimissPromptComponent],
+  declarations: [ReminderDebtComponent, RemiderListComponent, RemiderDetailComponent, DialogDimissPromptComponent, PayButtonRenderComponent],
+  entryComponents: [DialogDimissPromptComponent, PayButtonRenderComponent],
   imports: [
     CommonModule,
     FormsModule,

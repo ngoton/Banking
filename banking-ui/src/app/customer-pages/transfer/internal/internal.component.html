@@ -15,7 +15,7 @@
         <label for="inputAccount" class="label col-sm-3 col-form-label">Thông tin người nhận</label>
         <div class="col-sm-3">
           <!-- <input nbInput [(ngModel)]="paymentTransaction.beneficiaryAccount" #beneficiaryAccount="ngModel" fullWidth id="beneficiary-account" name="beneficiaryAccount" placeholder="Số tài khoản người nhận"> -->
-          <ngx-auto-complete [disabled]="finished===true" [placeholder]="'Số tài khoản người nhận'" [(loading)]="loading" [(keywork)]="paymentTransaction.beneficiaryAccount" [(valueshow)]="selectedBenificiary.name" [(response)]="resultCustomer" [dataSource]="source" (callBackFunc)="callBack($event)"></ngx-auto-complete>
+          <ngx-auto-complete [disabled]="finished===true" [placeholder]="'Số tài khoản người nhận'" [(loading)]="loading" [(keywork)]="paymentTransaction.beneficiaryAccount" [(valueshow)]="selectedBenificiary.name" [(response)]="accountInfo" [dataSource]="source" (callBackFunc)="callBack($event)"></ngx-auto-complete>
         </div>
         <label class="label col-sm-3 col-form-label"><span>{{selectedBenificiary.name}}</span></label>
       </div>

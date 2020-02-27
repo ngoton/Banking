@@ -11,6 +11,7 @@ export const environment = {
   BASE_URL: 'http://localhost:4200',
   AUTH_SERV: '/auth',
   USER_SERV: '/internal/users',
+  ACC_SERV: '/internal/accounts',
   CUST_SERV: '/internal/customers',
   SAVING_SERV: '/internal/savings',
   PAYMENT_SERV: '/internal/payments',

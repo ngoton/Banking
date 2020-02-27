@@ -31,6 +31,8 @@ export class CustomerService implements OnDestroy {
   private CUST_URL = environment.BASE_URL + environment.CUST_SERV;
   private REQ_URL = environment.BASE_URL + environment.REQ_SERV;
 
+  private ACC_URL = environment.BASE_URL + environment.ACC_SERV;
+
   // Observable string sources: Account Details
   private acctDetailSource = new BehaviorSubject<Customers>(null);
   acctDetail$ = this.acctDetailSource.asObservable();
@@ -132,6 +134,14 @@ export class CustomerService implements OnDestroy {
 
   getByPaymentAccount(account): Observable<any> {
     const PATH = this.CUST_URL + `/payment/${account}`;
+
+    return this.http.get<any>(PATH).pipe(
+      //retry(3)
+    );
+  }
+
+  getAccountInfo(account, bankName): Observable<any> {
+    const PATH = this.ACC_URL + `?account=${account}&bankName=${bankName}`;
 
     return this.http.get<any>(PATH).pipe(
       //retry(3)
