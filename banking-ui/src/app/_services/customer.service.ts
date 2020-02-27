@@ -121,7 +121,7 @@ export class CustomerService implements OnDestroy {
       const PATH = this.CUST_URL + `/user/${userId}`;
       return this.http.get<any>(PATH)
       .pipe(
-        retry(3),
+        //retry(3),
         //catchError(this.util.handleError)
       );
     }
@@ -134,7 +134,7 @@ export class CustomerService implements OnDestroy {
     const PATH = this.CUST_URL + `/payment/${account}`;
 
     return this.http.get<any>(PATH).pipe(
-      retry(3)
+      //retry(3)
     );
   }
 

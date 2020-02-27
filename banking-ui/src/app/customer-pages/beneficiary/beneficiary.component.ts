@@ -44,6 +44,17 @@ export class BeneficiaryComponent implements OnInit, OnDestroy {
         type: 'string',
       }
     },
+    actions: {
+      columnTitle: 'Thao tác',
+      add: false,
+      edit: true,
+      delete: true
+    //   custom: [
+    //   { name: 'viewrecord', title: '<i class="fa fa-eye"></i>'},
+    //   { name: 'editrecord', title: '&nbsp;&nbsp;<i class="fa  fa-pencil"></i>' }
+    // ],
+    //   position: 'right'
+    },
     hideSubHeader: true
   };
 
