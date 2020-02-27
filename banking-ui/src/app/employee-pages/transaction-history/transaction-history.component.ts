@@ -1,10 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import {
-  NbSortDirection,
-  NbSortRequest,
-  NbTreeGridDataSource,
-  NbTreeGridDataSourceBuilder
-} from '@nebular/theme';
+import { Component, Input } from '@angular/core';
+import { NbSortDirection, NbSortRequest, NbTreeGridDataSource, NbTreeGridDataSourceBuilder } from '@nebular/theme';
 
 interface TreeNode<T> {
   data: T;
@@ -13,142 +8,109 @@ interface TreeNode<T> {
 }
 
 interface FSEntry {
-  transaction_type: string;
-  content: string;
-  date: string;
-  money: string;
+  name: string;
+  size: string;
+  kind: string;
+  items?: number;
 }
-
 
 @Component({
   selector: 'ngx-transaction-history',
   templateUrl: './transaction-history.component.html',
   styleUrls: ['./transaction-history.component.scss']
 })
-export class TransactionHistoryComponent implements OnInit {
+export class TreeGridShowcaseComponent {
+  customColumn = 'name';
+  defaultColumns = [ 'size', 'kind', 'items' ];
+  allColumns = [ this.customColumn, ...this.defaultColumns ];
 
-  // constructor() { }
-  customColumn = {bindingName: 'transaction_type', showName: 'Loại giao dịch'};
-  defaultColumns = [
-    {bindingName: 'content', showName: 'Nội dung'},
-    {bindingName: 'date', showName: 'Ngày'},
-    {bindingName: 'money', showName: 'Số tiền'}];
-  allColumns = ['transaction_type', 'content', 'date', 'money'];
+  dataSource: NbTreeGridDataSource<FSEntry>;
+
+  sortColumn: string;
+  sortDirection: NbSortDirection = NbSortDirection.NONE;
+
+  constructor(private dataSourceBuilder: NbTreeGridDataSourceBuilder<FSEntry>) {
+    this.dataSource = this.dataSourceBuilder.create(this.data);
+  }
+
+  updateSort(sortRequest: NbSortRequest): void {
+    this.sortColumn = sortRequest.column;
+    this.sortDirection = sortRequest.direction;
+  }
+
+  getSortDirection(column: string): NbSortDirection {
+    if (this.sortColumn === column) {
+      return this.sortDirection;
+    }
+    return NbSortDirection.NONE;
+  }
 
   private data: TreeNode<FSEntry>[] = [
     {
-      data: {
-        transaction_type: 'Nhận tiền',
-        content: '',
-        date: '',
-        money: ''
-      },
+      data: { name: 'Projects', size: '1.8 MB', items: 5, kind: 'dir' },
       children: [
+        { data: { name: 'project-1.doc', kind: 'doc', size: '240 KB' } },
+        { data: { name: 'project-2.doc', kind: 'doc', size: '290 KB' } },
         {
-          data: {
-            transaction_type: null,
-            content: 'Tiền lì xì',
-            date: '28/01/2020',
-            money: '500.000'
-          }
+          data: { name: 'project-3', kind: 'dir', size: '466 KB', items: 3 },
+          children: [
+            { data: { name: 'project-3A.doc', kind: 'doc', size: '200 KB' } },
+            { data: { name: 'project-3B.doc', kind: 'doc', size: '266 KB' } },
+            { data: { name: 'project-3C.doc', kind: 'doc', size: '0' } },
+          ],
         },
-        {
-          data: {
-            transaction_type: null,
-            content: 'Tiền lì xì',
-            date: '28/01/2020',
-            money: '500.000'
-          }
-        },
-        {
-          data: {
-            transaction_type: null,
-            content: 'Tiền lì xì',
-            date: '28/01/2020',
-            money: '500.000'
-          }
-        }
-      ]
+        { data: { name: 'project-4.docx', kind: 'docx', size: '900 KB' } },
+      ],
     },
     {
-      data: {
-        transaction_type: 'Thanh toán',
-        content: '',
-        date: '',
-        money: ''
-      },
+      data: { name: 'Reports', kind: 'dir', size: '400 KB', items: 2 },
       children: [
         {
-          data: {
-            transaction_type: null,
-            content: 'Tiền lì xì',
-            date: '28/01/2020',
-            money: '500.000'
-          }
+          data: { name: 'Report 1', kind: 'dir', size: '100 KB', items: 1 },
+          children: [
+            { data: { name: 'report-1.doc', kind: 'doc', size: '100 KB' } },
+          ],
         },
         {
-          data: {
-            transaction_type: null,
-            content: 'Tiền lì xì',
-            date: '28/01/2020',
-            money: '500.000'
-          }
+          data: { name: 'Report 2', kind: 'dir', size: '300 KB', items: 2 },
+          children: [
+            { data: { name: 'report-2.doc', kind: 'doc', size: '290 KB' } },
+            { data: { name: 'report-2-note.txt', kind: 'txt', size: '10 KB' } },
+          ],
         },
-      ]
+      ],
     },
     {
-      data: {
-        transaction_type: 'Nhắc nợ',
-        content: '',
-        date: '',
-        money: ''
-      },
+      data: { name: 'Other', kind: 'dir', size: '109 MB', items: 2 },
       children: [
-        {
-          data: {
-            transaction_type: null,
-            content: 'Tiền lì xì',
-            date: '28/01/2020',
-            money: '500.000'
-          }
-        },
-        {
-          data: {
-            transaction_type: null,
-            content: 'Tiền lì xì',
-            date: '28/01/2020',
-            money: '500.000'
-          }
-        }
-      ]
-    }
+        { data: { name: 'backup.bkp', kind: 'bkp', size: '107 MB' } },
+        { data: { name: 'secret-note.txt', kind: 'txt', size: '2 MB' } },
+      ],
+    },
   ];
 
-  ngOnInit() {
+  getShowOn(index: number) {
+    const minWithForMultipleColumns = 400;
+    const nextColumnStep = 100;
+    return minWithForMultipleColumns + (nextColumnStep * index);
   }
-
 }
 
 @Component({
-  selector: 'ngx-fs-icon',
+  selector: 'nb-fs-icon',
   template: `
-    <nb-tree-grid-row-toggle
-      [expanded]="expanded"
-      *ngIf="isDir(); else fileIcon"
-    >
+    <nb-tree-grid-row-toggle [expanded]="expanded" *ngIf="isDir(); else fileIcon">
     </nb-tree-grid-row-toggle>
     <ng-template #fileIcon>
-      <nb-icon icon="corner-down-right"></nb-icon>
+      <nb-icon icon="file-text-outline"></nb-icon>
     </ng-template>
-  `
+  `,
 })
-
 export class FsIconComponent {
   @Input() kind: string;
   @Input() expanded: boolean;
 
   isDir(): boolean {
-    return this.kind !== null;
+    return this.kind === 'dir';
   }
 }
-
