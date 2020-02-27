@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NbSortDirection, NbSortRequest, NbTreeGridDataSource, NbTreeGridDataSourceBuilder } from '@nebular/theme';
 
 interface TreeNode<T> {
@@ -19,7 +19,7 @@ interface FSEntry {
   templateUrl: './transaction-history.component.html',
   styleUrls: ['./transaction-history.component.scss']
 })
-export class TreeGridShowcaseComponent {
+export class TransactionHistoryComponent {
   customColumn = 'name';
   defaultColumns = [ 'size', 'kind', 'items' ];
   allColumns = [ this.customColumn, ...this.defaultColumns ];
@@ -47,7 +47,7 @@ export class TreeGridShowcaseComponent {
 
   private data: TreeNode<FSEntry>[] = [
     {
-      data: { name: 'Projects', size: '1.8 MB', items: 5, kind: 'dir' },
+      data: { name: 'Nhận tiền', size: '1.8 MB', items: 5, kind: 'dir' },
       children: [
         { data: { name: 'project-1.doc', kind: 'doc', size: '240 KB' } },
         { data: { name: 'project-2.doc', kind: 'doc', size: '290 KB' } },
@@ -63,7 +63,7 @@ export class TreeGridShowcaseComponent {
       ],
     },
     {
-      data: { name: 'Reports', kind: 'dir', size: '400 KB', items: 2 },
+      data: { name: 'Chuyển khoản', kind: 'dir', size: '400 KB', items: 2 },
       children: [
         {
           data: { name: 'Report 1', kind: 'dir', size: '100 KB', items: 1 },
@@ -81,7 +81,7 @@ export class TreeGridShowcaseComponent {
       ],
     },
     {
-      data: { name: 'Other', kind: 'dir', size: '109 MB', items: 2 },
+      data: { name: 'Thanh toán nhắc nợ', kind: 'dir', size: '109 MB', items: 2 },
       children: [
         { data: { name: 'backup.bkp', kind: 'bkp', size: '107 MB' } },
         { data: { name: 'secret-note.txt', kind: 'txt', size: '2 MB' } },
