@@ -64,14 +64,14 @@ export class CustomerService implements OnDestroy {
   // Observable string sources: Pre registered Beneficiaries
 
   // Observable string sources: debit
-  private debits = new BehaviorSubject<Debits[]>(null);
+  private debits = new BehaviorSubject<Debits[]>([]);
   private debitsError = new BehaviorSubject<any>(null);
   // Observable string streams: debit
   debits$ = this.debits.asObservable();
   debitsError$ = this.debitsError.asObservable();
 
   // Observable string sources: credit
-  private credits = new BehaviorSubject<Credits[]>(null);
+  private credits = new BehaviorSubject<Credits[]>([]);
   private creditsError = new BehaviorSubject<any>(null);
   // Observable string streams: credit
   credits$ = this.credits.asObservable();
@@ -263,12 +263,13 @@ export class CustomerService implements OnDestroy {
 
   public getDebitsData() {
     debugger;
-    this.getCustomerData().pipe(untilDestroyed(this)).subscribe(
+    var subscription = this.getCustomerData().pipe(untilDestroyed(this)).subscribe(
       (customerResponse: any) => {
         this.debitService.getByCustomerId(customerResponse.customerId)
         .pipe(untilDestroyed(this))
         .subscribe(
           (response: any) => {
+            this.clearDebit();
             this.updateDebit(response.content);
           },
           (err: HttpErrorResponse)=> {
@@ -277,6 +278,7 @@ export class CustomerService implements OnDestroy {
         );
       }
     );
+
   }
 
   updateDebit(debits) {
@@ -287,6 +289,10 @@ export class CustomerService implements OnDestroy {
     this.debitsError.next(error);
   }
 
+  clearDebit() {
+    this.debits.next([]);
+  }
+
   public getCreditsData() {
     this.getCustomerData().pipe(untilDestroyed(this)).subscribe(
       (customerResponse: any) => {
@@ -294,6 +300,7 @@ export class CustomerService implements OnDestroy {
         .pipe(untilDestroyed(this))
         .subscribe(
           (response: any) => {
+            this.clearCredit();
             this.updateCredit(response.content);
           },
           (err: HttpErrorResponse)=> {
@@ -310,6 +317,10 @@ export class CustomerService implements OnDestroy {
 
   updateCreditError(error) {
     this.creditsError.next(error);
+  }
+
+  clearCredit() {
+    this.credits.next([]);
   }
 
   ngOnDestroy(): void {

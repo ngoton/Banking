@@ -1,14 +1,19 @@
-import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation, ViewChild } from '@angular/core';
 
 import { LocalDataSource } from 'ng2-smart-table';
 import { NbDialogService } from '@nebular/theme';
 import { CustomerService } from '../../../_services/customer.service';
-import { Customers, Debits, Payment, Credits } from '../../../_models/customer.model';
+import { Customers, Debits, Payment, Credits, PaymentTransactions, Beneficiarys } from '../../../_models/customer.model';
 import { DialogDimissPromptComponent } from '../dialog-dimiss-prompt/dialog-dimiss-prompt.component';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { CreditService } from '../../../_services/credit.service';
+import { DebitService } from '../../../_services/debit.service';
+import { NotifierService } from 'angular-notifier';
+import { DialogOTPPromptComponent } from '../dialog-otp-prompt/dialog-otp-prompt.component';
+import { PaymentTransactionService } from '../../../_services/payment-transaction.service';
 
 @Component({
   selector: "ngx-remider-list",
@@ -16,7 +21,10 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ["./remider-list.component.scss"]
 })
 export class RemiderListComponent implements OnInit, OnDestroy {
-  private unsubscribe$ = new Subject<void>();
+  @ViewChild("customNotification", { static: true }) customNotificationTmpl;
+  private readonly notifi: NotifierService;
+
+  private subscription: Subscription = new Subscription();
 
   loadingList: boolean = false;
 
@@ -25,6 +33,7 @@ export class RemiderListComponent implements OnInit, OnDestroy {
   debits: Debits[] = new Array();
   credits: Credits[] = new Array();
   debitsData: debitData[] = new Array();
+  creditData: debitData[] = new Array();
 
   settings = {
     add: {
@@ -73,7 +82,7 @@ export class RemiderListComponent implements OnInit, OnDestroy {
       edit: false,
       delete: true,
       custom: [
-        { name: "payment", title: '<i class="nb-checkmark" ngIf=""></i>' }
+        { name: "pay", title: '<i class="nb-checkmark" ngIf=""></i>' }
       ]
       //   custom: [
       //   { name: 'viewrecord', title: '<i class="fa fa-eye"></i>'},
@@ -83,15 +92,15 @@ export class RemiderListComponent implements OnInit, OnDestroy {
     },
     rowClassFunction: row => {
       var curPaymentAccount = localStorage.getItem("paymentAccount");
-      if (curPaymentAccount != null && curPaymentAccount != "") {
-        if (row.data.account_reminder == curPaymentAccount) {
-          return "hide-custom-action";
-        } else {
-          return "hide-action";
+      if (curPaymentAccount != null && curPaymentAccount != ""){
+        if(row.data.type == 'debit'){
+          return "hide-custom-action"; //Ẩn nút Thanh toán nợ
         }
-      } else {
-        return "hide-all";
+        if(row.data.type == 'credit'){
+          return "show-all" //Hiện cả nút Thanh toán và Hủy
+        }
       }
+      return "hide-all";
     },
     attr: {
       class: "table table-bordered"
@@ -105,44 +114,84 @@ export class RemiderListComponent implements OnInit, OnDestroy {
 
   constructor(
     private customerService: CustomerService,
-    private dialogService: NbDialogService
+    private dialogService: NbDialogService,
+    private debitService: DebitService,
+    private creditService: CreditService,
+    private notifications: NotifierService,
+    private paymentTransactionService: PaymentTransactionService
   ) {
-    // const data = [
-    //   {
-    //     name_reminder: 'Nguyễn Minh Phong',
-    //     account_reminder: '8492398237874350293',
-    //     account_debt: '80928539384534543',
-    //     money: '1,000.000',
-    //     content_debt: 'Trả tiền mừng cưới',
-    //     status: this.status[0]
-    //   },
-    //   {
-    //     name_reminder: 'Nguyễn Văn Nam',
-    //     account_reminder: '394893859345934923',
-    //     account_debt: '8492398237874350293',
-    //     money: '20.000',
-    //     content_debt: 'Trả tiền xe ôm',
-    //     status: this.status[1]
-    //   },
-    //   {
-    //     name_reminder: 'Nguyễn Minh Phong',
-    //     account_reminder: '8492398237874350293',
-    //     account_debt: '2839823948234234025',
-    //     money: '15,000.000',
-    //     content_debt: 'Thanh toán nghiệm thu hợp đồng',
-    //     status: this.status[0]
-    //   }
-    // ];
-    // this.source.load(data);
+    this.notifi = notifications;
 
+    this.getPayment();
+  }
+
+  onCustomAction(event) {
+    debugger;
+    switch (event.action) {
+      case "pay":
+        this.payCredit(event.data);
+        break;
+    }
+  }
+
+  payCredit(data) {
+    this.creditService.pay(data.id, data)
+    .pipe(untilDestroyed(this))
+    .subscribe(
+      (success: any) => {
+        var paymentTransaction = new PaymentTransactions();
+        var benificiary = new Beneficiarys();
+
+        // this.paymentTransactionService.internalPayment(paymentTransaction, benificiary)
+        // .pipe(untilDestroyed(this))
+        // .subscribe(
+        //   (response: any) => {
+        //     this.dialogService.open(DialogOTPPromptComponent, { 
+        //       context: {
+        //         paymentInfor: response
+        //       } 
+        //     }).onClose.subscribe((code: string ) => {
+        //       if(code){
+        //         this.notifi.show({
+        //           id: `paied`,
+        //           message: `Thanh toán nợ thành công`,
+        //           type: `info`,
+        //           template: this.customNotificationTmpl
+        //         });
+        //       }
+        //     });
+        //   },
+        //   (error: HttpErrorResponse) => {
+        //     this.notifi.show({
+        //       id: `payError`,
+        //       message: `Không thể thanh toán nợ`,
+        //       type: `error`,
+        //       template: this.customNotificationTmpl
+        //     });
+        //   }
+        // );
+      },
+      (err: HttpErrorResponse) => {
+        this.notifi.show({
+          id: `payError`,
+          message: `Không thể thanh toán nợ`,
+          type: `error`,
+          template: this.customNotificationTmpl
+        });
+      }
+    );
+  }
+
+  getPayment() {
     this.loadingList = true;
-    var subscription = this.customerService.acctDetail$
-      .pipe(takeUntil(this.unsubscribe$))
+    var subscription = this.customerService.payments$
+      .pipe(untilDestroyed(this))
       .subscribe(
-        (customer: Customers) => {
+        (payment: Payment) => {
           this.loadingList = false;
-          this.customer = new Customers(customer);
-          this.getPayment();
+          this.payment = new Payment(payment);
+          localStorage.setItem("paymentAccount", this.payment.account);
+
           this.getDebits();
           this.getCredits();
         },
@@ -150,79 +199,62 @@ export class RemiderListComponent implements OnInit, OnDestroy {
           this.loadingList = false;
         }
       );
-  }
-
-  onCustomAction(event) {
-    switch (event.action) {
-      case "payment":
-        this.paymentCredit(event.data);
-        break;
-    }
-  }
-
-  paymentCredit(data) {}
-
-  getPayment() {
-    this.loadingList = true;
-    var subscription = this.customerService.payments$
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(
-        (payment: Payment) => {
-          this.loadingList = false;
-          this.payment = new Payment(payment);
-          localStorage.setItem("paymentAccount", this.payment.account);
-        },
-        (err: any) => {
-          this.loadingList = false;
-        }
-      );
+    this.subscription.add(subscription);
   }
 
   getDebits() {
     this.loadingList = true;
     var subscription = this.customerService.debits$
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(untilDestroyed(this))
       .subscribe(
         (debits: Debits[]) => {
-          this.loadingList = false;
           this.debits = debits;
 
           if (debits != null && debits.length != 0) {
-            debits.forEach(element => {
-              let debit: debitData = {
-                id: element.id,
-                name_reminder: this.customer.fullName,
-                account_reminder: this.payment.account,
-                account: element.account,
-                money: element.money,
-                content: element.content,
-                status: element.status,
-                type: "debit"
-              };
+            this.customerService
+              .getAccountInfo(this.payment.account, "HCB_BANK")
+              .pipe(untilDestroyed(this))
+              .subscribe(
+                (acc: any) => {
+                  debits.forEach(element => {
+                    let debit: debitData = {
+                      id: element.id,
+                      name_reminder: acc.name,
+                      account_reminder: acc.account,
+                      account: element.account,
+                      money: element.money,
+                      content: element.content,
+                      status: element.status,
+                      type: "debit"
+                    };
 
-              // const existsDebit = this.debitsData.find(x => x.id == debit.id);
-              // if(existsDebit === null){
-              //   this.debitsData.push(debit);
-              // }
+                    this.debitsData.splice(this.debitsData.indexOf(debit), 1);
+                    this.debitsData.push(debit);
+                    //this.source.append(debit);
+                    this.source.reset();
+                    this.source.load([ ...this.debitsData, ...this.creditData]);
+                    this.loadingList = false;
+                  });
 
-              this.debitsData.splice(this.debitsData.indexOf(debit), 1);
-              this.debitsData.push(debit);
-              this.source.load(this.debitsData);
-              this.loadingList = false;
-            });
+                  //this.source.load(this.debitsData);
+                },
+                (err: HttpErrorResponse) => {
+                  this.loadingList = false;
+                }
+              );
           }
         },
         (err: any) => {
           this.loadingList = false;
         }
       );
+    this.subscription.add(subscription);
   }
 
   getCredits() {
     this.loadingList = true;
-    var subscription = this.customerService.credits$.pipe(takeUntil(this.unsubscribe$)).subscribe(
+    var subscription = this.customerService.credits$.pipe(untilDestroyed(this)).subscribe(
       (credits: Credits[]) => {
-        this.loadingList = false;
         this.credits = credits;
         if (credits != null && credits.length != 0) {
           credits.forEach(element => {
@@ -242,9 +274,11 @@ export class RemiderListComponent implements OnInit, OnDestroy {
                     type: "credit"
                   };
 
-                  this.debitsData.splice(this.debitsData.indexOf(credits), 1);
-                  this.debitsData.push(credits);
-                  this.source.load(this.debitsData);
+                  this.creditData.splice(this.creditData.indexOf(credits), 1);
+                  this.creditData.push(credits);
+                  //this.source.append(credits);
+                  this.source.reset();
+                  this.source.load([ ...this.debitsData, ...this.creditData]);
                   this.loadingList = false;
                 },
                 (err: HttpErrorResponse) => {
@@ -258,6 +292,7 @@ export class RemiderListComponent implements OnInit, OnDestroy {
         this.loadingList = false;
       }
     );
+    this.subscription.add(subscription);
   }
 
   onDeleteConfirm(event): void {
@@ -283,8 +318,7 @@ export class RemiderListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     localStorage.removeItem("paymentAccount");
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.subscription.unsubscribe();
   }
 }
 

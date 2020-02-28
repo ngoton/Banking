@@ -4,8 +4,15 @@
     </nb-card-header>
   
     <nb-card-body *ngIf="payment.account!=''">
-      <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)">
+      <ng2-smart-table [settings]="settings" [source]="source" (custom)="onCustomAction($event)" (deleteConfirm)="onDeleteConfirm($event)">
       </ng2-smart-table>
     </nb-card-body>
+    <notifier-container>
+      <ng-template #customNotification let-notificationData="notification">
+        <div>
+          <strong>{{ notificationData.message }}</strong>
+        </div>
+      </ng-template>
+    </notifier-container>
 </nb-card>
   

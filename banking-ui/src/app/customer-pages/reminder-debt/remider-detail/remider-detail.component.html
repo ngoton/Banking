@@ -49,4 +49,11 @@
         </div>
       </form>
     </nb-card-body>
+    <notifier-container>
+      <ng-template #customNotification let-notificationData="notification">
+        <div>
+          <strong>{{ notificationData.message }}</strong>
+        </div>
+      </ng-template>
+    </notifier-container>
   </nb-card>
