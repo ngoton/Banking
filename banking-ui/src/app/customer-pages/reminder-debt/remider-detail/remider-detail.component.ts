@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DebitService } from '../../../_services/debit.service';
-import { Debits, Payment, Customers } from '../../../_models/customer.model';
+import { Debits, Payment, Customers, AccountInfo } from '../../../_models/customer.model';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CustomerService } from '../../../_services/customer.service';
@@ -14,7 +14,7 @@ import { environment } from '../../../../environments/environment';
 export class RemiderDetailComponent implements OnInit, OnDestroy {
   loading: boolean = false;
 
-  customerInfo: Customers = new Customers();
+  accountInfo: AccountInfo;
   debitData: Debits = new Debits();
   debits: Debits[] = new Array();
 
@@ -25,16 +25,29 @@ export class RemiderDetailComponent implements OnInit, OnDestroy {
   constructor(private customerService: CustomerService,
               private debitService: DebitService) {
                 debugger;
-                this.source = environment.BASE_URL + environment.CUST_SERV + '/payment'; 
+                this.accountInfo = {
+                  name: '',
+                  account: '',
+                  bankName: ''
+                }
+
+                this.source =
+                  environment.BASE_URL +
+                  environment.ACC_SERV +
+                  `?bankName=HCB_BANK&account=`; 
                 //this.customerService.getDebitsData();
 
                 setTimeout(()=>{
+                  this.loading = true;
                   this.customerService.debits$
                   .pipe(untilDestroyed(this))
                   .subscribe(
                     (debits: Debits[]) => {
                       this.loading = false;
                       this.debits = debits;
+                    },
+                    (err: any) => {
+                      this.loading = false;
                     }
                   );
                 }, 2000);
@@ -49,11 +62,14 @@ export class RemiderDetailComponent implements OnInit, OnDestroy {
 
   callBack(data: any): void {
     if(data != null){
-      this.customerInfo = data;
-      this.customerInfo.fullName = this.customerInfo.firstName + " " + this.customerInfo.lastName;
+      this.accountInfo = data;
     }
     else{
-      this.customerInfo = new Customers();
+      this.accountInfo = {
+        name: '',
+        account: '',
+        bankName: ''
+      };
     }
     
   }
@@ -75,12 +91,11 @@ export class RemiderDetailComponent implements OnInit, OnDestroy {
   }
 
   accountChange(item) {
-    this.customerService.getByPaymentAccount(item.account)
+    this.customerService.getAccountInfo(item.account, "HCB_BANK")
     .pipe(untilDestroyed(this))
     .subscribe(
-      (cusctomer: Customers) => {
-        this.customerInfo = cusctomer;
-        this.customerInfo.fullName = this.customerInfo.firstName + " " + this.customerInfo.lastName;
+      (acc: AccountInfo) => {
+        this.accountInfo = acc;
       }
     );
   }

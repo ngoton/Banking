@@ -262,6 +262,7 @@ export class CustomerService implements OnDestroy {
   }
 
   public getDebitsData() {
+    debugger;
     this.getCustomerData().pipe(untilDestroyed(this)).subscribe(
       (customerResponse: any) => {
         this.debitService.getByCustomerId(customerResponse.customerId)

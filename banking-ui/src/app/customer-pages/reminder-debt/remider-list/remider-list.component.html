@@ -3,7 +3,7 @@
       Danh sách nhắc nợ
     </nb-card-header>
   
-    <nb-card-body>
+    <nb-card-body *ngIf="payment.account!=''">
       <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)">
       </ng2-smart-table>
     </nb-card-body>

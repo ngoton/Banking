@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation } from '@ang
 import { FormControl } from '@angular/forms';
 import { CustomerService } from '../../../_services/customer.service';
 import { untilDestroyed } from 'ngx-take-until-destroy';
-import { Customers, Beneficiarys, Payment, Savings, PaymentTransactions } from '../../../_models/customer.model';
+import { Customers, Beneficiarys, Payment, Savings, PaymentTransactions, AccountInfo } from '../../../_models/customer.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PaymentService } from '../../../_services/payment.service';
 import { SavingService } from '../../../_services/saving.service';
@@ -142,10 +142,4 @@ export class InternalComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
   }
 
-}
-
-export interface AccountInfo {
-  name: string,
-  account: string,
-  bankName: string
 }

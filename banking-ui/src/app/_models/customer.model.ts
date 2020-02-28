@@ -221,3 +221,9 @@ export class Notifications {
         this.gif_url  = obj && obj.gif_url || null;
     }
 }
+
+export interface AccountInfo {
+  name: string;
+  account: string;
+  bankName: string;
+}
