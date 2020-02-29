@@ -18,7 +18,8 @@ import { PaymentTransactionService } from '../../../_services/payment-transactio
 @Component({
   selector: "ngx-remider-list",
   templateUrl: "./remider-list.component.html",
-  styleUrls: ["./remider-list.component.scss"]
+  styleUrls: ["./remider-list.component.scss"],
+  encapsulation: ViewEncapsulation.None
 })
 export class RemiderListComponent implements OnInit, OnDestroy {
   @ViewChild("customNotification", { static: true }) customNotificationTmpl;
@@ -139,37 +140,32 @@ export class RemiderListComponent implements OnInit, OnDestroy {
     .pipe(untilDestroyed(this))
     .subscribe(
       (success: any) => {
-        var paymentTransaction = new PaymentTransactions();
-        var benificiary = new Beneficiarys();
+        this.dialogService.open(DialogOTPPromptComponent, { 
+          context: {
+            paymentInfor: success,
+          } 
+        }).onClose.subscribe(
+          (code: string ) => {
+            if(code){
+              this.notifi.show({
+                id: `paied`,
+                message: `Thanh toán nợ thành công`,
+                type: `info`,
+                template: this.customNotificationTmpl
+              });
 
-        // this.paymentTransactionService.internalPayment(paymentTransaction, benificiary)
-        // .pipe(untilDestroyed(this))
-        // .subscribe(
-        //   (response: any) => {
-        //     this.dialogService.open(DialogOTPPromptComponent, { 
-        //       context: {
-        //         paymentInfor: response
-        //       } 
-        //     }).onClose.subscribe((code: string ) => {
-        //       if(code){
-        //         this.notifi.show({
-        //           id: `paied`,
-        //           message: `Thanh toán nợ thành công`,
-        //           type: `info`,
-        //           template: this.customNotificationTmpl
-        //         });
-        //       }
-        //     });
-        //   },
-        //   (error: HttpErrorResponse) => {
-        //     this.notifi.show({
-        //       id: `payError`,
-        //       message: `Không thể thanh toán nợ`,
-        //       type: `error`,
-        //       template: this.customNotificationTmpl
-        //     });
-        //   }
-        // );
+              this.source.refresh();
+            }
+          },
+          (err: any) => {
+            this.notifi.show({
+              id: `payError`,
+              message: `Không thể thanh toán nợ`,
+              type: `error`,
+              template: this.customNotificationTmpl
+            });
+          }
+        );
       },
       (err: HttpErrorResponse) => {
         this.notifi.show({

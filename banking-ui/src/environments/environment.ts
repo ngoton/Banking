@@ -22,6 +22,7 @@ export const environment = {
   PAYMENT_SERV: '/internal/payments',
   PARTNER_SERV: '/internal/partners',
   TRANSF_SERV: '/internal/paymentTransaction',
+  TRANSF_SAVING_SERV: '/internal/savingTransaction',
   DEBIT_SERV: '/internal/debits',
   CREDIT_SERV: '/internal/credits',
   REQ_SERV: '',

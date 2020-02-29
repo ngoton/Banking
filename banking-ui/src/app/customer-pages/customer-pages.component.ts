@@ -18,6 +18,5 @@ export class CustomerPagesComponent {
   menu = MENU_ITEMS;
 
   constructor (private customerService: CustomerService){
-      
   }
 }

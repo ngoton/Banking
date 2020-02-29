@@ -23,7 +23,7 @@ export class DialogOTPPromptComponent implements OnInit, OnDestroy {
   submit(code) {
     debugger;
     this.sendingOTP = true;
-    this.paymentTransactionService.verifyPayment(this.paymentInfor, code)
+    this.paymentTransactionService.verifyPaymentDebit(this.paymentInfor, code)
     .pipe(untilDestroyed(this))
     .subscribe(
       (res: any) => {
