@@ -13,6 +13,7 @@ import { Customers } from '../../../_models/customer.model';
 import { AuthService } from '../../../_services/auth.service';
 import { Router } from '@angular/router';
 import { NotificationSocketService } from '../../../_services/notification-socket.service';
+import { messages } from '../../../customer-pages/extra-components/chat/messages';
 
 @Component({
   selector: 'ngx-ibanking-customer-header',
@@ -126,12 +127,17 @@ export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
   subscribeToServer() {
     var userInfo = JSON.parse(localStorage.getItem("userDetails"));
 
-    this.client.connect({name: userInfo.username}, frame => {
+    this.client.connect({}, frame => {
       console.log("Connected: ", frame);
-      this.client.subscribe(this.notificationService.topic, (message: any) => {
-        this.notification = JSON.parse(message.body);
-        console.log("notification: ", this.notification);
-      }, )
+      this.client.subscribe(this.notificationService.topic, 
+        function(message){
+          alert("Message" + message);
+          // console.log("ms: ", message);
+          // this.notification = JSON.parse(message.body);
+          // console.log("notification: ", this.notification.content);
+      }, function(error){
+        alert("STOMP error" + error);
+      })
     }, (err: any) => {
       console.log("errorCallBack -> " + err)
       setTimeout(() => {

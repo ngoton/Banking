@@ -178,7 +178,7 @@ export class RemiderListComponent implements OnInit, OnDestroy {
     );
   }
 
-  getPayment() {
+  async getPayment() {
     this.loadingList = true;
     var subscription = this.customerService.payments$
       .pipe(untilDestroyed(this))
@@ -190,6 +190,7 @@ export class RemiderListComponent implements OnInit, OnDestroy {
 
           this.getDebits();
           this.getCredits();
+          this.source.load([ ...this.debitsData, ...this.creditData]);
         },
         (err: any) => {
           this.loadingList = false;
@@ -205,6 +206,7 @@ export class RemiderListComponent implements OnInit, OnDestroy {
       .subscribe(
         (debits: Debits[]) => {
           this.debits = debits;
+          var debitData = [];
 
           if (debits != null && debits.length != 0) {
             this.customerService
@@ -224,15 +226,12 @@ export class RemiderListComponent implements OnInit, OnDestroy {
                       type: "debit"
                     };
 
-                    this.debitsData.splice(this.debitsData.indexOf(debit), 1);
-                    this.debitsData.push(debit);
-                    //this.source.append(debit);
-                    this.source.reset();
-                    this.source.load([ ...this.debitsData, ...this.creditData]);
+                    //this.debitsData.splice(this.debitsData.indexOf(debit), 1);
+                    debitData.push(debit);
                     this.loadingList = false;
                   });
 
-                  //this.source.load(this.debitsData);
+                  this.debitsData = debitData;
                 },
                 (err: HttpErrorResponse) => {
                   this.loadingList = false;
@@ -252,6 +251,8 @@ export class RemiderListComponent implements OnInit, OnDestroy {
     var subscription = this.customerService.credits$.pipe(untilDestroyed(this)).subscribe(
       (credits: Credits[]) => {
         this.credits = credits;
+        var creditData = [];
+
         if (credits != null && credits.length != 0) {
           credits.forEach(element => {
             this.customerService
@@ -270,11 +271,11 @@ export class RemiderListComponent implements OnInit, OnDestroy {
                     type: "credit"
                   };
 
-                  this.creditData.splice(this.creditData.indexOf(credits), 1);
-                  this.creditData.push(credits);
+                  //this.creditData.splice(this.creditData.indexOf(credits), 1);
+                  creditData.push(credits);
                   //this.source.append(credits);
-                  this.source.reset();
-                  this.source.load([ ...this.debitsData, ...this.creditData]);
+                  // this.source.reset();
+                  // this.source.load([ ...this.debitsData, ...this.creditData]);
                   this.loadingList = false;
                 },
                 (err: HttpErrorResponse) => {
