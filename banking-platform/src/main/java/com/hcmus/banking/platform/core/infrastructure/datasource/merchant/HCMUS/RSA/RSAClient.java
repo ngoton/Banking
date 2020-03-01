@@ -5,9 +5,11 @@ import com.hcmus.banking.platform.core.infrastructure.datasource.merchant.Mercha
 import com.hcmus.banking.platform.domain.merchant.MerchantAccount;
 import com.hcmus.banking.platform.domain.merchant.MerchantDeposit;
 import com.hcmus.banking.platform.domain.merchant.MerchantTransfer;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+@Primary
 @Component("RSAClient")
 public class RSAClient implements MerchantClient {
     RestTemplate restTemplate;
