@@ -21,11 +21,22 @@ export class CreditService {
 
   cancel(data): Observable<any> {
     const body = {
-      id: data.id,
+      creditId: data.id,
       content: data.content
     }
 
     const PATH = this.CREDIT_URL + `/cancel`;
+    return this.http.post<any>(PATH, JSON.stringify(body))
+    .pipe();
+  }
+
+  pay(creditId, data): Observable<any> {
+    const body = {
+      content: data.content,
+      fee: true
+    }
+
+    const PATH = this.CREDIT_URL + `/${creditId}/pay`;
     return this.http.post<any>(PATH, JSON.stringify(body))
     .pipe();
   }

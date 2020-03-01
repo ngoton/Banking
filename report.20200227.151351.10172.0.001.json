@@ -1,0 +1,579 @@
+
+{
+  "header": {
+    "reportVersion": 1,
+    "event": "Allocation failed - JavaScript heap out of memory",
+    "trigger": "FatalError",
+    "filename": "report.20200227.151351.10172.0.001.json",
+    "dumpEventTime": "2020-02-27T15:13:51Z",
+    "dumpEventTimeStamp": "1582791231395",
+    "processId": 10172,
+    "cwd": "D:\\Chihtm\\angular\\Banking",
+    "commandLine": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Program Files\\JetBrains\\PyCharm 2019.2.1\\plugins\\JavaScriptLanguage\\jsLanguageServicesImpl\\js-language-service.js",
+      "-id=1582789760540",
+      "-debug-name=typescript"
+    ],
+    "nodejsVersion": "v13.2.0",
+    "wordSize": 64,
+    "arch": "x64",
+    "platform": "win32",
+    "componentVersions": {
+      "node": "13.2.0",
+      "v8": "7.9.317.23-node.20",
+      "uv": "1.33.1",
+      "zlib": "1.2.11",
+      "brotli": "1.0.7",
+      "ares": "1.15.0",
+      "modules": "79",
+      "nghttp2": "1.40.0",
+      "napi": "5",
+      "llhttp": "1.1.4",
+      "openssl": "1.1.1d",
+      "cldr": "35.1",
+      "icu": "64.2",
+      "tz": "2019c",
+      "unicode": "12.1"
+    },
+    "release": {
+      "name": "node",
+      "headersUrl": "https://nodejs.org/download/release/v13.2.0/node-v13.2.0-headers.tar.gz",
+      "sourceUrl": "https://nodejs.org/download/release/v13.2.0/node-v13.2.0.tar.gz",
+      "libUrl": "https://nodejs.org/download/release/v13.2.0/win-x64/node.lib"
+    },
+    "osName": "Windows_NT",
+    "osRelease": "10.0.18362",
+    "osVersion": "Windows 10 Home Single Language",
+    "osMachine": "x86_64",
+    "cpus": [
+      {
+        "model": "Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz",
+        "speed": 1800,
+        "user": 225312,
+        "nice": 0,
+        "sys": 134875,
+        "idle": 1356187,
+        "irq": 16734
+      },
+      {
+        "model": "Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz",
+        "speed": 1800,
+        "user": 151265,
+        "nice": 0,
+        "sys": 56625,
+        "idle": 1508015,
+        "irq": 718
+      },
+      {
+        "model": "Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz",
+        "speed": 1800,
+        "user": 268203,
+        "nice": 0,
+        "sys": 108828,
+        "idle": 1338875,
+        "irq": 1000
+      },
+      {
+        "model": "Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz",
+        "speed": 1800,
+        "user": 203265,
+        "nice": 0,
+        "sys": 59984,
+        "idle": 1452640,
+        "irq": 703
+      },
+      {
+        "model": "Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz",
+        "speed": 1800,
+        "user": 225031,
+        "nice": 0,
+        "sys": 105593,
+        "idle": 1385265,
+        "irq": 1281
+      },
+      {
+        "model": "Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz",
+        "speed": 1800,
+        "user": 163578,
+        "nice": 0,
+        "sys": 72500,
+        "idle": 1479812,
+        "irq": 750
+      },
+      {
+        "model": "Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz",
+        "speed": 1800,
+        "user": 221953,
+        "nice": 0,
+        "sys": 100421,
+        "idle": 1393515,
+        "irq": 1015
+      },
+      {
+        "model": "Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz",
+        "speed": 1800,
+        "user": 188437,
+        "nice": 0,
+        "sys": 85515,
+        "idle": 1441937,
+        "irq": 750
+      }
+    ],
+    "networkInterfaces": [
+      {
+        "name": "Wi-Fi 2",
+        "internal": false,
+        "mac": "d0:c5:d3:e8:71:03",
+        "address": "fe80::d0ca:96b9:5ec7:ac05",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 9
+      },
+      {
+        "name": "Wi-Fi 2",
+        "internal": false,
+        "mac": "d0:c5:d3:e8:71:03",
+        "address": "192.168.1.118",
+        "netmask": "255.255.255.0",
+        "family": "IPv4"
+      },
+      {
+        "name": "Loopback Pseudo-Interface 1",
+        "internal": true,
+        "mac": "00:00:00:00:00:00",
+        "address": "::1",
+        "netmask": "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+        "family": "IPv6",
+        "scopeid": 0
+      },
+      {
+        "name": "Loopback Pseudo-Interface 1",
+        "internal": true,
+        "mac": "00:00:00:00:00:00",
+        "address": "127.0.0.1",
+        "netmask": "255.0.0.0",
+        "family": "IPv4"
+      }
+    ],
+    "host": "Sateraito-Chi"
+  },
+  "javascriptStack": {
+    "message": "No stack.",
+    "stack": [
+      "Unavailable."
+    ]
+  },
+  "nativeStack": [
+    {
+      "pc": "0x00007ff750251479",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff7502557ec",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff7502547a8",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750340f3b",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750b67e6e",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750b4f5c1",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750a1690c",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750a1e95f",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750a13e83",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750a12614",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750a34604",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff75078ec51",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750faad2d",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f77a31",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f32411",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff75101648b",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f32317",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff75101648b",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750fbd659",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750fbd659",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750fbd659",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750fbd659",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750fbd659",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x00007ff750f365cb",
+      "symbol": ""
+    },
+    {
+      "pc": "0x000000c13caa9658",
+      "symbol": ""
+    }
+  ],
+  "javascriptHeap": {
+    "totalMemory": 497860608,
+    "totalCommittedMemory": 497860608,
+    "usedMemory": 495040920,
+    "availableMemory": 1702051936,
+    "memoryLimit": 2197815296,
+    "heapSpaces": {
+      "read_only_space": {
+        "memorySize": 262144,
+        "committedMemory": 262144,
+        "capacity": 33040,
+        "used": 33040,
+        "available": 0
+      },
+      "new_space": {
+        "memorySize": 1048576,
+        "committedMemory": 1048576,
+        "capacity": 1047424,
+        "used": 1047408,
+        "available": 16
+      },
+      "old_space": {
+        "memorySize": 447844352,
+        "committedMemory": 447844352,
+        "capacity": 446674976,
+        "used": 445948688,
+        "available": 726288
+      },
+      "code_space": {
+        "memorySize": 4100096,
+        "committedMemory": 4100096,
+        "capacity": 3843168,
+        "used": 3531008,
+        "available": 312160
+      },
+      "map_space": {
+        "memorySize": 1576960,
+        "committedMemory": 1576960,
+        "capacity": 1574720,
+        "used": 1563360,
+        "available": 11360
+      },
+      "large_object_space": {
+        "memorySize": 42979328,
+        "committedMemory": 42979328,
+        "capacity": 42914632,
+        "used": 42914632,
+        "available": 0
+      },
+      "code_large_object_space": {
+        "memorySize": 49152,
+        "committedMemory": 49152,
+        "capacity": 2784,
+        "used": 2784,
+        "available": 0
+      },
+      "new_large_object_space": {
+        "memorySize": 0,
+        "committedMemory": 0,
+        "capacity": 1047424,
+        "used": 0,
+        "available": 1047424
+      }
+    }
+  },
+  "resourceUsage": {
+    "userCpuSeconds": 106.703,
+    "kernelCpuSeconds": 28.671,
+    "cpuConsumptionPercent": 9.20912,
+    "maxRss": 516620288,
+    "pageFaults": {
+      "IORequired": 518037,
+      "IONotRequired": 0
+    },
+    "fsActivity": {
+      "reads": 36781,
+      "writes": 739
+    }
+  },
+  "libuv": [
+  ],
+  "environmentVariables": {
+    "=::": "::\\",
+    "=C:": "C:\\",
+    "ALLUSERSPROFILE": "C:\\ProgramData",
+    "Anacoda": "C:\\Users\\Asus\\Anaconda3\\Scripts",
+    "APPDATA": "C:\\Users\\Asus\\AppData\\Roaming",
+    "CommonProgramFiles": "C:\\Program Files\\Common Files",
+    "CommonProgramFiles(x86)": "C:\\Program Files (x86)\\Common Files",
+    "CommonProgramW6432": "C:\\Program Files\\Common Files",
+    "COMPUTERNAME": "SATERAITO-CHI",
+    "ComSpec": "C:\\WINDOWS\\system32\\cmd.exe",
+    "DriverData": "C:\\Windows\\System32\\Drivers\\DriverData",
+    "FPS_BROWSER_APP_PROFILE_STRING": "Internet Explorer",
+    "FPS_BROWSER_USER_PROFILE_STRING": "Default",
+    "GOOGLE_API_KEY": "no",
+    "GOOGLE_DEFAULT_CLIENT_ID": "no",
+    "GOOGLE_DEFAULT_CLIENT_SECRET": "no",
+    "HOMEDRIVE": "C:",
+    "HOMEPATH": "\\Users\\Asus",
+    "IDEA_INITIAL_DIRECTORY": "C:\\Users\\Asus\\Desktop",
+    "LOCALAPPDATA": "C:\\Users\\Asus\\AppData\\Local",
+    "LOGONSERVER": "\\\\SATERAITO-CHI",
+    "MOZ_PLUGIN_PATH": "C:\\Program Files (x86)\\Foxit Software\\Foxit PhantomPDF\\plugins\\",
+    "NUMBER_OF_PROCESSORS": "8",
+    "OneDrive": "C:\\Users\\Asus\\OneDrive",
+    "OS": "Windows_NT",
+    "Path": "C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\iCLS\\;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\iCLS\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Git\\cmd;C:\\Program Files\\nodejs\\;C:\\Users\\Asus\\Anaconda3;C:\\Users\\Asus\\Anaconda3\\Library\\mingw-w64\\bin;C:\\Users\\Asus\\Anaconda3\\Library\\usr\\bin;C:\\Users\\Asus\\Anaconda3\\Library\\bin;C:\\Users\\Asus\\Anaconda3\\Scripts;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\iCLS\\;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\iCLS\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Git\\cmd;C:\\Program Files\\nodejs\\;C:\\Users\\Asus\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Program Files\\JetBrains\\PyCharm 2019.2.1\\bin;C:\\Users\\Asus\\AppData\\Local\\Google\\Cloud SDK\\google-cloud-sdk\\bin;C:\\Program Files (x86)\\Google\\google_appengine\\;C:\\Users\\Asus\\AppData\\Roaming\\npm;C:\\Python;C:\\Users\\Asus\\AppData\\Local\\Programs\\Microsoft VS Code\\bin",
+    "PATHEXT": ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC",
+    "PROCESSOR_ARCHITECTURE": "AMD64",
+    "PROCESSOR_IDENTIFIER": "Intel64 Family 6 Model 142 Stepping 10, GenuineIntel",
+    "PROCESSOR_LEVEL": "6",
+    "PROCESSOR_REVISION": "8e0a",
+    "ProgramData": "C:\\ProgramData",
+    "ProgramFiles": "C:\\Program Files",
+    "ProgramFiles(x86)": "C:\\Program Files (x86)",
+    "ProgramW6432": "C:\\Program Files",
+    "PSModulePath": "C:\\Users\\Asus\\Documents\\WindowsPowerShell\\Modules;C:\\Users\\Asus\\AppData\\Local\\Google\\Cloud SDK\\google-cloud-sdk\\platform\\PowerShell",
+    "PUBLIC": "C:\\Users\\Public",
+    "PyCharm": "C:\\Program Files\\JetBrains\\PyCharm 2019.2.1\\bin;",
+    "Script": "C:\\Python27\\Scripts",
+    "SESSIONNAME": "Console",
+    "SystemDrive": "C:",
+    "SystemRoot": "C:\\WINDOWS",
+    "TEMP": "C:\\Users\\Asus\\AppData\\Local\\Temp",
+    "TMP": "C:\\Users\\Asus\\AppData\\Local\\Temp",
+    "USERDOMAIN": "SATERAITO-CHI",
+    "USERDOMAIN_ROAMINGPROFILE": "SATERAITO-CHI",
+    "USERNAME": "Asus",
+    "USERPROFILE": "C:\\Users\\Asus",
+    "windir": "C:\\WINDOWS"
+  },
+  "sharedObjects": [
+    "C:\\Program Files\\nodejs\\node.exe",
+    "C:\\WINDOWS\\SYSTEM32\\ntdll.dll",
+    "C:\\WINDOWS\\System32\\KERNEL32.DLL",
+    "C:\\WINDOWS\\System32\\KERNELBASE.dll",
+    "C:\\WINDOWS\\System32\\WS2_32.dll",
+    "C:\\WINDOWS\\System32\\RPCRT4.dll",
+    "C:\\WINDOWS\\SYSTEM32\\dbghelp.dll",
+    "C:\\WINDOWS\\System32\\ucrtbase.dll",
+    "C:\\WINDOWS\\System32\\ADVAPI32.dll",
+    "C:\\WINDOWS\\System32\\msvcrt.dll",
+    "C:\\WINDOWS\\System32\\sechost.dll",
+    "C:\\WINDOWS\\System32\\USER32.dll",
+    "C:\\WINDOWS\\System32\\win32u.dll",
+    "C:\\WINDOWS\\System32\\GDI32.dll",
+    "C:\\WINDOWS\\System32\\gdi32full.dll",
+    "C:\\WINDOWS\\System32\\msvcp_win.dll",
+    "C:\\WINDOWS\\System32\\PSAPI.DLL",
+    "C:\\WINDOWS\\System32\\CRYPT32.dll",
+    "C:\\WINDOWS\\System32\\MSASN1.dll",
+    "C:\\WINDOWS\\SYSTEM32\\USERENV.dll",
+    "C:\\WINDOWS\\SYSTEM32\\IPHLPAPI.DLL",
+    "C:\\WINDOWS\\System32\\bcrypt.dll",
+    "C:\\WINDOWS\\System32\\profapi.dll",
+    "C:\\WINDOWS\\SYSTEM32\\WINMM.dll",
+    "C:\\WINDOWS\\SYSTEM32\\winmmbase.dll",
+    "C:\\WINDOWS\\System32\\cfgmgr32.dll",
+    "C:\\WINDOWS\\System32\\bcryptPrimitives.dll",
+    "C:\\WINDOWS\\System32\\IMM32.DLL",
+    "C:\\WINDOWS\\System32\\powrprof.dll",
+    "C:\\WINDOWS\\System32\\UMPDC.dll",
+    "C:\\WINDOWS\\SYSTEM32\\CRYPTBASE.DLL",
+    "C:\\WINDOWS\\system32\\uxtheme.dll",
+    "C:\\WINDOWS\\System32\\combase.dll",
+    "C:\\WINDOWS\\system32\\mswsock.dll",
+    "C:\\WINDOWS\\System32\\kernel.appcore.dll",
+    "C:\\WINDOWS\\System32\\NSI.dll",
+    "C:\\WINDOWS\\SYSTEM32\\dhcpcsvc6.DLL",
+    "C:\\WINDOWS\\SYSTEM32\\dhcpcsvc.DLL",
+    "C:\\WINDOWS\\SYSTEM32\\DNSAPI.dll",
+    "C:\\WINDOWS\\system32\\napinsp.dll",
+    "C:\\WINDOWS\\system32\\pnrpnsp.dll",
+    "C:\\WINDOWS\\System32\\winrnr.dll",
+    "C:\\WINDOWS\\system32\\NLAapi.dll",
+    "C:\\WINDOWS\\system32\\wshbth.dll"
+  ]
+}

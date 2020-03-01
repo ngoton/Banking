@@ -33,7 +33,7 @@ export class DebitService {
 
   cancel(data): Observable<any> {
     const body = {
-      id: data.id,
+      debitId: data.id,
       content: data.content
     }
 

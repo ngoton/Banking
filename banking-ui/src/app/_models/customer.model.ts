@@ -123,9 +123,9 @@ export class Beneficiarys {
 export class Credits {
     id: number;
     account: string;
-    money: string;
+    money: number;
     content: string;
-    status: number;
+    status: string;
     customers_id: number;
 
     constructor(obj?: any) {
@@ -143,7 +143,7 @@ export class Debits {
     account: string;
     money: number;
     content: string;
-    status: number;
+    status: string;
     customers_id: number;
 
     constructor(obj?: any) {
@@ -220,4 +220,10 @@ export class Notifications {
         this.nextAction  = obj && obj.nextAction || null;
         this.gif_url  = obj && obj.gif_url || null;
     }
+}
+
+export interface AccountInfo {
+  name: string;
+  account: string;
+  bankName: string;
 }

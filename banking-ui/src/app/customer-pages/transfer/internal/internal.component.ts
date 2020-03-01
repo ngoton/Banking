@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation } from '@ang
 import { FormControl } from '@angular/forms';
 import { CustomerService } from '../../../_services/customer.service';
 import { untilDestroyed } from 'ngx-take-until-destroy';
-import { Customers, Beneficiarys, Payment, Savings, PaymentTransactions } from '../../../_models/customer.model';
+import { Customers, Beneficiarys, Payment, Savings, PaymentTransactions, AccountInfo } from '../../../_models/customer.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PaymentService } from '../../../_services/payment.service';
 import { SavingService } from '../../../_services/saving.service';
@@ -30,7 +30,7 @@ export class InternalComponent implements OnInit, OnDestroy {
   public keypadNumbers = ['10.000', '20.000', '50.000', '100.000', '500.000', '1,000.000', '2,000.000', '3,000.000'];
   amountSubmitted = false;
   source: string;
-  resultCustomer: Customers = new Customers();
+  accountInfo: AccountInfo;
   internalAccounts: any[] = new Array();
   benificiary: Beneficiarys[] = new Array();
   selectedBenificiary: Beneficiarys = new Beneficiarys();
@@ -45,7 +45,7 @@ export class InternalComponent implements OnInit, OnDestroy {
               private benificiaryService: BenificiaryService,
               private notifications: NotifierService,
               private router: Router) {
-                this.source = environment.BASE_URL + environment.CUST_SERV + '/payment';
+                this.source = environment.BASE_URL + environment.ACC_SERV + `?bankName=HCB_BANK&account=`;
                 this.notifier = notifications;
               }
 
@@ -79,12 +79,12 @@ export class InternalComponent implements OnInit, OnDestroy {
 
   callBack(data: any): void {
     if(data != null){
-      this.resultCustomer = data;
+      this.accountInfo = data;
 
       let benificiary = new Beneficiarys();
-      benificiary.name = this.resultCustomer.firstName + ' ' + this.resultCustomer.lastName;
-      benificiary.account = this.paymentTransaction.beneficiaryAccount;
-      benificiary.bankName = environment.BANK_NAME;
+      benificiary.name = this.accountInfo.name;
+      benificiary.account = this.accountInfo.account;
+      benificiary.bankName = this.accountInfo.bankName;
       let savedBenificiary = this.benificiary.find(x => x.account == benificiary.account);
       if(savedBenificiary == null){
         this.benificiaryService.insert(benificiary).pipe(untilDestroyed(this))

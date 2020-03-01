@@ -1,0 +1,71 @@
+@import '~@nebular/theme/styles/global/breakpoints';
+
+@import url("~angular-notifier/styles/core");
+@import url("~angular-notifier/styles/themes/theme-material");
+@import url("~angular-notifier/styles/types/type-default");
+@import url("~angular-notifier/styles/types/type-error");
+@import url("~angular-notifier/styles/types/type-info");
+@import url("~angular-notifier/styles/types/type-success");
+@import url("~angular-notifier/styles/types/type-warning");
+
+:host /deep/ {
+    
+}
+
+ng2-smart-table {
+    .show-all {
+        .ng2-smart-actions {
+            display: flex;
+            flex-direction: column;
+            height: auto;
+
+            ng2-st-tbody-custom {
+                border-bottom: 0.5px solid #edf1f7;
+                &:hover{
+                    background-color: #fff;
+                }
+                
+            }
+
+            ng2-st-tbody-edit-delete {
+                border-top: 0.5px solid #edf1f7;
+                &:hover{
+                    background-color: #fff;
+                }
+            }
+
+            a.ng2-smart-action.ng2-smart-action-custom-custom{ 
+                &:hover {
+                    color: #3366ff;
+                }
+            }
+        }
+    }
+
+    .hide-action {
+        ng2-st-tbody-edit-delete {
+            display: none;
+            visibility: hidden;
+        }
+
+        a.ng2-smart-action.ng2-smart-action-custom-custom {
+            &:hover {
+                color: #3366ff;
+            }
+        }
+    }
+
+    .hide-custom-action {
+        ng2-st-tbody-custom {
+            display: none;
+            visibility: hidden;
+        }
+    }
+
+    .hide-all {
+        display: none;
+        visibility: hidden;
+    }
+}
+
+

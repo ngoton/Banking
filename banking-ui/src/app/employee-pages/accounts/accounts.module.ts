@@ -21,14 +21,16 @@ import {
   NbPopoverModule,
   NbTooltipModule,
   NbWindowModule,
-  NbSpinnerModule
+  NbSpinnerModule,
+  NbCheckboxModule,
 } from '@nebular/theme';
 
 import { ThemeModule } from '../../@theme/theme.module';
 import { MatAutocompleteModule, MatOptionModule } from '@angular/material';
+import { StatusCardComponent } from './status-card/status-card.component';
 
 @NgModule({
-  declarations: [AccountsComponent, NewAccountComponent],
+  declarations: [AccountsComponent, NewAccountComponent, StatusCardComponent],
   imports: [
     CommonModule,
     ThemeModule,
@@ -49,7 +51,8 @@ import { MatAutocompleteModule, MatOptionModule } from '@angular/material';
     NbPopoverModule,
     NbTooltipModule,
     NbWindowModule,
-    AccountsRoutingModule
+    AccountsRoutingModule,
+    NbCheckboxModule,
   ]
 })
 export class AccountsModule { }

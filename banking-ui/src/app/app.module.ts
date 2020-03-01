@@ -26,7 +26,6 @@ import { NotifierModule, NotifierService } from 'angular-notifier';
 import { CurrencyPipe } from '@angular/common';
 import { InterceptorService } from './_services/interceptor.service';
 import { CurrencyMaskModule } from "ngx-currency-mask";
-
 @NgModule({
   declarations: [AppComponent],
   imports: [

@@ -1,10 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import {
   NbSortDirection,
   NbSortRequest,
   NbTreeGridDataSource,
   NbTreeGridDataSourceBuilder
 } from '@nebular/theme';
+import { PaymentTransactionService } from '../../_services/payment-transaction.service';
+import { SavingTransactionService } from '../../_services/saving-transaction.service';
+import { CustomerService } from '../../_services/customer.service';
+import { pipe } from 'rxjs';
+import { untilDestroyed } from 'ngx-take-until-destroy';
+import { Payment, Savings } from '../../_models/customer.model';
+import { elementAt } from 'rxjs/operators';
 
 interface TreeNode<T> {
   data: T;
@@ -24,13 +31,19 @@ interface FSEntry {
   templateUrl: './transaction-history.component.html',
   styleUrls: ['./transaction-history.component.scss']
 })
-export class TransactionHistoryComponent implements OnInit {
+export class TransactionHistoryComponent implements OnInit, OnDestroy {
   customColumn = {bindingName: 'transaction_type', showName: 'Loại giao dịch'};
   defaultColumns = [
     {bindingName: 'content', showName: 'Nội dung'},
     {bindingName: 'date', showName: 'Ngày'},
     {bindingName: 'money', showName: 'Số tiền'}];
   allColumns = ['transaction_type', 'content', 'date', 'money'];
+
+  paymentInfor: Payment = new Payment();
+  savingInfor: Savings = new Savings();
+  receiveHistories: TreeNode<FSEntry>[]= new Array();
+  transferHistories: TreeNode<FSEntry>[] = new Array();
+  creditHistories: TreeNode<FSEntry>[] = new Array();
 
   private data: TreeNode<FSEntry>[] = [
     {
@@ -40,32 +53,7 @@ export class TransactionHistoryComponent implements OnInit {
         date: '',
         money: ''
       },
-      children: [
-        {
-          data: {
-            transaction_type: null,
-            content: 'Tiền lì xì',
-            date: '28/01/2020',
-            money: '500.000'
-          }
-        },
-        {
-          data: {
-            transaction_type: null,
-            content: 'Tiền lì xì',
-            date: '28/01/2020',
-            money: '500.000'
-          }
-        },
-        {
-          data: {
-            transaction_type: null,
-            content: 'Tiền lì xì',
-            date: '28/01/2020',
-            money: '500.000'
-          }
-        }
-      ]
+      children: this.receiveHistories
     },
     {
       data: {
@@ -142,8 +130,89 @@ export class TransactionHistoryComponent implements OnInit {
   sortColumn: string;
   sortDirection: NbSortDirection = NbSortDirection.NONE;
 
-  constructor(private dataSourceBuilder: NbTreeGridDataSourceBuilder<FSEntry>) {
-    this.dataSource = this.dataSourceBuilder.create(this.data);
+  constructor(private dataSourceBuilder: NbTreeGridDataSourceBuilder<FSEntry>,
+              private customerService: CustomerService,
+              private paymentTransationService: PaymentTransactionService,
+              private savingTransactionService: SavingTransactionService) {
+    // this.dataSource = this.dataSourceBuilder.create(this.data);
+  }
+
+  getPayment() {
+    this.customerService.payments$
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        (payment: Payment) => {
+          this.paymentInfor = payment;
+          if(this.paymentInfor != null){
+            this.getPaymentReceiveHistory();
+          }
+        },
+        (err: any) => {
+
+        }
+      );
+  }
+
+  getSaving() {
+    this.customerService.savings$
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        (saving: Savings) => {
+          this.savingInfor = saving;
+          if(this.savingInfor != null){
+            this.getSavingReceiveHistory();
+          }
+        },
+        (err: any) => {
+
+        }
+      );
+  }
+
+  getPaymentReceiveHistory() {
+    debugger;
+    this.paymentTransationService.getPaymentReceive(this.paymentInfor.paymentId)
+    .pipe(untilDestroyed(this))
+    .subscribe(
+      (success: any) => {
+        success.content.forEach(item => {
+          let node : TreeNode<FSEntry> = {
+            data: {
+              transaction_type: null,
+              content: item.content,
+              date: item.createdAt,
+              money: item.money,
+            }
+          }
+          this.receiveHistories.splice(this.receiveHistories.indexOf(node), 1);
+          this.receiveHistories.push(node);
+        });
+        this.dataSource = this.dataSourceBuilder.create(this.data);
+      }
+    );
+  }
+
+  getSavingReceiveHistory() {
+    debugger;
+    this.savingTransactionService.getSavingReceive(this.paymentInfor.paymentId)
+    .pipe(untilDestroyed(this))
+    .subscribe(
+      (success: any) => {
+        success.content.forEach(item => {
+          let node : TreeNode<FSEntry> = {
+            data: {
+              transaction_type: null,
+              content: item.content,
+              date: item.createdAt,
+              money: item.money,
+            }
+          }
+          this.receiveHistories.splice(this.receiveHistories.indexOf(node), 1);
+          this.receiveHistories.push(node);
+        });
+        this.dataSource = this.dataSourceBuilder.create(this.data);
+      }
+    );
   }
 
   updateSort(sortRequest: NbSortRequest): void {
@@ -164,7 +233,11 @@ export class TransactionHistoryComponent implements OnInit {
     return minWithForMultipleColumns + nextColumnStep * index;
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.getPayment();
+  }
+
+  ngOnDestroy() {}
 }
 
 @Component({

@@ -42,7 +42,7 @@ export class AutoCompleteComponent implements OnInit {
     this.loading = true;
     this.loadingChange.emit(this.loading);
     
-    this.httpClient.get<any>(`${this.dataSource}/${this.keywork}`).pipe(retry(3))
+    this.httpClient.get<any>(this.dataSource + `${this.keywork}`).pipe(retry(3))
     .subscribe(
       (res: any) => {
         this.response = res;

@@ -8,37 +8,118 @@
   </nb-card-header>
   <nb-card-body>
     <div class="auth-block">
-      <h1 id="title" class="title">Đăng nhập</h1>
-      <p class="sub-title">Nhập thông tin đăng nhập bên dưới.</p>
+      <h1 id="title" class="title">Đăng ký</h1>
       <form  aria-labelledby="title">
 
         <div class="form-control-group">
-          <label class="label" for="input-username">Tên Đăng nhập:</label>
-          <input nbInput>
+          <label class="label">Họ tên:</label>
+          <input nbInput
+            fullWidth
+            name="fullname"
+            id="input-fullname"
+            pattern="[a-zA-Z0-9]*"
+            placeholder="Nhập tên của bạn"
+            fieldSize="large"
+            autofocus
+          >
           <ng-container >
             <p class="caption status-danger">
-              Tên Đăng nhập không được để trống!
+              <!-- Tên Đăng nhập không được để trống! -->
             </p>
             <p class="caption status-danger" >
-              Tên Đăng nhập bao gồm chữ số, không bao gồm kí tự đặc biệt
+              <!-- Tên Đăng nhập bao gồm chữ số, không bao gồm kí tự đặc biệt -->
             </p>
           </ng-container>
         </div>
+
+        <div class="form-control-group">
+          <label class="label">Email:</label>
+          <input nbInput
+            fullWidth
+            name="email"
+            id="input-email"
+            pattern="[a-zA-Z0-9]*"
+            placeholder="Nhập email của bạn"
+            fieldSize="large"
+            autofocus
+          >
+          <ng-container >
+            <p class="caption status-danger">
+              <!-- Tên Đăng nhập không được để trống! -->
+            </p>
+            <p class="caption status-danger" >
+              <!-- Tên Đăng nhập bao gồm chữ số, không bao gồm kí tự đặc biệt -->
+            </p>
+          </ng-container>
+        </div>
+
+        <div class="form-control-group">
+          <label class="label">Phone:</label>
+          <input nbInput
+            fullWidth
+            name="phone"
+            id="input-phone"
+            pattern="[a-zA-Z0-9]*"
+            placeholder="xxx-xxx-xxxx"
+            fieldSize="large"
+            autofocus
+          >
+          <ng-container >
+            <p class="caption status-danger">
+              <!-- Tên Đăng nhập không được để trống! -->
+            </p>
+            <p class="caption status-danger" >
+              <!-- Tên Đăng nhập bao gồm chữ số, không bao gồm kí tự đặc biệt -->
+            </p>
+          </ng-container>
+        </div>
+
+        <div class="form-control-group">
+          <label class="label">Tên đăng nhập:</label>
+          <input nbInput
+            fullWidth
+            name="username"
+            id="input-username"
+            pattern="[a-zA-Z0-9]*"
+            placeholder="Nhập tên đăng nhập"
+            fieldSize="large"
+            autofocus
+          >
+          <ng-container >
+            <p class="caption status-danger">
+              <!-- Tên Đăng nhập không được để trống! -->
+            </p>
+            <p class="caption status-danger" >
+              <!-- Tên Đăng nhập bao gồm chữ số, không bao gồm kí tự đặc biệt -->
+            </p>
+          </ng-container>
+        </div>
+
       
         <div class="form-control-group">
           <span class="label-with-link">
-            <label class="label" for="input-Password">Mật khẩu:</label>
-            <a class="forgot-Password caption-2" routerLink="">Quên mật khẩu?</a>
+            <label class="label" for="input-password">Email:</label>
           </span>
-          <input nbInput>
+          <input nbInput
+            fullWidth
+            name="password"
+            type="password"
+            id="input-Password"
+            placeholder="Nhập mật khẩu"
+            fieldSize="large"
+          >
           <ng-container>
             <p class="caption status-danger">
-              Mật khẩu/ không được để trống!
+              <!-- Mật khẩu/ không được để trống! -->
             </p>
             <p class="caption status-danger">
-              Mật khẩu/ phải có độ dài
+              <!-- Mật khẩu/ phải có độ dài -->
             </p>
           </ng-container>
+        </div>
+
+        <div class="form-control-group accept-group">
+          <nb-checkbox name="rememberMe">Hiển thị mật khẩu</nb-checkbox>
         </div>
       
         <button nbButton
@@ -47,7 +128,7 @@
                 size="large"
                 [disabled]=""
                 [class.btn-pulse]="submitted">
-          Đăng nhập
+          Đăng ký
         </button>
       </form>
     </div>  

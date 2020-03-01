@@ -18,34 +18,34 @@ interface CardSettings {
 }
 
 @Component({
-  selector: 'ngx-accounts',
-  styleUrls: ['./accounts.component.scss'],
-  templateUrl: './accounts.component.html',
+  selector: "ngx-accounts",
+  styleUrls: ["./accounts.component.scss"],
+  templateUrl: "./accounts.component.html"
 })
 export class AccountsComponent implements OnDestroy {
-
   private alive = true;
+  loadingAccount = false;
 
   solarValue: number;
   lightCard: CardSettings = {
-    title: 'Light',
-    iconClass: 'nb-checkmark-circle',
-    type: 'primary',
+    title: "Light",
+    iconClass: "nb-checkmark-circle",
+    type: "primary"
   };
   rollerShadesCard: CardSettings = {
-    title: 'Roller Shades',
-    iconClass: 'nb-roller-shades',
-    type: 'success',
+    title: "Roller Shades",
+    iconClass: "nb-roller-shades",
+    type: "success"
   };
   wirelessAudioCard: CardSettings = {
-    title: 'Wireless Audio',
-    iconClass: 'nb-audio',
-    type: 'info',
+    title: "Wireless Audio",
+    iconClass: "nb-audio",
+    type: "info"
   };
   coffeeMakerCard: CardSettings = {
-    title: 'Coffee Maker',
-    iconClass: 'nb-coffee-maker',
-    type: 'warning',
+    title: "Coffee Maker",
+    iconClass: "nb-coffee-maker",
+    type: "warning"
   };
 
   statusCards: string;
@@ -54,7 +54,7 @@ export class AccountsComponent implements OnDestroy {
     this.lightCard,
     this.rollerShadesCard,
     this.wirelessAudioCard,
-    this.coffeeMakerCard,
+    this.coffeeMakerCard
   ];
 
   statusCardsByThemes: {
@@ -68,89 +68,108 @@ export class AccountsComponent implements OnDestroy {
     corporate: [
       {
         ...this.lightCard,
-        type: 'warning',
+        type: "warning"
       },
       {
         ...this.rollerShadesCard,
-        type: 'primary',
+        type: "primary"
       },
       {
         ...this.wirelessAudioCard,
-        type: 'danger',
+        type: "danger"
       },
       {
         ...this.coffeeMakerCard,
-        type: 'info',
-      },
+        type: "info"
+      }
     ],
-    dark: this.commonStatusCardsSet,
+    dark: this.commonStatusCardsSet
   };
 
   customerInfor: Customers;
   saving: Savings;
   payment: Payment;
 
-  constructor(private themeService: NbThemeService,
-              private accountsService: AccountsService,
-              private solarService: SolarData,
-              private paymentService: PaymentService,
-              private savingService: SavingService,
-              private decimalPipe: DecimalPipe) {
+  constructor(
+    private themeService: NbThemeService,
+    private accountsService: AccountsService,
+    private solarService: SolarData,
+    private paymentService: PaymentService,
+    private savingService: SavingService,
+    private decimalPipe: DecimalPipe
+  ) {
     this.saving = new Savings();
     this.payment = new Payment();
-    
-    this.themeService.getJsTheme()
+
+    this.themeService
+      .getJsTheme()
       .pipe(takeWhile(() => this.alive))
       .subscribe(theme => {
         this.statusCards = this.statusCardsByThemes[theme.name];
-    });
+      });
 
     // Subscribe to user Details from UserService
     setTimeout(() => {
+      this.loadingAccount = true;
       this.accountsService.acctDetail$
         .pipe(untilDestroyed(this))
         .subscribe((response: Customers) => {
+          this.loadingAccount = false;
           this.customerInfor = response;
 
           this.getPayment(this.customerInfor.customerId);
           this.getSaving(this.customerInfor.customerId);
+        }, (err: any) => {
+          this.loadingAccount = false;
         });
     }, 2000);
 
-
-    this.solarService.getSolarData()
+    this.solarService
+      .getSolarData()
       .pipe(takeWhile(() => this.alive))
-      .subscribe((data) => {
+      .subscribe(data => {
         this.solarValue = data;
       });
   }
 
-  getPayment(customerId){
-    this.paymentService.getPaymentsByCustomerId(customerId)
-    .pipe(untilDestroyed(this))
-    .subscribe(
-      (payment: Payment[]) => {
-        this.payment = payment[0];
-        this.payment.balance = this.decimalPipe.transform(this.payment.balance, '1.0-3');
-      },
-      (err: HttpErrorResponse)=> {
-        
-      }
-    );
+  getPayment(customerId) {
+    this.loadingAccount = true;
+    this.paymentService
+      .getPaymentsByCustomerId(customerId)
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        (payment: Payment[]) => {
+          this.loadingAccount = false;
+          this.payment = payment[0];
+          this.payment.balance = this.decimalPipe.transform(
+            this.payment.balance,
+            "1.0-3"
+          );
+        },
+        (err: HttpErrorResponse) => {
+          this.loadingAccount = false;
+        }
+      );
   }
 
-  getSaving(customerId){
-    this.savingService.getSavingsByCustomerId(customerId)
-    .pipe(untilDestroyed(this))
-    .subscribe(
-      (saving: Savings[]) => {
-        this.saving = saving[0];
-        this.saving.balance = this.decimalPipe.transform(this.saving.balance, '1.0-3');
-      },
-      (err: HttpErrorResponse)=> {
-        
-      }
-    );
+  getSaving(customerId) {
+    this.loadingAccount = true;
+    this.savingService
+      .getSavingsByCustomerId(customerId)
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        (saving: Savings[]) => {
+          this.loadingAccount = false;
+          this.saving = saving[0];
+          this.saving.balance = this.decimalPipe.transform(
+            this.saving.balance,
+            "1.0-3"
+          );
+        },
+        (err: HttpErrorResponse) => {
+          this.loadingAccount = false;
+        }
+      );
   }
 
   ngOnDestroy() {

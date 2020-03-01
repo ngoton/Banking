@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import {
+  NbSpinnerModule,
   NbActionsModule,
   NbButtonModule,
   NbCardModule,
@@ -22,6 +23,7 @@ import { DecimalPipe } from '@angular/common';
   imports: [
     FormsModule,
     ThemeModule,
+    NbSpinnerModule,
     NbCardModule,
     NbUserModule,
     NbButtonModule,
