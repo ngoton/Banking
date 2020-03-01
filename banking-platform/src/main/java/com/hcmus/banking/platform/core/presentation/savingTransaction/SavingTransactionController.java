@@ -22,19 +22,44 @@ public class SavingTransactionController {
     private final SavingUseCaseService savingService;
 
     @GetMapping
-    public Page<SavingTransactionResponse> findAllBy(Pageable pageable){
+    public Page<SavingTransactionResponse> findAllBy(Pageable pageable) {
         Page<SavingTransaction> savingTransactions = savingTransactionService.findAllBy(pageable);
         return SavingTransactionResponses.ofPage(savingTransactions, pageable);
     }
+
     @GetMapping("/saving/{id}")
-    public Page<SavingTransactionResponse> findAllByPaymentId(@PathVariable Long id, Pageable pageable){
-        Page<SavingTransaction> savingTransactions = savingTransactionService.findAllBySavingId(id,pageable);
+    public Page<SavingTransactionResponse> findAllByPaymentId(@PathVariable Long id, Pageable pageable) {
+        Page<SavingTransaction> savingTransactions = savingTransactionService.findAllBySavingId(id, pageable);
+        return SavingTransactionResponses.ofPage(savingTransactions, pageable);
+    }
+
+    @GetMapping("/history/savingTransfer/saving/{id}")
+    public Page<SavingTransactionResponse> findAllBySavingIdAnAndMoneyGreaterThan(@PathVariable Long id, Pageable pageable) {
+        Page<SavingTransaction> savingTransactions = savingTransactionService.findAllBySavingIdAnAndMoneyGreaterThan(id, pageable);
+        return SavingTransactionResponses.ofPage(savingTransactions, pageable);
+    }
+
+    @GetMapping("/history/savingReceive/saving/{id}")
+    public Page<SavingTransactionResponse> findAllBySavingIdAnAndMoneyLessThan(@PathVariable Long id, Pageable pageable) {
+        Page<SavingTransaction> savingTransactions = savingTransactionService.findAllBySavingIdAnAndMoneyLessThan(id, pageable);
+        return SavingTransactionResponses.ofPage(savingTransactions, pageable);
+    }
+
+    @GetMapping("/history/savingTransfer/customer/{id}")
+    public Page<SavingTransactionResponse> findAllBySavingCustomerIdAndMoneyGreaterThan(@PathVariable Long id, Pageable pageable) {
+        Page<SavingTransaction> savingTransactions = savingTransactionService.findAllBySavingCustomerIdAndMoneyGreaterThan(id, pageable);
+        return SavingTransactionResponses.ofPage(savingTransactions, pageable);
+    }
+
+    @GetMapping("/history/savingReceive/customer/{id}")
+    public Page<SavingTransactionResponse> findAllBySavingCustomerIdAndMoneyLessThan(@PathVariable Long id, Pageable pageable) {
+        Page<SavingTransaction> savingTransactions = savingTransactionService.findAllBySavingCustomerIdAndMoneyLessThan(id, pageable);
         return SavingTransactionResponses.ofPage(savingTransactions, pageable);
     }
 
     @GetMapping("/{id}")
-    public SavingTransactionResponse findBy(@PathVariable Long id){
-        SavingTransaction savingTransaction  = savingTransactionService.findById(id);
+    public SavingTransactionResponse findBy(@PathVariable Long id) {
+        SavingTransaction savingTransaction = savingTransactionService.findById(id);
         return new SavingTransactionResponse(savingTransaction);
     }
 
@@ -52,7 +77,7 @@ public class SavingTransactionController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public void delete(@PathVariable Long id){
+    public void delete(@PathVariable Long id) {
         savingTransactionService.delete(id);
     }
 }

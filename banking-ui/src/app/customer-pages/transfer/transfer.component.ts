@@ -14,10 +14,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class TransferComponent implements OnInit, OnDestroy {
 
-  constructor(private customerService: CustomerService, 
-    private paymentService: PaymentService,
-    private savingService: SavingService,
-    private decimalPipe: DecimalPipe) {
+  constructor(private customerService: CustomerService) {
       this.customerService.getAcctDetailsData();
       this.customerService.getPaymentsData();
       this.customerService.getSavingsData();

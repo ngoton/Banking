@@ -41,21 +41,22 @@ export class InterceptorService implements HttpInterceptor {
           case 400:
             return Observable.throw(response.error.message);
           case 401:
-            let token = JSON.parse(localStorage.getItem('token'));
-            let refreshToken = JSON.parse(localStorage.getItem('refreshToken'));
-            if(token && refreshToken){
-              this.auth.verifyToken(refreshToken).pipe(takeUntil(this.destroy$)).subscribe(
-                (res: any) => {
-                  localStorage.setItem("token", JSON.stringify(res.accessToken));
-                  localStorage.setItem("refreshToken", JSON.stringify(res.refreshToken));
-                  return next.handle(request);
-                },
-                (err: HttpErrorResponse) => {
-                  this.auth.logout();
-                  return Observable.throw("Không thể xác thực tài khoản!");
-                }
-              )
-            }
+            // let token = JSON.parse(localStorage.getItem('token'));
+            // let refreshToken = JSON.parse(localStorage.getItem('refreshToken'));
+            // if(token && refreshToken){
+            //   this.auth.verifyToken(refreshToken).pipe(takeUntil(this.destroy$)).subscribe(
+            //     (res: any) => {
+            //       localStorage.setItem("token", JSON.stringify(res.accessToken));
+            //       localStorage.setItem("refreshToken", JSON.stringify(res.refreshToken));
+            //       return next.handle(request);
+            //     },
+            //     (err: HttpErrorResponse) => {
+            //       this.auth.logout();
+            //       return Observable.throw("Không thể xác thực tài khoản!");
+            //     }
+            //   )
+            // }
+            this.auth.logout();
             break;
             case 403:
               return Observable.throw("Tài khoản này không có quyền truy cập!");
@@ -65,7 +66,7 @@ export class InterceptorService implements HttpInterceptor {
               return Observable.throw("Phương thức yêu cầu không hợp lệ!");
         }
 
-        return Observable.throwError(response);
+        return Observable.throwError(response.error.message);
       })
     );
   }

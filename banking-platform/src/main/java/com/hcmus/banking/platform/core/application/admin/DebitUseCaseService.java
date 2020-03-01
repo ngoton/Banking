@@ -42,8 +42,8 @@ public class DebitUseCaseService {
     }
 
     @Transactional(readOnly = true)
-    public List<Debit> findAllByCustomerCode(String code) {
-        List<Debit> debits = debitService.findAllByCustomerCode(code);
+    public Page<Debit> findAllByCustomerCode(String code, Pageable pageable) {
+        Page<Debit> debits = debitService.findAllByCustomerCode(code, pageable);
         return debits;
     }
 
@@ -57,8 +57,8 @@ public class DebitUseCaseService {
     }
 
     @Transactional(readOnly = true)
-    public List<Debit> findAllByCustomerId(Long id) {
-        List<Debit> debits = debitService.findAllByCustomerId(id);
+    public Page<Debit> findAllByCustomerId(Long id, Pageable pageable) {
+        Page<Debit> debits = debitService.findAllByCustomerId(id, pageable);
         return debits;
     }
 
@@ -119,5 +119,27 @@ public class DebitUseCaseService {
 
         creditService.delete(debit.getCredit());
         debitService.delete(debit);
+    }
+
+    @Transactional
+    public void cancel(Long id, String content) {
+        Debit debit = debitService.findById(id);
+        if (debit.isEmpty()) {
+            throw new BankingServiceException("Debit not found");
+        }
+
+        Notification notification = new Notification(
+                String.format("%s %s", debit.getCustomer().getInfo().getFirstName(), debit.getCustomer().getInfo().getLastName()),
+                String.format("[%s] %s", debit.getContent(), content),
+                LocalDateTime.now()
+        );
+        notificationService.notify(notification, debit.getCredit().getCustomer().getInfo().getUser().getUsername());
+
+        Credit credit = debit.getCredit();
+        credit.setStatus(2);
+        creditService.create(credit);
+
+        debit.setStatus(2);
+        debitService.create(debit);
     }
 }

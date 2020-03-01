@@ -55,3 +55,6 @@ import 'core-js/es7/object';
 if (typeof SVGElement.prototype.contains === 'undefined') {
   SVGElement.prototype.contains = HTMLDivElement.prototype.contains;
 }
+
+// Add global to window, assigning the value of window itself.
+(window as any).global = window;

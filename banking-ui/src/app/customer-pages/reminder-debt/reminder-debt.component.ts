@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { CustomerService } from '../../_services/customer.service';
+import { Debits } from '../../_models/customer.model';
 
 @Component({
   selector: 'ngx-reminder-debt',
@@ -7,7 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ReminderDebtComponent implements OnInit {
 
-  constructor() { }
+  constructor(private customerService: CustomerService) {
+    this.customerService.getAcctDetailsData();
+    this.customerService.getPaymentsData();
+    this.customerService.getDebitsData();
+    this.customerService.getCreditsData();
+  }
 
   ngOnInit() {
   }

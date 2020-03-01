@@ -12,6 +12,8 @@ import { User } from '../../../_models/user';
 import { Customers } from '../../../_models/customer.model';
 import { AuthService } from '../../../_services/auth.service';
 import { Router } from '@angular/router';
+import { NotificationSocketService } from '../../../_services/notification-socket.service';
+import { messages } from '../../../customer-pages/extra-components/chat/messages';
 
 @Component({
   selector: 'ngx-ibanking-customer-header',
@@ -25,6 +27,8 @@ export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
   // user: any;
   user: User;
   customer: Customers;
+  client: any;
+  notification: any;
 
   themes = [
     {
@@ -57,11 +61,16 @@ export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
               private customerService: CustomerService,
               private layoutService: LayoutService,
               private breakpointService: NbMediaBreakpointsService,
-              private router: Router) {
+              private router: Router,
+              private notificationService: NotificationSocketService) {
+                this.notificationService = new NotificationSocketService();
   }
 
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
+    this.client = this.notificationService.Connection();
+    debugger;
+    this.subscribeToServer();
 
     // this.userService.getUsers()
     //   .pipe(takeUntil(this.destroy$))
@@ -113,6 +122,29 @@ export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
             break;
         }
       });
+  }
+
+  subscribeToServer() {
+    var userInfo = JSON.parse(localStorage.getItem("userDetails"));
+
+    this.client.connect({}, frame => {
+      console.log("Connected: ", frame);
+      this.client.subscribe(this.notificationService.topic, 
+        function(message){
+          alert("Message" + message);
+          // console.log("ms: ", message);
+          this.notification = JSON.parse(message.body);
+          console.log("notification: ", this.notification.message);
+      }, function(error){
+        alert("STOMP error" + error);
+      });
+      this.client.send("/app/notification", {}, JSON.stringify({'sender': userInfo.username,'message':'hello'}));
+    }, (err: any) => {
+      console.log("errorCallBack -> " + err)
+      setTimeout(() => {
+        this.subscribeToServer();
+      }, 5000);
+    });
   }
 
   ngOnDestroy() {

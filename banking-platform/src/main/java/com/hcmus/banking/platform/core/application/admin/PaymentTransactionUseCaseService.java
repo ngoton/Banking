@@ -3,6 +3,7 @@ package com.hcmus.banking.platform.core.application.admin;
 import com.hcmus.banking.platform.core.application.beneficiary.BeneficiaryService;
 import com.hcmus.banking.platform.core.application.credit.CreditService;
 import com.hcmus.banking.platform.core.application.customer.CustomerService;
+import com.hcmus.banking.platform.core.application.debit.DebitService;
 import com.hcmus.banking.platform.core.application.mail.MailService;
 import com.hcmus.banking.platform.core.application.otp.OtpService;
 import com.hcmus.banking.platform.core.application.partner.PartnerService;
@@ -10,7 +11,9 @@ import com.hcmus.banking.platform.core.application.payment.PaymentService;
 import com.hcmus.banking.platform.core.application.paymentTransaction.PaymentTransactionService;
 import com.hcmus.banking.platform.core.utils.RandomUtils;
 import com.hcmus.banking.platform.domain.beneficiary.Beneficiary;
+import com.hcmus.banking.platform.domain.credit.Credit;
 import com.hcmus.banking.platform.domain.customer.Customer;
+import com.hcmus.banking.platform.domain.debit.Debit;
 import com.hcmus.banking.platform.domain.exception.BankingServiceException;
 import com.hcmus.banking.platform.domain.general.Created;
 import com.hcmus.banking.platform.domain.general.CreatedAt;
@@ -41,6 +44,8 @@ public class PaymentTransactionUseCaseService {
     private final MailService mailService;
     private final PartnerService partnerService;
     private final CustomerService customerService;
+    private final DebitService debitService;
+    private final CreditService creditService;
 
     @Transactional(readOnly = true)
     public Page<PaymentTransaction> findAllBy(Pageable pageable) {
@@ -81,6 +86,24 @@ public class PaymentTransactionUseCaseService {
             throw new BankingServiceException("Payment does not exist!!!");
         }
         return paymentTransactionService.findAllByPaymentIdAndMoneyGreaterThan(id, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<PaymentTransaction> findAllByPaymentCustomerIdAndMoneyGreaterThan(Long id, Pageable pageable) {
+        Customer customer = customerService.findById(id);
+        if (customer.isEmpty()) {
+            throw new BankingServiceException("Customer does not exist!!!");
+        }
+        return paymentTransactionService.findAllByPaymentCustomerIdAndMoneyGreaterThan(id, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<PaymentTransaction> findAllByPaymentCustomerIdAndMoneyLessThan(Long id, Pageable pageable) {
+        Customer customer = customerService.findById(id);
+        if (customer.isEmpty()) {
+            throw new BankingServiceException("Customer does not exist!!!");
+        }
+        return paymentTransactionService.findAllByPaymentCustomerIdAndMoneyLessThan(id, pageable);
     }
 
     @Transactional(readOnly = true)
@@ -148,7 +171,7 @@ public class PaymentTransactionUseCaseService {
     }
 
     @Transactional
-    public void paymentVerify(PaymentTransaction toPaymentTransaction, Boolean fee, String email, String code) {
+    public void paymentVerify(PaymentTransaction toPaymentTransaction, Boolean fee, String email, String code, Long debitId) {
         OTP otp = otpService.findByEmailAndCode(email, code);
         if (otp.isEmpty() || otp.isExpired()) {
             throw new BankingServiceException("OTP code is expired");
@@ -179,8 +202,7 @@ public class PaymentTransactionUseCaseService {
         BigDecimal transFee;
         if (toPaymentTransaction.getBeneficiary().isInternal()) {
             transFee = PaymentTransaction.internalFee();
-        }
-        else {
+        } else {
             transFee = PaymentTransaction.externalFee();
         }
 
@@ -215,7 +237,16 @@ public class PaymentTransactionUseCaseService {
             paymentService.create(payment);
         }
 
+        if (!debitId.equals(Long.MIN_VALUE)) {
+            Debit debit = debitService.findById(debitId);
+            debit.setStatus(1);
+            debit.setPaymentTransaction(paymentTransaction);
 
+            Credit credit = debit.getCredit();
+            credit.setStatus(1);
+            creditService.create(credit);
+            debitService.create(debit);
+        }
     }
 
     @Transactional

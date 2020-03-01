@@ -82,6 +82,7 @@ public class BeneficiaryUseCaseService {
         return beneficiaries;
     }
 
+    @Transactional(readOnly = true)
     public List<Beneficiary> findInternal() {
         List<Beneficiary> beneficiaries = beneficiaryService.findAll();
         return beneficiaries.stream()
@@ -89,10 +90,17 @@ public class BeneficiaryUseCaseService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<Beneficiary> findExternal() {
         List<Beneficiary> beneficiaries = beneficiaryService.findAll();
         return beneficiaries.stream()
                 .filter(beneficiary -> !beneficiary.isInternal())
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public Beneficiary findByCustomerAccount(String account, Long id) {
+        Beneficiary beneficiary = beneficiaryService.findByCustomerAccount(account, id);
+        return beneficiary;
     }
 }

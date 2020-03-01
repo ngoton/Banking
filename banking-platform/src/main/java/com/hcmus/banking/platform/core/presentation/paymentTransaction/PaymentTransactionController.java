@@ -47,6 +47,7 @@ public class PaymentTransactionController {
         Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByPaymentIdAndMoneyLessThan(id, pageable);
         return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
     }
+
     @GetMapping("/history/paymentCredit/{id}")
     public Page<PaymentTransactionResponse> findAllByPaymentCredit(@PathVariable Long id, Pageable pageable) {
         Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByCredit(id, pageable);
@@ -56,6 +57,18 @@ public class PaymentTransactionController {
     @GetMapping("/history/paymentReceive/{id}")
     public Page<PaymentTransactionResponse> findAllByPaymentIdAndMoneyGreaterThan(@PathVariable Long id, Pageable pageable) {
         Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByPaymentIdAndMoneyGreaterThan(id, pageable);
+        return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
+    }
+
+    @GetMapping("/history/paymentTransfer/customer/{id}")
+    public Page<PaymentTransactionResponse> findAllByPaymentCustomerIdAndMoneyLessThan(@PathVariable Long id, Pageable pageable) {
+        Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByPaymentCustomerIdAndMoneyLessThan(id, pageable);
+        return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
+    }
+
+    @GetMapping("/history/paymentReceive/customer/{id}")
+    public Page<PaymentTransactionResponse> findAllByPaymentCustomerIdAndMoneyGreaterThan(@PathVariable Long id, Pageable pageable) {
+        Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByPaymentCustomerIdAndMoneyGreaterThan(id, pageable);
         return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
     }
 
@@ -118,13 +131,13 @@ public class PaymentTransactionController {
     @PostMapping("/payment")
     public PaymentResponse payment(@Valid @RequestBody PaymentTransactionRequest paymentTransactionRequest, @ModelAttribute("user") User user) {
         Customer customer = customerService.findByUserId(user.getId());
-        Beneficiary beneficiary = beneficiaryService.findByAccount(paymentTransactionRequest.beneficiaryAccount);
+        Beneficiary beneficiary = beneficiaryService.findByCustomerAccount(paymentTransactionRequest.beneficiaryAccount, customer.getId());
         Payment payment = paymentService.findById(paymentTransactionRequest.paymentId);
         if (beneficiary.isEmpty()) {
             Beneficiary newBeneficiary = new Beneficiary(paymentTransactionRequest.name, paymentTransactionRequest.shortName, paymentTransactionRequest.beneficiaryAccount, paymentTransactionRequest.bankName, customer, Created.ofEmpty());
             if (newBeneficiary.isInternal()) {
                 Payment newPayment = paymentService.findByAccount(paymentTransactionRequest.beneficiaryAccount);
-                if (newPayment.isEmpty()){
+                if (newPayment.isEmpty()) {
                     throw new BankingServiceException("Beneficiary account not found");
                     //newPayment = new Payment(newBeneficiary.getAccount(), BigDecimal.ZERO, Created.ofEmpty());
                 }
@@ -143,7 +156,7 @@ public class PaymentTransactionController {
     @PostMapping("/payment/external")
     public PaymentResponse externalPayment(@Valid @RequestBody PaymentTransactionRequest paymentTransactionRequest, @ModelAttribute("user") User user) {
         Customer customer = customerService.findByUserId(user.getId());
-        Beneficiary beneficiary = beneficiaryService.findByAccount(paymentTransactionRequest.beneficiaryAccount);
+        Beneficiary beneficiary = beneficiaryService.findByCustomerAccount(paymentTransactionRequest.beneficiaryAccount, customer.getId());
         Payment payment = paymentService.findById(paymentTransactionRequest.paymentId);
         if (beneficiary.isEmpty()) {
             Beneficiary newBeneficiary = new Beneficiary(paymentTransactionRequest.name, paymentTransactionRequest.shortName, paymentTransactionRequest.beneficiaryAccount, paymentTransactionRequest.bankName, customer, Created.ofEmpty());
@@ -164,7 +177,7 @@ public class PaymentTransactionController {
             throw new BankingServiceException("PaymentId or beneficiaryId is empty!!!");
         }
 
-        paymentTransactionService.paymentVerify(paymentRequest.toPaymentTransaction(paymentRequest, beneficiary, payment), paymentRequest.fee, user.getEmail(), paymentRequest.code);
+        paymentTransactionService.paymentVerify(paymentRequest.toPaymentTransaction(paymentRequest, beneficiary, payment), paymentRequest.fee, user.getEmail(), paymentRequest.code, paymentRequest.asDebit());
 
     }
 

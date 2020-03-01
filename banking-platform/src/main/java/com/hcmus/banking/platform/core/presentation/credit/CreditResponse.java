@@ -13,6 +13,7 @@ public class CreditResponse {
     public String content;
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     public LocalDateTime createdAt;
+    public String status;
 
     public CreditResponse(Credit credit) {
         this.id = credit.getId();
@@ -20,5 +21,6 @@ public class CreditResponse {
         this.money = credit.getMoney();
         this.content = credit.getContent();
         this.createdAt = credit.getCreated().getCreatedAt().getValue();
+        this.status = credit.isPaid() ? "Paid" : (credit.isCanceled() ? "Canceled" : "Waiting") ;
     }
 }

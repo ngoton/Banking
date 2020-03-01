@@ -30,4 +30,15 @@ export class DebitService {
     return this.http.post<any>(PATH, JSON.stringify(body))
     .pipe();
   }
+
+  cancel(data): Observable<any> {
+    const body = {
+      debitId: data.id,
+      content: data.content
+    }
+
+    const PATH = this.DEBIT_URL + `/cancel`;
+    return this.http.post<any>(PATH, JSON.stringify(body))
+    .pipe();
+  }
 }

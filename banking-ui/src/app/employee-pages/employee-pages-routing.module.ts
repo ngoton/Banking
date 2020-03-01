@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { EmployeePagesComponent } from './employee-pages.component';
+import { TransactionHistoryComponent } from './transaction-history/transaction-history.component';
+import { from } from 'rxjs';
 
 const routes: Routes = [
   {
@@ -13,6 +15,10 @@ const routes: Routes = [
           import('./accounts/accounts.module').then(
             m => m.AccountsModule
           )
+      },
+      {
+        path: 'transaction-history',
+        component: TransactionHistoryComponent
       }
     ]
   }

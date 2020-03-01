@@ -36,6 +36,20 @@ Database:
 http://localhost:5432/banking
 ``` 
 
+## Deployment
+
+Web:
+
+```
+https://web-banking-hcmus.herokuapp.com
+``` 
+
+API:
+
+```
+https://banking-hcmus.herokuapp.com
+``` 
+
 **External API**
 ----
   

@@ -26,12 +26,12 @@ public class CreditService {
         return creditRepository.findByAccount(account).orElse(Credit.ofEmpty());
     }
 
-    public List<Credit> findAllByCustomerCode(String code) {
-        return creditRepository.findAllByCustomerCode(code);
+    public Page<Credit> findAllByCustomerCode(String code, Pageable pageable) {
+        return creditRepository.findAllByCustomerCode(code, pageable);
     }
 
-    public List<Credit> findAllByCustomerId(Long id) {
-        return creditRepository.findAllByCustomerId(id);
+    public Page<Credit> findAllByCustomerId(Long id, Pageable pageable) {
+        return creditRepository.findAllByCustomerId(id, pageable);
     }
 
     public void create(Credit credit) {

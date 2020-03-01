@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { DebitService } from '../../../_services/debit.service';
-import { Debits, Payment, Customers } from '../../../_models/customer.model';
+import { Debits, Payment, Customers, AccountInfo } from '../../../_models/customer.model';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CustomerService } from '../../../_services/customer.service';
 import { environment } from '../../../../environments/environment';
+import { NotifierService } from 'angular-notifier';
 
 @Component({
   selector: 'ngx-remider-detail',
@@ -12,9 +13,12 @@ import { environment } from '../../../../environments/environment';
   styleUrls: ['./remider-detail.component.scss']
 })
 export class RemiderDetailComponent implements OnInit, OnDestroy {
+  @ViewChild("customNotification", { static: true }) customNotificationTmpl;
+  private readonly notifi: NotifierService;
+
   loading: boolean = false;
 
-  customerInfo: Customers = new Customers();
+  accountInfo: AccountInfo;
   debitData: Debits = new Debits();
   debits: Debits[] = new Array();
 
@@ -23,17 +27,33 @@ export class RemiderDetailComponent implements OnInit, OnDestroy {
   source: string;
 
   constructor(private customerService: CustomerService,
-              private debitService: DebitService) {
+              private debitService: DebitService,
+              private notifications: NotifierService) {
                 debugger;
-                this.source = environment.BASE_URL + environment.CUST_SERV + '/payment'; 
-                this.customerService.getDebitsData();
+                this.accountInfo = {
+                  name: '',
+                  account: '',
+                  bankName: ''
+                }
+                this.notifi = notifications;
+
+                this.source =
+                  environment.BASE_URL +
+                  environment.ACC_SERV +
+                  `?bankName=HCB_BANK&account=`; 
+                //this.customerService.getDebitsData();
 
                 setTimeout(()=>{
+                  this.loading = true;
                   this.customerService.debits$
                   .pipe(untilDestroyed(this))
                   .subscribe(
                     (debits: Debits[]) => {
+                      this.loading = false;
                       this.debits = debits;
+                    },
+                    (err: any) => {
+                      this.loading = false;
                     }
                   );
                 }, 2000);
@@ -47,41 +67,52 @@ export class RemiderDetailComponent implements OnInit, OnDestroy {
   }
 
   callBack(data: any): void {
-    debugger;
     if(data != null){
-      this.customerInfo = data;
-      this.customerInfo.fullName = this.customerInfo.firstName + " " + this.customerInfo.lastName;
+      this.accountInfo = data;
     }
     else{
-      this.customerInfo = new Customers();
+      this.accountInfo = {
+        name: '',
+        account: '',
+        bankName: ''
+      };
     }
     
   }
 
   sendDebit() {
-    debugger;
     this.loading = true;
     this.debitService.add(this.debitData).pipe(untilDestroyed(this))
     .subscribe(
       (response: any) => {
         this.loading = false;
         // Nếu gửi yêu cầu đến server thành công thì server sẽ trả kết quả đúng trong đây
-
+        this.notifi.show({
+          id: `debit`,
+          message: `Đã gửi nhắc nợ`,
+          type: `info`,
+          template: this.customNotificationTmpl
+        });
       },
       (err: HttpErrorResponse) => {
         this.loading = false;
+        this.notifi.show({
+          id: `debitError`,
+          message: `Không gửi được nhắc nợ`,
+          type: `error`,
+          template: this.customNotificationTmpl
+        });
         // Nếu lỗi thì server sẽ trả lỗi về đây
       }
     );
   }
 
   accountChange(item) {
-    this.customerService.getByPaymentAccount(item.account)
+    this.customerService.getAccountInfo(item.account, "HCB_BANK")
     .pipe(untilDestroyed(this))
     .subscribe(
-      (cusctomer: Customers) => {
-        this.customerInfo = cusctomer;
-        this.customerInfo.fullName = this.customerInfo.firstName + " " + this.customerInfo.lastName;
+      (acc: AccountInfo) => {
+        this.accountInfo = acc;
       }
     );
   }

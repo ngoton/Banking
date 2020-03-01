@@ -8,6 +8,7 @@ import lombok.Getter;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Getter
 public class PaymentRequest {
@@ -23,11 +24,16 @@ public class PaymentRequest {
     public String code;
     @NotNull
     public Boolean fee;
+    public Long debitId;
 
     public static PaymentTransaction toPaymentTransaction(PaymentRequest paymentTransactionRequest, Beneficiary beneficiary, Payment payment) {
         return new PaymentTransaction(
                 paymentTransactionRequest.content,
                 paymentTransactionRequest.money,
                 Created.ofEmpty(), payment, beneficiary);
+    }
+
+    public Long asDebit(){
+        return Objects.nonNull(debitId) ? debitId : Long.MIN_VALUE;
     }
 }

@@ -31,10 +31,55 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { DialogDimissPromptComponent } from './dialog-dimiss-prompt/dialog-dimiss-prompt.component';
 import { SharedModule } from '../../shared/shared.module';
 import { FormsModule } from '@angular/forms';
+import { NotifierModule, NotifierOptions } from 'angular-notifier';
+import { DialogOTPPromptComponent } from './dialog-otp-prompt/dialog-otp-prompt.component';
+
+/**
+ * Custom angular notifier options
+ */
+const customNotifierOptions: NotifierOptions = {
+  position: {
+    horizontal: {
+      position: 'left',
+      distance: 12
+    },
+    vertical: {
+      position: 'top',
+      distance: 12,
+      gap: 10
+    }
+  },
+  theme: 'material',
+  behaviour: {
+    autoHide: 3000,
+    onClick: false,
+    onMouseover: 'pauseAutoHide',
+    showDismissButton: true,
+    stacking: 4
+  },
+  animations: {
+    enabled: true,
+    show: {
+      preset: 'slide',
+      speed: 300,
+      easing: 'ease'
+    },
+    hide: {
+    preset: 'fade',
+    speed: 300,
+    easing: 'ease',
+      offset: 50
+    },
+    shift: {
+      speed: 300,
+      easing: 'ease'
+    }
+  }
+};
 
 @NgModule({
-  declarations: [ReminderDebtComponent, RemiderListComponent, RemiderDetailComponent, DialogDimissPromptComponent],
-  entryComponents: [DialogDimissPromptComponent],
+  declarations: [ReminderDebtComponent, RemiderListComponent, RemiderDetailComponent, DialogDimissPromptComponent, DialogOTPPromptComponent],
+  entryComponents: [DialogDimissPromptComponent, DialogOTPPromptComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -54,6 +99,7 @@ import { FormsModule } from '@angular/forms';
     NbButtonModule,
     NbAccordionModule,
     NbDialogModule.forChild(),
+    NotifierModule.withConfig(customNotifierOptions),
     NbPopoverModule,
     NbTooltipModule,
     NbWindowModule,

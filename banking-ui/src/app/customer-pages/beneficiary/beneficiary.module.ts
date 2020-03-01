@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BeneficiaryComponent } from './beneficiary.component';
 
-import { NbCardModule, NbIconModule, NbInputModule, NbTreeGridModule } from '@nebular/theme';
+import { NbSpinnerModule, NbCardModule, NbIconModule, NbInputModule, NbTreeGridModule } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { ThemeModule } from '../../@theme/theme.module';
 
@@ -10,6 +10,7 @@ import { ThemeModule } from '../../@theme/theme.module';
   declarations: [BeneficiaryComponent],
   imports: [
     CommonModule,
+    NbSpinnerModule,
     NbCardModule,
     NbTreeGridModule,
     NbIconModule,

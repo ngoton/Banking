@@ -14,8 +14,8 @@ public interface CreditRepository extends JpaRepository<Credit, Long> {
     Page<Credit> findAllBy(Pageable pageable);
     Optional<Credit> findById(Long id);
     Optional<Credit> findByAccount(String account);
-    List<Credit> findAllByCustomerCode(String code);
-    List<Credit> findAllByCustomerId(Long id);
+    Page<Credit> findAllByCustomerCode(String code, Pageable pageable);
+    Page<Credit> findAllByCustomerId(Long id, Pageable pageable);
     Page<Credit> findAllByStatusIsNull(Pageable pageable);
     Credit save(Credit credit);
     void delete(Credit credit);

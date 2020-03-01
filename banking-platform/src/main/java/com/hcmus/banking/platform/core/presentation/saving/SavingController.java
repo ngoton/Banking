@@ -50,8 +50,8 @@ public class SavingController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
-    public void create(@Valid @RequestBody SavingRequest savingRequest, @ModelAttribute("user") User user) {
-        Customer customer = customerService.findByUserId(user.getId());
+    public void create(@Valid @RequestBody SavingRequest savingRequest) {
+        Customer customer = customerService.findById(savingRequest.customerId);
         if (customer.isEmpty()) {
             throw new NotFoundException();
         }

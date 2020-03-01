@@ -21,6 +21,7 @@ import { PaymentService } from './payment.service';
 import { SavingService } from './saving.service';
 import { BenificiaryService } from './benificiary.service';
 import { DebitService } from './debit.service';
+import { CreditService } from './credit.service';
 
 @Injectable({
   providedIn: 'root',
@@ -29,6 +30,8 @@ export class CustomerService implements OnDestroy {
 
   private CUST_URL = environment.BASE_URL + environment.CUST_SERV;
   private REQ_URL = environment.BASE_URL + environment.REQ_SERV;
+
+  private ACC_URL = environment.BASE_URL + environment.ACC_SERV;
 
   // Observable string sources: Account Details
   private acctDetailSource = new BehaviorSubject<Customers>(null);
@@ -61,14 +64,14 @@ export class CustomerService implements OnDestroy {
   // Observable string sources: Pre registered Beneficiaries
 
   // Observable string sources: debit
-  private debits = new BehaviorSubject<Debits[]>(null);
+  private debits = new BehaviorSubject<Debits[]>([]);
   private debitsError = new BehaviorSubject<any>(null);
   // Observable string streams: debit
   debits$ = this.debits.asObservable();
   debitsError$ = this.debitsError.asObservable();
 
   // Observable string sources: credit
-  private credits = new BehaviorSubject<Credits[]>(null);
+  private credits = new BehaviorSubject<Credits[]>([]);
   private creditsError = new BehaviorSubject<any>(null);
   // Observable string streams: credit
   credits$ = this.credits.asObservable();
@@ -98,7 +101,8 @@ export class CustomerService implements OnDestroy {
     private paymentService: PaymentService,
     private savingService: SavingService,
     private benificiaryService: BenificiaryService,
-    private debitService: DebitService
+    private debitService: DebitService,
+    private creditService: CreditService
   ) { }
 
   // Http Headers
@@ -119,7 +123,7 @@ export class CustomerService implements OnDestroy {
       const PATH = this.CUST_URL + `/user/${userId}`;
       return this.http.get<any>(PATH)
       .pipe(
-        retry(3),
+        //retry(3),
         //catchError(this.util.handleError)
       );
     }
@@ -132,12 +136,16 @@ export class CustomerService implements OnDestroy {
     const PATH = this.CUST_URL + `/payment/${account}`;
 
     return this.http.get<any>(PATH).pipe(
-      retry(3)
+      //retry(3)
     );
   }
 
-  findCustomerByAccount(account) {
-    
+  getAccountInfo(account, bankName): Observable<any> {
+    const PATH = this.ACC_URL + `?account=${account}&bankName=${bankName}`;
+
+    return this.http.get<any>(PATH).pipe(
+      //retry(3)
+    );
   }
 
   getAcctDetailsData() {
@@ -254,13 +262,46 @@ export class CustomerService implements OnDestroy {
   }
 
   public getDebitsData() {
-    this.getCustomerData().pipe(untilDestroyed(this)).subscribe(
+    debugger;
+    var subscription = this.getCustomerData().pipe(untilDestroyed(this)).subscribe(
       (customerResponse: any) => {
         this.debitService.getByCustomerId(customerResponse.customerId)
         .pipe(untilDestroyed(this))
         .subscribe(
-          (debits: Debits[]) => {
-            this.updateDebit(debits);
+          (response: any) => {
+            this.clearDebit();
+            this.updateDebit(response.content);
+          },
+          (err: HttpErrorResponse)=> {
+            
+          }
+        );
+      }
+    );
+
+  }
+
+  updateDebit(debits) {
+    this.debits.next(debits);
+  }
+
+  updateDebitError(error) {
+    this.debitsError.next(error);
+  }
+
+  clearDebit() {
+    this.debits.next([]);
+  }
+
+  public getCreditsData() {
+    this.getCustomerData().pipe(untilDestroyed(this)).subscribe(
+      (customerResponse: any) => {
+        this.creditService.getByCustomerId(customerResponse.customerId)
+        .pipe(untilDestroyed(this))
+        .subscribe(
+          (response: any) => {
+            this.clearCredit();
+            this.updateCredit(response.content);
           },
           (err: HttpErrorResponse)=> {
             
@@ -270,12 +311,16 @@ export class CustomerService implements OnDestroy {
     );
   }
 
-  updateDebit(debits) {
-    this.debits.next(debits);
+  updateCredit(credits) {
+    this.credits.next(credits);
   }
 
-  updateDebitError(error) {
-    this.debitsError.next(error);
+  updateCreditError(error) {
+    this.creditsError.next(error);
+  }
+
+  clearCredit() {
+    this.credits.next([]);
   }
 
   ngOnDestroy(): void {
