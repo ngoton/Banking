@@ -44,7 +44,6 @@ export class Payment {
     balance: string;
 
     constructor(obj?: any) {
-        debugger;
         this.paymentId = obj && obj.paymentId || obj && obj.id || null;
         this.account = obj && obj.account || "";
         this.balance = obj && obj.balance || "";
@@ -80,7 +79,6 @@ export class Savings {
     customersId: number;
 
     constructor(obj?: any) {
-        debugger;
         this.id = obj && obj.id || null;
         this.account = obj && obj.account || "";
         this.balance = obj && obj.balance || "";
