@@ -139,6 +139,13 @@ export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
         alert("STOMP error" + error);
       });
       this.client.send("/app/notification", {}, JSON.stringify({'sender': userInfo.username,'message':'hello'}));
+
+      this.client.subscribe('/topic/notification/'+userInfo.username,
+        function (message) {
+          console.log(JSON.parse(message.body));
+        });
+      this.client.send("/app/topic/notification/"+userInfo.username, {}, JSON.stringify({'sender': userInfo.username,'message':'hello'}));
+
     }, (err: any) => {
       console.log("errorCallBack -> " + err)
       setTimeout(() => {

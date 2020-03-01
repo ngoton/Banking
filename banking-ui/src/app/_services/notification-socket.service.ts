@@ -10,7 +10,7 @@ import { IBankingCustomerHeaderComponent } from '../@theme/components';
 })
 export class NotificationSocketService {
   webSocketEndPoint: string = environment.BASE_URL + `/ws`;
-  topic: string = environment.BASE_URL + "/user/queue/notification";
+  topic: string = "/user/queue/notification";
   notification: any;
 
   constructor() {
