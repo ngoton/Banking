@@ -269,7 +269,6 @@ export class CustomerService implements OnDestroy {
         .pipe(untilDestroyed(this))
         .subscribe(
           (response: any) => {
-            this.clearDebit();
             this.updateDebit(response.content);
           },
           (err: HttpErrorResponse)=> {
@@ -300,7 +299,6 @@ export class CustomerService implements OnDestroy {
         .pipe(untilDestroyed(this))
         .subscribe(
           (response: any) => {
-            this.clearCredit();
             this.updateCredit(response.content);
           },
           (err: HttpErrorResponse)=> {

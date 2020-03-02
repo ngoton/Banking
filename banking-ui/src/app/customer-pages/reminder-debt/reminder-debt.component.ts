@@ -11,9 +11,6 @@ export class ReminderDebtComponent implements OnInit {
 
   constructor(private customerService: CustomerService) {
     this.customerService.getAcctDetailsData();
-    this.customerService.getPaymentsData();
-    this.customerService.getDebitsData();
-    this.customerService.getCreditsData();
   }
 
   ngOnInit() {
