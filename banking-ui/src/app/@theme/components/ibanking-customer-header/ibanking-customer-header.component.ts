@@ -129,22 +129,13 @@ export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
 
     this.client.connect({}, frame => {
       console.log("Connected: ", frame);
-      this.client.subscribe(this.notificationService.topic, 
-        function(message){
-          alert("Message" + message);
-          // console.log("ms: ", message);
+      this.client.subscribe(this.notificationService.topic + userInfo.username, message => {
           this.notification = JSON.parse(message.body);
-          console.log("notification: ", this.notification.message);
-      }, function(error){
-        alert("STOMP error" + error);
+          console.log("Notification: ", this.notification);
+      }, (err: any) => {
+        console.log("STOMP error ->" + err);
       });
-      this.client.send("/app/notification", {}, JSON.stringify({'sender': userInfo.username,'message':'hello'}));
-
-      this.client.subscribe('/topic/notification/'+userInfo.username,
-        function (message) {
-          console.log(JSON.parse(message.body));
-        });
-      this.client.send("/app/topic/notification/"+userInfo.username, {}, JSON.stringify({'sender': userInfo.username,'message':'hello'}));
+      this.client.send("/app" + this.notificationService.topic + userInfo.username, {}, JSON.stringify({'sender': userInfo.username,'message':'Welcome'}));
 
     }, (err: any) => {
       console.log("errorCallBack -> " + err)

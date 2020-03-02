@@ -3,17 +3,18 @@ import { Component, OnInit, OnDestroy, ViewEncapsulation, ViewChild } from '@ang
 import { LocalDataSource } from 'ng2-smart-table';
 import { NbDialogService } from '@nebular/theme';
 import { CustomerService } from '../../../_services/customer.service';
-import { Customers, Debits, Payment, Credits, PaymentTransactions, Beneficiarys } from '../../../_models/customer.model';
+import { Customers, Debits, Payment, Credits, PaymentTransactions, Beneficiarys, AccountInfo } from '../../../_models/customer.model';
 import { DialogDimissPromptComponent } from '../dialog-dimiss-prompt/dialog-dimiss-prompt.component';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Subscription, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subscription, Subject, combineLatest, Observable, of, BehaviorSubject } from 'rxjs';
+import { takeUntil, map, flatMap, mergeMap, switchMap, finalize } from 'rxjs/operators';
 import { CreditService } from '../../../_services/credit.service';
 import { DebitService } from '../../../_services/debit.service';
 import { NotifierService } from 'angular-notifier';
 import { DialogOTPPromptComponent } from '../dialog-otp-prompt/dialog-otp-prompt.component';
 import { PaymentTransactionService } from '../../../_services/payment-transaction.service';
+import { async } from '@angular/core/testing';
 
 @Component({
   selector: "ngx-remider-list",
@@ -112,6 +113,7 @@ export class RemiderListComponent implements OnInit, OnDestroy {
   status = { 0: "Chưa thanh toán", 1: "Đã thanh toán" };
   source: LocalDataSource = new LocalDataSource();
   content_dimiss: string;
+  accountInfor: any;
 
   constructor(
     private customerService: CustomerService,
@@ -119,11 +121,41 @@ export class RemiderListComponent implements OnInit, OnDestroy {
     private debitService: DebitService,
     private creditService: CreditService,
     private notifications: NotifierService,
-    private paymentTransactionService: PaymentTransactionService
+    private paymentTransactionService: PaymentTransactionService,
   ) {
     this.notifi = notifications;
+    this.customerService.getPaymentsData();
 
-    this.getPayment();
+    setTimeout(() => {
+      var subscription = this.customerService.payments$
+      .pipe(
+        untilDestroyed(this),
+        flatMap((payment) => {
+          debugger;
+          //do some operation and create object x(this.objx)
+          this.payment = new Payment(payment);
+          localStorage.setItem("paymentAccount", this.payment.account);
+
+          this.customerService.getDebitsData();
+          this.customerService.getCreditsData();
+          
+          return this.customerService.getAccountInfo(payment.account, "HCB_BANK")
+        }),
+        finalize(() => {
+          debugger;
+            //do something after both api calls are completed
+          this.loadingList = false;
+          subscription.unsubscribe();
+        })
+      ).subscribe(
+          account => {
+            debugger;
+          //do something based on result2 and this.objx
+          this.accountInfor = account;
+          this.loadDebitDataSource();
+        }
+      );
+    }, 2000)
   }
 
   onCustomAction(event) {
@@ -178,119 +210,181 @@ export class RemiderListComponent implements OnInit, OnDestroy {
     );
   }
 
-  async getPayment() {
-    this.loadingList = true;
-    var subscription = this.customerService.payments$
-      .pipe(untilDestroyed(this))
-      .subscribe(
-        (payment: Payment) => {
-          this.loadingList = false;
-          this.payment = new Payment(payment);
-          localStorage.setItem("paymentAccount", this.payment.account);
+  mappingDebits(debits): any[] {
+    let debitData = [];
+    
+    debits.forEach(element => {              
+      let debit: debitData = {
+        id: element.id,
+        name_reminder: this.accountInfor.name,
+        account_reminder: this.accountInfor.account,
+        account: element.account,
+        money: element.money,
+        content: element.content,
+        status: element.status,
+        type: "debit"
+      };
+      debitData.push(debit);
+    });
 
-          this.getDebits();
-          this.getCredits();
-          this.source.load([ ...this.debitsData, ...this.creditData]);
-        },
-        (err: any) => {
-          this.loadingList = false;
-        }
-      );
-    this.subscription.add(subscription);
+    return debitData;
   }
 
-  getDebits() {
-    this.loadingList = true;
-    var subscription = this.customerService.debits$
-      .pipe(untilDestroyed(this))
-      .subscribe(
-        (debits: Debits[]) => {
-          this.debits = debits;
-          var debitData = [];
+  mappingCredit(credits): any[] {
+    let creditData = [];
 
-          if (debits != null && debits.length != 0) {
-            this.customerService
-              .getAccountInfo(this.payment.account, "HCB_BANK")
-              .pipe(untilDestroyed(this))
-              .subscribe(
-                (acc: any) => {
-                  debits.forEach(element => {
-                    let debit: debitData = {
-                      id: element.id,
-                      name_reminder: acc.name,
-                      account_reminder: acc.account,
-                      account: element.account,
-                      money: element.money,
-                      content: element.content,
-                      status: element.status,
-                      type: "debit"
-                    };
+    credits.forEach(async element => {
+      let credits: debitData;
+      await this.getAccountCredit(element, credits);
 
-                    //this.debitsData.splice(this.debitsData.indexOf(debit), 1);
-                    debitData.push(debit);
-                    this.loadingList = false;
-                  });
+      credits = {
+        id: element.id,
+        name_reminder: credits.name_reminder,
+        account_reminder: credits.account_reminder,
+        account: this.payment.account,
+        money: element.money,
+        content: element.content,
+        status: element.status,
+        type: "credit"
+      };
 
-                  this.debitsData = debitData;
-                },
-                (err: HttpErrorResponse) => {
-                  this.loadingList = false;
-                }
-              );
-          }
-        },
-        (err: any) => {
-          this.loadingList = false;
-        }
-      );
-    this.subscription.add(subscription);
+      creditData.push(credits);
+    });
+
+    return creditData;
   }
 
-  getCredits() {
-    this.loadingList = true;
-    var subscription = this.customerService.credits$.pipe(untilDestroyed(this)).subscribe(
-      (credits: Credits[]) => {
-        this.credits = credits;
-        var creditData = [];
-
-        if (credits != null && credits.length != 0) {
-          credits.forEach(element => {
-            this.customerService
-              .getAccountInfo(element.account, "HCB_BANK")
-              .pipe(untilDestroyed(this))
-              .subscribe(
-                (accountCredit: any) => {
-                  let credits: debitData = {
-                    id: element.id,
-                    name_reminder: accountCredit.name,
-                    account_reminder: accountCredit.account,
-                    account: this.payment.account,
-                    money: element.money,
-                    content: element.content,
-                    status: element.status,
-                    type: "credit"
-                  };
-
-                  //this.creditData.splice(this.creditData.indexOf(credits), 1);
-                  creditData.push(credits);
-                  //this.source.append(credits);
-                  // this.source.reset();
-                  // this.source.load([ ...this.debitsData, ...this.creditData]);
-                  this.loadingList = false;
-                },
-                (err: HttpErrorResponse) => {
-                  this.loadingList = false;
-                }
-              );
-          });
-        }
-      },
-      (err: any) => {
-        this.loadingList = false;
-      }
+  getAccountCredit(credit: Credits, creditOut: debitData) {
+    this.customerService.getAccountInfo(credit.account, "HCB_BANK")
+    .pipe(untilDestroyed(this), 
+          map((res: AccountInfo) => {
+            creditOut.name_reminder = res.name;
+            creditOut.account_reminder = res.account;
+          })
     );
-    this.subscription.add(subscription);
   }
+
+  loadDebitDataSource() {
+    var subscription = this.customerService.debits$
+      .pipe(untilDestroyed(this),
+      flatMap( debits => {
+          if (debits != null && debits.length != 0) {
+            this.debitsData = this.mappingDebits(debits);
+          }
+
+          return this.customerService.credits$;
+      }), finalize(() => {
+          this.loadingList = false;
+          subscription.unsubscribe();
+      })
+      ).subscribe(
+        async credits => {
+          if (credits != null && credits.length != 0) {
+            this.creditData = await this.mappingCredit(credits);
+          }
+
+          this.source.load([...this.debitsData, ...this.creditData]);
+        }
+      )
+  }
+
+  // getPayment() {
+  //   this.loadingList = true;
+  //   this.customerService.payments$
+  //     .pipe(untilDestroyed(this))
+  //     .subscribe(
+  //       (payment: Payment) => {
+  //         this.loadingList = false;
+  //         this.payment = new Payment(payment);
+  //         localStorage.setItem("paymentAccount", this.payment.account);
+
+  //         this.customerService.getAccountInfo(payment.account, "HCB_BANK").subscribe(
+  //           account => { 
+  //             this.accountInfor = account;             
+  //             //this.getDebits();
+  //             this.getCredits();
+  //           }
+  //         );
+  //       },
+  //       (err: any) => {
+  //         this.loadingList = false;
+  //       }
+  //     );
+  // }
+
+  // getDebits() {
+  //   this.loadingList = true;
+  //   this.customerService.debits$
+  //     .subscribe(
+  //       (debits: Debits[]) => {
+  //         this.debits = debits;
+  //         var debitData = [];
+
+  //         if (debits != null && debits.length != 0) {
+  //           debits.forEach(element => {
+              
+  //             let debit: debitData = {
+  //               id: element.id,
+  //               name_reminder: this.accountInfor.name,
+  //               account_reminder: this.accountInfor.account,
+  //               account: element.account,
+  //               money: element.money,
+  //               content: element.content,
+  //               status: element.status,
+  //               type: "debit"
+  //             };
+  //             debitData.push(debit);
+  //           });
+
+  //           this.debitsData = debitData;
+  //         }
+  //         this.source.reset(true);
+  //         this.source.load([ ...this.debitsData, ...this.creditData]);
+
+  //         this.loadingList = false;
+  //       }
+  //     ).unsubscribe();
+  // }
+
+  // getCredits() {
+  //   this.loadingList = true;
+  //   this.customerService.credits$
+  //     .pipe(untilDestroyed(this))
+  //     .subscribe(
+  //       (credits: Credits[]) => {
+  //         this.credits = credits;
+  //         var creditData = [];
+  
+  //         if (credits != null && credits.length != 0) {
+  //           credits.forEach(async element => {
+  //             await this.customerService.getAccountInfo(element.account, "HCB_BANK")
+  //               .pipe(untilDestroyed(this))
+  //               .subscribe(accountCredit => {
+  //                   let credits: debitData = {
+  //                     id: element.id,
+  //                     name_reminder: accountCredit.name,
+  //                     account_reminder: accountCredit.account,
+  //                     account: this.payment.account,
+  //                     money: element.money,
+  //                     content: element.content,
+  //                     status: element.status,
+  //                     type: "credit"
+  //                   };
+  
+  //                   //this.creditData.splice(this.creditData.indexOf(credits), 1);
+  //                   this.creditData.push(credits);
+                    
+  //                   this.source.reset(true);
+  //                   this.source.load([ ...this.debitsData, ...this.creditData]);
+
+  //                   this.loadingList = false;
+  //                 }
+  //               );
+  //           });
+  //         }
+  //       }
+  //     ).unsubscribe();
+  // }
 
   onDeleteConfirm(event): void {
     this.dialogService
@@ -301,16 +395,10 @@ export class RemiderListComponent implements OnInit, OnDestroy {
         }
       })
       .onClose.subscribe((content: string) => (this.content_dimiss = content));
-    // if (window.confirm('Are you sure you want to delete?')) {
-    //   event.confirm.resolve();
-    // } else {
-    //   event.confirm.reject();
-    // }
   }
 
   ngOnInit() {
-    //this.loadingList = true;
-    //this.source.load(this.debitsData);
+    debugger;
   }
 
   ngOnDestroy() {
