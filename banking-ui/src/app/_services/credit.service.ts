@@ -1,13 +1,14 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CreditService {
+export class CreditService implements OnDestroy {
 
   public CREDIT_URL = environment.BASE_URL + environment.CREDIT_SERV;
 
@@ -16,7 +17,7 @@ export class CreditService {
   getByCustomerId(customerId): Observable<any> {
     const PATH = this.CREDIT_URL + `/customerId/${customerId}`;
     return this.http.get<any>(PATH)
-    .pipe();  
+    .pipe(untilDestroyed(this));  
   }
 
   cancel(data): Observable<any> {
@@ -40,4 +41,6 @@ export class CreditService {
     return this.http.post<any>(PATH, JSON.stringify(body))
     .pipe();
   }
+
+  ngOnDestroy(){}
 }
