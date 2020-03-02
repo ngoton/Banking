@@ -8,7 +8,7 @@ import { Debits } from '../../_models/customer.model';
   styleUrls: ['./reminder-debt.component.scss']
 })
 export class ReminderDebtComponent implements OnInit {
-
+  
   constructor(private customerService: CustomerService) {
     this.customerService.getAcctDetailsData();
   }

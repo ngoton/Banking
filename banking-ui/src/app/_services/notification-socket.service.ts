@@ -10,13 +10,13 @@ import { IBankingCustomerHeaderComponent } from '../@theme/components';
 })
 export class NotificationSocketService {
   webSocketEndPoint: string = environment.BASE_URL + `/ws`;
-  topic: string = environment.BASE_URL + "/user/queue/notification";
+  topic: string = "/topic/notification/";
   notification: any;
 
   constructor() {
    }
 
-  Connection() {
+  Connection(): Stomp {
     let socketServer = new SockJS(this.webSocketEndPoint);
     let stompClient = Stomp.over(socketServer);
 

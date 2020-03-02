@@ -33,6 +33,8 @@ import { SharedModule } from '../../shared/shared.module';
 import { FormsModule } from '@angular/forms';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
 import { DialogOTPPromptComponent } from './dialog-otp-prompt/dialog-otp-prompt.component';
+import { DebitListComponent } from './remider-list/debit-list/debit-list.component';
+import { CreditListComponent } from './remider-list/credit-list/credit-list.component';
 
 /**
  * Custom angular notifier options
@@ -78,7 +80,14 @@ const customNotifierOptions: NotifierOptions = {
 };
 
 @NgModule({
-  declarations: [ReminderDebtComponent, RemiderListComponent, RemiderDetailComponent, DialogDimissPromptComponent, DialogOTPPromptComponent],
+  declarations: [
+    ReminderDebtComponent, 
+    RemiderListComponent, 
+    RemiderDetailComponent, 
+    DialogDimissPromptComponent, 
+    DialogOTPPromptComponent, 
+    DebitListComponent, 
+    CreditListComponent],
   entryComponents: [DialogDimissPromptComponent, DialogOTPPromptComponent],
   imports: [
     CommonModule,
