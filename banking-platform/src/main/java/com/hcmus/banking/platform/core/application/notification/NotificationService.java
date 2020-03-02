@@ -16,5 +16,6 @@ public class NotificationService {
                 "/queue/notification",
                 notification
         );
+        messagingTemplate.convertAndSend(String.format("%s%s", "/topic/notification/", username), notification);
     }
 }
