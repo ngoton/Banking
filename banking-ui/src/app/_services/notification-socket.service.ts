@@ -16,7 +16,7 @@ export class NotificationSocketService {
   constructor() {
    }
 
-  Connection() {
+  Connection(): Stomp {
     let socketServer = new SockJS(this.webSocketEndPoint);
     let stompClient = Stomp.over(socketServer);
 

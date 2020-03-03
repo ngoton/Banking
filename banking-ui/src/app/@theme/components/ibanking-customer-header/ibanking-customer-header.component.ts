@@ -69,12 +69,6 @@ export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
     this.client = this.notificationService.Connection();
-    debugger;
-    this.subscribeToServer();
-
-    // this.userService.getUsers()
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe((users: any) => this.user = users.nick);
 
     this.user = JSON.parse(localStorage.getItem('userDetails'));
     if(!this.user.avatar) {
@@ -129,14 +123,13 @@ export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
 
     this.client.connect({}, frame => {
       console.log("Connected: ", frame);
-      this.client.subscribe(this.notificationService.topic + userInfo.username, message => {
+      this.client.subscribe(this.notificationService.topic + userInfo.username,
+        message => {
           this.notification = JSON.parse(message.body);
-          console.log("Notification: ", this.notification);
-      }, (err: any) => {
-        console.log("STOMP error ->" + err);
-      });
-      this.client.send("/app" + this.notificationService.topic + userInfo.username, {}, JSON.stringify({'sender': userInfo.username,'message':'Welcome'}));
-
+          console.log("notification: ", this.notification);
+      }, function(error){
+        alert("STOMP error" + error);
+      })
     }, (err: any) => {
       console.log("errorCallBack -> " + err)
       setTimeout(() => {

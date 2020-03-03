@@ -2,7 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subject, Subscription, from } from 'rxjs';
-import { retry, catchError } from 'rxjs/operators';
+import { retry, catchError, flatMap, finalize, map } from 'rxjs/operators';
 import { UtilitiesService } from './utilities.service';
 import {
   Beneficiarys,
@@ -32,6 +32,8 @@ export class CustomerService implements OnDestroy {
   private REQ_URL = environment.BASE_URL + environment.REQ_SERV;
 
   private ACC_URL = environment.BASE_URL + environment.ACC_SERV;
+
+  private accountCredits = [];
 
   // Observable string sources: Account Details
   private acctDetailSource = new BehaviorSubject<Customers>(null);
@@ -76,6 +78,13 @@ export class CustomerService implements OnDestroy {
   // Observable string streams: credit
   credits$ = this.credits.asObservable();
   creditsError$ = this.creditsError.asObservable();
+
+  // Observable string sources: account credit
+  private accountCreditsSource = new BehaviorSubject<any[]>([]);
+  private accountCreditsError = new BehaviorSubject<any>(null);
+  // Observable string streams: account credit
+  accountCredits$ = this.accountCreditsSource.asObservable();
+  accountCreditsError$ = this.accountCreditsError.asObservable();
 
   // Observable string sources: Banks
   private banks = new BehaviorSubject<Banks[]>(null);
@@ -171,7 +180,7 @@ export class CustomerService implements OnDestroy {
 
   }
 
-  public getPaymentsData() {
+  getPaymentsData() {
     this.getCustomerData().pipe(untilDestroyed(this)).subscribe(
       (customerResponse: any) => {
         this.paymentService.getPaymentsByCustomerId(customerResponse.customerId)
@@ -319,6 +328,30 @@ export class CustomerService implements OnDestroy {
 
   clearCredit() {
     this.credits.next([]);
+  }
+
+  getAccountCredit(credits) {
+    from(credits).pipe(
+      flatMap(
+        (credit: any) => {
+          return this.getAccountInfo(credit.account, "HCB_BANK");
+        }
+      ),
+      finalize(() => {
+      })
+    ).subscribe(
+      account => {
+        this.accountCredits.push(account);
+      }
+    );
+  }
+
+  updateAccountCredit() {
+    this.accountCreditsSource.next(this.accountCredits);
+  }
+
+  updateAccountCreditError(error) {
+    this.accountCreditsError.next(error);
   }
 
   ngOnDestroy(): void {
