@@ -70,6 +70,8 @@ export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
     this.currentTheme = this.themeService.currentTheme;
     this.client = this.notificationService.Connection();
 
+    this.subscribeToServer();
+
     this.user = JSON.parse(localStorage.getItem('userDetails'));
     if(!this.user.avatar) {
       this.user.avatar = 'assets/images/placeholder.png';
