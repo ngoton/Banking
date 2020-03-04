@@ -1,0 +1,9 @@
+@import '../../@theme/styles/themes';
+@include nb-install-component() {
+    .appearance-outline {
+        width: 87%;
+    }
+    .inputname {
+        width: 100%;
+    }
+}

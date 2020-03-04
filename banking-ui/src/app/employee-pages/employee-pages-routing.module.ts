@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { EmployeePagesComponent } from './employee-pages.component';
 import { TransactionHistoryComponent } from './transaction-history/transaction-history.component';
 import { from } from 'rxjs';
+import { DepositAccountComponent } from './deposit-account/deposit-account.component';
 
 const routes: Routes = [
   {
@@ -19,6 +20,10 @@ const routes: Routes = [
       {
         path: 'transaction-history',
         component: TransactionHistoryComponent
+      },
+      {
+        path: 'deposit-account',
+        component: DepositAccountComponent
       }
     ]
   }
