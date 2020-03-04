@@ -63,14 +63,19 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
               email: formdata.email,
             } 
           }).onClose.subscribe(
-            (token: string ) => {
-              if(token){
-                this.userService.resetPassword(token).pipe(untilDestroyed(this))
+            (success: any ) => {
+              if(success.accessToken){
+                const infor = {
+                  email: formdata.email,
+                  newPassword: "1234567",
+                  confirmPassword: "1234567"
+                }
+                this.userService.resetPassword(infor, success.accessToken).pipe(untilDestroyed(this))
                 .subscribe(
                   success => {
                     this.notifications.show({
                       id: `paied`,
-                      message: `Reset mật khẩu thành công`,
+                      message: `Reset mật khẩu thành công! Mật khẩu mới của bạn là: ${infor.newPassword}`,
                       type: `info`,
                       template: this.customNotificationTmpl
                     });

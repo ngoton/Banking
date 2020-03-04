@@ -13,7 +13,6 @@ import { Customers } from '../../../_models/customer.model';
 import { AuthService } from '../../../_services/auth.service';
 import { Router } from '@angular/router';
 import { NotificationSocketService } from '../../../_services/notification-socket.service';
-import { messages } from '../../../customer-pages/extra-components/chat/messages';
 
 @Component({
   selector: 'ngx-ibanking-customer-header',
