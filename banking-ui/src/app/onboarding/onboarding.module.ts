@@ -14,6 +14,7 @@ import {
   NbCardModule,
   NbAlertModule,
   NbInputModule,
+  NbSpinnerModule,
 } from '@nebular/theme';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -25,6 +26,7 @@ import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { DialogOTPPromptComponent } from './dialog-otp-prompt/dialog-otp-prompt.component';
 
 /**
  * Custom angular notifier options
@@ -73,6 +75,7 @@ const customNotifierOptions: NotifierOptions = {
   imports: [
     PagesRoutingModule,
     ThemeModule,
+    NbSpinnerModule,
     NbActionsModule,
     NbLayoutModule,
     NbMenuModule,
@@ -93,10 +96,12 @@ const customNotifierOptions: NotifierOptions = {
     MiscellaneousModule,
     NbInputModule
   ],
+  entryComponents: [DialogOTPPromptComponent],
   declarations: [
     OnboardingComponent,
     ChangePasswordComponent,
     ForgotPasswordComponent,
+    DialogOTPPromptComponent
   ],
 })
 export class OnboardingModule {

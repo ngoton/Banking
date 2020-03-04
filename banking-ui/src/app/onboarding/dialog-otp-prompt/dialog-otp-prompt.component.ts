@@ -1,20 +1,19 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
-import { PaymentTransactions } from '../../../_models/customer.model';
-import { PaymentTransactionService } from '../../../_services/payment-transaction.service';
 import { untilDestroyed } from 'ngx-take-until-destroy';
+import { AuthService } from '../../_services/auth.service';
 
 @Component({
-  selector: 'ngx-dialog-otp-prompt',
+  selector: 'ngx-dialog-otp-prompt-prompt',
   templateUrl: 'dialog-otp-prompt.component.html',
   styleUrls: ['dialog-otp-prompt.component.scss'],
 })
 export class DialogOTPPromptComponent implements OnInit, OnDestroy {
   sendingOTP = false;
-  paymentInfor: PaymentTransactions;
+  email: string;
 
   constructor(protected ref: NbDialogRef<DialogOTPPromptComponent>,
-              private paymentTransactionService: PaymentTransactionService) {}
+              private authService: AuthService) {}
 
   cancel() {
     this.ref.close();
@@ -23,12 +22,12 @@ export class DialogOTPPromptComponent implements OnInit, OnDestroy {
   submit(code) {
     debugger;
     this.sendingOTP = true;
-    this.paymentTransactionService.verifyPaymentDebit(this.paymentInfor, code)
+    this.authService.verifyResetPassword(this.email, code)
     .pipe(untilDestroyed(this))
     .subscribe(
       (res: any) => {
         this.sendingOTP = false;
-        this.ref.close(code);
+        this.ref.close(res);
       }
     );
     
