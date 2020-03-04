@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
 import { DebitService } from '../../../_services/debit.service';
 import { Debits, Payment, Customers, AccountInfo } from '../../../_models/customer.model';
 import { untilDestroyed } from 'ngx-take-until-destroy';
@@ -13,7 +13,8 @@ import { NotificationSocketService } from '../../../_services/notification-socke
 @Component({
   selector: 'ngx-remider-detail',
   templateUrl: './remider-detail.component.html',
-  styleUrls: ['./remider-detail.component.scss']
+  styleUrls: ['./remider-detail.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class RemiderDetailComponent implements OnInit, OnDestroy {
   @ViewChild("customNotification", { static: true }) customNotificationTmpl;
@@ -35,7 +36,6 @@ export class RemiderDetailComponent implements OnInit, OnDestroy {
               private debitService: DebitService,
               private notifications: NotifierService,
               private notificationSocketService: NotificationSocketService) {
-                debugger;
                 this.notifyService = notificationSocketService;
 
                 this.accountInfo = {

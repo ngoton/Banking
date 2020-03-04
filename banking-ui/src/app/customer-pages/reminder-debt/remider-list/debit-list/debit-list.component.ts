@@ -8,6 +8,7 @@ import { DialogDimissPromptComponent } from '../../dialog-dimiss-prompt/dialog-d
 import { Subject } from 'rxjs';
 import { takeUntil, flatMap, finalize } from 'rxjs/operators';
 import { AccountInfo } from '../../../../_models/customer.model';
+import { NotificationSocketService } from '../../../../_services/notification-socket.service';
 
 @Component({
   selector: 'ngx-debit-list',
@@ -21,6 +22,7 @@ export class DebitListComponent implements OnInit, OnDestroy {
   @ViewChild("customNotification", { static: true }) customNotificationTmpl;
   private destroy$: Subject<void> = new Subject<void>();
   private readonly notifi: NotifierService;
+  loadingDebit = false;
   
   settings = {
     add: {
@@ -80,18 +82,23 @@ export class DebitListComponent implements OnInit, OnDestroy {
 
   debitSource: LocalDataSource = new LocalDataSource();
   accountInfo: AccountInfo;
-  content_dimiss: string;
+
+  notifyService: any;
+  client: any;
 
   constructor(private customerService: CustomerService,
               private notification: NotifierService,
-              private dialogService: NbDialogService) {
-    
+              private dialogService: NbDialogService,
+              private notificationSocketService: NotificationSocketService) {
+                this.notifyService = notificationSocketService;
    }
 
   ngOnInit() {
+    this.client = this.notifyService.Connection();
     this.customerService.getDebitsData();
 
     setTimeout(() => {
+      this.loadingDebit = true;
       this.customerService.getAccountInfo(this.payment.account, "HCB_BANK").pipe(
         flatMap(
           accountInfo => {
@@ -123,11 +130,44 @@ export class DebitListComponent implements OnInit, OnDestroy {
               debitData.push(debit);
             });
 
+            debitData = debitData.filter(x => x.status !== "Canceled");
             this.debitSource.load(debitData);
+            this.loadingDebit = false;
           }   
         }
       );
     }, 2000);
+  }
+
+  sendNotifyRemove(debitData, content) {
+    var userInfo = JSON.parse(localStorage.getItem("userDetails"));
+
+    const notification = {
+      sender: userInfo.username,
+      message: `Nhắc nợ '${debitData.content}' đã hủy với nội dung ${content}`
+    }
+
+    const PATH = "/app" + this.notifyService.topic + userInfo.username;
+
+    this.client.connect({}, frame => {
+      console.log("Connected: ", frame);
+      this.client.send(PATH, {}, JSON.stringify(notification));
+    }, (err: any) => {
+      console.log("errorCallBack -> " + err)
+      setTimeout(() => {
+        this.sendNotifyRemove(debitData, content);
+      }, 5000);
+    });
+  }
+
+  accountChange(item) {
+    this.customerService.getAccountInfo(item.account, "HCB_BANK")
+    .pipe(untilDestroyed(this))
+    .subscribe(
+      (acc: AccountInfo) => {
+        this.accountInfo = acc;
+      }
+    );
   }
   
   ngOnDestroy(){
@@ -139,11 +179,13 @@ export class DebitListComponent implements OnInit, OnDestroy {
     this.dialogService
       .open(DialogDimissPromptComponent, {
         context: {
-          creditId: event.data.type === "credit" ? event.data.id : null,
-          debitId: event.data.type === "debit" ? event.data.id : null
+          credit: event.data.type === "credit" ? event.data : null,
+          debit: event.data.type === "debit" ? event.data : null
         }
       })
-      .onClose.subscribe((content: string) => (this.content_dimiss = content));
+      .onClose.subscribe((dimissObject: any) => {
+        this.sendNotifyRemove(dimissObject.object, dimissObject.content);
+      });
   }
 
 }
