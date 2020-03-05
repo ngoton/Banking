@@ -15,6 +15,7 @@ import { NotifierService } from 'angular-notifier';
 import { DialogOTPPromptComponent } from '../dialog-otp-prompt/dialog-otp-prompt.component';
 import { PaymentTransactionService } from '../../../_services/payment-transaction.service';
 import { async } from '@angular/core/testing';
+import { NotificationSocketService } from '../../../_services/notification-socket.service';
 
 @Component({
   selector: "ngx-remider-list",

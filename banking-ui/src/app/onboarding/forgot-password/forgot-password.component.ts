@@ -6,6 +6,8 @@ import { UserService } from '../../_services/user.service';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { AuthService } from '../../_services/auth.service';
 import { Location } from '@angular/common';
+import { NbDialogService } from '@nebular/theme';
+import { DialogOTPPromptComponent } from '../dialog-otp-prompt/dialog-otp-prompt.component';
 
 @Component({
   selector: 'ngx-forgot-password',
@@ -27,9 +29,11 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
 
   constructor(
     private location: Location,
-    private notifications: NotifierService, 
+    private notifications: NotifierService,
+    private dialogService: NbDialogService,
     private fb: FormBuilder,
-    private authService: AuthService) {
+    private authService: AuthService,
+    private userService: UserService) {
       this.createForm();
   }
 
@@ -50,11 +54,51 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
       template: this.customNotificationTmpl
     });
 
-    this.authService.requestPassword(formdata.email)
+    this.authService.forgotPassword(formdata.email)
       .pipe(untilDestroyed(this))
       .subscribe(
         (res: any) => {
-
+          this.dialogService.open(DialogOTPPromptComponent, { 
+            context: {
+              email: formdata.email,
+            } 
+          }).onClose.subscribe(
+            (success: any ) => {
+              if(success.accessToken){
+                const infor = {
+                  email: formdata.email,
+                  newPassword: "1234567",
+                  confirmPassword: "1234567"
+                }
+                this.userService.resetPassword(infor, success.accessToken).pipe(untilDestroyed(this))
+                .subscribe(
+                  success => {
+                    this.notifications.show({
+                      id: `paied`,
+                      message: `Reset mật khẩu thành công! Mật khẩu mới của bạn là: ${infor.newPassword}`,
+                      type: `info`,
+                      template: this.customNotificationTmpl
+                    });
+                  },
+                  (err: HttpErrorResponse) => {
+                    this.notifications.show({
+                      id: `payError`,
+                      message: `Không thể reset mật khẩu`,
+                      type: `error`,
+                      template: this.customNotificationTmpl
+                    });
+                  }
+                )
+              }
+            },
+            (err: any) => {
+              this.notifications.show({
+                id: `payError`,
+                message: `Không thể reset mật khẩu`,
+                type: `error`,
+                template: this.customNotificationTmpl
+              });
+            })
         },
         (err: HttpErrorResponse) => {
           this.notifications.hide("RequestPass"); // remove change password notification

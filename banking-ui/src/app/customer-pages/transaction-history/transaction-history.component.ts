@@ -8,10 +8,12 @@ import {
 import { PaymentTransactionService } from '../../_services/payment-transaction.service';
 import { SavingTransactionService } from '../../_services/saving-transaction.service';
 import { CustomerService } from '../../_services/customer.service';
-import { pipe } from 'rxjs';
+import { pipe, forkJoin, combineLatest, Observable } from 'rxjs';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { Payment, Savings } from '../../_models/customer.model';
-import { elementAt } from 'rxjs/operators';
+import { elementAt, flatMap, finalize, retry, mergeMap } from 'rxjs/operators';
+import { TransactionHistoryService } from './transaction-history.service';
+import { PaymentService } from '../../_services/payment.service';
 
 interface TreeNode<T> {
   data: T;
@@ -41,178 +43,52 @@ export class TransactionHistoryComponent implements OnInit, OnDestroy {
 
   paymentInfor: Payment = new Payment();
   savingInfor: Savings = new Savings();
-  receiveHistories: TreeNode<FSEntry>[]= new Array();
-  transferHistories: TreeNode<FSEntry>[] = new Array();
-  creditHistories: TreeNode<FSEntry>[] = new Array();
+  receiveHistories: TreeNode<FSEntry> = {
+    data: {
+      transaction_type: 'Nhận tiền',
+      content: '',
+      date: '',
+      money: '',
+    },
+    children: []
+  };
+  transferHistories: TreeNode<FSEntry> = {
+    data: {
+      transaction_type: 'Chuyển khoản',
+      content: '',
+      date: '',
+      money: '',
+    },
+    children: []
+  };
+  creditHistories: TreeNode<FSEntry> = {
+    data: {
+      transaction_type: 'Thanh toán nhắc nợ',
+      content: '',
+      date: '',
+      money: '',
+    },
+    children: []
+  };
 
-  private data: TreeNode<FSEntry>[] = [
-    {
-      data: {
-        transaction_type: 'Nhận tiền',
-        content: '',
-        date: '',
-        money: ''
-      },
-      children: this.receiveHistories
-    },
-    {
-      data: {
-        transaction_type: 'Thanh toán',
-        content: '',
-        date: '',
-        money: ''
-      },
-      children: [
-        {
-          data: {
-            transaction_type: null,
-            content: 'Tiền lì xì',
-            date: '28/01/2020',
-            money: '500.000'
-          }
-        },
-        {
-          data: {
-            transaction_type: null,
-            content: 'Tiền lì xì',
-            date: '28/01/2020',
-            money: '500.000'
-          }
-        },
-        {
-          data: {
-            transaction_type: null,
-            content: 'Tiền lì xì',
-            date: '28/01/2020',
-            money: '500.000'
-          }
-        }
-      ]
-    },
-    {
-      data: {
-        transaction_type: 'Nhắc nợ',
-        content: '',
-        date: '',
-        money: ''
-      },
-      children: [
-        {
-          data: {
-            transaction_type: null,
-            content: 'Tiền lì xì',
-            date: '28/01/2020',
-            money: '500.000'
-          }
-        },
-        {
-          data: {
-            transaction_type: null,
-            content: 'Tiền lì xì',
-            date: '28/01/2020',
-            money: '500.000'
-          }
-        },
-        {
-          data: {
-            transaction_type: null,
-            content: 'Tiền lì xì',
-            date: '28/01/2020',
-            money: '500.000'
-          }
-        }
-      ]
-    }
-  ];
+  private data: TreeNode<FSEntry>[] = [];
 
   dataSource: NbTreeGridDataSource<FSEntry>;
+  transaction: TransactionHistoryService;
+  getPaymentSaving: Observable<any>;
 
   sortColumn: string;
   sortDirection: NbSortDirection = NbSortDirection.NONE;
 
   constructor(private dataSourceBuilder: NbTreeGridDataSourceBuilder<FSEntry>,
               private customerService: CustomerService,
-              private paymentTransationService: PaymentTransactionService,
-              private savingTransactionService: SavingTransactionService) {
+              private paymentService: PaymentService,
+              private paymentTransactionService: PaymentTransactionService,
+              private savingTransactionService: SavingTransactionService,
+              private transationHistoryService: TransactionHistoryService) {
+                this.transaction = transationHistoryService;
+                // this.transaction.getPaymentHistoryData();
     // this.dataSource = this.dataSourceBuilder.create(this.data);
-  }
-
-  getPayment() {
-    this.customerService.payments$
-      .pipe(untilDestroyed(this))
-      .subscribe(
-        (payment: Payment) => {
-          this.paymentInfor = payment;
-          if(this.paymentInfor != null){
-            this.getPaymentReceiveHistory();
-          }
-        },
-        (err: any) => {
-
-        }
-      );
-  }
-
-  getSaving() {
-    this.customerService.savings$
-      .pipe(untilDestroyed(this))
-      .subscribe(
-        (saving: Savings) => {
-          this.savingInfor = saving;
-          if(this.savingInfor != null){
-            this.getSavingReceiveHistory();
-          }
-        },
-        (err: any) => {
-
-        }
-      );
-  }
-
-  getPaymentReceiveHistory() {
-    debugger;
-    this.paymentTransationService.getPaymentReceive(this.paymentInfor.paymentId)
-    .pipe(untilDestroyed(this))
-    .subscribe(
-      (success: any) => {
-        success.content.forEach(item => {
-          let node : TreeNode<FSEntry> = {
-            data: {
-              transaction_type: null,
-              content: item.content,
-              date: item.createdAt,
-              money: item.money,
-            }
-          }
-          this.receiveHistories.splice(this.receiveHistories.indexOf(node), 1);
-          this.receiveHistories.push(node);
-        });
-        this.dataSource = this.dataSourceBuilder.create(this.data);
-      }
-    );
-  }
-
-  getSavingReceiveHistory() {
-    debugger;
-    this.savingTransactionService.getSavingReceive(this.paymentInfor.paymentId)
-    .pipe(untilDestroyed(this))
-    .subscribe(
-      (success: any) => {
-        success.content.forEach(item => {
-          let node : TreeNode<FSEntry> = {
-            data: {
-              transaction_type: null,
-              content: item.content,
-              date: item.createdAt,
-              money: item.money,
-            }
-          }
-          this.receiveHistories.splice(this.receiveHistories.indexOf(node), 1);
-          this.receiveHistories.push(node);
-        });
-        this.dataSource = this.dataSourceBuilder.create(this.data);
-      }
-    );
   }
 
   updateSort(sortRequest: NbSortRequest): void {
@@ -233,8 +109,89 @@ export class TransactionHistoryComponent implements OnInit, OnDestroy {
     return minWithForMultipleColumns + nextColumnStep * index;
   }
 
+  getPaymentTransfer() {  
+    const customer = JSON.parse(localStorage.getItem("customerInfor"));
+
+    this.paymentService.getPaymentsByCustomerId(customer.customerId).pipe(untilDestroyed(this),
+      mergeMap(
+        payment => {
+          const transferPayment = this.paymentTransactionService.getPaymentTransfer(payment[0].id);
+          const creditPayment = this.paymentTransactionService.getPaymentCredit(payment[0].id);
+
+          return forkJoin([transferPayment, creditPayment]);
+        }
+      ),
+      finalize(() =>{})
+    )
+    .subscribe(
+      success => {
+        success[0].content.forEach(item => {
+          let node : TreeNode<FSEntry> = {
+            data: {
+              transaction_type: null,
+              content: item.content,
+              date: item.createdAt,
+              money: item.money,
+            }
+          }
+          this.transferHistories.children.push(node);
+        });
+
+        success[1].content.forEach(item => {
+          let node : TreeNode<FSEntry> = {
+            data: {
+              transaction_type: null,
+              content: item.content,
+              date: item.createdAt,
+              money: item.money,
+            }
+          }
+
+          this.creditHistories.children.push(node);
+        });
+
+        this.data = [this.receiveHistories, this.transferHistories, this.creditHistories];
+        this.dataSource = this.dataSourceBuilder.create(this.data);
+      }
+    );
+  }
+
   ngOnInit() {
-    this.getPayment();
+    debugger;
+    this.customerService.getPaymentAndSavingReceive().pipe(untilDestroyed(this))
+      .subscribe(
+        success => {
+          success[0].content.forEach(item => {
+            let node : TreeNode<FSEntry> = {
+              data: {
+                transaction_type: null,
+                content: item.content,
+                date: item.createdAt,
+                money: item.money,
+              }
+            }
+            this.receiveHistories.children.push(node);
+          });
+
+          success[1].content.forEach(item => {
+            let node : TreeNode<FSEntry> = {
+              data: {
+                transaction_type: null,
+                content: item.content,
+                date: item.createdAt,
+                money: item.money,
+              }
+            }
+
+            this.receiveHistories.children.push(node);
+          });
+
+          this.data = [this.receiveHistories, this.transferHistories, this.creditHistories];
+          this.dataSource = this.dataSourceBuilder.create(this.data);
+
+          this.getPaymentTransfer();
+        }
+      );
   }
 
   ngOnDestroy() {}

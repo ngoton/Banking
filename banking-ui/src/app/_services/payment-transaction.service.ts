@@ -96,6 +96,12 @@ export class PaymentTransactionService {
     return this.http.get<any>(PATH).pipe();
   }
 
+  getPaymentReceiveByCustomer(customerId): Observable<any> {
+
+    const PATH = this.TRANSFER_URL + `/history/paymentReceive/customer/${customerId}`;
+    return this.http.get<any>(PATH).pipe();
+  }
+
   getPaymentTransfer(paymentId): Observable<any> {
 
     const PATH = this.TRANSFER_URL + `/history/paymentTransfer/${paymentId}`;

@@ -11,7 +11,6 @@ import {
   NbListModule,
   NbIconModule,
 } from '@nebular/theme';
-import { NgxEchartsModule } from 'ngx-echarts';
 
 import { ThemeModule } from '../../@theme/theme.module';
 import { AccountsComponent } from './accounts.component';
@@ -33,8 +32,7 @@ import { DecimalPipe } from '@angular/common';
     NbSelectModule,
     NbListModule,
     NbIconModule,
-    NbButtonModule,
-    NgxEchartsModule,
+    NbButtonModule
   ],
   declarations: [
     AccountsComponent,

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
+import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService, NbDialogService } from '@nebular/theme';
 
 import { UserData } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
@@ -13,7 +13,6 @@ import { Customers } from '../../../_models/customer.model';
 import { AuthService } from '../../../_services/auth.service';
 import { Router } from '@angular/router';
 import { NotificationSocketService } from '../../../_services/notification-socket.service';
-import { messages } from '../../../customer-pages/extra-components/chat/messages';
 
 @Component({
   selector: 'ngx-ibanking-customer-header',
@@ -21,6 +20,7 @@ import { messages } from '../../../customer-pages/extra-components/chat/messages
   templateUrl: './ibanking-customer-header.component.html',
 })
 export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
+  loading = false;
 
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
@@ -28,7 +28,8 @@ export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
   user: User;
   customer: Customers;
   client: any;
-  notification: any;
+  notifications: any[] = new Array();
+  countNotify: number = 0;
 
   themes = [
     {
@@ -78,6 +79,7 @@ export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
     }
 
     this.customerService.getAcctDetailsData();
+    this.subscribeToServer();
 
     this.customerService.acctDetail$
       .pipe(takeUntil(this.destroy$))
@@ -127,8 +129,9 @@ export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
       console.log("Connected: ", frame);
       this.client.subscribe(this.notificationService.topic + userInfo.username,
         message => {
-          this.notification = JSON.parse(message.body);
-          console.log("notification: ", this.notification);
+          this.notifications.push(JSON.parse(message.body));
+          this.countNotify = this.notifications.length;
+          console.log("notification: ", this.notifications);
       }, function(error){
         alert("STOMP error" + error);
       })
@@ -138,6 +141,13 @@ export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
         this.subscribeToServer();
       }, 5000);
     });
+  }
+
+  notifyClicked(){
+    this.countNotify = 0;
+  }
+  goTo(){
+    this.router.navigate(['/customer/reminder-debt']);
   }
 
   ngOnDestroy() {

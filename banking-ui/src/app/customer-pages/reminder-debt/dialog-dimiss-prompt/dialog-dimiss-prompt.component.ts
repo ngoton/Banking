@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, OnDestroy, Input } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { DebitService } from '../../../_services/debit.service';
 import { CreditService } from '../../../_services/credit.service';
@@ -8,11 +8,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'ngx-dialog-dimiss-prompt',
   templateUrl: 'dialog-dimiss-prompt.component.html',
-  styleUrls: ['dialog-dimiss-prompt.component.scss'],
+  styleUrls: ['dialog-dimiss-prompt.component.scss']
 })
-export class DialogDimissPromptComponent {
-  @Input() debitId: number = null;
-  @Input() creditId: number = null;
+export class DialogDimissPromptComponent implements OnDestroy {
+  @Input() debit: any = null;
+  @Input() credit: any = null;
 
   constructor(protected ref: NbDialogRef<DialogDimissPromptComponent>,
               private debitService: DebitService,
@@ -23,12 +23,16 @@ export class DialogDimissPromptComponent {
   }
 
   submit(content) {
-    if(this.debitId != null){
-      this.debitService.cancel({id: this.debitId, content: content})
+    if(this.debit != null){
+      this.debitService.cancel({id: this.debit.id, content: content})
       .pipe(untilDestroyed(this))
       .subscribe(
         (response: any) => {
-          this.ref.close(content);
+          let dimissObject = {
+            object: this.debit,
+            content: content
+          }
+          this.ref.close(dimissObject);
         },
         (err: HttpErrorResponse) => {
           
@@ -36,17 +40,25 @@ export class DialogDimissPromptComponent {
       );
     }
 
-    if(this.creditId != null){
-      this.creditService.cancel({id: this.creditId, content: content})
+    if(this.credit != null){
+      this.creditService.cancel({id: this.credit.id, content: content})
       .pipe(untilDestroyed(this))
       .subscribe(
         (response: any) => {
-          this.ref.close(content);
+          let dimissObject = {
+            object: this.credit,
+            content: content
+          }
+          this.ref.close(dimissObject);
         },
         (err: HttpErrorResponse) => {
           
         }
       );
     }
+  }
+
+  ngOnDestroy() {
+
   }
 }

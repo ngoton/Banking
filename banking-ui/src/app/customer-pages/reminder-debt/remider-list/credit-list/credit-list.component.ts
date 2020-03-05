@@ -11,6 +11,7 @@ import { DialogDimissPromptComponent } from '../../dialog-dimiss-prompt/dialog-d
 import { Subject, from } from 'rxjs';
 import { async } from 'rxjs/internal/scheduler/async';
 import { takeUntil, flatMap, finalize } from 'rxjs/operators';
+import { NotificationSocketService } from '../../../../_services/notification-socket.service';
 
 @Component({
   selector: 'ngx-credit-list',
@@ -23,6 +24,7 @@ export class CreditListComponent implements OnInit, OnDestroy {
   @ViewChild("customNotification", { static: true }) customNotificationTmpl;
   private destroy$: Subject<void> = new Subject<void>();
   private readonly notifi: NotifierService;
+  loadingCredit = false;
 
   settings = {
     add: {
@@ -86,14 +88,17 @@ export class CreditListComponent implements OnInit, OnDestroy {
   creditSource: LocalDataSource = new LocalDataSource();
   accountCredit: any;
   creditsData: any[];
-  content_dimiss: string;
+
+  notifyService: any;
+  client: any;
 
   constructor(private customerService: CustomerService,
               private creditService: CreditService,
               private notifiService: NotifierService,
-              private dialogService: NbDialogService) {
+              private dialogService: NbDialogService,
+              private notificationSocketService: NotificationSocketService) {
                 this.notifi = notifiService;
-                
+                this.notifyService = notificationSocketService;
                }
 
   getAccountByCredit(account) {
@@ -107,10 +112,11 @@ export class CreditListComponent implements OnInit, OnDestroy {
   }
   
   ngOnInit() {
-    debugger;
+    this.client = this.notifyService.Connection();
     this.customerService.getCreditsData()
-
+    
     setTimeout(() => {
+      this.loadingCredit = true
       this.customerService.credits$.pipe(takeUntil(this.destroy$))
       .subscribe(
         credits => {
@@ -119,25 +125,47 @@ export class CreditListComponent implements OnInit, OnDestroy {
             
             let creditDataList = [];
             this.creditsData.forEach(element => {
-              let credits = {
-                id: element.id,
-                name_reminder: "",
-                account_reminder: element.account,
-                account: this.payment.account,
-                money: element.money,
-                content: element.content,
-                status: element.status,
-                type: "credit"
-              }
-              creditDataList.push(credits);
-          });
-
-          this.creditSource.load(creditDataList);
+                let credits = {
+                  id: element.id,
+                  name_reminder: "",
+                  account_reminder: element.account,
+                  account: this.payment.account,
+                  money: element.money,
+                  content: element.content,
+                  status: element.status,
+                  type: "credit"
+                }
+                creditDataList.push(credits);
+            });
+            creditDataList = creditDataList.filter(x => x.status !== "Canceled");
+            this.creditSource.load(creditDataList);
+            this.loadingCredit = false;
             
           }
         } 
       );
     }, 2000);
+  }
+
+  sendNotifyRemove(debitData, content) {
+    var userInfo = JSON.parse(localStorage.getItem("userDetails"));
+
+    const notification = {
+      sender: userInfo.username,
+      message: `Nhắc nợ '${debitData.content}' đã hủy với nội dung ${content}`
+    }
+
+    const PATH = "/app" + this.notifyService.topic + userInfo.username;
+
+    this.client.connect({}, frame => {
+      console.log("Connected: ", frame);
+      this.client.send(PATH, {}, JSON.stringify(notification));
+    }, (err: any) => {
+      console.log("errorCallBack -> " + err)
+      setTimeout(() => {
+        this.sendNotifyRemove(debitData, content);
+      }, 5000);
+    });
   }
 
   ngOnDestroy(){
@@ -201,11 +229,13 @@ export class CreditListComponent implements OnInit, OnDestroy {
     this.dialogService
       .open(DialogDimissPromptComponent, {
         context: {
-          creditId: event.data.type === "credit" ? event.data.id : null,
-          debitId: event.data.type === "debit" ? event.data.id : null
+          credit: event.data.type === "credit" ? event.data : null,
+          debit: event.data.type === "debit" ? event.data : null
         }
       })
-      .onClose.subscribe((content: string) => (this.content_dimiss = content));
+      .onClose.subscribe((dimissObject: any) => {
+        this.sendNotifyRemove(dimissObject.object, dimissObject.content);
+      });
   }
 
 }

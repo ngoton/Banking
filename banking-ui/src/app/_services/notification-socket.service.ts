@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import * as SockJS from 'sockjs-client';
 import * as Stomp from 'stompjs';
-import { messages } from '../customer-pages/extra-components/chat/messages';
 import { IBankingCustomerHeaderComponent } from '../@theme/components';
 
 @Injectable({
