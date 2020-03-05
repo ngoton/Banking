@@ -17,36 +17,36 @@ public class PaymentTransactionService {
     private final PaymentTransactionRepository paymentTransactionRepository;
 
     public Page<PaymentTransaction> findAllBy(Pageable pageable) {
-        return paymentTransactionRepository.findAllBy(pageable);
+        return paymentTransactionRepository.findAllByOrderByIdDesc(pageable);
     }
 
 
     public Page<PaymentTransaction> findAllByPaymentId(Long id, Pageable pageable) {
-        return paymentTransactionRepository.findAllByPaymentId(id, pageable);
+        return paymentTransactionRepository.findAllByPaymentIdOrderByIdDesc(id, pageable);
     }
 
     public Page<PaymentTransaction> findAllByPaymentIdAndMoneyLessThan(Long id, Pageable pageable) {
-        return paymentTransactionRepository.findAllByPaymentIdAndMoneyLessThan(id, BigDecimal.ZERO, pageable);
+        return paymentTransactionRepository.findAllByPaymentIdAndMoneyLessThanOrderByIdDesc(id, BigDecimal.ZERO, pageable);
     }
 
     public Page<PaymentTransaction> findAllByPaymentIdAndMoneyGreaterThan(Long id, Pageable pageable) {
-        return paymentTransactionRepository.findAllByPaymentIdAndMoneyGreaterThan(id, BigDecimal.ZERO, pageable);
+        return paymentTransactionRepository.findAllByPaymentIdAndMoneyGreaterThanOrderByIdDesc(id, BigDecimal.ZERO, pageable);
     }
 
     public Page<PaymentTransaction> findAllByPaymentCustomerIdAndMoneyLessThan(Long id, Pageable pageable) {
-        return paymentTransactionRepository.findAllByPaymentCustomerIdAndMoneyLessThan(id, BigDecimal.ZERO, pageable);
+        return paymentTransactionRepository.findAllByPaymentCustomerIdAndMoneyLessThanOrderByIdDesc(id, BigDecimal.ZERO, pageable);
     }
 
     public Page<PaymentTransaction> findAllByPaymentCustomerIdAndMoneyGreaterThan(Long id, Pageable pageable) {
-        return paymentTransactionRepository.findAllByPaymentCustomerIdAndMoneyGreaterThan(id, BigDecimal.ZERO, pageable);
+        return paymentTransactionRepository.findAllByPaymentCustomerIdAndMoneyGreaterThanOrderByIdDesc(id, BigDecimal.ZERO, pageable);
     }
 
     public Page<PaymentTransaction> findAllByPartnerName(String name, Pageable pageable) {
-        return paymentTransactionRepository.findAllByPartnerName(name, pageable);
+        return paymentTransactionRepository.findAllByPartnerNameOrderByIdDesc(name, pageable);
     }
 
     public Page<PaymentTransaction> findAllByBeneficiary(Long id, Pageable pageable) {
-        return paymentTransactionRepository.findAllByBeneficiaryId(id, pageable);
+        return paymentTransactionRepository.findAllByBeneficiaryIdOrderByIdDesc(id, pageable);
     }
 
     public PaymentTransaction findById(Long id) {
@@ -67,18 +67,18 @@ public class PaymentTransactionService {
     }
 
     public Page<PaymentTransaction> findAllByDate(CreatedAt startDate, CreatedAt endDate, Pageable pageable) {
-        return paymentTransactionRepository.findAllByPartnerIsNotNullAndCreatedCreatedAtGreaterThanEqualAndCreatedCreatedAtLessThanEqual(startDate, endDate, pageable);
+        return paymentTransactionRepository.findAllByPartnerIsNotNullAndCreatedCreatedAtGreaterThanEqualAndCreatedCreatedAtLessThanEqualOrderByIdDesc(startDate, endDate, pageable);
     }
 
     public Page<PaymentTransaction> findAllByPartner(String name, CreatedAt startDate, CreatedAt endDate, Pageable pageable) {
-        return paymentTransactionRepository.findAllByPartnerNameAndCreatedCreatedAtGreaterThanEqualAndCreatedCreatedAtLessThanEqual(name, startDate, endDate, pageable);
+        return paymentTransactionRepository.findAllByPartnerNameAndCreatedCreatedAtGreaterThanEqualAndCreatedCreatedAtLessThanEqualOrderByIdDesc(name, startDate, endDate, pageable);
     }
 
     public Page<PaymentTransaction> findAllByPartners(Pageable pageable) {
-        return paymentTransactionRepository.findAllByPartnerIsNotNull(pageable);
+        return paymentTransactionRepository.findAllByPartnerIsNotNullOrderByIdDesc(pageable);
     }
 
     public Page<PaymentTransaction> findAllByCredit(Long id, Pageable pageable) {
-        return paymentTransactionRepository.findAllByPaymentCustomerIdAndDebitIsNotNull(id, pageable);
+        return paymentTransactionRepository.findAllByPaymentCustomerIdAndDebitIsNotNullOrderByIdDesc(id, pageable);
     }
 }

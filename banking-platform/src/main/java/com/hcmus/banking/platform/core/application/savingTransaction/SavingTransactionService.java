@@ -16,7 +16,7 @@ public class SavingTransactionService {
     private final SavingTransactionRepository savingTransactionRepository;
 
     public Page<SavingTransaction> findAllBy(Pageable pageable) {
-        return savingTransactionRepository.findAllBy(pageable);
+        return savingTransactionRepository.findAllByOrderByIdDesc(pageable);
     }
 
     public SavingTransaction findById(Long id) {
@@ -24,23 +24,23 @@ public class SavingTransactionService {
     }
 
     public Page<SavingTransaction> findAllBySavingId(Long id, Pageable pageable) {
-        return savingTransactionRepository.findAllBySavingId(id, pageable);
+        return savingTransactionRepository.findAllBySavingIdOrderByIdDesc(id, pageable);
     }
 
     public Page<SavingTransaction> findAllBySavingIdAndMoneyGreaterThan(Long id, Pageable pageable) {
-        return savingTransactionRepository.findAllBySavingIdAndMoneyGreaterThan(id, BigDecimal.ZERO, pageable);
+        return savingTransactionRepository.findAllBySavingIdAndMoneyGreaterThanOrderByIdDesc(id, BigDecimal.ZERO, pageable);
     }
 
     public Page<SavingTransaction> findAllBySavingIdAndMoneyLessThan(Long id, Pageable pageable) {
-        return savingTransactionRepository.findAllBySavingIdAndMoneyLessThan(id, BigDecimal.ZERO, pageable);
+        return savingTransactionRepository.findAllBySavingIdAndMoneyLessThanOrderByIdDesc(id, BigDecimal.ZERO, pageable);
     }
 
     public Page<SavingTransaction> findAllBySavingCustomerIdAndMoneyGreaterThan(Long id, Pageable pageable) {
-        return savingTransactionRepository.findAllBySavingCustomerIdAndMoneyGreaterThan(id, BigDecimal.ZERO, pageable);
+        return savingTransactionRepository.findAllBySavingCustomerIdAndMoneyGreaterThanOrderByIdDesc(id, BigDecimal.ZERO, pageable);
     }
 
     public Page<SavingTransaction> findAllBySavingCustomerIdAndMoneyLessThan(Long id, Pageable pageable) {
-        return savingTransactionRepository.findAllBySavingCustomerIdAndMoneyLessThan(id, BigDecimal.ZERO, pageable);
+        return savingTransactionRepository.findAllBySavingCustomerIdAndMoneyLessThanOrderByIdDesc(id, BigDecimal.ZERO, pageable);
     }
 
     public void create(SavingTransaction savingTransaction) {
