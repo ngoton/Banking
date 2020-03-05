@@ -79,6 +79,6 @@ public class PaymentTransactionService {
     }
 
     public Page<PaymentTransaction> findAllByCredit(Long id, Pageable pageable) {
-        return paymentTransactionRepository.findAllByCreditPaymentTransactionIsNotNullAndCreditCustomerId(id, pageable);
+        return paymentTransactionRepository.findAllByPaymentCustomerIdAndDebitIsNotNull(id, pageable);
     }
 }

@@ -116,6 +116,15 @@ public class PaymentTransactionUseCaseService {
     }
 
     @Transactional(readOnly = true)
+    public Page<PaymentTransaction> findAllByCreditCustomer(Long id, Pageable pageable) {
+        Customer customer = customerService.findById(id);
+        if (customer.isEmpty()) {
+            throw new BankingServiceException("Customer does not exist!!!");
+        }
+        return paymentTransactionService.findAllByCredit(customer.getId(), pageable);
+    }
+
+    @Transactional(readOnly = true)
     public Page<PaymentTransaction> findAllByPaymentIdAndMoneyLessThan(Long id, Pageable pageable) {
         Payment payment = paymentService.findById(id);
         if (payment.isEmpty()) {

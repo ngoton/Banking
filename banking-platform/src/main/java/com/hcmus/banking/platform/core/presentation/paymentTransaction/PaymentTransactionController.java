@@ -54,6 +54,12 @@ public class PaymentTransactionController {
         return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
     }
 
+    @GetMapping("/history/paymentCredit/customer/{id}")
+    public Page<PaymentTransactionResponse> findAllByPaymentCreditCustomer(@PathVariable Long id, Pageable pageable) {
+        Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByCreditCustomer(id, pageable);
+        return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
+    }
+
     @GetMapping("/history/paymentReceive/{id}")
     public Page<PaymentTransactionResponse> findAllByPaymentIdAndMoneyGreaterThan(@PathVariable Long id, Pageable pageable) {
         Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByPaymentIdAndMoneyGreaterThan(id, pageable);
