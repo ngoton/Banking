@@ -5,7 +5,7 @@ import { PaymentTransactionService } from '../../../_services/payment-transactio
 import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
-  selector: 'ngx-otp-dimiss-prompt',
+  selector: 'ngx-dialog-otp-prompt',
   templateUrl: 'dialog-otp-prompt.component.html',
   styleUrls: ['dialog-otp-prompt.component.scss'],
 })

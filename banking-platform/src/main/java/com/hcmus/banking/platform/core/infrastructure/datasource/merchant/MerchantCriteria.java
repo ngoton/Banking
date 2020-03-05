@@ -8,12 +8,16 @@ import java.math.BigDecimal;
 @Getter
 public class MerchantCriteria {
     Partner partner;
+    String account;
     String content;
     BigDecimal money;
+    String internalAccount;
 
-    public MerchantCriteria(Partner partner, String content, BigDecimal money){
+    public MerchantCriteria(Partner partner, String account, String content, BigDecimal money, String internalAccount){
         this.partner = partner;
+        this.account = account;
         this.content = content;
         this.money = money;
+        this.internalAccount = internalAccount;
     }
 }

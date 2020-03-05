@@ -8,13 +8,10 @@ import {
 } from '@nebular/theme';
 import { ThemeModule } from '../@theme/theme.module';
 import { CustomerPagesComponent } from './customer-pages.component';
-import { DashboardModule } from './dashboard/dashboard.module';
 import { AccountsModule } from './accounts/accounts.module';
 import { BeneficiaryModule } from './beneficiary/beneficiary.module';
 import { TransferModule } from './transfer/transfer.module';
-import { ECommerceModule } from './e-commerce/e-commerce.module';
 import { CustomerPagesRoutingModule } from './customer-pages-routing.module';
-import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { TransactionHistoryComponent } from './transaction-history/transaction-history.component';
 import { FsIconComponent } from './transaction-history/transaction-history.component';
 import { SharedModule } from '../shared/shared.module';
@@ -73,12 +70,9 @@ const customNotifierOptions: NotifierOptions = {
     NbIconModule,
     NbInputModule,
     NbTreeGridModule,
-    DashboardModule,
     AccountsModule,
     BeneficiaryModule,
     TransferModule,
-    ECommerceModule,
-    MiscellaneousModule,
     NotifierModule.withConfig(customNotifierOptions),
     SharedModule
   ],

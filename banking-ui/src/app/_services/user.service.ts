@@ -98,6 +98,15 @@ export class UserService implements OnDestroy {
     );
   }
 
+  resetPassword(data, token): Observable<any> {
+    localStorage.setItem("token", token);
+
+    const PATH = this.USER_URL + `/reset-password`;
+
+    return this.http.post<any>(PATH, JSON.stringify(data))
+    .pipe();
+  }
+
   ngOnDestroy(): void {}
 }
 

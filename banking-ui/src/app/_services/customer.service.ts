@@ -1,8 +1,8 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subject, Subscription, from } from 'rxjs';
-import { retry, catchError } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject, Subscription, from, forkJoin, combineLatest } from 'rxjs';
+import { retry, catchError, flatMap, finalize, map, mergeMap } from 'rxjs/operators';
 import { UtilitiesService } from './utilities.service';
 import {
   Beneficiarys,
@@ -22,6 +22,8 @@ import { SavingService } from './saving.service';
 import { BenificiaryService } from './benificiary.service';
 import { DebitService } from './debit.service';
 import { CreditService } from './credit.service';
+import { PaymentTransactionService } from './payment-transaction.service';
+import { SavingTransactionService } from './saving-transaction.service';
 
 @Injectable({
   providedIn: 'root',
@@ -32,6 +34,8 @@ export class CustomerService implements OnDestroy {
   private REQ_URL = environment.BASE_URL + environment.REQ_SERV;
 
   private ACC_URL = environment.BASE_URL + environment.ACC_SERV;
+
+  private accountCredits = [];
 
   // Observable string sources: Account Details
   private acctDetailSource = new BehaviorSubject<Customers>(null);
@@ -77,6 +81,13 @@ export class CustomerService implements OnDestroy {
   credits$ = this.credits.asObservable();
   creditsError$ = this.creditsError.asObservable();
 
+  // Observable string sources: account credit
+  private accountCreditsSource = new BehaviorSubject<any[]>([]);
+  private accountCreditsError = new BehaviorSubject<any>(null);
+  // Observable string streams: account credit
+  accountCredits$ = this.accountCreditsSource.asObservable();
+  accountCreditsError$ = this.accountCreditsError.asObservable();
+
   // Observable string sources: Banks
   private banks = new BehaviorSubject<Banks[]>(null);
   banks$ = this.banks.asObservable();
@@ -100,6 +111,8 @@ export class CustomerService implements OnDestroy {
     private userService: UserService,
     private paymentService: PaymentService,
     private savingService: SavingService,
+    private paymentTranService: PaymentTransactionService,
+    private savingTranService: SavingTransactionService,
     private benificiaryService: BenificiaryService,
     private debitService: DebitService,
     private creditService: CreditService
@@ -155,6 +168,7 @@ export class CustomerService implements OnDestroy {
           if (customerRes) {
             this.updateAcctDetailsError('');
             this.updateAcctDetails(customerRes);
+            localStorage.setItem("customerInfor", JSON.stringify(customerRes));
           } else {
             this.updateAcctDetailsError("Can't get customer's data");
             this.updateAcctDetails(null);
@@ -171,20 +185,23 @@ export class CustomerService implements OnDestroy {
 
   }
 
-  public getPaymentsData() {
-    this.getCustomerData().pipe(untilDestroyed(this)).subscribe(
-      (customerResponse: any) => {
-        this.paymentService.getPaymentsByCustomerId(customerResponse.customerId)
-        .pipe(untilDestroyed(this))
-        .subscribe(
-          (payments: Payment[]) => {
-            let payment = new Payment(payments[0]);
-            this.updatePayment(payment);
-          },
-          (err: HttpErrorResponse)=> {
-            
-          }
-        );
+  getPaymentsData() {
+    this.getCustomerData().pipe(untilDestroyed(this),
+      flatMap(
+        customer => {
+          return this.paymentService.getPaymentsByCustomerId(customer.customerId);
+        }
+      ),
+      finalize(() => {
+
+      })
+    ).subscribe(
+      (payments: Payment[]) => {
+        let payment = new Payment(payments[0]);
+        this.updatePayment(payment);
+      },
+      (err: HttpErrorResponse)=> {
+        
       }
     );
   }
@@ -198,19 +215,22 @@ export class CustomerService implements OnDestroy {
   }
 
   public getSavingsData() {
-    this.getCustomerData().pipe(untilDestroyed(this)).subscribe(
-      (customerResponse: any) => {
-        this.savingService.getSavingsByCustomerId(customerResponse.customerId)
-        .pipe(untilDestroyed(this))
-        .subscribe(
-          (savings: Savings[]) => {
-            let saving = new Savings(savings[0]);
-            this.updateSaving(saving);
-          },
-          (err: HttpErrorResponse)=> {
-            
-          }
-        );
+    this.getCustomerData().pipe(untilDestroyed(this),
+      flatMap(
+        customer => {
+          return this.savingService.getSavingsByCustomerId(customer.customerId);
+        }
+      ),
+      finalize(() => {
+
+      })
+    ).subscribe(
+      (savings: Savings[]) => {
+        let saving = new Savings(savings[0]);
+        this.updateSaving(saving);
+      },
+      (err: HttpErrorResponse)=> {
+        
       }
     );
   }
@@ -229,6 +249,16 @@ export class CustomerService implements OnDestroy {
 
   updateAcctDetailsError(message) {
     this.acctDetailErrorSource.next(message);
+  }
+
+
+  getPaymentAndSavingReceive() {
+    const customer = JSON.parse(localStorage.getItem("customerInfor"));
+
+    const payments = this.paymentTranService.getPaymentReceiveByCustomer(customer.customerId);
+    const savings = this.savingTranService.getSavingReceiveByCustomer(customer.customerId);
+
+    return forkJoin([payments, savings]).pipe();
   }
 
   public getBeneficiariesData() {
@@ -319,6 +349,30 @@ export class CustomerService implements OnDestroy {
 
   clearCredit() {
     this.credits.next([]);
+  }
+
+  getAccountCredit(credits) {
+    from(credits).pipe(
+      flatMap(
+        (credit: any) => {
+          return this.getAccountInfo(credit.account, "HCB_BANK");
+        }
+      ),
+      finalize(() => {
+      })
+    ).subscribe(
+      account => {
+        this.accountCredits.push(account);
+      }
+    );
+  }
+
+  updateAccountCredit() {
+    this.accountCreditsSource.next(this.accountCredits);
+  }
+
+  updateAccountCreditError(error) {
+    this.accountCreditsError.next(error);
   }
 
   ngOnDestroy(): void {

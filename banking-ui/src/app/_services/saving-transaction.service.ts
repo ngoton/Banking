@@ -15,7 +15,13 @@ export class SavingTransactionService {
 
   getSavingReceive(savingId): Observable<any> {
 
-    const PATH = this.TRANSFER_SAVING_URL + `/history/savingReceive/${savingId}`;
+    const PATH = this.TRANSFER_SAVING_URL + `/history/savingReceive/saving/${savingId}`;
+    return this.http.get<any>(PATH).pipe();
+  }
+
+  getSavingReceiveByCustomer(customerId): Observable<any> {
+
+    const PATH = this.TRANSFER_SAVING_URL + `/history/savingReceive/customer/${customerId}`;
     return this.http.get<any>(PATH).pipe();
   }
 }

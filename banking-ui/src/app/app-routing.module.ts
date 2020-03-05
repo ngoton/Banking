@@ -12,11 +12,6 @@ import { AuthGuard } from './_guards/auth.guard';
 
 const routes: Routes = [
   {
-    path: 'pages',
-    loadChildren: () => import('app/pages/pages.module')
-      .then(m => m.PagesModule),
-  },
-  {
     path: 'customer',
     canActivate: [AuthGuard],
     loadChildren: () => import('app/customer-pages/customer-pages.module')
@@ -65,7 +60,7 @@ const routes: Routes = [
     ],
   },
   { path: '', redirectTo: 'customer', pathMatch: 'full' },
-  { path: '**', redirectTo: 'pages' },
+  { path: '**', redirectTo: 'onboarding' },
 ];
 
 const config: ExtraOptions = {

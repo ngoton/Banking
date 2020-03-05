@@ -43,13 +43,19 @@ export class AuthService implements OnDestroy {
         this.router.navigate(['onboarding/login']);
     }
 
-    requestPassword(email): Observable<any>{
+    forgotPassword(email): Observable<any>{
       const PATH = this.AUTH_URL + `/forgot`;
       return this.http.post<any>(PATH, JSON.stringify({email: email}))
       .pipe(
         //retry(3),
         //catchError(this.util.handleError)
       );
+    }
+    verifyResetPassword(email, code): Observable<any> {
+      const PATH = this.AUTH_URL + `/otp-verify`;
+
+      return this.http.post<any>(PATH, JSON.stringify({email: email, code: code}))
+      .pipe();
     }
 
     getToken(): string {
