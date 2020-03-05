@@ -50,7 +50,7 @@ public class Beneficiary extends IDEntity {
 
     public Beneficiary(String name, String shortName, String account, String bankName, Customer customer, Created created) {
         this.name = name;
-        this.shortName = shortName;
+        this.shortName = shortName.isEmpty() ? name : shortName;
         this.account = account;
         this.bankName = bankName;
         this.customer = customer;

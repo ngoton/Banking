@@ -17,7 +17,7 @@ public class BeneficiaryResponse {
     public BeneficiaryResponse(Beneficiary beneficiary) {
         this.id = beneficiary.getId();
         this.name = beneficiary.getName();
-        this.shortName = beneficiary.getShortName();
+        this.shortName = beneficiary.getShortName().isEmpty() ? beneficiary.getName() : beneficiary.getShortName();
         this.bankName = beneficiary.getBankName();
         this.account = beneficiary.getAccount();
         this.createdAt = beneficiary.getCreated().getCreatedAt().getValue();
