@@ -28,7 +28,7 @@ export class ExternalComponent implements OnInit, OnDestroy {
   public keypadNumbers = ['10.000', '20.000', '50.000', '100.000', '500.000', '1,000.000', '2,000.000', '3,000.000'];
   amountSubmitted = false;
   accounts: any[] = new Array();
-  selectedPartner: Partners;
+  selectedPartner: Partners = new Partners();
   partners: Partners[] = new Array();
   benificiary: Beneficiarys[] = new Array();
   selectedBenificiary: Beneficiarys = new Beneficiarys();
@@ -105,6 +105,7 @@ export class ExternalComponent implements OnInit, OnDestroy {
   }
 
   benificiaryChange(item: Beneficiarys) {
+    this.selectedPartner = this.partners.find(x => x.name === item.bankName);
     this.selectedBenificiary = item;
     this.paymentTransaction.beneficiarysId = item.id;
     this.paymentTransaction.beneficiaryAccount = item.account;

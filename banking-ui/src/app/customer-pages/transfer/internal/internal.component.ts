@@ -73,10 +73,10 @@ export class InternalComponent implements OnInit, OnDestroy {
         }
       );
 
-    this.customerService.beneficiaries$.pipe(takeUntil(this.destroy$))
+    this.benificiaryService.getInternal().pipe(takeUntil(this.destroy$))
       .subscribe(
         (benificiaries: Beneficiarys[]) => {
-          this.benificiary = benificiaries.filter(b => b.bankName == environment.BANK_NAME);
+          this.benificiary = benificiaries.filter(x => x.account !== this.internalAccounts[0].account);
         }
       );
     
@@ -129,11 +129,11 @@ export class InternalComponent implements OnInit, OnDestroy {
           }
         });
       },
-      (error: HttpErrorResponse) => {
+      (errorRespone: HttpErrorResponse) => {
         this.loading = false;
         this.notifier.show({
           type: "error",
-          message: "Chuyển tiền không thành công!",
+          message: `Chuyển tiền không thành công! ${errorRespone}`,
           id: "error-payment"
         });
       }

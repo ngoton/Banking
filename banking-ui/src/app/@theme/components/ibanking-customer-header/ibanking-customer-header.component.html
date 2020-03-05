@@ -12,14 +12,13 @@
 
 <div class="header-container">
   <nb-actions size="small">
-
-    <nb-action class="control-item">
+    <!-- <nb-action class="control-item">
       <nb-search type="rotate-layout"></nb-search>
     </nb-action>
-    <nb-action class="control-item" icon="email-outline"></nb-action>
+    <nb-action class="control-item" icon="email-outline"></nb-action> -->
     <nb-action [nbPopover]="templateRef" nbPopoverPlacement="bottom" 
                 class="control-item" icon="bell-outline" 
-                [badgeText]="countNotify" badgePosition="top right" 
+                [badgeText]="countNotify" badgePosition="top left" 
                 badgeStatus="info" (click)="notifyClicked()">
     </nb-action>
     <!-- <nb-action class="control-item">

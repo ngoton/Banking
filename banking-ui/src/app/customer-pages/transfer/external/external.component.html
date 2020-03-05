@@ -17,7 +17,7 @@
           </div>
           <label class="label col-sm-2 col-form-label">Ngân hàng</label>
           <div class="col-sm-4">
-            <nb-select [disabled]="finished===true" placeholder="Chọn ngân hàng">
+            <nb-select [(selected)]="selectedPartner.name" [disabled]="finished===true" placeholder="Chọn ngân hàng">
               <nb-option *ngFor="let item of partners" [value]="item.name" (selectionChange)="partnerChange(item)">{{item.name}}</nb-option>
               </nb-select>
           </div>
@@ -25,8 +25,8 @@
         <div class="form-group row">
           <div class="offset-sm-3 col-sm-9">
             <label class="label col-form-label"><span style="padding-right: 5px;">hoặc</span></label>
-            <nb-select [disabled]="finished===true" placeholder="Chọn người thụ hưởng" [disabled]="selectedPartner!=null">
-              <nb-option *ngFor="let item of benificiary" [value]="item.account" (selectionChange)="benificiaryChange(item)">{{item.account}}</nb-option>
+            <nb-select placeholder="Chọn người thụ hưởng" [disabled]="finished===true||selectedPartner.name!=''">
+              <nb-option *ngFor="let item of benificiary" [value]="item.account" (selectionChange)="benificiaryChange(item)">{{item.name}}</nb-option>
             </nb-select>
           </div>
         </div>

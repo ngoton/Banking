@@ -9,6 +9,7 @@ import { Subject } from 'rxjs';
 import { takeUntil, flatMap, finalize } from 'rxjs/operators';
 import { AccountInfo } from '../../../../_models/customer.model';
 import { NotificationSocketService } from '../../../../_services/notification-socket.service';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'ngx-debit-list',
@@ -46,7 +47,10 @@ export class DebitListComponent implements OnInit, OnDestroy {
       },
       money: {
         title: "Số tiền (VNĐ)",
-        type: "string"
+        type:'html',
+        valuePrepareFunction: (value) => {
+          return '<div class="money-format"> ' + value + ' </div>';
+        }
       },
       content: {
         title: "Nội dung",
@@ -89,6 +93,7 @@ export class DebitListComponent implements OnInit, OnDestroy {
   constructor(private customerService: CustomerService,
               private notification: NotifierService,
               private dialogService: NbDialogService,
+              private decimalPipe: DecimalPipe,
               private notificationSocketService: NotificationSocketService) {
                 this.notifyService = notificationSocketService;
    }
@@ -121,7 +126,7 @@ export class DebitListComponent implements OnInit, OnDestroy {
                 name_reminder: this.accountInfo.name,
                 account_reminder: this.accountInfo.account,
                 account: element.account,
-                money: element.money,
+                money: this.decimalPipe.transform(element.money, "1.0-3"),
                 content: element.content,
                 status: element.status,
                 type: "debit"
