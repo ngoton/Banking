@@ -6,6 +6,8 @@ import { Customers, Beneficiarys } from '../../_models/customer.model';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { BenificiaryService } from '../../_services/benificiary.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: "ngx-beneficiary",
@@ -13,6 +15,9 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ["./beneficiary.component.scss"]
 })
 export class BeneficiaryComponent implements OnInit, OnDestroy {
+  private destroy$: Subject<void> = new Subject<void>();
+
+
   settings = {
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
@@ -65,21 +70,7 @@ export class BeneficiaryComponent implements OnInit, OnDestroy {
     private customerService: CustomerService,
     private befiniciaryService: BenificiaryService
   ) {
-    this.customerService.getBeneficiariesData();
-
-    // Subscribe to user Details from UserService
-    setTimeout(() => {
-      this.loadingBenificiary = true;
-      this.customerService.beneficiaries$
-        .pipe(untilDestroyed(this))
-        .subscribe((response: Beneficiarys[]) => {
-          this.loadingBenificiary = false;
-          this.benificiariesData = response;
-          this.source.load(this.benificiariesData);
-        }, (err: any) => {
-          this.loadingBenificiary = false;
-        });
-    }, 2000);
+    
   }
 
   onDeleteConfirm(event): void {
@@ -118,7 +109,26 @@ export class BeneficiaryComponent implements OnInit, OnDestroy {
       );
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.customerService.getBeneficiariesData();
 
-  ngOnDestroy() {}
+    // Subscribe to user Details from UserService
+    setTimeout(() => {
+      this.loadingBenificiary = true;
+      this.customerService.beneficiaries$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((response: Beneficiarys[]) => {
+          this.loadingBenificiary = false;
+          this.benificiariesData = response;
+          this.source.load(this.benificiariesData);
+        }, (err: any) => {
+          this.loadingBenificiary = false;
+        });
+    }, 2000)
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

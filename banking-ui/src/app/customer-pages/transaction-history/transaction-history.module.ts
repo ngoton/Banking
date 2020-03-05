@@ -11,7 +11,6 @@ import {
   NbListModule,
   NbIconModule,
 } from '@nebular/theme';
-import { NgxEchartsModule } from 'ngx-echarts';
 
 import { ThemeModule } from '../../@theme/theme.module';
 import { FormsModule } from '@angular/forms';
@@ -32,8 +31,7 @@ import { TransactionHistoryComponent } from './transaction-history.component';
     NbSelectModule,
     NbListModule,
     NbIconModule,
-    NbButtonModule,
-    NgxEchartsModule,
+    NbButtonModule
   ],
   declarations: [
     TransactionHistoryComponent

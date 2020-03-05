@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import * as SockJS from 'sockjs-client';
 import * as Stomp from 'stompjs';
-import { messages } from '../customer-pages/extra-components/chat/messages';
 import { IBankingCustomerHeaderComponent } from '../@theme/components';
 
 @Injectable({
@@ -10,13 +9,13 @@ import { IBankingCustomerHeaderComponent } from '../@theme/components';
 })
 export class NotificationSocketService {
   webSocketEndPoint: string = environment.BASE_URL + `/ws`;
-  topic: string = environment.BASE_URL + "/user/queue/notification";
+  topic: string = "/topic/notification/";
   notification: any;
 
   constructor() {
    }
 
-  Connection() {
+  Connection(): Stomp {
     let socketServer = new SockJS(this.webSocketEndPoint);
     let stompClient = Stomp.over(socketServer);
 

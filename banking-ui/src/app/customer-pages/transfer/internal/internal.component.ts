@@ -14,6 +14,8 @@ import { PaymentTransactionService } from '../../../_services/payment-transactio
 import { BenificiaryService } from '../../../_services/benificiary.service';
 import { NotifierService } from 'angular-notifier';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'ngx-internal',
@@ -23,6 +25,8 @@ import { Router } from '@angular/router';
 })
 export class InternalComponent implements OnInit, OnDestroy {
   //@ViewChild("customNotification", { static: true }) customNotificationTmpl;
+  private destroy$: Subject<void> = new Subject<void>();
+  
   loading = false;
   finished = false;
   private readonly notifier: NotifierService;
@@ -62,19 +66,20 @@ export class InternalComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.customerService.payments$.pipe(untilDestroyed(this))
-    .subscribe(
-      (payment: Payment) => {
-        // payment.balance = this.decimalPipe.transform(payment.balance, '1.3-3');
-        this.internalAccounts.push(payment);
-      }
-    );
+      .subscribe(
+        (payment: Payment) => {
+          // payment.balance = this.decimalPipe.transform(payment.balance, '1.3-3');
+          this.internalAccounts.push(payment);
+        }
+      );
+
+    this.customerService.beneficiaries$.pipe(takeUntil(this.destroy$))
+      .subscribe(
+        (benificiaries: Beneficiarys[]) => {
+          this.benificiary = benificiaries.filter(b => b.bankName == environment.BANK_NAME);
+        }
+      );
     
-    this.customerService.beneficiaries$.pipe(untilDestroyed(this))
-    .subscribe(
-      (benificiaries: Beneficiarys[]) => {
-        this.benificiary = benificiaries.filter(b => b.bankName == environment.BANK_NAME);
-      }
-    );
   }
 
   callBack(data: any): void {
@@ -140,6 +145,8 @@ export class InternalComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 }

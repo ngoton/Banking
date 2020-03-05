@@ -1,11 +1,10 @@
 <nb-card [nbSpinner]="loadingList" nbSpinnerStatus="primary">
     <nb-card-header>
-      Danh sách nhắc nợ
+      Nhắc nợ đã tạo
     </nb-card-header>
   
     <nb-card-body *ngIf="payment.account!=''">
-      <ng2-smart-table [settings]="settings" [source]="source" (custom)="onCustomAction($event)" (deleteConfirm)="onDeleteConfirm($event)">
-      </ng2-smart-table>
+      <ngx-debit-list [payment]="payment"></ngx-debit-list>
     </nb-card-body>
     <notifier-container>
       <ng-template #customNotification let-notificationData="notification">
@@ -14,5 +13,22 @@
         </div>
       </ng-template>
     </notifier-container>
+</nb-card>
+
+<nb-card [nbSpinner]="loadingList" nbSpinnerStatus="primary">
+  <nb-card-header>
+    Nhắc nợ đã nhận
+  </nb-card-header>
+
+  <nb-card-body *ngIf="payment.account!=''">
+    <ngx-credit-list [payment]="payment"></ngx-credit-list>
+  </nb-card-body>
+  <notifier-container>
+    <ng-template #customNotification let-notificationData="notification">
+      <div>
+        <strong>{{ notificationData.message }}</strong>
+      </div>
+    </ng-template>
+  </notifier-container>
 </nb-card>
   
