@@ -12,33 +12,33 @@ import java.util.Optional;
 
 @Repository
 public interface PaymentTransactionRepository extends JpaRepository<PaymentTransaction, Long> {
-    Page<PaymentTransaction> findAllBy(Pageable pageable);
+    Page<PaymentTransaction> findAllByOrderByIdDesc(Pageable pageable);
 
     Optional<PaymentTransaction> findById(Long id);
 
-    Page<PaymentTransaction> findAllByPaymentId(Long id, Pageable pageable);
+    Page<PaymentTransaction> findAllByPaymentIdOrderByIdDesc(Long id, Pageable pageable);
 
-    Page<PaymentTransaction> findAllByBeneficiaryId(Long id, Pageable pageable);
+    Page<PaymentTransaction> findAllByBeneficiaryIdOrderByIdDesc(Long id, Pageable pageable);
 
-    Page<PaymentTransaction> findAllByPartnerName(String name, Pageable pageable);
+    Page<PaymentTransaction> findAllByPartnerNameOrderByIdDesc(String name, Pageable pageable);
 
     PaymentTransaction save(PaymentTransaction paymentTransaction);
 
     void delete(PaymentTransaction paymentTransaction);
 
-    Page<PaymentTransaction> findAllByPartnerNameAndCreatedCreatedAtGreaterThanEqualAndCreatedCreatedAtLessThanEqual(String partnerName, CreatedAt startDate, CreatedAt endDate, Pageable pageable);
+    Page<PaymentTransaction> findAllByPartnerNameAndCreatedCreatedAtGreaterThanEqualAndCreatedCreatedAtLessThanEqualOrderByIdDesc(String partnerName, CreatedAt startDate, CreatedAt endDate, Pageable pageable);
 
-    Page<PaymentTransaction> findAllByPartnerIsNotNullAndCreatedCreatedAtGreaterThanEqualAndCreatedCreatedAtLessThanEqual(CreatedAt startDate, CreatedAt endDate, Pageable pageable);
+    Page<PaymentTransaction> findAllByPartnerIsNotNullAndCreatedCreatedAtGreaterThanEqualAndCreatedCreatedAtLessThanEqualOrderByIdDesc(CreatedAt startDate, CreatedAt endDate, Pageable pageable);
 
-    Page<PaymentTransaction> findAllByPartnerIsNotNull(Pageable pageable);
+    Page<PaymentTransaction> findAllByPartnerIsNotNullOrderByIdDesc(Pageable pageable);
 
-    Page<PaymentTransaction> findAllByPaymentIdAndMoneyLessThan(Long paymentId, BigDecimal decimal, Pageable pageable);
+    Page<PaymentTransaction> findAllByPaymentIdAndMoneyLessThanOrderByIdDesc(Long paymentId, BigDecimal decimal, Pageable pageable);
 
-    Page<PaymentTransaction> findAllByPaymentIdAndMoneyGreaterThan(Long paymentId, BigDecimal decimal, Pageable pageable);
+    Page<PaymentTransaction> findAllByPaymentIdAndMoneyGreaterThanOrderByIdDesc(Long paymentId, BigDecimal decimal, Pageable pageable);
 
-    Page<PaymentTransaction> findAllByPaymentCustomerIdAndMoneyGreaterThan(Long id, BigDecimal decimal, Pageable pageable);
+    Page<PaymentTransaction> findAllByPaymentCustomerIdAndMoneyGreaterThanOrderByIdDesc(Long id, BigDecimal decimal, Pageable pageable);
 
-    Page<PaymentTransaction> findAllByPaymentCustomerIdAndMoneyLessThan(Long id, BigDecimal decimal, Pageable pageable);
+    Page<PaymentTransaction> findAllByPaymentCustomerIdAndMoneyLessThanOrderByIdDesc(Long id, BigDecimal decimal, Pageable pageable);
 
-    Page<PaymentTransaction> findAllByPaymentCustomerIdAndDebitIsNotNull(Long id, Pageable pageable);
+    Page<PaymentTransaction> findAllByPaymentCustomerIdAndDebitIsNotNullOrderByIdDesc(Long id, Pageable pageable);
 }

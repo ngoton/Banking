@@ -11,12 +11,12 @@ import java.util.Optional;
 
 @Repository
 public interface CreditRepository extends JpaRepository<Credit, Long> {
-    Page<Credit> findAllBy(Pageable pageable);
+    Page<Credit> findAllByOrderByIdDesc(Pageable pageable);
     Optional<Credit> findById(Long id);
     Optional<Credit> findByAccount(String account);
-    Page<Credit> findAllByCustomerCode(String code, Pageable pageable);
-    Page<Credit> findAllByCustomerId(Long id, Pageable pageable);
-    Page<Credit> findAllByStatusIsNull(Pageable pageable);
+    Page<Credit> findAllByCustomerCodeOrderByIdDesc(String code, Pageable pageable);
+    Page<Credit> findAllByCustomerIdOrderByIdDesc(Long id, Pageable pageable);
+    Page<Credit> findAllByStatusIsNullOrderByIdDesc(Pageable pageable);
     Credit save(Credit credit);
     void delete(Credit credit);
 }

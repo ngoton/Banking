@@ -11,11 +11,11 @@ import java.util.Optional;
 
 @Repository
 public interface DebitRepository extends JpaRepository<Debit, Long> {
-    Page<Debit> findAllBy(Pageable pageable);
+    Page<Debit> findAllByOrderByIdDesc(Pageable pageable);
     Optional<Debit> findById(Long id);
     Optional<Debit> findByAccount(String account);
-    Page<Debit> findAllByCustomerCode(String code, Pageable pageable);
-    Page<Debit> findAllByCustomerId(Long id, Pageable pageable);
+    Page<Debit> findAllByCustomerCodeOrderByIdDesc(String code, Pageable pageable);
+    Page<Debit> findAllByCustomerIdOrderByIdDesc(Long id, Pageable pageable);
     Debit save(Debit debit);
     void delete(Debit debit);
 }

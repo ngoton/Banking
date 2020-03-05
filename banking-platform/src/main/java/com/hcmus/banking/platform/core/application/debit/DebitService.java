@@ -15,7 +15,7 @@ public class DebitService {
     private final DebitRepository debitRepository;
 
     public Page<Debit> findAllBy(Pageable pageable) {
-        return debitRepository.findAllBy(pageable);
+        return debitRepository.findAllByOrderByIdDesc(pageable);
     }
 
     public Debit findById(Long id) {
@@ -26,10 +26,10 @@ public class DebitService {
         return debitRepository.findByAccount(account).orElse(Debit.ofEmpty());
     }
     public Page<Debit> findAllByCustomerCode(String code, Pageable pageable) {
-        return debitRepository.findAllByCustomerCode(code, pageable);
+        return debitRepository.findAllByCustomerCodeOrderByIdDesc(code, pageable);
     }
     public Page<Debit> findAllByCustomerId(Long id, Pageable pageable) {
-        return debitRepository.findAllByCustomerId(id, pageable);
+        return debitRepository.findAllByCustomerIdOrderByIdDesc(id, pageable);
     }
 
     public void create(Debit debit) {
