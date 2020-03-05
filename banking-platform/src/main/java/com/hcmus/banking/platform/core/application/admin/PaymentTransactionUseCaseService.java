@@ -5,6 +5,7 @@ import com.hcmus.banking.platform.core.application.credit.CreditService;
 import com.hcmus.banking.platform.core.application.customer.CustomerService;
 import com.hcmus.banking.platform.core.application.debit.DebitService;
 import com.hcmus.banking.platform.core.application.mail.MailService;
+import com.hcmus.banking.platform.core.application.notification.NotificationService;
 import com.hcmus.banking.platform.core.application.otp.OtpService;
 import com.hcmus.banking.platform.core.application.partner.PartnerService;
 import com.hcmus.banking.platform.core.application.payment.PaymentService;
@@ -18,6 +19,7 @@ import com.hcmus.banking.platform.domain.exception.BankingServiceException;
 import com.hcmus.banking.platform.domain.general.Created;
 import com.hcmus.banking.platform.domain.general.CreatedAt;
 import com.hcmus.banking.platform.domain.mail.Mail;
+import com.hcmus.banking.platform.domain.notification.Notification;
 import com.hcmus.banking.platform.domain.otp.OTP;
 import com.hcmus.banking.platform.domain.partner.Partner;
 import com.hcmus.banking.platform.domain.payment.Payment;
@@ -31,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Objects;
 
@@ -46,6 +49,7 @@ public class PaymentTransactionUseCaseService {
     private final CustomerService customerService;
     private final DebitService debitService;
     private final CreditService creditService;
+    private final NotificationService notificationService;
 
     @Transactional(readOnly = true)
     public Page<PaymentTransaction> findAllBy(Pageable pageable) {
@@ -255,6 +259,14 @@ public class PaymentTransactionUseCaseService {
             credit.setStatus(1);
             creditService.create(credit);
             debitService.create(debit);
+
+            Notification notification = new Notification(
+                    String.format("%s %s", credit.getCustomer().getInfo().getFirstName(), credit.getCustomer().getInfo().getLastName()),
+                    String.format("%s %s", credit.getContent(), "[Paid]"),
+                    LocalDateTime.now()
+            );
+            notificationService.notify(notification, credit.getDebit().getCustomer().getInfo().getUser().getUsername());
+
         }
     }
 
