@@ -40,6 +40,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     position: ["bottom", "right"]
   };
   returnUrl: string;
+  captchaVerified: string = "";
 
   public keypadNumbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
   //private subscription: Subscription = new Subscription();
@@ -76,6 +77,10 @@ export class LoginComponent implements OnInit, OnDestroy {
       RequestID: reqID,
       Channel: environment.CHANNEL
     });
+  }
+
+  resolved(captchaResponse: string) {
+    this.captchaVerified = captchaResponse;
   }
 
   onSubmit(formdata) {
