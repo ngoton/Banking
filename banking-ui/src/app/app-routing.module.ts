@@ -20,6 +20,7 @@ const routes: Routes = [
 
   {
     path: 'employee',
+    canActivate: [AuthGuard],
     loadChildren: () => import('app/employee-pages/employee-pages.module')
       .then(m => m.EmployeePagesModule),
   },
