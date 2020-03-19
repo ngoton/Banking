@@ -5,7 +5,10 @@ import { AccountsRoutingModule } from './accounts-routing.module';
 import { AccountsComponent } from './accounts.component';
 import { NewAccountComponent } from './new-account/new-account.component';
 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import {
+  NbDatepickerModule,
   NbActionsModule,
   NbButtonModule,
   NbCardModule,
@@ -32,6 +35,9 @@ import { StatusCardComponent } from './status-card/status-card.component';
 @NgModule({
   declarations: [AccountsComponent, NewAccountComponent, StatusCardComponent],
   imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    NbDatepickerModule,
     CommonModule,
     ThemeModule,
     NbSpinnerModule,

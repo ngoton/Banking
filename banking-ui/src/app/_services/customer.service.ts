@@ -375,6 +375,24 @@ export class CustomerService implements OnDestroy {
     this.accountCreditsError.next(error);
   }
 
+  Add(customer): Observable<any> {
+    const body = {
+      code: customer.code,
+      firstName: customer.firstName,
+      lastName: customer.lastName,
+      birthDate: customer.birthDate,
+      gender: customer.gender,
+      phone: customer.phone,
+      address: customer.address,
+      email: customer.email
+    }
+
+    const PATH = this.CUST_URL;
+
+    return this.http.post<any>(PATH, JSON.stringify(body))
+    .pipe();
+  }
+
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }

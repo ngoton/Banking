@@ -4,7 +4,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Tạo tài khoản',
     icon: 'plus',
-    link: '/employee/accounts',
+    link: '/employee/accounts/new-account',
     home: true,
   },
   {

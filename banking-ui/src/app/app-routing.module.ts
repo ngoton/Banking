@@ -60,7 +60,7 @@ const routes: Routes = [
       },
     ],
   },
-  { path: '', redirectTo: 'customer', pathMatch: 'full' },
+  { path: '', redirectTo: 'employee', pathMatch: 'full' },
   { path: '**', redirectTo: 'onboarding' },
 ];
 
