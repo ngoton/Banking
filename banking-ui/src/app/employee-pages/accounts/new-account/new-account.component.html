@@ -1,4 +1,5 @@
 <nb-card nbSpinnerStatus="primary">
+  <notifier-container></notifier-container>
   <nb-card-header>
     <nav class="navigation">
       <a arial-label="Black" class="link back-link" href="#">
@@ -22,8 +23,8 @@
                 fullWidth
                 name="firstname"
                 [formControl]="customerForm.controls['firstName']"
+                [status]="customerForm.controls['firstName'].dirty ? (customerForm.controls['firstName'].invalid  ? 'danger' : 'success') : 'danger'"
                 id="input-firstname"
-                pattern="[a-zA-Z0-9]*"
                 placeholder="Nhập họ và tên đệm"
                 fieldSize="large"
                 autofocus />
@@ -33,16 +34,16 @@
                 fullWidth
                 name="lastname"
                 [formControl]="customerForm.controls['lastName']"
+                [status]="customerForm.controls['lastName'].dirty ? (customerForm.controls['lastName'].invalid  ? 'danger' : 'success') : 'danger'"
                 id="input-lastname"
-                pattern="[a-zA-Z0-9]*"
                 placeholder="Nhập tên"
                 fieldSize="large"
                 autofocus />
               </div>
             </div>
             <ng-container >
-              <p class="caption status-danger">
-                <!-- Tên Đăng nhập không được để trống! -->
+              <p class="caption status-danger" *ngIf="customerForm.controls['firstName'].errors?.required || customerForm.controls['lastName'].errors?.required">
+                Họ và tên không được để trống
               </p>
               <p class="caption status-danger" >
                 <!-- Tên Đăng nhập bao gồm chữ số, không bao gồm kí tự đặc biệt -->
@@ -59,7 +60,6 @@
               id="input-birthdate"
               [nbDatepicker]="datepicker"
               [formControl]="customerForm.controls['birthDate']"
-              pattern="[a-zA-Z0-9]*"
               placeholder="Ngày tháng năm sinh"
               fieldSize="large"
               autofocus />
@@ -82,8 +82,8 @@
               name="phone"
               id="input-phone"
               [formControl]="customerForm.controls['phone']"
-              pattern="[a-zA-Z0-9]*"
-              placeholder="xxx-xxx-xxxx"
+              pattern="^(\+84|0)?[0-9]{10}$"
+              placeholder="xxx xxx xxxx"
               fieldSize="large"
               autofocus
             >
@@ -91,8 +91,8 @@
               <p class="caption status-danger">
                 <!-- Tên Đăng nhập không được để trống! -->
               </p>
-              <p class="caption status-danger" >
-                <!-- Tên Đăng nhập bao gồm chữ số, không bao gồm kí tự đặc biệt -->
+              <p class="caption status-danger" *ngIf="customerForm.controls['phone'].errors?.pattern">
+                Sai định dạng số điện thoại
               </p>
             </ng-container>
           </div>
@@ -104,7 +104,6 @@
               name="address"
               id="input-address"
               [formControl]="customerForm.controls['address']"
-              pattern="[a-zA-Z0-9]*"
               placeholder="Nhập địa chỉ"
               fieldSize="large"
               autofocus
@@ -113,8 +112,7 @@
               <p class="caption status-danger">
                 <!-- Tên Đăng nhập không được để trống! -->
               </p>
-              <p class="caption status-danger" >
-                <!-- Tên Đăng nhập bao gồm chữ số, không bao gồm kí tự đặc biệt -->
+              <p class="caption status-danger">
               </p>
             </ng-container>
           </div>
@@ -127,17 +125,19 @@
               name="email"
               id="input-email"
               [formControl]="customerForm.controls['email']"
+              required="forms.validation.email.required"
               pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+              [status]="customerForm.controls['email'].dirty ? (customerForm.controls['email'].invalid  ? 'danger' : 'success') : 'danger'"
               placeholder="Nhập email"
               fieldSize="large"
               autofocus
             >
             <ng-container >
-              <p class="caption status-danger">
-                <!-- Tên Đăng nhập không được để trống! -->
+              <p class="caption status-danger" *ngIf="customerForm.controls['email'].errors?.required">
+                Email không được để trống
               </p>
-              <p class="caption status-danger" >
-                <!-- Tên Đăng nhập bao gồm chữ số, không bao gồm kí tự đặc biệt -->
+              <p class="caption status-danger" *ngIf="customerForm.controls['email'].errors?.pattern">
+                Sai định dạng email
               </p>
             </ng-container>
           </div>
@@ -147,7 +147,7 @@
                   fullWidth
                   status="primary"
                   size="large"
-                  [disabled]=""
+                  [disabled]="!customerForm.valid"
                   [class.btn-pulse]="submitted">
             Đăng ký
         </button>
