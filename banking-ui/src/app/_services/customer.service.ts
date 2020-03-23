@@ -375,6 +375,13 @@ export class CustomerService implements OnDestroy {
     this.accountCreditsError.next(error);
   }
 
+  All(): Observable<any> {
+    const PATH = this.CUST_URL;
+
+    return this.http.get<any>(PATH)
+    .pipe();
+  }
+
   Add(customer): Observable<any> {
     const body = {
       code: customer.code,
