@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { CustomerService } from '../../../_services/customer.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NbDateService } from '@nebular/theme';
@@ -10,7 +10,8 @@ import { mergeMap, finalize } from 'rxjs/operators';
 @Component({
   selector: 'ngx-new-account',
   templateUrl: './new-account.component.html',
-  styleUrls: ['./new-account.component.scss']
+  styleUrls: ['./new-account.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class NewAccountComponent implements OnInit, OnDestroy {
 
@@ -49,6 +50,7 @@ export class NewAccountComponent implements OnInit, OnDestroy {
           const arr: [] = success.content;
           const code = Math.max.apply(Math, arr.map(function(o: any) { return o.customerId; })) + 1;
           formData.code = `KH00${code}`;
+          formData.birthDate = this.dateService.format(formData.birthDate, "yyyy-MM-dd");
           return this.customerService.Add(formData);
         }
       ),
@@ -63,6 +65,7 @@ export class NewAccountComponent implements OnInit, OnDestroy {
           message: "Đăng ký thành công!",
           id: "register-success"
         });
+        this.createForm();
       },
       (error: HttpErrorResponse) => {
         this.submitting = false;

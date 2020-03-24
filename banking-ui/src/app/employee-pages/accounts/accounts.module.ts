@@ -7,6 +7,7 @@ import { NewAccountComponent } from './new-account/new-account.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
+import { NbDateFnsDateModule } from '@nebular/date-fns';
 
 /**
  * Custom angular notifier options
@@ -103,6 +104,7 @@ import { StatusCardComponent } from './status-card/status-card.component';
     NbWindowModule,
     AccountsRoutingModule,
     NbCheckboxModule,
+    NbDateFnsDateModule.forRoot({ format: 'yyyy-MM-dd' }),
     NotifierModule.withConfig(customNotifierOptions)
   ]
 })
