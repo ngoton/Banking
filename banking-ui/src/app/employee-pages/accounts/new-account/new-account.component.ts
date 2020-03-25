@@ -26,7 +26,8 @@ export class NewAccountComponent implements OnInit, OnDestroy {
               private dateService: NbDateService<Date>) {
               this.notifier = notifications;
               this.maxBirthDate = this.dateService.createDate(this.dateService.today().getFullYear() - 18,0,1);
-  }
+              this.createForm();
+            }
 
   createForm() {
 
@@ -42,7 +43,6 @@ export class NewAccountComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(formData) {
-    debugger;
     this.submitting = true;
     this.customerService.All().pipe(untilDestroyed(this),
       mergeMap(
@@ -80,7 +80,6 @@ export class NewAccountComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.createForm();
   }
 
   ngOnDestroy(){}
