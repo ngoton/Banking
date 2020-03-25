@@ -24,6 +24,16 @@ const routes: Routes = [
       {
         path: 'deposit-account',
         component: DepositAccountComponent
+      },
+      {
+        path: '',
+        redirectTo: 'accounts',
+        pathMatch: 'full'
+      },
+      {
+        path: '**',
+        redirectTo: 'accounts',
+        pathMatch: 'full'
       }
     ]
   }

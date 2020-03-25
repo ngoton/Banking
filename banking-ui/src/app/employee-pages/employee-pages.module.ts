@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NbMenuModule } from '@nebular/theme';
 import {
@@ -85,6 +85,7 @@ const customNotifierOptions: NotifierOptions = {
     NbButtonModule,
     CurrencyMaskModule,
     NotifierModule.withConfig(customNotifierOptions)
-  ]
+  ],
+  providers: [DecimalPipe]
 })
 export class EmployeePagesModule { }
