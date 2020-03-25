@@ -4,6 +4,7 @@ import { EmployeePagesComponent } from './employee-pages.component';
 import { TransactionHistoryComponent } from './transaction-history/transaction-history.component';
 import { from } from 'rxjs';
 import { DepositAccountComponent } from './deposit-account/deposit-account.component';
+import { EmployeeManagerComponent } from './employee-manager/employee-manager.component';
 
 const routes: Routes = [
   {
@@ -24,6 +25,10 @@ const routes: Routes = [
       {
         path: 'deposit-account',
         component: DepositAccountComponent
+      },
+      {
+        path: 'employee-manager',
+        component: EmployeeManagerComponent
       },
       {
         path: '',

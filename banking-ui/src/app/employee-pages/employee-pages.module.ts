@@ -19,6 +19,7 @@ import { TransactionHistoryComponent } from './transaction-history/transaction-h
 import { FsIconComponent } from './transaction-history/transaction-history.component';
 import { DepositAccountComponent } from './deposit-account/deposit-account.component';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
+import { EmployeeManagerComponent } from './employee-manager/employee-manager.component';
 
 /**
  * Custom angular notifier options
@@ -69,6 +70,7 @@ const customNotifierOptions: NotifierOptions = {
       TransactionHistoryComponent,
       FsIconComponent,
       DepositAccountComponent,
+      EmployeeManagerComponent,
     ],
   imports: [
     FormsModule,
