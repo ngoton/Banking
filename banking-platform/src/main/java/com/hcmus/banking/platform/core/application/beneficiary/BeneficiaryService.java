@@ -51,8 +51,8 @@ public class BeneficiaryService {
         return beneficiaryRepository.findAllByBankName(bankName);
     }
 
-    public List<Beneficiary> findAll() {
-        return beneficiaryRepository.findAll();
+    public List<Beneficiary> findAll(Long id) {
+        return beneficiaryRepository.findAllByCustomerId(id);
     }
 
     public Beneficiary findByCustomerAccount(String account, Long id) {

@@ -11,6 +11,16 @@ const routes: Routes = [
       {
         path: 'new-account',
         component:NewAccountComponent
+      },
+      {
+        path: '',
+        redirectTo: 'new-account',
+        pathMatch: 'full'
+      },
+      {
+        path: '**',
+        redirectTo: 'new-account',
+        pathMatch: 'full'
       }
     ]
   }

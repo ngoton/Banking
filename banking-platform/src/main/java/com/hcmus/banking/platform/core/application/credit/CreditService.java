@@ -15,7 +15,7 @@ public class CreditService {
     private final CreditRepository creditRepository;
 
     public Page<Credit> findAllBy(Pageable pageable) {
-        return creditRepository.findAllBy(pageable);
+        return creditRepository.findAllByOrderByIdDesc(pageable);
     }
 
     public Credit findById(Long id) {
@@ -27,11 +27,11 @@ public class CreditService {
     }
 
     public Page<Credit> findAllByCustomerCode(String code, Pageable pageable) {
-        return creditRepository.findAllByCustomerCode(code, pageable);
+        return creditRepository.findAllByCustomerCodeOrderByIdDesc(code, pageable);
     }
 
     public Page<Credit> findAllByCustomerId(Long id, Pageable pageable) {
-        return creditRepository.findAllByCustomerId(id, pageable);
+        return creditRepository.findAllByCustomerIdOrderByIdDesc(id, pageable);
     }
 
     public void create(Credit credit) {
@@ -50,6 +50,6 @@ public class CreditService {
     }
 
     public Page<Credit> findPending(Pageable pageable) {
-        return creditRepository.findAllByStatusIsNull(pageable);
+        return creditRepository.findAllByStatusIsNullOrderByIdDesc(pageable);
     }
 }

@@ -36,6 +36,12 @@ ng2-smart-table {
         }
     }
 
+    tr {
+        td .money-format {
+            text-align: right;
+        }
+    }
+
     .hide-action {
         ng2-st-tbody-edit-delete {
             display: none;

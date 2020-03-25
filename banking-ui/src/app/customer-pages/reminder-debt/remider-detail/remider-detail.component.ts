@@ -140,11 +140,13 @@ export class RemiderDetailComponent implements OnInit, OnDestroy {
   }
 
   accountChange(item) {
+    this.loading = true
     this.customerService.getAccountInfo(item.account, "HCB_BANK")
     .pipe(untilDestroyed(this))
     .subscribe(
       (acc: AccountInfo) => {
         this.accountInfo = acc;
+        this.loading = false;
       }
     );
   }

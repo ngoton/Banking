@@ -20,6 +20,7 @@ const routes: Routes = [
 
   {
     path: 'employee',
+    canActivate: [AuthGuard],
     loadChildren: () => import('app/employee-pages/employee-pages.module')
       .then(m => m.EmployeePagesModule),
   },
@@ -59,7 +60,7 @@ const routes: Routes = [
       },
     ],
   },
-  { path: '', redirectTo: 'customer', pathMatch: 'full' },
+  { path: '', redirectTo: 'employee', pathMatch: 'full' },
   { path: '**', redirectTo: 'onboarding' },
 ];
 

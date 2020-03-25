@@ -40,6 +40,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     position: ["bottom", "right"]
   };
   returnUrl: string;
+  captchaVerified: string = "";
 
   public keypadNumbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
   //private subscription: Subscription = new Subscription();
@@ -76,6 +77,10 @@ export class LoginComponent implements OnInit, OnDestroy {
       RequestID: reqID,
       Channel: environment.CHANNEL
     });
+  }
+
+  resolved(captchaResponse: string) {
+    this.captchaVerified = captchaResponse;
   }
 
   onSubmit(formdata) {
@@ -123,22 +128,22 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   // User Authentication
   getOnboardingJourney() {
-    this.userService.getUserInforByToken()
-      .pipe(untilDestroyed(this)).subscribe(
-        (res: any) => {
-          this.user = res;
-          this.storeUserDetails(this.user);
-          this.checkUserStatus(this.user);         
-        },
-        (err: HttpErrorResponse) => {
-          console.log(err);
-        }
-      );
+    this.userService.getUserInfor()
+        .pipe(untilDestroyed(this)).subscribe(
+          (res: any) => {
+            this.user = res;
+            this.storeUserDetails(this.user);
+            this.checkUserStatus(this.user);         
+          },
+          (err: HttpErrorResponse) => {
+            console.log(err);
+          }
+        );
   }
 
   storeUserDetails(user) {
     this.userService.updateUser(user);
-    localStorage.setItem("userDetails", JSON.stringify(user));
+    localStorage.setItem("userDetails", JSON.stringify(user)); 
     // localStorage.removeItem('userDetails');
   }
 
@@ -149,7 +154,18 @@ export class LoginComponent implements OnInit, OnDestroy {
   authenticateUser(user) {
     this.notifications.hide('login'); // remove login notification
     setTimeout(() => {
-      this.router.navigate(['/customer']);
+      let userInfor = JSON.parse(localStorage.getItem('userDetails'));
+      switch(userInfor.role){
+        case 'ADMIN':
+          this.router.navigate(['/employee']);
+          break;
+        case 'STAFF':
+          this.router.navigate(['/employee']);
+          break;
+        case 'USER':
+          this.router.navigate(['/customer']);
+          break;
+      }
     }, 300);
 
   }

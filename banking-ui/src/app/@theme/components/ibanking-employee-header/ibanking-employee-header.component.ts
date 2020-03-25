@@ -12,6 +12,8 @@ import { User } from '../../../_models/user';
 // import { employees } from '../../../_models/employee.model';
 import { AuthService } from '../../../_services/auth.service';
 import { Router } from '@angular/router';
+import { untilDestroyed } from 'ngx-take-until-destroy';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'ngx-ibanking-employee-header',
@@ -22,9 +24,8 @@ export class IBankingEmployeeHeaderComponent implements OnInit, OnDestroy {
 
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
-  // user: any;
-  user: User;
-  // employee: employees;
+  user: any;
+  staffInfor: User = new User();
 
   themes = [
     {
@@ -61,23 +62,30 @@ export class IBankingEmployeeHeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    debugger;
     this.currentTheme = this.themeService.currentTheme;
 
-    // this.userService.getUsers()
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe((users: any) => this.user = users.nick);
-
     this.user = JSON.parse(localStorage.getItem('userDetails'));
-    // if(!this.user.avatar) {
-    //   this.user.avatar = 'assets/images/placeholder.png';
-    // }
-
-    // this.employeeService.acctDetail$
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe((userDetail: any) => {
-    //     debugger;
-    //     this.employee = userDetail;
-    //   });
+    switch(this.user.role){
+      case 'ADMIN':
+      case 'STAFF':
+        setTimeout(() => {
+          this.userService.getStaffInfor(this.user.userId)
+          .pipe(untilDestroyed(this)).subscribe(
+            (res: any) => {
+              this.staffInfor = res;
+              localStorage.setItem("staffInfo", JSON.stringify(this.user));
+              if(!this.staffInfor.avatar) {
+                this.staffInfor.avatar = 'assets/images/placeholder.png';
+              }      
+            },
+            (err: HttpErrorResponse) => {
+              console.log(err);
+            }
+          );
+        }, 2000)
+        break;
+    }
 
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService.onMediaQueryChange()

@@ -49,14 +49,22 @@ public class BeneficiaryController {
     }
 
     @GetMapping("/internal")
-    public List<BeneficiaryResponse> findInternal() {
-        List<Beneficiary> beneficiaries = beneficiaryService.findInternal();
+    public List<BeneficiaryResponse> findInternal(@ModelAttribute("user") User user) {
+        Customer customer = customerService.findByUserId(user.getId());
+        if (customer.isEmpty()) {
+            throw new NotFoundException();
+        }
+        List<Beneficiary> beneficiaries = beneficiaryService.findInternal(customer.getId());
         return BeneficiaryResponses.ofList(beneficiaries);
     }
 
     @GetMapping("/external")
-    public List<BeneficiaryResponse> findExternal() {
-        List<Beneficiary> beneficiaries = beneficiaryService.findExternal();
+    public List<BeneficiaryResponse> findExternal(@ModelAttribute("user") User user) {
+        Customer customer = customerService.findByUserId(user.getId());
+        if (customer.isEmpty()) {
+            throw new NotFoundException();
+        }
+        List<Beneficiary> beneficiaries = beneficiaryService.findExternal(customer.getId());
         return BeneficiaryResponses.ofList(beneficiaries);
     }
 

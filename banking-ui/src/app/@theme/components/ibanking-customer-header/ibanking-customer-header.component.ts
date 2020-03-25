@@ -13,6 +13,8 @@ import { Customers } from '../../../_models/customer.model';
 import { AuthService } from '../../../_services/auth.service';
 import { Router } from '@angular/router';
 import { NotificationSocketService } from '../../../_services/notification-socket.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
   selector: 'ngx-ibanking-customer-header',
@@ -25,8 +27,8 @@ export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
   // user: any;
-  user: User;
-  customer: Customers;
+  user: any;
+  customerInfo: User = new User();
   client: any;
   notifications: any[] = new Array();
   countNotify: number = 0;
@@ -74,19 +76,28 @@ export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
     this.subscribeToServer();
 
     this.user = JSON.parse(localStorage.getItem('userDetails'));
-    if(!this.user.avatar) {
-      this.user.avatar = 'assets/images/placeholder.png';
+    switch(this.user.role){
+      case 'USER':
+        setTimeout(() => {
+          this.userService.getCustomerInfor(this.user.userId)
+          .pipe(untilDestroyed(this)).subscribe(
+            (res: any) => {
+              this.customerInfo = res;
+              localStorage.setItem("customerInfo", JSON.stringify(this.customerInfo));
+              if(!this.customerInfo.avatar) {
+                this.customerInfo.avatar = 'assets/images/placeholder.png';
+              }
+            },
+            (err: HttpErrorResponse) => {
+              console.log(err);
+            }
+          );
+        }, 2000)
+        break;
     }
 
     this.customerService.getAcctDetailsData();
     this.subscribeToServer();
-
-    this.customerService.acctDetail$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((userDetail: any) => {
-        debugger;
-        this.customer = userDetail;
-      });
 
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService.onMediaQueryChange()

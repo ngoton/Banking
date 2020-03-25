@@ -66,16 +66,20 @@
             </p>
           </ng-container>
         </div>
-      
-        <div class="form-control-group accept-group">
-          <nb-checkbox name="rememberMe" [(ngModel)]="loginForm.RememberMe">Ghi nhớ</nb-checkbox>
+        <div class="form-control-group">
+          <ng-container>
+            <re-captcha (resolved)="resolved($event)" siteKey="6LfFSN8UAAAAAFRfIRM2UWEyLMrMoOYnWJgRFQe0"></re-captcha>
+          </ng-container>
         </div>
+        <!-- <div class="form-control-group accept-group">
+          <nb-checkbox name="rememberMe" [(ngModel)]="loginForm.RememberMe">Ghi nhớ</nb-checkbox>
+        </div> -->
       
         <button nbButton
                 fullWidth
                 status="primary"
                 size="large"
-                [disabled]="submitted || !loginForm.valid"
+                [disabled]="submitted || !loginForm.valid || captchaVerified===''"
                 [class.btn-pulse]="submitted">
           Đăng nhập
         </button>

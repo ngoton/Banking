@@ -14,6 +14,7 @@ import { Payment, Savings } from '../../_models/customer.model';
 import { elementAt, flatMap, finalize, retry, mergeMap } from 'rxjs/operators';
 import { TransactionHistoryService } from './transaction-history.service';
 import { PaymentService } from '../../_services/payment.service';
+import { DecimalPipe } from '@angular/common';
 
 interface TreeNode<T> {
   data: T;
@@ -85,7 +86,8 @@ export class TransactionHistoryComponent implements OnInit, OnDestroy {
               private paymentService: PaymentService,
               private paymentTransactionService: PaymentTransactionService,
               private savingTransactionService: SavingTransactionService,
-              private transationHistoryService: TransactionHistoryService) {
+              private transationHistoryService: TransactionHistoryService,
+              private decimalPipe: DecimalPipe) {
                 this.transaction = transationHistoryService;
                 // this.transaction.getPaymentHistoryData();
     // this.dataSource = this.dataSourceBuilder.create(this.data);
@@ -131,7 +133,10 @@ export class TransactionHistoryComponent implements OnInit, OnDestroy {
               transaction_type: null,
               content: item.content,
               date: item.createdAt,
-              money: item.money,
+              money: this.decimalPipe.transform(
+                item.money*(-1),
+                "1.0-3"
+              ),
             }
           }
           this.transferHistories.children.push(node);
@@ -143,7 +148,10 @@ export class TransactionHistoryComponent implements OnInit, OnDestroy {
               transaction_type: null,
               content: item.content,
               date: item.createdAt,
-              money: item.money,
+              money: this.decimalPipe.transform(
+                item.money*(-1),
+                "1.0-3"
+              ),
             }
           }
 
@@ -167,7 +175,10 @@ export class TransactionHistoryComponent implements OnInit, OnDestroy {
                 transaction_type: null,
                 content: item.content,
                 date: item.createdAt,
-                money: item.money,
+                money: this.decimalPipe.transform(
+                  item.money,
+                  "1.0-3"
+                ),
               }
             }
             this.receiveHistories.children.push(node);
@@ -179,7 +190,10 @@ export class TransactionHistoryComponent implements OnInit, OnDestroy {
                 transaction_type: null,
                 content: item.content,
                 date: item.createdAt,
-                money: item.money,
+                money: this.decimalPipe.transform(
+                  item.money,
+                  "1.0-3"
+                ),
               }
             }
 

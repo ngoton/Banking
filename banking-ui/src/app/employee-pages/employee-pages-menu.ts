@@ -2,38 +2,19 @@ import { NbMenuItem } from '@nebular/theme';
 
 export const MENU_ITEMS: NbMenuItem[] = [
   {
-    title: 'Tài khoản',
-    icon: 'credit-card',
-    link: '/customer/accounts',
+    title: 'Tạo tài khoản',
+    icon: 'plus',
+    link: '/employee/accounts/new-account',
     home: true,
   },
   {
-    title: 'Quản lý người thụ hưởng',
-    icon: 'people',
-    link: '/customer/beneficiary',
+    title: 'Nạp tiền',
+    icon: 'log-in',
+    link: '/employee/deposit-account',
   },
   {
-    title: 'Chuyển khoản',
-    icon: 'corner-down-left',
-    link: '/customer/transfer',
-  },
-  {
-    title: 'Quản lý nhắc nợ',
-    icon: 'volume-up',
-    children: [
-      {
-        title: 'Tạo nhắc nợ',
-        link: '/customer/reminder-debt/new'
-      },
-      {
-        title: 'Danh sách nhắc nợ',
-        link: '/customer/reminder-debt'
-      }
-    ],
-  },
-  {
-    title: 'Lịch sử giao dịch',
+    title: 'Xem lịch sử giao dịch',
     icon: 'clipboard',
-    link: '/customer/transaction-history',
+    link: '/employee/transaction-history',
   }
 ];
