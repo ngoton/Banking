@@ -68,13 +68,28 @@ export class IBankingEmployeeHeaderComponent implements OnInit, OnDestroy {
     this.user = JSON.parse(localStorage.getItem('userDetails'));
     switch(this.user.role){
       case 'ADMIN':
+        this.staffInfor = {
+          staffId: 1,
+          code: "AD001",
+          firstName: "Administrator ",
+          lastName: "HCB Bank",
+          birthDate: "",
+          gender: "Male",
+          phone: "190032738",
+          address: "Anonymous"
+        }
+        localStorage.setItem("staffInfo", JSON.stringify(this.staffInfor));
+        if(!this.staffInfor.avatar) {
+          this.staffInfor.avatar = 'assets/images/placeholder.png';
+        }
+        break;   
       case 'STAFF':
         setTimeout(() => {
           this.userService.getStaffInfor(this.user.userId)
           .pipe(untilDestroyed(this)).subscribe(
             (res: any) => {
               this.staffInfor = res;
-              localStorage.setItem("staffInfo", JSON.stringify(this.user));
+              localStorage.setItem("staffInfo", JSON.stringify(this.staffInfor));
               if(!this.staffInfor.avatar) {
                 this.staffInfor.avatar = 'assets/images/placeholder.png';
               }      

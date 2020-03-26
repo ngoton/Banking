@@ -1,14 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NbMenuModule } from '@nebular/theme';
 import {
+  NbMenuModule,
+  NbSpinnerModule,
   NbCardModule,
   NbIconModule,
   NbInputModule,
   NbTreeGridModule,
   NbSelectModule,
-  NbButtonModule
+  NbButtonModule,
+  NbRadioModule,
+  NbDatepicker,
+  NbDatepickerModule,
+  NbDialogModule
 } from '@nebular/theme';
 import { ThemeModule } from '../@theme/theme.module';
 import { CurrencyMaskModule } from 'ngx-currency-mask';
@@ -19,7 +24,11 @@ import { TransactionHistoryComponent } from './transaction-history/transaction-h
 import { FsIconComponent } from './transaction-history/transaction-history.component';
 import { DepositAccountComponent } from './deposit-account/deposit-account.component';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { EmployeeManagerComponent } from './employee-manager/employee-manager.component';
+import { NbDateFnsDateModule } from '@nebular/date-fns';
+import { DialogEmployeePromptComponent } from './employee-manager/dialog-employee-prompt/dialog-employee-prompt.component';
+import { PaymentHistoryComponent } from './payment-history/payment-history.component';
 
 /**
  * Custom angular notifier options
@@ -71,22 +80,31 @@ const customNotifierOptions: NotifierOptions = {
       FsIconComponent,
       DepositAccountComponent,
       EmployeeManagerComponent,
+      DialogEmployeePromptComponent,
+      PaymentHistoryComponent
     ],
+  entryComponents: [DialogEmployeePromptComponent],
   imports: [
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
     NbMenuModule,
+    NbSpinnerModule,
     NbCardModule,
     NbIconModule,
     NbInputModule,
     NbTreeGridModule,
+    NbRadioModule,
+    NbDatepickerModule,
     ThemeModule,
     EmployeePagesRoutingModule,
     NbSelectModule,
     NbButtonModule,
     CurrencyMaskModule,
-    NotifierModule.withConfig(customNotifierOptions)
+    Ng2SmartTableModule,
+    NbDialogModule.forChild(),
+    NbDateFnsDateModule.forRoot({ format: 'yyyy-MM-dd' }),
+    NotifierModule.withConfig(customNotifierOptions),
   ],
   providers: [DecimalPipe]
 })

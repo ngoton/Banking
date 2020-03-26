@@ -5,6 +5,7 @@ import { TransactionHistoryComponent } from './transaction-history/transaction-h
 import { from } from 'rxjs';
 import { DepositAccountComponent } from './deposit-account/deposit-account.component';
 import { EmployeeManagerComponent } from './employee-manager/employee-manager.component';
+import { PaymentHistoryComponent } from './payment-history/payment-history.component';
 
 const routes: Routes = [
   {
@@ -29,6 +30,10 @@ const routes: Routes = [
       {
         path: 'employee-manager',
         component: EmployeeManagerComponent
+      },
+      {
+        path: 'payment-history',
+        component: PaymentHistoryComponent
       },
       {
         path: '',
