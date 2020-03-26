@@ -18,3 +18,16 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/employee/transaction-history',
   }
 ];
+
+export const MENU_ADMIN_ITEMS: NbMenuItem[] = [
+  {
+    title: 'Quản lý nhân viên',
+    icon: 'list',
+    link: '/employee/employee-manager',
+  },
+  {
+    title: 'Thống kê giao dịch',
+    icon: 'clipboard',
+    link: '/employee/payment-history',
+  }
+];

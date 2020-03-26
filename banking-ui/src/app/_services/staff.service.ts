@@ -115,6 +115,58 @@ export class StaffService implements OnDestroy {
     private creditService: CreditService
   ) { }
 
+  all(): Observable<any> {
+    const PATH = this.STAFF_URL;
+
+    return this.http.get<any>(PATH).pipe();
+  }
+
+  single(staffId): Observable<any> {
+    const PATH = this.STAFF_URL + `/${staffId}`;
+
+    return this.http.get<any>(PATH).pipe();
+  }
+
+  add(data): Observable<any> {
+    const body = {
+      code: data.code,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      birthDate: data.birthDate,
+      gender: data.gender,
+      phone: data.phone,
+      address: data.address,
+      email: data.email
+    }
+
+    const PATH = this.STAFF_URL;
+
+    return this.http.post<any>(PATH, JSON.stringify(body)).pipe();
+  }
+
+  update(data): Observable<any> {
+    const body = {
+      code: data.code,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      birthDate: data.birthDate,
+      gender: data.gender,
+      phone: data.phone,
+      address: data.address,
+      email: data.email
+    }
+
+    const PATH = this.STAFF_URL;
+
+    return this.http.put<any>(PATH, JSON.stringify(body)).pipe();
+  }
+
+  delete(id): Observable<any> {
+    const PATH = this.STAFF_URL + `/${id}`;
+
+    return this.http.delete<any>(PATH).pipe();
+  }
+
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }

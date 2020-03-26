@@ -157,10 +157,10 @@ export class LoginComponent implements OnInit, OnDestroy {
       let userInfor = JSON.parse(localStorage.getItem('userDetails'));
       switch(userInfor.role){
         case 'ADMIN':
-          this.router.navigate(['/employee']);
+          this.router.navigate(['/employee', {role: 'ADMIN'}]);
           break;
         case 'STAFF':
-          this.router.navigate(['/employee']);
+          this.router.navigate(['/employee', {role: 'STAFF'}]);
           break;
         case 'USER':
           this.router.navigate(['/customer']);

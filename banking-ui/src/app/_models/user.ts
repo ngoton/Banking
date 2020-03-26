@@ -10,6 +10,7 @@ export class User {
   gender?: string;
   phone?: string;
   address?: string;
+  email?: string;
   avatar?: string;
 
   constructor(obj?: any) {
@@ -19,9 +20,10 @@ export class User {
     this.firstName = obj && obj.firstName || "",
     this.lastName = obj && obj.lastName || "",
     this.birthDate = obj && obj.birthDate || "",
-    this.gender = obj && obj.gender || "",
+    this.gender = obj && obj.gender || "Male",
     this.phone = obj && obj.phone || "",
     this.address = obj && obj.address || "",
+    this.email = obj && obj.email || "",
     this.avatar = obj && obj.avatar || ""
   }
 
