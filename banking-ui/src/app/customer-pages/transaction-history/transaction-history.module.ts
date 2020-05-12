@@ -15,7 +15,6 @@ import {
 import { ThemeModule } from '../../@theme/theme.module';
 import { FormsModule } from '@angular/forms';
 import { DecimalPipe } from '@angular/common';
-import { TransactionHistoryComponent } from './transaction-history.component';
 
 @NgModule({
   imports: [
@@ -32,9 +31,6 @@ import { TransactionHistoryComponent } from './transaction-history.component';
     NbListModule,
     NbIconModule,
     NbButtonModule
-  ],
-  declarations: [
-    TransactionHistoryComponent
   ],
   providers: [DecimalPipe]
 })
