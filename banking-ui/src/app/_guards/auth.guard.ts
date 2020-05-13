@@ -17,6 +17,20 @@ export class AuthGuard implements CanActivate {
       const url: string  = location.origin + state.url;
       let token = JSON.parse(localStorage.getItem('token'));
       if (token) {
+        let userInfor = JSON.parse(localStorage.getItem('userDetails'));
+        
+        switch(userInfor.role){
+          case 'ADMIN':
+            state.url.includes("/employee") ? null : this.router.navigate(['/employee', {role: 'ADMIN'}]);
+            break;
+          case 'STAFF':
+            state.url.includes("/employee") ? null : this.router.navigate(['/employee', {role: 'STAFF'}]);
+            break;
+          case 'USER':
+            state.url.includes("/customer") ? null : this.router.navigate(['/customer']);
+            break;
+        }
+
         return true;
       }
       this.router.navigate(['onboarding/login'], { queryParams: { returnUrl: url }});

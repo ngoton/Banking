@@ -69,7 +69,9 @@ export class InternalComponent implements OnInit, OnDestroy {
       .subscribe(
         (payment: Payment) => {
           // payment.balance = this.decimalPipe.transform(payment.balance, '1.3-3');
-          this.internalAccounts.push(payment);
+          if(payment != null){
+            this.internalAccounts.push(payment);
+          }
         }
       );
 
@@ -79,7 +81,6 @@ export class InternalComponent implements OnInit, OnDestroy {
           this.benificiary = benificiaries.filter(x => x.account !== this.internalAccounts[0].account);
         }
       );
-    
   }
 
   callBack(data: any): void {
@@ -108,6 +109,7 @@ export class InternalComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+    debugger;
     this.loading = true;
     this.paymentTransactionService.internalPayment(this.paymentTransaction, this.selectedBenificiary)
     .pipe(untilDestroyed(this))

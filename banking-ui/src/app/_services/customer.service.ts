@@ -251,6 +251,15 @@ export class CustomerService implements OnDestroy {
     this.acctDetailErrorSource.next(message);
   }
 
+  getPaymentAndSavingInfor() {
+    const customer = JSON.parse(localStorage.getItem("customerInfor"));
+
+    const payments = this.paymentService.getPaymentsByCustomerId(customer.customerId);
+    const savings = this.savingService.getSavingsByCustomerId(customer.customerId);
+
+    return forkJoin([payments, savings]).pipe();
+  }
+
 
   getPaymentAndSavingReceive() {
     const customer = JSON.parse(localStorage.getItem("customerInfor"));

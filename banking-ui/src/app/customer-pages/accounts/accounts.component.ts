@@ -87,15 +87,14 @@ export class AccountsComponent implements OnDestroy {
   };
 
   customerInfor: Customers;
-  saving: Savings;
-  payment: Payment;
+  saving: any;
+  payment: any;
 
   constructor(
     private themeService: NbThemeService,
     private accountsService: AccountsService,
     private solarService: SolarData,
-    private paymentService: PaymentService,
-    private savingService: SavingService,
+    private customerService: CustomerService,
     private decimalPipe: DecimalPipe
   ) {
     this.saving = new Savings();
@@ -111,14 +110,34 @@ export class AccountsComponent implements OnDestroy {
     // Subscribe to user Details from UserService
     setTimeout(() => {
       this.loadingAccount = true;
-      this.accountsService.acctDetail$
+      this.customerService.getPaymentAndSavingInfor()
         .pipe(untilDestroyed(this))
-        .subscribe((response: Customers) => {
+        .subscribe(([payments, savings]) => {
           this.loadingAccount = false;
-          this.customerInfor = response;
+          
+          if(payments.length != 0){
+            this.payment = payments[0];
+            this.payment.balance = this.decimalPipe.transform(
+              this.payment.balance,
+              "1.0-3"
+            );
+          }
+          else{
+            this.payment = new Payment();
+          }
 
-          this.getPayment(this.customerInfor.customerId);
-          this.getSaving(this.customerInfor.customerId);
+          if(savings.length != 0){
+            this.saving = savings[0];
+            this.saving.balance = this.decimalPipe.transform(
+              this.saving.balance,
+              "1.0-3"
+            );
+          }
+          else{
+            this.saving = new Savings();
+          }
+          
+          
         }, (err: any) => {
           this.loadingAccount = false;
         });
@@ -130,46 +149,6 @@ export class AccountsComponent implements OnDestroy {
       .subscribe(data => {
         this.solarValue = data;
       });
-  }
-
-  getPayment(customerId) {
-    this.loadingAccount = true;
-    this.paymentService
-      .getPaymentsByCustomerId(customerId)
-      .pipe(untilDestroyed(this))
-      .subscribe(
-        (payment: Payment[]) => {
-          this.loadingAccount = false;
-          this.payment = payment[0];
-          this.payment.balance = this.decimalPipe.transform(
-            this.payment.balance,
-            "1.0-3"
-          );
-        },
-        (err: HttpErrorResponse) => {
-          this.loadingAccount = false;
-        }
-      );
-  }
-
-  getSaving(customerId) {
-    this.loadingAccount = true;
-    this.savingService
-      .getSavingsByCustomerId(customerId)
-      .pipe(untilDestroyed(this))
-      .subscribe(
-        (saving: Savings[]) => {
-          this.loadingAccount = false;
-          this.saving = saving[0];
-          this.saving.balance = this.decimalPipe.transform(
-            this.saving.balance,
-            "1.0-3"
-          );
-        },
-        (err: HttpErrorResponse) => {
-          this.loadingAccount = false;
-        }
-      );
   }
 
   ngOnDestroy() {
