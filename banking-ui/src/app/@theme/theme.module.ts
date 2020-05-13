@@ -30,6 +30,8 @@ import {
   IBankingEmployeeHeaderComponent,
   SearchInputComponent,
   TinyMCEComponent,
+  GeneralHeaderComponent,
+  GeneralFooterComponent,
 } from './components';
 import {
   CapitalizePipe,
@@ -74,6 +76,8 @@ const NB_MODULES = [
 const COMPONENTS = [
   HeaderComponent,
   FooterComponent,
+  GeneralHeaderComponent,
+  GeneralFooterComponent,
   IBankingCustomerFooterComponent,
   IBankingCustomerHeaderComponent,
   IBankingEmployeeFooterComponent,

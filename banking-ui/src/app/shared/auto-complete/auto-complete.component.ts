@@ -10,7 +10,7 @@ import { Customers } from '../../_models/customer.model';
   styleUrls: ['./auto-complete.component.scss']
 })
 export class AutoCompleteComponent implements OnInit {
-  private showResult: boolean = false;
+  showResult: boolean = false;
 
   @Input() disabled: boolean = false;
 
