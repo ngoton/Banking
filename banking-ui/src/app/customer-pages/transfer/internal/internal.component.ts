@@ -69,17 +69,18 @@ export class InternalComponent implements OnInit, OnDestroy {
       .subscribe(
         (payment: Payment) => {
           // payment.balance = this.decimalPipe.transform(payment.balance, '1.3-3');
-          this.internalAccounts.push(payment);
+          if(payment != null){
+            this.internalAccounts.push(payment);
+          }
         }
       );
 
-    this.customerService.beneficiaries$.pipe(takeUntil(this.destroy$))
+    this.benificiaryService.getInternal().pipe(takeUntil(this.destroy$))
       .subscribe(
         (benificiaries: Beneficiarys[]) => {
-          this.benificiary = benificiaries.filter(b => b.bankName == environment.BANK_NAME);
+          this.benificiary = benificiaries.filter(x => x.account !== this.internalAccounts[0].account);
         }
       );
-    
   }
 
   callBack(data: any): void {
@@ -108,6 +109,7 @@ export class InternalComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+    debugger;
     this.loading = true;
     this.paymentTransactionService.internalPayment(this.paymentTransaction, this.selectedBenificiary)
     .pipe(untilDestroyed(this))
@@ -129,11 +131,11 @@ export class InternalComponent implements OnInit, OnDestroy {
           }
         });
       },
-      (error: HttpErrorResponse) => {
+      (errorRespone: HttpErrorResponse) => {
         this.loading = false;
         this.notifier.show({
           type: "error",
-          message: "Chuyển tiền không thành công!",
+          message: `Chuyển tiền không thành công! ${errorRespone}`,
           id: "error-payment"
         });
       }

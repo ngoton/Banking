@@ -108,10 +108,34 @@ export class PaymentTransactionService {
     return this.http.get<any>(PATH).pipe();
   }
 
+  getPaymentTransferByCustomer(customerId): Observable<any> {
+
+    const PATH = this.TRANSFER_URL + `/history/paymentTransfer/customer/${customerId}`;
+    return this.http.get<any>(PATH).pipe();
+  }
+
   getPaymentCredit(paymentId): Observable<any> {
 
     const PATH = this.TRANSFER_URL + `/history/paymentCredit/${paymentId}`;
     return this.http.get<any>(PATH).pipe(); 
+  }
+
+  getPaymentCreditByCustomer(customerId): Observable<any> {
+
+    const PATH = this.TRANSFER_URL + `/history/paymentCredit/customer/${customerId}`;
+    return this.http.get<any>(PATH).pipe(); 
+  }
+
+  depositPayment(data): Observable<any> {
+    const body = {
+      content: data.content,
+	    money: data.money,
+	    account: data.account,
+	    username: data.username
+    }
+
+    const PATH = this.TRANSFER_URL + `/deposit`;
+    return this.http.post<any>(PATH, JSON.stringify(body)).pipe(); 
   }
 
 }

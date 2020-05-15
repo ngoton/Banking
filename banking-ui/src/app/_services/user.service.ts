@@ -19,10 +19,11 @@ export class UserService implements OnDestroy {
   public today = Date();
   randomNumber: any;
 
-  private CUST_URL = environment.BASE_URL + environment.CUST_SERV;
   private Req_URL = environment.BASE_URL + environment.REQ_SERV;
 
   private USER_URL = environment.BASE_URL + environment.USER_SERV;
+  private STAFF_URL = environment.BASE_URL + environment.STAFF_SERV;
+  private CUST_URL = environment.BASE_URL + environment.CUST_SERV;
 
   // Observable string sources: user
   private userDetailSource = new BehaviorSubject<any>(null);
@@ -66,8 +67,26 @@ export class UserService implements OnDestroy {
     return userDetails;
   }
 
-  getUserInforByToken(): Observable<any> {
+  getUserInfor(): Observable<any> {
     const PATH = this.USER_URL + `/info`;
+      return this.http.get<any>(PATH)
+      .pipe(
+        retry(3),
+        //catchError(this.util.handleError)
+      );
+  }
+
+  getStaffInfor(id): Observable<any> {
+    const PATH = this.STAFF_URL + `/user/${id}`;
+      return this.http.get<any>(PATH)
+      .pipe(
+        retry(3),
+        //catchError(this.util.handleError)
+      );
+  }
+
+  getCustomerInfor(id): Observable<any> {
+    const PATH = this.CUST_URL + `/user/${id}`;
       return this.http.get<any>(PATH)
       .pipe(
         retry(3),

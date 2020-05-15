@@ -1,38 +1,33 @@
 <nb-card  nbSpinnerStatus="primary">
-    <nb-card-header>Nạp tiền vào một tài khoản bất kỳ</nb-card-header>
-    <nb-card-body>
-      <form>
-        <div class="form-group row">
-          <label for="inputAccount" class="label col-sm-3 col-form-label">Thông tin đăng nhập:</label>
-          <div class="col-sm-3">
-            <input type="text" class="inputname" nbInput placeholder="Nhập tên đăng nhập">
-          </div>
+  <notifier-container></notifier-container>
+  <nb-card-header>Nạp tiền vào tài khoản khách hàng</nb-card-header>
+  <nb-card-body>
+    <form (ngSubmit)="onSubmit(depositForm.value)" #form="ngForm">
+      <div class="form-group row">
+        <label for="inputAccount" class="label col-sm-3 col-form-label">Thông tin khách hàng:</label>
+        <div class="col-sm-6">
+          <input type="text" class="inputname" nbInput [formControl]="depositForm.controls['userName']" placeholder="Nhập tên đăng nhập" (change)="userNameChanged(depositForm.value['userName'])">
         </div>
-        <div class="form-group row">
-            <div class="offset-sm-3 col-sm-3 text-center">
-                <span><b>hoặc</b></span>
-            </div>
-          </div>
-        <div class="form-group row">
-          <div class="offset-sm-3 col-sm-3">
-            <nb-select  name="accountNumber" fullWidth placeholder="Chọn số tài khoản">
-              <nb-option></nb-option>
-            </nb-select>
-          </div>
+      </div>
+      <div class="form-group row">
+        <label for="inputAccount" class="label col-sm-3 col-form-label">hoặc:</label>
+        <div class="col-sm-6">
+          <input type="text" class="inputname" nbInput [formControl]="depositForm.controls['account']" placeholder="Nhập số tài khoản" (change)="accountChanged(depositForm.value['account'])">
         </div>
-        <div class="form-group row">
-          <label for="inputMoney" class="label col-sm-3 col-form-label">Số tiền cần nạp</label>
-          <div class="col-sm-3">
-            <input nbInput currencyMask name="money"
+      </div>
+      <div class="form-group row">
+        <label for="inputMoney" class="label col-sm-3 col-form-label">Số tiền cần nạp</label>
+        <div class="col-sm-3">
+          <input nbInput [formControl]="depositForm.controls['money']" currencyMask  name="money" [options]="{ prefix: '', thousands: ',', decimal: '.', precision: '0', allowNegative: false }"
                       class="form-control form-primary form-control-lg form-control-right border-left-0 border-right-0 border-top-0"
                       placeholder="0.000">
-          </div>
         </div>
-        <div class="form-group row">
-          <div class="offset-sm-3 col-sm-9">
-            <button type="submit" nbButton status="primary">Hệ thống ghi nhận</button>
-          </div>
+      </div>
+      <div class="form-group row">
+        <div class="offset-sm-3 col-sm-9">
+          <button type="submit" nbButton status="primary">Nạp tiền</button>
         </div>
-      </form>
-    </nb-card-body>
-  </nb-card>
+      </div>
+    </form>
+  </nb-card-body>
+</nb-card>

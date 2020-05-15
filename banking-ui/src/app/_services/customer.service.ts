@@ -251,6 +251,15 @@ export class CustomerService implements OnDestroy {
     this.acctDetailErrorSource.next(message);
   }
 
+  getPaymentAndSavingInfor() {
+    const customer = JSON.parse(localStorage.getItem("customerInfor"));
+
+    const payments = this.paymentService.getPaymentsByCustomerId(customer.customerId);
+    const savings = this.savingService.getSavingsByCustomerId(customer.customerId);
+
+    return forkJoin([payments, savings]).pipe();
+  }
+
 
   getPaymentAndSavingReceive() {
     const customer = JSON.parse(localStorage.getItem("customerInfor"));
@@ -373,6 +382,31 @@ export class CustomerService implements OnDestroy {
 
   updateAccountCreditError(error) {
     this.accountCreditsError.next(error);
+  }
+
+  All(): Observable<any> {
+    const PATH = this.CUST_URL;
+
+    return this.http.get<any>(PATH)
+    .pipe();
+  }
+
+  Add(customer): Observable<any> {
+    const body = {
+      code: customer.code,
+      firstName: customer.firstName,
+      lastName: customer.lastName,
+      birthDate: customer.birthDate,
+      gender: customer.gender,
+      phone: customer.phone,
+      address: customer.address,
+      email: customer.email
+    }
+
+    const PATH = this.CUST_URL;
+
+    return this.http.post<any>(PATH, JSON.stringify(body))
+    .pipe();
   }
 
   ngOnDestroy(): void {

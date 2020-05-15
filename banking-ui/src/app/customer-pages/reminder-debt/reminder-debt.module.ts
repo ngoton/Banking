@@ -1,5 +1,5 @@
 import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 
 import { ReminderDebtRoutingModule } from './reminder-debt-routing.module';
 import { ReminderDebtComponent } from './reminder-debt.component';
@@ -118,6 +118,7 @@ const customNotifierOptions: NotifierOptions = {
     Ng2SmartTableModule,
     SharedModule
   ],
+  providers: [DecimalPipe],
   schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ReminderDebtModule { }

@@ -21,6 +21,8 @@ import {
   NbSpinnerModule
 } from '@nebular/theme';
 
+import { RecaptchaModule } from 'ng-recaptcha';
+
 /**
  * Custom angular notifier options
  */
@@ -86,7 +88,8 @@ const customNotifierOptions: NotifierOptions = {
     NbDatepickerModule,
     NbSelectModule,
     NbIconModule,
-    NbAlertModule
+    NbAlertModule,
+    RecaptchaModule
   ]
 })
 export class LoginModule {}

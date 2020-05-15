@@ -161,8 +161,8 @@ export class Partners {
 
     constructor(obj?: any) {
         this.id = obj && obj.id || null;
-        this.name = obj && obj.name || null;
-        this.key = obj && obj.key || null;
+        this.name = obj && obj.name || "";
+        this.key = obj && obj.key || "";
     }
 }
 

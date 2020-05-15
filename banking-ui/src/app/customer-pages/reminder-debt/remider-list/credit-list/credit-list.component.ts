@@ -12,6 +12,7 @@ import { Subject, from } from 'rxjs';
 import { async } from 'rxjs/internal/scheduler/async';
 import { takeUntil, flatMap, finalize } from 'rxjs/operators';
 import { NotificationSocketService } from '../../../../_services/notification-socket.service';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'ngx-credit-list',
@@ -48,7 +49,10 @@ export class CreditListComponent implements OnInit, OnDestroy {
       },
       money: {
         title: "Số tiền (VNĐ)",
-        type: "string"
+        type:'html',
+        valuePrepareFunction: (value) => {
+          return '<div class="money-format"> ' + value + ' </div>';
+        }
       },
       content: {
         title: "Nội dung",
@@ -96,6 +100,7 @@ export class CreditListComponent implements OnInit, OnDestroy {
               private creditService: CreditService,
               private notifiService: NotifierService,
               private dialogService: NbDialogService,
+              private decimalPipe: DecimalPipe,
               private notificationSocketService: NotificationSocketService) {
                 this.notifi = notifiService;
                 this.notifyService = notificationSocketService;
@@ -130,7 +135,7 @@ export class CreditListComponent implements OnInit, OnDestroy {
                   name_reminder: "",
                   account_reminder: element.account,
                   account: this.payment.account,
-                  money: element.money,
+                  money: this.decimalPipe.transform(element.money, "1.0-3"),
                   content: element.content,
                   status: element.status,
                   type: "credit"
@@ -207,7 +212,7 @@ export class CreditListComponent implements OnInit, OnDestroy {
           (err: any) => {
             this.notifi.show({
               id: `payError`,
-              message: `Không thể thanh toán nợ`,
+              message: `Không thể thanh toán nợ! ${err}`,
               type: `error`,
               template: this.customNotificationTmpl
             });
@@ -217,7 +222,7 @@ export class CreditListComponent implements OnInit, OnDestroy {
       (err: HttpErrorResponse) => {
         this.notifi.show({
           id: `payError`,
-          message: `Không thể thanh toán nợ`,
+          message: `Không thể thanh toán nợ! ${err}`,
           type: `error`,
           template: this.customNotificationTmpl
         });

@@ -1,5 +1,5 @@
 <div class="row" [nbSpinner]="loadingAccount" nbSpinnerStatus="primary">
-  <div class="col-xxxl-6 col-md-6" *ngIf="payment!==null&&payment!=='undefined'">
+  <div class="col-xxxl-6 col-md-6">
     <ngx-status-card [title]="'Tài khoản thanh toán'" 
                      [content]="'Số tài khoản: ' + payment.account"
                      [subcontent] = "'Số dư khả dụng: ' + payment.balance  + ' VNĐ'"
@@ -7,7 +7,7 @@
       <i [ngClass]="'nb-checkmark-circle'"></i>
     </ngx-status-card>
   </div>
-  <div class="col-xxxl-6 col-md-6" *ngIf="saving!==null&&saving!=='undefined'">
+  <div class="col-xxxl-6 col-md-6">
     <ngx-status-card [title]="'Tài khoản tiết kiệm'" 
                      [content]="'Số tài khoản: ' + saving.account"
                      [subcontent] = "'Số dư khả dụng: ' + saving.balance + ' VNĐ'"

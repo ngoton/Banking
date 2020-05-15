@@ -8,6 +8,7 @@ import { BenificiaryService } from '../../_services/benificiary.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { NotifierService } from 'angular-notifier';
 
 @Component({
   selector: "ngx-beneficiary",
@@ -16,7 +17,7 @@ import { Subject } from 'rxjs';
 })
 export class BeneficiaryComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
-
+  private readonly notifier: NotifierService;
 
   settings = {
     add: {
@@ -46,11 +47,15 @@ export class BeneficiaryComponent implements OnInit, OnDestroy {
       account: {
         title: "Số tài khoản",
         type: "string"
+      },
+      bankName: {
+        title: "Ngân hàng",
+        type: "string"
       }
     },
     actions: {
       columnTitle: "Thao tác",
-      add: false,
+      add: true,
       edit: true,
       delete: true
       //   custom: [
@@ -59,7 +64,6 @@ export class BeneficiaryComponent implements OnInit, OnDestroy {
       // ],
       //   position: 'right'
     },
-    hideSubHeader: true
   };
 
   loadingBenificiary = false;
@@ -67,10 +71,35 @@ export class BeneficiaryComponent implements OnInit, OnDestroy {
   benificiariesData: Beneficiarys[];
 
   constructor(
+    private notifications: NotifierService,
     private customerService: CustomerService,
     private befiniciaryService: BenificiaryService
   ) {
-    
+    this.notifier = notifications;
+  }
+
+  onCreateConfirm(event):void {
+    this.befiniciaryService
+      .insert(event.data)
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        (res: any) => {
+          event.confirm.resolve();
+          this.notifier.show({
+            type: "success",
+            message: "Thêm mới thành công!",
+            id: "create-success"
+          });
+        },
+        (err: HttpErrorResponse) => {
+          event.confirm.reject();
+          this.notifier.show({
+            type: "error",
+            message: `Thêm mới không thành công! ${err}`,
+            id: "create-error"
+          });
+        }
+      );
   }
 
   onDeleteConfirm(event): void {
@@ -83,10 +112,20 @@ export class BeneficiaryComponent implements OnInit, OnDestroy {
           (res: any) => {
             this.loadingBenificiary = false;
             event.confirm.resolve();
+            this.notifier.show({
+              type: "success",
+              message: "Xóa thành công!",
+              id: "delete-success"
+            });
           },
           (err: any) => {
             this.loadingBenificiary = false;
             event.confirm.reject();
+            this.notifier.show({
+              type: "error",
+              message: `Xóa không thành công! ${err}`,
+              id: "delete-error"
+            });
           }
         );
     } else {
@@ -95,16 +134,25 @@ export class BeneficiaryComponent implements OnInit, OnDestroy {
   }
 
   onSaveConfirm(event) {
-    debugger;
     this.befiniciaryService
       .update(event.newData)
       .pipe(untilDestroyed(this))
       .subscribe(
         (res: any) => {
           event.confirm.resolve();
+          this.notifier.show({
+            type: "success",
+            message: "Cập nhật thành công!",
+            id: "save-success"
+          });
         },
         (err: HttpErrorResponse) => {
           event.confirm.reject();
+          this.notifier.show({
+            type: "error",
+            message: `Cập nhật không thành công! ${err}`,
+            id: "save-error"
+          });
         }
       );
   }

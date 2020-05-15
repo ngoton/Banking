@@ -21,5 +21,8 @@
     "../src/*.ts",
     "../src/**/*.ts",
     "../node_modules/@nebular/**/*.ts"
-  ]
+  ],
+  "angularCompilerOptions": {
+    "enableIvy": false
+  }
 }

@@ -1,9 +1,7 @@
-@import '../../@theme/styles/themes';
-@include nb-install-component() {
-    .appearance-outline {
-        width: 87%;
-    }
-    .inputname {
-        width: 100%;
-    }
-}
+@import url("~angular-notifier/styles/core");
+@import url("~angular-notifier/styles/themes/theme-material");
+@import url("~angular-notifier/styles/types/type-default");
+@import url("~angular-notifier/styles/types/type-error");
+@import url("~angular-notifier/styles/types/type-info");
+@import url("~angular-notifier/styles/types/type-success");
+@import url("~angular-notifier/styles/types/type-warning");

@@ -3,7 +3,7 @@
     <a (click)="toggleSidebar()" href="#" class="sidebar-toggle">
       <nb-icon icon="menu-2-outline"></nb-icon>
     </a>
-    <a class="logo" href="#" (click)="navigateHome()">{{customer?.firstName + ' '}}<span>{{customer?.lastName}}</span></a>
+    <a class="logo" href="#" *ngIf="staffInfor!==null" (click)="navigateHome()">{{staffInfor?.firstName + ' '}}<span>{{staffInfor?.lastName}}</span></a>
   </div>
   <nb-select [selected]="currentTheme" (selectedChange)="changeTheme($event)" status="primary">
     <nb-option *ngFor="let theme of themes" [value]="theme.value"> {{ theme.name }}</nb-option>
@@ -21,8 +21,8 @@
     <nb-action class="user-action" *nbIsGranted="['view', 'user']" >
       <nb-user [nbContextMenu]="userMenu"
                [onlyPicture]="userPictureOnly"
-               [name]="customer?.code"
-               [picture]="user?.avatar"
+               [name]="staffInfor?.code"
+               [picture]="staffInfor?.avatar"
                nbContextMenuTag="ibanking-context-menu">
       </nb-user>
     </nb-action>

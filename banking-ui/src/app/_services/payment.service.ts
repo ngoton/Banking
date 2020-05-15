@@ -22,4 +22,12 @@ export class PaymentService {
       );
   }
 
+  getPaymentsByCustomerCode(customerCode) {
+    const PATH = this.PAYMENT_URL + `/customerCode/${customerCode}`;
+      return this.http.get<any>(PATH)
+      .pipe(
+        retry(3),
+        //catchError(this.util.handleError)
+      );
+  }
 }
