@@ -1,5 +1,6 @@
 package com.hcmus.banking.platform.api.presentation.secure;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hcmus.banking.platform.core.application.admin.PaymentTransactionUseCaseService;
 import com.hcmus.banking.platform.core.application.admin.PaymentUseCaseService;
 import com.hcmus.banking.platform.domain.general.Created;
@@ -9,7 +10,7 @@ import com.hcmus.banking.platform.domain.paymentTransaction.PaymentTransaction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.util.Map;
 
 @RestController("ApiTransactionController")
 @RequiredArgsConstructor
@@ -19,9 +20,11 @@ public class TransactionController {
     private final PaymentTransactionUseCaseService paymentTransactionService;
 
     @PostMapping
-    public TransactionResponse transaction(@Valid @RequestBody TransactionRequest transactionRequest, @ModelAttribute("partner") Partner partner){
-        Payment payment = paymentService.findByAccount(transactionRequest.getContent().getAccount());
-        PaymentTransaction paymentTransaction = new PaymentTransaction(transactionRequest.getContent().getContent(), transactionRequest.getContent().getAmount(), Created.ofEmpty(), payment);
+    public TransactionResponse transaction(@ModelAttribute("request") Map<String,Object> request, @ModelAttribute("partner") Partner partner){
+        ObjectMapper objectMapper = new ObjectMapper();
+        ContentRequest contentRequest = objectMapper.convertValue(request.get("content"), ContentRequest.class);
+        Payment payment = paymentService.findByAccount(contentRequest.getAccount());
+        PaymentTransaction paymentTransaction = new PaymentTransaction(contentRequest.getContent(), contentRequest.getAmount(), Created.ofEmpty(), payment);
         paymentTransactionService.externalPayment(paymentTransaction, partner);
         return TransactionResponse.of(paymentTransaction);
     }

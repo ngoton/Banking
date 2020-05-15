@@ -6,11 +6,13 @@ import com.hcmus.banking.platform.api.application.partner.PartnerUseCaseService;
 import com.hcmus.banking.platform.config.security.PGPCryptography;
 import com.hcmus.banking.platform.config.security.RSACryptography;
 import com.hcmus.banking.platform.core.application.user.PasswordService;
+import com.hcmus.banking.platform.domain.exception.BankingServiceException;
 import com.hcmus.banking.platform.domain.exception.UnauthorizedException;
 import com.hcmus.banking.platform.domain.partner.Encryption;
 import com.hcmus.banking.platform.domain.partner.Partner;
 import org.bouncycastle.openpgp.PGPPublicKey;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,7 +46,8 @@ public class ApiAdvice {
     @Autowired
     PGPCryptography pgpCryptography;
 
-    void validateApiKey(@RequestHeader Map<String,String> headers, @RequestBody Map<String,Object> bodies) throws SecurityException {
+    @ModelAttribute
+    public void validateApiKey(@RequestHeader Map<String,String> headers, @RequestBody Map<String,Object> bodies, Model model) throws SecurityException {
         ObjectMapper objectMapper = new ObjectMapper();
         String xApiKey = headers.get(X_API_KEY);
         String xTimeCode = headers.get(X_TIME_CODE);
@@ -54,26 +57,23 @@ public class ApiAdvice {
         }
 
         if(bodies.get(HASH_STRING) == null || bodies.get(SIGNATURE) == null || bodies.get(CONTENT) == null) {
-            throw new UnauthorizedException();
+            throw new BankingServiceException("Body request is missing");
         }
 
         String hashString = bodies.get(HASH_STRING).toString();
         String signature = bodies.get(SIGNATURE).toString();
         String content = bodies.get(CONTENT).toString();
 
-        Partner partner = partnerUseCaseService.findByKey(xApiKey);
-        if (partner.isEmpty()) {
-            throw new UnauthorizedException();
-        }
+        Partner partner = getPartner(xApiKey);
 
         Instant instant = Instant.now();
         Long timeStampMillis = instant.toEpochMilli();
         if (Long.valueOf(xTimeCode) < timeStampMillis){
-            throw new UnauthorizedException();
+            throw new BankingServiceException("The request is expired");
         }
 
         if (!passwordService.isMatchPassword(String.format("%s%s", xApiKey, xTimeCode), hashString)){
-            throw new UnauthorizedException();
+            throw new BankingServiceException("Password not matched");
         }
 
         try {
@@ -86,17 +86,17 @@ public class ApiAdvice {
             if(encryption.isRSA()){
                 PublicKey publicKey = rsaCryptography.getPublicKey(partner.getPublicKey());
                 if (!rsaCryptography.verify(content, signature, publicKey)){
-                    throw new UnauthorizedException();
+                    throw new BankingServiceException("Signature cannot verified");
                 }
             }
             else if (encryption.isPGP()){
                 PGPPublicKey publicKey = pgpCryptography.getPublicKey(partner.getPublicKey());
                 if (!pgpCryptography.verify(content, signature, publicKey)){
-                    throw new UnauthorizedException();
+                    throw new BankingServiceException("Signature cannot verified");
                 }
             }
             else {
-                throw new UnauthorizedException();
+                throw new BankingServiceException("Signature is required");
             }
 
         } catch (NoSuchAlgorithmException e) {
@@ -108,11 +108,16 @@ public class ApiAdvice {
         } catch (Exception e) {
             throw new UnauthorizedException();
         }
+
+        model.addAttribute("request", bodies);
+        model.addAttribute("partner", partner);
     }
 
-    @ModelAttribute("partner")
-    Partner partner(@RequestHeader Map<String,String> headers) throws SecurityException {
-        Partner partner = partnerUseCaseService.findByKey(headers.get(X_API_KEY));
+    Partner getPartner(String partnerCode) throws SecurityException {
+        Partner partner = partnerUseCaseService.findByKey(partnerCode);
+        if (partner.isEmpty()) {
+            throw new BankingServiceException("Partner not found");
+        }
         return partner;
     }
 }
