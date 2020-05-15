@@ -5,8 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class DepositResponse {
-    String hash;
-    ContentResponse contentResponse;
-    String sign;
+public class AccountContentRequest {
+    Long validity;
+    String accId;
 }
