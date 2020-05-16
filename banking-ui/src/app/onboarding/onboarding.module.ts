@@ -96,12 +96,10 @@ const customNotifierOptions: NotifierOptions = {
     MiscellaneousModule,
     NbInputModule
   ],
-  entryComponents: [DialogOTPPromptComponent],
   declarations: [
     OnboardingComponent,
     ChangePasswordComponent,
-    ForgotPasswordComponent,
-    DialogOTPPromptComponent
+    ForgotPasswordComponent
   ],
 })
 export class OnboardingModule {
