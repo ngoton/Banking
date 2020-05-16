@@ -65,6 +65,6 @@ merchant:
   rsa:
     account: http://t2trc-ws.us-east-2.elasticbeanstalk.com/v1.0/account
     transaction: http://t2trc-ws.us-east-2.elasticbeanstalk.com/v1.0/transaction
-    secret-key: 2177e8c6efca038fb79a7a5db257de98
+    secret-key: GROUP_11
     client-id: 2c9180827217cb57017218e755260002
     token: 2c9180827217cb57017218e755260002.$2a$09$XS24VGaR5grMRfYcdnQQTOjINSgCp8kU/LWwEepBIhxVQciRX5Qee
