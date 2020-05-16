@@ -240,19 +240,19 @@ public class PaymentTransactionUseCaseService {
         }
 
         if (toPaymentTransaction.getBeneficiary().isInternal()) {
+          Payment receiptPayment = paymentService.findByAccount(toPaymentTransaction.getBeneficiary().getAccount());
             PaymentTransaction receiptTransaction = new PaymentTransaction(
                     RandomUtils.generateTransactionCode(),
                     money,
                     toPaymentTransaction.getContent(),
                     Created.ofEmpty(),
-                    toPaymentTransaction.getBeneficiary().getPayment()
-
+                    receiptPayment
             );
             paymentTransactionService.create(receiptTransaction);
-
-            Payment receiptPayment = toPaymentTransaction.getBeneficiary().getPayment();
+            
             receiptPayment.setBalance(receiptPayment.getBalance().add(money));
-            paymentService.update(toPaymentTransaction.getBeneficiary().getPayment(), receiptPayment);
+            paymentService.create(receiptPayment);
+
         } else {
             Partner partner = partnerService.findByName(toPaymentTransaction.getBeneficiary().getBankName());
             if (!partner.isEmpty()){
