@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class AccountResponse {
-    String accountId;
-    String firstName;
-    String lastName;
+public class TransactionResponse {
+    String hash;
+    ContentResponse content;
+    String sign;
 }

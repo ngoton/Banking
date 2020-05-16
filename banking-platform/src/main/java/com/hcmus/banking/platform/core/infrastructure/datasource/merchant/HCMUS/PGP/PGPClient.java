@@ -54,12 +54,16 @@ public class PGPClient implements MerchantClient {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<AccountRequest> request = new HttpEntity<>(accountRequest, headers);
-
         String url = String.format("%s%s", merchantCriteria.getPartner().getBaseUrl(), accountURL);
-        ResponseEntity<AccountResponse> response = restTemplate.postForEntity(url, request, AccountResponse.class);
 
-        if (response.getStatusCode() == HttpStatus.OK){
-            return new MerchantAccount(response.getBody().getAccount().getFullName());
+        try{
+            ResponseEntity<AccountResponse> response = restTemplate.postForEntity(url, request, AccountResponse.class);
+
+            if (response.getStatusCode() == HttpStatus.OK){
+                return new MerchantAccount(response.getBody().getAccount().getFullName());
+            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
         return MerchantAccount.ofEmpty();
     }

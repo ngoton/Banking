@@ -5,11 +5,13 @@ import com.hcmus.banking.platform.core.application.credit.CreditService;
 import com.hcmus.banking.platform.core.application.customer.CustomerService;
 import com.hcmus.banking.platform.core.application.debit.DebitService;
 import com.hcmus.banking.platform.core.application.mail.MailService;
+import com.hcmus.banking.platform.core.application.merchant.MerchantService;
 import com.hcmus.banking.platform.core.application.notification.NotificationService;
 import com.hcmus.banking.platform.core.application.otp.OtpService;
 import com.hcmus.banking.platform.core.application.partner.PartnerService;
 import com.hcmus.banking.platform.core.application.payment.PaymentService;
 import com.hcmus.banking.platform.core.application.paymentTransaction.PaymentTransactionService;
+import com.hcmus.banking.platform.core.infrastructure.datasource.merchant.MerchantCriteria;
 import com.hcmus.banking.platform.core.utils.RandomUtils;
 import com.hcmus.banking.platform.domain.beneficiary.Beneficiary;
 import com.hcmus.banking.platform.domain.credit.Credit;
@@ -19,6 +21,7 @@ import com.hcmus.banking.platform.domain.exception.BankingServiceException;
 import com.hcmus.banking.platform.domain.general.Created;
 import com.hcmus.banking.platform.domain.general.CreatedAt;
 import com.hcmus.banking.platform.domain.mail.Mail;
+import com.hcmus.banking.platform.domain.merchant.MerchantDeposit;
 import com.hcmus.banking.platform.domain.notification.Notification;
 import com.hcmus.banking.platform.domain.otp.OTP;
 import com.hcmus.banking.platform.domain.partner.Partner;
@@ -50,6 +53,7 @@ public class PaymentTransactionUseCaseService {
     private final DebitService debitService;
     private final CreditService creditService;
     private final NotificationService notificationService;
+    private final MerchantService merchantService;
 
     @Transactional(readOnly = true)
     public Page<PaymentTransaction> findAllBy(Pageable pageable) {
@@ -208,7 +212,7 @@ public class PaymentTransactionUseCaseService {
 
         paymentTransactionService.create(paymentTransaction);
 
-        paymentService.create(payment);
+        //paymentService.create(payment);
 
         BigDecimal money = toPaymentTransaction.getMoney();
 
@@ -229,10 +233,10 @@ public class PaymentTransactionUseCaseService {
             );
             paymentTransactionService.create(paymentTransactionFee);
 
-            payment.setBalance(payment.getBalance().add(transFee));
-            paymentService.create(payment);
+            payment.setBalance(payment.getBalance().subtract(transFee));
+            //paymentService.create(payment);
         } else {
-            money = money.add(transFee);
+            money = money.subtract(transFee);
         }
 
         if (toPaymentTransaction.getBeneficiary().isInternal()) {
@@ -247,8 +251,19 @@ public class PaymentTransactionUseCaseService {
 
             Payment receiptPayment = toPaymentTransaction.getBeneficiary().getPayment();
             receiptPayment.setBalance(receiptPayment.getBalance().add(money));
-            paymentService.create(payment);
+            paymentService.update(toPaymentTransaction.getBeneficiary().getPayment(), receiptPayment);
+        } else {
+            Partner partner = partnerService.findByName(toPaymentTransaction.getBeneficiary().getBankName());
+            if (!partner.isEmpty()){
+                MerchantCriteria merchantCriteria = new MerchantCriteria(partner, toPaymentTransaction.getBeneficiary().getAccount(), toPaymentTransaction.getContent(), money, toPaymentTransaction.getPayment().getAccount());
+                MerchantDeposit merchantDeposit = merchantService.deposit(merchantCriteria);
+                if (merchantDeposit.isEmpty()){
+                    throw new BankingServiceException("Could not transfer money");
+                }
+            }
         }
+
+        paymentService.update(toPaymentTransaction.getPayment(), payment);
 
         if (!debitId.equals(Long.MIN_VALUE)) {
             Debit debit = debitService.findById(debitId);
