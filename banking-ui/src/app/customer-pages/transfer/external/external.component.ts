@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { CustomerService } from '../../../_services/customer.service';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { Payment, Savings, Customers, Beneficiarys, Partners, PaymentTransactions } from '../../../_models/customer.model';
@@ -11,13 +11,16 @@ import { PaymentTransactionService } from '../../../_services/payment-transactio
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { DialogOTPPromptComponent } from '../dialog-otp-prompt/dialog-otp-prompt.component';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, forkJoin } from 'rxjs';
+import { takeUntil, flatMap } from 'rxjs/operators';
+import { PaymentService } from '../../../_services/payment.service';
+import { BenificiaryService } from '../../../_services/benificiary.service';
 
 @Component({
   selector: 'ngx-external',
   templateUrl: './external.component.html',
-  styleUrls: ['./external.component.scss']
+  styleUrls: ['./external.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ExternalComponent implements OnInit, OnDestroy {
   loading = false;
@@ -36,6 +39,8 @@ export class ExternalComponent implements OnInit, OnDestroy {
   paymentTransaction: PaymentTransactions = new PaymentTransactions();
 
   constructor(private customerService: CustomerService,
+              private paymentService: PaymentService,
+              private benificiaryService: BenificiaryService,
               private partnerService: PartnerService,
               private decimalPipe: DecimalPipe,
               private dialogService: NbDialogService,
@@ -43,38 +48,75 @@ export class ExternalComponent implements OnInit, OnDestroy {
               private notifications: NotifierService,
               private router: Router) {
                 this.notifier = notifications;
-
+                this.selectedBenificiary = new Beneficiarys();
   }
 
   ngOnInit() {
     this.loading = true;
-    this.partnerService.getAll().pipe(untilDestroyed(this))
-      .subscribe(
+    this.partnerService.getAll().pipe(untilDestroyed(this),
+      flatMap(
         (partners: Partners[]) => {
           this.partners = partners;
           this.loading = false;
+
+          let customerInfor = JSON.parse(localStorage.getItem('customerInfor'));
+          if(customerInfor != null){
+            return forkJoin([this.paymentService.getPaymentsByCustomerId(customerInfor.customerId)
+                            , this.benificiaryService.getByCustomerCode(customerInfor.code)]);
+          }
+          else
+            this.router.navigate(['onboarding/login']);
+        }
+      )
+    ).subscribe(
+        ([payment, benificiaries]) => {
+          this.accounts.push(payment[0]);
+          this.benificiary = benificiaries.filter(b => b.bankName != environment.BANK_NAME);
         }
       );
-    
-    this.loading = true;
-    this.customerService.payments$.pipe(takeUntil(this.destroy$))
-    .subscribe(
-      (payment: Payment) => {
-        // payment.balance = this.decimalPipe.transform(payment.balance, '1.3-3');
-        this.accounts.push(payment);
-        this.loading = false;
-      }
-    );
-
-    this.loading = true;
-    this.customerService.beneficiaries$.pipe(untilDestroyed(this))
-    .subscribe(
-      (benificiaries: Beneficiarys[]) => {
-        this.benificiary = benificiaries.filter(b => b.bankName != environment.BANK_NAME);
-        this.loading = false;
-      }
-    );
   }
+
+  accountInforChanged(){
+    this.loading = true;
+    if(this.paymentTransaction.beneficiaryAccount != null && this.selectedPartner.name != ""){
+      this.customerService.getAccountInfo(this.paymentTransaction.beneficiaryAccount, this.selectedPartner.name)
+      .pipe(untilDestroyed(this)).subscribe(
+        (accountInfor : any) => {
+          this.loading = false;
+          if(accountInfor.name!= ""){
+            let benificiary = new Beneficiarys();
+            benificiary.name = accountInfor.name;
+            benificiary.account = accountInfor.account;
+            benificiary.bankName = accountInfor.bankName;
+
+            this.selectedBenificiary = benificiary;
+          }
+          else{
+            this.notifier.show({
+              type: "error",
+              message: "Tài khoản này không đủ thông tin!",
+              id: "wrong-content" // this is optional
+            });
+          }
+
+          
+        },
+        (error: HttpErrorResponse) => {
+          this.loading = false;
+          this.notifier.show({
+            type: "error",
+            message: "Không tìm thấy thông tin tài khoản!",
+            id: "not-found" // this is optional
+          });
+        }
+      );
+    }
+    else{
+      this.loading = false;
+    }
+    
+  }
+
 
   onSubmit() {
     this.loading = true;
@@ -123,6 +165,7 @@ export class ExternalComponent implements OnInit, OnDestroy {
 
   partnerChange(item) {
     this.selectedPartner = item;
+    this.accountInforChanged();
   }
 
   ngOnDestroy() {

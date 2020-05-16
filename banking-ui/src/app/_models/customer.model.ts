@@ -62,11 +62,11 @@ export class PaymentTransactions {
 
     constructor(obj?: any) {
         this.id = obj && obj.id || null;
-        this.code = obj && obj.code || null;
+        this.code = obj && obj.code || "";
         this.money = obj && obj.money || null;
-        this.content = obj && obj.content || null;
+        this.content = obj && obj.content || "";
         this.paymentsId = obj && obj.paymentsId || null;
-        this.beneficiaryAccount = obj && obj.beneficiaryAccount || null;
+        this.beneficiaryAccount = obj && obj.beneficiaryAccount || "";
         this.beneficiarysId = obj && obj.beneficiarysId || null;
         this.fee = obj && obj.fee || true;
     }

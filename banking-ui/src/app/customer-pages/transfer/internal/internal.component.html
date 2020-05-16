@@ -6,7 +6,7 @@
       <div class="form-group row">
         <label class="label col-sm-3 col-form-label">Chọn tài khoản</label>
         <div class="col-sm-3">
-          <nb-select [disabled]="finished===true" fullWidth *ngIf="internalAccounts.length!=0" placeholder="Chọn tài khoản" class="text-center">
+          <nb-select [disabled]="finished===true" fullWidth placeholder="Chọn tài khoản" class="text-center">
             <nb-option *ngFor="let item of internalAccounts" [value]="item.account" (selectionChange)="paymentChange(item)">{{item.account}}</nb-option>
           </nb-select>
         </div>

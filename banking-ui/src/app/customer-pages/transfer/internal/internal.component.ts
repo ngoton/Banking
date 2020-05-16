@@ -43,6 +43,7 @@ export class InternalComponent implements OnInit, OnDestroy {
   paymentTransaction: PaymentTransactions = new PaymentTransactions();
 
   constructor(private customerService: CustomerService,
+              private paymentService: PaymentService,
               private decimalPipe: DecimalPipe,
               private dialogService: NbDialogService,
               private paymentTransactionService: PaymentTransactionService,
@@ -65,22 +66,29 @@ export class InternalComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.customerService.payments$.pipe(untilDestroyed(this))
+    let customerInfor = JSON.parse(localStorage.getItem('customerInfor'));
+    if(customerInfor != null){
+      this.loading = true;
+      this.paymentService.getPaymentsByCustomerId(customerInfor.customerId).pipe(untilDestroyed(this))
       .subscribe(
-        (payment: Payment) => {
+        (payment: Payment[]) => {
           // payment.balance = this.decimalPipe.transform(payment.balance, '1.3-3');
-          if(payment != null){
-            this.internalAccounts.push(payment);
+          this.loading = false;
+          if(payment.length != 0){
+            this.internalAccounts.push(payment[0]);
+
+            this.benificiaryService.getInternal().pipe(takeUntil(this.destroy$))
+            .subscribe(
+              (benificiaries: Beneficiarys[]) => {
+                this.benificiary = benificiaries.filter(x => x.account !== this.internalAccounts[0].account);
+              }
+            );
           }
         }
       );
-
-    this.benificiaryService.getInternal().pipe(takeUntil(this.destroy$))
-      .subscribe(
-        (benificiaries: Beneficiarys[]) => {
-          this.benificiary = benificiaries.filter(x => x.account !== this.internalAccounts[0].account);
-        }
-      );
+    }
+    else
+      this.router.navigate(['onboarding/login']);
   }
 
   callBack(data: any): void {
