@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class TransferResponse {
+public class TransactionRequest {
     String hash;
-    ContentResponse contentResponse;
+    TransactionContentRequest content;
     String sign;
 }

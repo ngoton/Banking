@@ -5,8 +5,12 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class DepositResponse {
-    String hash;
-    ContentResponse contentResponse;
-    String sign;
+public class TransactionContentRequest {
+    Long validity;
+    String accId;
+    String transType;
+    String feeType;
+    Double fee;
+    Double amount;
+    String note;
 }

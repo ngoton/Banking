@@ -1,0 +1,5 @@
+UPDATE banking.partners
+SET api_key='2c9180827217cb57017218e755260002.$2a$09$XS24VGaR5grMRfYcdnQQTOjINSgCp8kU/LWwEepBIhxVQciRX5Qee',
+base_url='http://t2trc-ws.us-east-2.elasticbeanstalk.com',
+public_key='MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCS+9txFgugup/QXCR/MSHNr0O96Yl+uWPooQZlQYmqeWGuO8aKfjQAJnlXtsjoHzlRbZWpG92fnp/4JIuTuroQp7DS/YGeM5HZnh0B9N9XZ9C9DM81VX6cTRzaD3KN2AeVmPKJxplioeiNeXo/T3QOKdzjLAeu95M10y9qn4IlMQIDAQAB'
+WHERE name='GROUP_19'
