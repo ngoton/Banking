@@ -30,7 +30,7 @@ public class AccountController {
             if (!partner.isEmpty()){
                 MerchantCriteria merchantCriteria = new MerchantCriteria(partner, accountRequest.account);
                 MerchantAccount merchantAccount = merchantService.findAccount(merchantCriteria);
-                if (merchantAccount.isEmpty()){
+                if (!merchantAccount.isEmpty()){
                     return new AccountResponse(merchantAccount.getName(), accountRequest.account, accountRequest.bankName);
                 }
             }
