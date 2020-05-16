@@ -245,13 +245,13 @@ public class PaymentTransactionUseCaseService {
                     money,
                     toPaymentTransaction.getContent(),
                     Created.ofEmpty(),
-                    toPaymentTransaction.getBeneficiary().getPayment()
+                    payment
             );
             paymentTransactionService.create(receiptTransaction);
 
-//             Payment receiptPayment = toPaymentTransaction.getBeneficiary().getPayment();
-//             receiptPayment.setBalance(receiptPayment.getBalance().add(money));
-//             paymentService.update(toPaymentTransaction.getBeneficiary().getPayment(), receiptPayment);
+            Payment receiptPayment = toPaymentTransaction.getBeneficiary().getPayment();
+            receiptPayment.setBalance(receiptPayment.getBalance().add(money));
+            paymentService.update(toPaymentTransaction.getBeneficiary().getPayment(), receiptPayment);
         } else {
             Partner partner = partnerService.findByName(toPaymentTransaction.getBeneficiary().getBankName());
             if (!partner.isEmpty()){
