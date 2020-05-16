@@ -239,29 +239,29 @@ public class PaymentTransactionUseCaseService {
             money = money.add(transFee);
         }
 
-//         if (toPaymentTransaction.getBeneficiary().isInternal()) {
-//             PaymentTransaction receiptTransaction = new PaymentTransaction(
-//                     RandomUtils.generateTransactionCode(),
-//                     money,
-//                     toPaymentTransaction.getContent(),
-//                     Created.ofEmpty(),
-//                     toPaymentTransaction.getBeneficiary().getPayment()
-//             );
+        if (toPaymentTransaction.getBeneficiary().isInternal()) {
+            PaymentTransaction receiptTransaction = new PaymentTransaction(
+                    RandomUtils.generateTransactionCode(),
+                    money,
+                    toPaymentTransaction.getContent(),
+                    Created.ofEmpty(),
+                    toPaymentTransaction.getBeneficiary().getPayment()
+            );
 //             paymentTransactionService.create(receiptTransaction);
 
-//             Payment receiptPayment = toPaymentTransaction.getBeneficiary().getPayment();
-//             receiptPayment.setBalance(receiptPayment.getBalance().add(money));
-//             paymentService.update(toPaymentTransaction.getBeneficiary().getPayment(), receiptPayment);
-//         } else {
-//             Partner partner = partnerService.findByName(toPaymentTransaction.getBeneficiary().getBankName());
-//             if (!partner.isEmpty()){
-//                 MerchantCriteria merchantCriteria = new MerchantCriteria(partner, toPaymentTransaction.getBeneficiary().getAccount(), toPaymentTransaction.getContent(), money, toPaymentTransaction.getPayment().getAccount());
-//                 MerchantDeposit merchantDeposit = merchantService.deposit(merchantCriteria);
-//                 if (merchantDeposit.isEmpty()){
-//                     throw new BankingServiceException("Could not transfer money");
-//                 }
-//             }
-//         }
+            Payment receiptPayment = toPaymentTransaction.getBeneficiary().getPayment();
+            receiptPayment.setBalance(receiptPayment.getBalance().add(money));
+            paymentService.update(toPaymentTransaction.getBeneficiary().getPayment(), receiptPayment);
+        } else {
+            Partner partner = partnerService.findByName(toPaymentTransaction.getBeneficiary().getBankName());
+            if (!partner.isEmpty()){
+                MerchantCriteria merchantCriteria = new MerchantCriteria(partner, toPaymentTransaction.getBeneficiary().getAccount(), toPaymentTransaction.getContent(), money, toPaymentTransaction.getPayment().getAccount());
+                MerchantDeposit merchantDeposit = merchantService.deposit(merchantCriteria);
+                if (merchantDeposit.isEmpty()){
+                    throw new BankingServiceException("Could not transfer money");
+                }
+            }
+        }
 
         paymentService.update(toPaymentTransaction.getPayment(), payment);
 
