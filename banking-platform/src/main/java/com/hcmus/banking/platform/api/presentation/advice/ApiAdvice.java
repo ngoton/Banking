@@ -86,13 +86,13 @@ public class ApiAdvice {
             if(encryption.isRSA()){
                 PublicKey publicKey = rsaCryptography.getPublicKey(partner.getPublicKey());
                 if (!rsaCryptography.verify(content, signature, publicKey)){
-                    throw new BankingServiceException("Signature cannot verified");
+                    throw new BankingServiceException("Could not verify signature");
                 }
             }
             else if (encryption.isPGP()){
                 PGPPublicKey publicKey = pgpCryptography.getPublicKey(partner.getPublicKey());
                 if (!pgpCryptography.verify(content, signature, publicKey)){
-                    throw new BankingServiceException("Signature cannot verified");
+                    throw new BankingServiceException("Could not verify signature");
                 }
             }
             else {

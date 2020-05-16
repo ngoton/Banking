@@ -20,4 +20,9 @@ public class MerchantCriteria {
         this.money = money;
         this.internalAccount = internalAccount;
     }
+
+    public MerchantCriteria(Partner partner, String account) {
+        this.partner = partner;
+        this.account = account;
+    }
 }
