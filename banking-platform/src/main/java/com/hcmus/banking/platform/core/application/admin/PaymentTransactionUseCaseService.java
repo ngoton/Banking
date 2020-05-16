@@ -233,10 +233,10 @@ public class PaymentTransactionUseCaseService {
             );
             paymentTransactionService.create(paymentTransactionFee);
 
-            payment.setBalance(payment.getBalance().subtract(transFee));
+            payment.setBalance(payment.getBalance().add(transFee));
             //paymentService.create(payment);
         } else {
-            money = money.subtract(transFee);
+            money = money.add(transFee);
         }
 
         if (toPaymentTransaction.getBeneficiary().isInternal()) {
