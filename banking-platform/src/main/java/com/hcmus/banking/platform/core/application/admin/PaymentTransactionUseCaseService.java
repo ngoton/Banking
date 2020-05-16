@@ -245,7 +245,8 @@ public class PaymentTransactionUseCaseService {
                     money,
                     toPaymentTransaction.getContent(),
                     Created.ofEmpty(),
-                    payment
+                    toPaymentTransaction.getBeneficiary().getPayment()
+
             );
             paymentTransactionService.create(receiptTransaction);
 
