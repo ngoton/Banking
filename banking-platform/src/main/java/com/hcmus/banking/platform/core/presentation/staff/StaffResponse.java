@@ -16,6 +16,7 @@ public class StaffResponse {
     public String gender;
     public String phone;
     public String address;
+    public String email;
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     public LocalDateTime createdAt;
 
@@ -30,5 +31,6 @@ public class StaffResponse {
         this.phone = staff.getInfo().getPhone();
         this.address = staff.getInfo().getAddress();
         this.createdAt = staff.getCreated().getCreatedAt().getValue();
+        this.email = staff.getInfo().getUser().getEmail();
     }
 }
