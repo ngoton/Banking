@@ -6,7 +6,8 @@ import { mergeMap, finalize } from 'rxjs/operators';
 import { PaymentTransactionService } from '../../_services/payment-transaction.service';
 import { SavingTransactionService } from '../../_services/saving-transaction.service';
 import { forkJoin } from 'rxjs';
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, formatDate, DatePipe } from '@angular/common';
+
 
 interface TreeNode<T> {
   data: T;
@@ -98,11 +99,13 @@ export class TransactionHistoryComponent implements OnInit, OnDestroy {
       ).subscribe(
         ([payments, savings, transfers, credits]) => {
           payments.content.forEach(item => {
+            const dateTimeArr: any[] = item.createdAt.split(" ", 2);
+
             let node : TreeNode<FSEntry> = {
               data: {
                 transaction_type: null,
                 content: item.content,
-                date: item.createdAt,
+                date: dateTimeArr.length != 0 ? dateTimeArr[0] : "",
                 money: this.decimalPipe.transform(
                   item.money,
                   "1.0-3"
@@ -113,11 +116,13 @@ export class TransactionHistoryComponent implements OnInit, OnDestroy {
           });
 
           savings.content.forEach(item => {
+            const dateTimeArr: any[] = item.createdAt.split(" ", 2);
+
             let node : TreeNode<FSEntry> = {
               data: {
                 transaction_type: null,
                 content: item.content,
-                date: item.createdAt,
+                date: dateTimeArr.length != 0 ? dateTimeArr[0] : "",
                 money: this.decimalPipe.transform(
                   item.money,
                   "1.0-3"
@@ -129,11 +134,13 @@ export class TransactionHistoryComponent implements OnInit, OnDestroy {
           });
 
           transfers.content.forEach(item => {
+            const dateTimeArr: any[] = item.createdAt.split(" ", 2);
+
             let node : TreeNode<FSEntry> = {
               data: {
                 transaction_type: null,
                 content: item.content,
-                date: item.createdAt,
+                date: dateTimeArr.length != 0 ? dateTimeArr[0] : "",
                 money: this.decimalPipe.transform(
                   item.money*(-1),
                   "1.0-3"
@@ -145,11 +152,13 @@ export class TransactionHistoryComponent implements OnInit, OnDestroy {
           });
 
           credits.content.forEach(item => {
+            const dateTimeArr: any[] = item.createdAt.split(" ", 2);
+
             let node : TreeNode<FSEntry> = {
               data: {
                 transaction_type: null,
                 content: item.content,
-                date: item.createdAt,
+                date: dateTimeArr.length != 0 ? dateTimeArr[0] : "",
                 money: this.decimalPipe.transform(
                   item.money*(-1),
                   "1.0-3"

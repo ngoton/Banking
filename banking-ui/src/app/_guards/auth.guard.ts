@@ -21,13 +21,13 @@ export class AuthGuard implements CanActivate {
         
         switch(userInfor.role){
           case 'ADMIN':
-            state.url.includes("/employee") ? null : this.router.navigate(['/employee', {role: 'ADMIN'}]);
+            state.url.includes("/employee") || state.url.includes("/onboarding") ? null : this.router.navigate(['/employee', {role: 'ADMIN'}]);
             break;
           case 'STAFF':
-            state.url.includes("/employee") ? null : this.router.navigate(['/employee', {role: 'STAFF'}]);
+            state.url.includes("/employee") || state.url.includes("/onboarding") ? null : this.router.navigate(['/employee', {role: 'STAFF'}]);
             break;
           case 'USER':
-            state.url.includes("/customer") ? null : this.router.navigate(['/customer']);
+            state.url.includes("/customer") || state.url.includes("/onboarding") ? null : this.router.navigate(['/customer']);
             break;
         }
 

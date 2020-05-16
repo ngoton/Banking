@@ -13,6 +13,7 @@ import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import {
+  NbCardModule,
   NbChatModule,
   NbDatepickerModule,
   NbDialogModule,
@@ -20,15 +21,26 @@ import {
   NbSidebarModule,
   NbToastrModule,
   NbWindowModule,
+  NbInputModule,
+  NbButtonModule,
 } from '@nebular/theme';
 
 import { NotifierModule, NotifierService } from 'angular-notifier';
 import { CurrencyPipe } from '@angular/common';
 import { InterceptorService } from './_services/interceptor.service';
 import { CurrencyMaskModule } from "ngx-currency-mask";
+import { DialogOTPPromptComponent } from './onboarding/dialog-otp-prompt/dialog-otp-prompt.component';
+import { registerLocaleData } from '@angular/common';
+import localeVN from "@angular/common/locales/vi";
+registerLocaleData(localeVN, "vi");
+
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, DialogOTPPromptComponent],
+  entryComponents: [DialogOTPPromptComponent],
   imports: [
+    NbCardModule,
+    NbInputModule,
+    NbButtonModule,
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,

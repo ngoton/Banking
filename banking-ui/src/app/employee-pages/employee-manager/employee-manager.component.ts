@@ -37,6 +37,10 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
       confirmDelete: true
     },
     columns: {
+      code: {
+        title: "Mã nhân viên",
+        type: "string"
+      },
       firstName: {
         title: "Họ và tên đệm",
         type: "string"
@@ -73,7 +77,11 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
   staffs: User[] = new Array();
 
   constructor(private staffService: StaffService,
-              private dialogService: NbDialogService) { }
+              private dialogService: NbDialogService,
+              private notificationService: NotifierService) {
+
+                this.notifier = notificationService;
+               }
 
   loadData() {
     this.staffService.all().pipe(untilDestroyed(this))
@@ -123,30 +131,34 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
     );
   }
 
-  onDeleteConfirm(event): void {
+  btnClickDelete(event) {
+    debugger;
     if (window.confirm("Bạn có chắc chắn muốn xóa người này không?")) {
       this.loadingStaff = true;
       this.staffService
-        .delete(event.data.id)
+        .delete(event.data.staffId)
         .pipe(untilDestroyed(this))
         .subscribe(
           (res: any) => {
             this.loadingStaff = false;
-            event.confirm.resolve();
+            
             this.notifier.show({
               type: "success",
               message: "Xóa thành công!",
               id: "delete-success"
             });
+            event.confirm.resolve();
+            this.loadData();
           },
           (err: any) => {
             this.loadingStaff = false;
-            event.confirm.reject();
+            
             this.notifier.show({
               type: "error",
               message: `Xóa không thành công! ${err}`,
               id: "delete-error"
             });
+            event.confirm.reject();
           }
         );
     } else {

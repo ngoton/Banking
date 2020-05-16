@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 
 import { LocalDataSource } from 'ng2-smart-table';
 import { CustomerService } from '../../_services/customer.service';
@@ -9,11 +9,13 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { NotifierService } from 'angular-notifier';
+import { Router } from '@angular/router';
 
 @Component({
   selector: "ngx-beneficiary",
   templateUrl: "./beneficiary.component.html",
-  styleUrls: ["./beneficiary.component.scss"]
+  styleUrls: ["./beneficiary.component.scss"],
+  encapsulation: ViewEncapsulation.None
 })
 export class BeneficiaryComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
@@ -23,7 +25,8 @@ export class BeneficiaryComponent implements OnInit, OnDestroy {
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
       createButtonContent: '<i class="nb-checkmark"></i>',
-      cancelButtonContent: '<i class="nb-close"></i>'
+      cancelButtonContent: '<i class="nb-close"></i>',
+      confirmCreate: true
     },
     edit: {
       editButtonContent: '<i class="nb-edit"></i>',
@@ -71,6 +74,7 @@ export class BeneficiaryComponent implements OnInit, OnDestroy {
   benificiariesData: Beneficiarys[];
 
   constructor(
+    private route: Router,
     private notifications: NotifierService,
     private customerService: CustomerService,
     private befiniciaryService: BenificiaryService
@@ -78,54 +82,58 @@ export class BeneficiaryComponent implements OnInit, OnDestroy {
     this.notifier = notifications;
   }
 
-  onCreateConfirm(event):void {
+  onCreateConfirm(event) {
     this.befiniciaryService
-      .insert(event.data)
+      .insert(event.newData)
       .pipe(untilDestroyed(this))
       .subscribe(
         (res: any) => {
-          event.confirm.resolve();
+          
           this.notifier.show({
             type: "success",
             message: "Thêm mới thành công!",
             id: "create-success"
           });
+
+          event.confirm.resolve();
+          this.loadData();
         },
         (err: HttpErrorResponse) => {
-          event.confirm.reject();
+          
           this.notifier.show({
             type: "error",
             message: `Thêm mới không thành công! ${err}`,
             id: "create-error"
           });
+
+          event.confirm.reject();
         }
       );
   }
 
-  onDeleteConfirm(event): void {
+  onDeleteConfirm(event) {
     if (window.confirm("Bạn có chắc chắn muốn xóa người này không?")) {
-      this.loadingBenificiary = true;
       this.befiniciaryService
         .delete(event.data.id)
         .pipe(untilDestroyed(this))
         .subscribe(
-          (res: any) => {
-            this.loadingBenificiary = false;
-            event.confirm.resolve();
+          (res: any) => {           
             this.notifier.show({
               type: "success",
               message: "Xóa thành công!",
               id: "delete-success"
             });
+
+            event.confirm.resolve();
           },
-          (err: any) => {
-            this.loadingBenificiary = false;
-            event.confirm.reject();
+          (err: any) => {            
             this.notifier.show({
               type: "error",
               message: `Xóa không thành công! ${err}`,
               id: "delete-error"
             });
+
+            event.confirm.reject();
           }
         );
     } else {
@@ -139,32 +147,35 @@ export class BeneficiaryComponent implements OnInit, OnDestroy {
       .pipe(untilDestroyed(this))
       .subscribe(
         (res: any) => {
-          event.confirm.resolve();
+          
           this.notifier.show({
             type: "success",
             message: "Cập nhật thành công!",
             id: "save-success"
           });
+
+          event.confirm.resolve();
         },
         (err: HttpErrorResponse) => {
-          event.confirm.reject();
+          
           this.notifier.show({
             type: "error",
             message: `Cập nhật không thành công! ${err}`,
             id: "save-error"
           });
+
+          event.confirm.reject();
         }
       );
   }
 
-  ngOnInit() {
-    this.customerService.getBeneficiariesData();
-
+  loadData() {
+    this.loadingBenificiary = true;
     // Subscribe to user Details from UserService
     setTimeout(() => {
-      this.loadingBenificiary = true;
-      this.customerService.beneficiaries$
-        .pipe(takeUntil(this.destroy$))
+      let customerInfor = JSON.parse(localStorage.getItem('customerInfor'));
+      if(customerInfor != null){
+        this.befiniciaryService.getByCustomerCode(customerInfor.code).pipe(takeUntil(this.destroy$))
         .subscribe((response: Beneficiarys[]) => {
           this.loadingBenificiary = false;
           this.benificiariesData = response;
@@ -172,7 +183,17 @@ export class BeneficiaryComponent implements OnInit, OnDestroy {
         }, (err: any) => {
           this.loadingBenificiary = false;
         });
+      }
+      else{
+        this.route.navigate(['onboarding/login']);
+      }
+        
     }, 2000)
+  }
+
+  ngOnInit() {
+    this.customerService.getBeneficiariesData();
+    this.loadData();
   }
 
   ngOnDestroy() {
