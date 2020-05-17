@@ -9,4 +9,6 @@ public class TransactionResponse {
     String hash;
     ContentResponse content;
     String sign;
+
+    public TransactionResponse(){}
 }
