@@ -61,8 +61,8 @@ export class InternalComponent implements OnInit, OnDestroy {
     this.customerService.updateSelectedBeneficiaries(item);
   }
 
-  paymentChange(item: Payment){
-    this.paymentTransaction.paymentsId = item.paymentId;
+  paymentChange(item: any){
+    this.paymentTransaction.paymentsId = item && item.id || item && item.paymentId;
   }
 
   ngOnInit() {
@@ -117,7 +117,6 @@ export class InternalComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    debugger;
     this.loading = true;
     this.paymentTransactionService.internalPayment(this.paymentTransaction, this.selectedBenificiary)
     .pipe(untilDestroyed(this))
