@@ -12,13 +12,15 @@ public class MerchantCriteria {
     String content;
     BigDecimal money;
     String internalAccount;
+    Boolean fee;
 
-    public MerchantCriteria(Partner partner, String account, String content, BigDecimal money, String internalAccount){
+    public MerchantCriteria(Partner partner, String account, String content, BigDecimal money, String internalAccount, Boolean fee){
         this.partner = partner;
         this.account = account;
         this.content = content;
         this.money = money;
         this.internalAccount = internalAccount;
+        this.fee = fee;
     }
 
     public MerchantCriteria(Partner partner, String account) {
