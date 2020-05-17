@@ -256,7 +256,7 @@ public class PaymentTransactionUseCaseService {
         } else {
             Partner partner = partnerService.findByName(toPaymentTransaction.getBeneficiary().getBankName());
             if (!partner.isEmpty()){
-                MerchantCriteria merchantCriteria = new MerchantCriteria(partner, toPaymentTransaction.getBeneficiary().getAccount(), toPaymentTransaction.getContent(), money, toPaymentTransaction.getPayment().getAccount());
+                MerchantCriteria merchantCriteria = new MerchantCriteria(partner, toPaymentTransaction.getBeneficiary().getAccount(), toPaymentTransaction.getContent(), toPaymentTransaction.getMoney(), toPaymentTransaction.getPayment().getAccount(), fee);
                 MerchantDeposit merchantDeposit = merchantService.deposit(merchantCriteria);
                 if (merchantDeposit.isEmpty()){
                     throw new BankingServiceException("Could not transfer money");

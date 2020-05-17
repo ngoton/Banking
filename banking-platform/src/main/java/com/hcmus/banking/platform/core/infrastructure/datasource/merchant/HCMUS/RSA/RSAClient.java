@@ -96,7 +96,8 @@ public class RSAClient implements MerchantClient {
             PrivateKey privateKey = rsaCryptography.getPrivateKey();
             ObjectMapper objectMapper = new ObjectMapper();
 
-            TransactionContentRequest transactionContentRequest = new TransactionContentRequest(validity, merchantCriteria.getAccount(), transType, "SENDER", Double.valueOf(0), merchantCriteria.getMoney().abs().doubleValue(), merchantCriteria.getContent());
+            String feeType = merchantCriteria.getFee() ? "SENDER" : "RECEIVER";
+            TransactionContentRequest transactionContentRequest = new TransactionContentRequest(validity, merchantCriteria.getAccount(), transType, feeType, Double.valueOf(0), merchantCriteria.getMoney().abs().doubleValue(), merchantCriteria.getContent());
             TransactionHashRequest transactionHashRequest = new TransactionHashRequest(secretKey, transactionContentRequest);
             String hash = "";
             try {

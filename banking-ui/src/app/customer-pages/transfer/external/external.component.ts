@@ -57,7 +57,6 @@ export class ExternalComponent implements OnInit, OnDestroy {
       flatMap(
         (partners: Partners[]) => {
           this.partners = partners;
-          this.loading = false;
 
           let customerInfor = JSON.parse(localStorage.getItem('customerInfor'));
           if(customerInfor != null){
@@ -70,6 +69,7 @@ export class ExternalComponent implements OnInit, OnDestroy {
       )
     ).subscribe(
         ([payment, benificiaries]) => {
+          this.loading = false;
           this.accounts.push(payment[0]);
           this.benificiary = benificiaries.filter(b => b.bankName != environment.BANK_NAME);
         }
@@ -141,7 +141,7 @@ export class ExternalComponent implements OnInit, OnDestroy {
         });
       },
       (error: HttpErrorResponse) => {
-
+        this.loading = false;
       }
     );
   }
@@ -154,9 +154,8 @@ export class ExternalComponent implements OnInit, OnDestroy {
     this.customerService.updateSelectedBeneficiaries(item);
   }
 
-  paymentChange(item: Payment){
-    debugger;
-    this.paymentTransaction.paymentsId = item.paymentId;
+  paymentChange(item: any){
+    this.paymentTransaction.paymentsId = item && item.id || item && item.paymentId;
   }
 
   goHome() {

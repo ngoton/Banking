@@ -1,1 +1,33 @@
-<p>payment-history works!</p>
+<nb-card>
+    <nb-card-body>
+        <label class="search-ladataSourcebel" for="search">Tìm kiếm:</label>
+        <input nbInput [nbFilterInput]="dataSource" id="search" class="search-input">
+
+        <table [nbTreeGrid]="">
+
+            <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allColumns"></tr>
+            <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allColumns"></tr>
+
+            <ng-container [nbTreeGridColumnDef]="customColumn.bindingName">
+                <th nbTreeGridHeaderCell [nbSortHeader]="getSortDirection(customColumn.bindingName)" *nbTreeGridHeaderCellDef>
+                    {{customColumn.showName}}
+                </th>
+                <td nbTreeGridCell *nbTreeGridCellDef="let row">
+                    <ngx-fs-icon [kind]="row.data.transaction_type" [expanded]="row.expanded"></ngx-fs-icon>
+                    {{row.data[customColumn.bindingName]}}
+                </td>
+            </ng-container>
+
+            <ng-container *ngFor="let column of defaultColumns; let index = index" [nbTreeGridColumnDef]="column.bindingName"
+                [showOn]="getShowOn(index)">
+                <th nbTreeGridHeaderCell [nbSortHeader]="getSortDirection(column.bindingName)" *nbTreeGridHeaderCellDef>
+                    {{column.showName}}
+                </th>
+                <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data[column.bindingName] || '-'}}</td>
+            </ng-container>
+
+        </table>
+
+    </nb-card-body>
+</nb-card>
+
