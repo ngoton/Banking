@@ -56,7 +56,6 @@ export class InterceptorService implements HttpInterceptor {
                 }
               )
             }
-            this.auth.logout();
             break;
             case 403:
               return Observable.throw("Tài khoản này không có quyền truy cập!");

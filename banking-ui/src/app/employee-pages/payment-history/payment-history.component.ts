@@ -5,6 +5,7 @@ import {
   NbTreeGridDataSource,
   NbTreeGridDataSourceBuilder
 } from '@nebular/theme';
+import { DecimalPipe } from '@angular/common';
 
 
 interface TreeNode<T> {
@@ -25,8 +26,39 @@ interface FSEntry {
   templateUrl: './payment-history.component.html',
   styleUrls: ['./payment-history.component.scss']
 })
-export class PaymentHistoryComponent {
+export class PaymentHistoryComponent implements OnInit, OnDestroy {
  
+  customColumn = {bindingName: 'transaction_type', showName: 'Loại giao dịch'};
+  defaultColumns = [
+    {bindingName: 'content', showName: 'Nội dung'},
+    {bindingName: 'date', showName: 'Ngày'},
+    {bindingName: 'money', showName: 'Số tiền'}];
+  allColumns = ['transaction_type', 'content', 'date', 'money'];
+
+  treeNode: TreeNode<FSEntry> = {
+    data: {
+      transaction_type: '',
+      content: '',
+      date: '',
+      money: '',
+    },
+    children: []
+  };
+
+  private data: TreeNode<FSEntry>[] = [this.treeNode];
+  dataSource: NbTreeGridDataSource<FSEntry>;
+
+  sortColumn: string;
+  sortDirection: NbSortDirection = NbSortDirection.NONE;
+
+  constructor(private decimalPipe: DecimalPipe,
+              private dataSourceBuilder: NbTreeGridDataSourceBuilder<FSEntry>) {
+  }
+
+  ngOnInit(){
+    this.dataSource = this.dataSourceBuilder.create(this.data);
+  }
+  ngOnDestroy(){}
 }
 
 @Component({
