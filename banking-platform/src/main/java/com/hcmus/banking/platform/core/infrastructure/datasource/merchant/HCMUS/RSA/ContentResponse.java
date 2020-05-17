@@ -16,4 +16,6 @@ public class ContentResponse {
     BigDecimal fee;
     String status;
     String receiveAccount;
+
+    public ContentResponse(){}
 }

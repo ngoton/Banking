@@ -7,4 +7,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class AccountResponse {
     Account account;
+
+    public AccountResponse(){}
 }
