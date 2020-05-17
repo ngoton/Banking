@@ -14,4 +14,6 @@ public class Account {
     String email;
     @JsonFormat(pattern = "dd/MM/yy")
     LocalDate birthday;
+
+    public Account(){}
 }
