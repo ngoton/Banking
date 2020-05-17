@@ -81,8 +81,6 @@ export class TransactionHistoryComponent implements OnInit, OnDestroy {
   }
 
   loadSource() {
-    debugger;
-
     if(this.account != "") {
       this.customerService.getByPaymentAccount(this.account).pipe(untilDestroyed(this),
         mergeMap(

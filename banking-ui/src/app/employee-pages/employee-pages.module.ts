@@ -13,7 +13,8 @@ import {
   NbRadioModule,
   NbDatepicker,
   NbDatepickerModule,
-  NbDialogModule
+  NbDialogModule,
+  NbSortDirective
 } from '@nebular/theme';
 import { ThemeModule } from '../@theme/theme.module';
 import { CurrencyMaskModule } from 'ngx-currency-mask';
@@ -106,6 +107,6 @@ const customNotifierOptions: NotifierOptions = {
     NbDateFnsDateModule.forRoot({ format: 'yyyy-MM-dd' }),
     NotifierModule.withConfig(customNotifierOptions),
   ],
-  providers: [DecimalPipe]
+  providers: [DecimalPipe, NbSortDirective]
 })
 export class EmployeePagesModule { }

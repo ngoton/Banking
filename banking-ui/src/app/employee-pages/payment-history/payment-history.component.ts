@@ -35,17 +35,15 @@ export class PaymentHistoryComponent implements OnInit, OnDestroy {
     {bindingName: 'money', showName: 'Số tiền'}];
   allColumns = ['transaction_type', 'content', 'date', 'money'];
 
-  treeNode: TreeNode<FSEntry> = {
-    data: {
-      transaction_type: '',
-      content: '',
-      date: '',
-      money: '',
-    },
-    children: []
-  };
-
-  private data: TreeNode<FSEntry>[] = [this.treeNode];
+  private data: TreeNode<FSEntry>[] = [
+    {
+      data: { transaction_type: 'Projects', content: '', date:'', money: '' },
+      children: [
+        { data: { transaction_type: 'project-1.doc', content: 'doc', date: '17-05-2020', money: '100,000' } },
+        { data: { transaction_type: 'project-2.doc', content: 'doc', date: '17-05-2020', money: '100,000' } }
+      ],
+    }
+  ];
   dataSource: NbTreeGridDataSource<FSEntry>;
 
   sortColumn: string;
@@ -58,28 +56,47 @@ export class PaymentHistoryComponent implements OnInit, OnDestroy {
   ngOnInit(){
     this.dataSource = this.dataSourceBuilder.create(this.data);
   }
+
+  updateSort(sortRequest: NbSortRequest): void {
+    this.sortColumn = sortRequest.column;
+    this.sortDirection = sortRequest.direction;
+  }
+
+  getSortDirection(column: string): NbSortDirection {
+    if (this.sortColumn === column) {
+      return this.sortDirection;
+    }
+    return NbSortDirection.NONE;
+  }
+
+  getShowOn(index: number) {
+    const minWithForMultipleColumns = 400;
+    const nextColumnStep = 100;
+    return minWithForMultipleColumns + (nextColumnStep * index);
+  }
+
   ngOnDestroy(){}
 }
 
-// @Component({
-//   selector: 'ngx-fs-icon',
-//   template: `
-//     <nb-tree-grid-row-toggle
-//       [expanded]="expanded"
-//       *ngIf="isDir(); else fileIcon"
-//     >
-//     </nb-tree-grid-row-toggle>
-//     <ng-template #fileIcon>
-//       <nb-icon icon="corner-down-right"></nb-icon>
-//     </ng-template>
-//   `
-// })
+@Component({
+  selector: 'ngx-fs-icon',
+  template: `
+    <nb-tree-grid-row-toggle
+      [expanded]="expanded"
+      *ngIf="isDir(); else fileIcon"
+    >
+    </nb-tree-grid-row-toggle>
+    <ng-template #fileIcon>
+      <nb-icon icon="corner-down-right"></nb-icon>
+    </ng-template>
+  `
+})
 
-// export class FsIconComponent {
-//   @Input() kind: string;
-//   @Input() expanded: boolean;
+export class FsIconComponent {
+  @Input() kind: string;
+  @Input() expanded: boolean;
 
-//   isDir(): boolean {
-//     return this.kind !== null;
-//   }
-// }
+  isDir(): boolean {
+    return this.kind !== null;
+  }
+}
