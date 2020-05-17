@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NotifierService } from 'angular-notifier';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -15,7 +15,8 @@ import { DialogOTPPromptComponent } from '../dialog-otp-prompt/dialog-otp-prompt
   styleUrls: [
     './forgot-password.component.scss',
     "../../../../node_modules/sweetalert2/src/sweetalert2.scss"
-]
+],
+  encapsulation: ViewEncapsulation.None
 })
 export class ForgotPasswordComponent implements OnInit, OnDestroy {
   @ViewChild("customNotification", { static: true }) customNotificationTmpl;
@@ -101,8 +102,9 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
             })
         },
         (err: HttpErrorResponse) => {
+          debugger;
           this.notifications.hide("RequestPass"); // remove change password notification
-          this.errorAlert(err.message === undefined ? "Gửi yêu cầu thất bại!" : err);
+          this.errorAlert(err === undefined ? "Gửi yêu cầu thất bại!" : err);
         }
       );
     this.loading = false;

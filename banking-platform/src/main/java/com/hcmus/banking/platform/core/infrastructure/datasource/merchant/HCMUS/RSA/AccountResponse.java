@@ -9,4 +9,6 @@ public class AccountResponse {
     String accountId;
     String firstName;
     String lastName;
+
+    public AccountResponse(){}
 }
