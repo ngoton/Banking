@@ -7,7 +7,7 @@ import { PaymentTransactionService } from '../../_services/payment-transaction.s
 import { SavingTransactionService } from '../../_services/saving-transaction.service';
 import { forkJoin } from 'rxjs';
 import { DecimalPipe, formatDate, DatePipe } from '@angular/common';
-
+import { FsIconComponent } from '../employee-pages.component';
 
 interface TreeNode<T> {
   data: T;
@@ -81,8 +81,6 @@ export class TransactionHistoryComponent implements OnInit, OnDestroy {
   }
 
   loadSource() {
-    debugger;
-
     if(this.account != "") {
       this.customerService.getByPaymentAccount(this.account).pipe(untilDestroyed(this),
         mergeMap(
@@ -203,24 +201,24 @@ export class TransactionHistoryComponent implements OnInit, OnDestroy {
   ngOnDestroy(){}
 }
 
-@Component({
-  selector: 'ngx-fs-icon',
-  template: `
-    <nb-tree-grid-row-toggle
-      [expanded]="expanded"
-      *ngIf="isDir(); else fileIcon"
-    >
-    </nb-tree-grid-row-toggle>
-    <ng-template #fileIcon>
-      <nb-icon icon="corner-down-right"></nb-icon>
-    </ng-template>
-  `
-})
-export class FsIconComponent {
-  @Input() kind: string;
-  @Input() expanded: boolean;
+// @Component({
+//   selector: 'ngx-fs-icon',
+//   template: `
+//     <nb-tree-grid-row-toggle
+//       [expanded]="expanded"
+//       *ngIf="isDir(); else fileIcon"
+//     >
+//     </nb-tree-grid-row-toggle>
+//     <ng-template #fileIcon>
+//       <nb-icon icon="corner-down-right"></nb-icon>
+//     </ng-template>
+//   `
+// })
+// export class FsIconComponent {
+//   @Input() kind: string;
+//   @Input() expanded: boolean;
 
-  isDir(): boolean {
-    return this.kind !== null;
-  }
-}
+//   isDir(): boolean {
+//     return this.kind !== null;
+//   }
+// }

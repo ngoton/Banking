@@ -54,6 +54,10 @@ public class CustomerUseCaseService {
         if (!user.isEmpty()) {
             throw new BankingServiceException("Code is already exists");
         }
+        User user2 = userService.findByEmail(customer.getInfo().getUser().getEmail());
+        if (!user2.isEmpty()){
+            throw new BankingServiceException("Email is already exists");
+        }
 
         customerService.create(customer);
     }
