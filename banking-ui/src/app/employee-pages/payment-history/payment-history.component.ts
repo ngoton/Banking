@@ -6,6 +6,7 @@ import {
   NbTreeGridDataSourceBuilder
 } from '@nebular/theme';
 import { DecimalPipe } from '@angular/common';
+import { FsIconComponent } from '../employee-pages.component';
 
 
 interface TreeNode<T> {
@@ -76,27 +77,4 @@ export class PaymentHistoryComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(){}
-}
-
-@Component({
-  selector: 'ngx-fs-icon',
-  template: `
-    <nb-tree-grid-row-toggle
-      [expanded]="expanded"
-      *ngIf="isDir(); else fileIcon"
-    >
-    </nb-tree-grid-row-toggle>
-    <ng-template #fileIcon>
-      <nb-icon icon="corner-down-right"></nb-icon>
-    </ng-template>
-  `
-})
-
-export class FsIconComponent {
-  @Input() kind: string;
-  @Input() expanded: boolean;
-
-  isDir(): boolean {
-    return this.kind !== null;
-  }
 }

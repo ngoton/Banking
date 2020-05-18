@@ -22,7 +22,7 @@ import { CurrencyMaskModule } from 'ngx-currency-mask';
 import { EmployeePagesRoutingModule } from './employee-pages-routing.module';
 import {EmployeePagesComponent} from './employee-pages.component';
 import { TransactionHistoryComponent } from './transaction-history/transaction-history.component';
-import { FsIconComponent } from './transaction-history/transaction-history.component';
+import { FsIconComponent } from './employee-pages.component';
 import { DepositAccountComponent } from './deposit-account/deposit-account.component';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
