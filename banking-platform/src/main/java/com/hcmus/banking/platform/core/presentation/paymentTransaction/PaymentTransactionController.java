@@ -139,6 +139,11 @@ public class PaymentTransactionController {
         Customer customer = customerService.findByUserId(user.getId());
         Beneficiary beneficiary = beneficiaryService.findByCustomerAccount(paymentTransactionRequest.beneficiaryAccount, customer.getId());
         Payment payment = paymentService.findById(paymentTransactionRequest.paymentId);
+        BigDecimal money = payment.getBalance().subtract(paymentTransactionRequest.money);
+        if (money.signum() < 0) {
+            throw new BankingServiceException("Not enough money");
+        }
+
         if (beneficiary.isEmpty()) {
             Beneficiary newBeneficiary = new Beneficiary(paymentTransactionRequest.name, paymentTransactionRequest.shortName, paymentTransactionRequest.beneficiaryAccount, paymentTransactionRequest.bankName, customer, Created.ofEmpty());
             if (newBeneficiary.isInternal()) {
@@ -164,6 +169,11 @@ public class PaymentTransactionController {
         Customer customer = customerService.findByUserId(user.getId());
         Beneficiary beneficiary = beneficiaryService.findByCustomerAccount(paymentTransactionRequest.beneficiaryAccount, customer.getId());
         Payment payment = paymentService.findById(paymentTransactionRequest.paymentId);
+        BigDecimal money = payment.getBalance().subtract(paymentTransactionRequest.money);
+        if (money.signum() < 0) {
+            throw new BankingServiceException("Not enough money");
+        }
+
         if (beneficiary.isEmpty()) {
             Beneficiary newBeneficiary = new Beneficiary(paymentTransactionRequest.name, paymentTransactionRequest.shortName, paymentTransactionRequest.beneficiaryAccount, paymentTransactionRequest.bankName, customer, Created.ofEmpty());
             beneficiaryService.create(newBeneficiary);
