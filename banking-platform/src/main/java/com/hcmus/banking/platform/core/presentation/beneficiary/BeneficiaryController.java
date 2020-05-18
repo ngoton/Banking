@@ -2,10 +2,13 @@ package com.hcmus.banking.platform.core.presentation.beneficiary;
 
 import com.hcmus.banking.platform.core.application.admin.BeneficiaryUseCaseService;
 import com.hcmus.banking.platform.core.application.admin.CustomerUseCaseService;
+import com.hcmus.banking.platform.core.application.admin.PaymentUseCaseService;
 import com.hcmus.banking.platform.core.presentation.advice.UserAdvice;
 import com.hcmus.banking.platform.domain.beneficiary.Beneficiary;
 import com.hcmus.banking.platform.domain.customer.Customer;
+import com.hcmus.banking.platform.domain.exception.BankingServiceException;
 import com.hcmus.banking.platform.domain.exception.NotFoundException;
+import com.hcmus.banking.platform.domain.payment.Payment;
 import com.hcmus.banking.platform.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,6 +26,7 @@ import java.util.List;
 public class BeneficiaryController {
     private final BeneficiaryUseCaseService beneficiaryService;
     private final CustomerUseCaseService customerService;
+    private final PaymentUseCaseService paymentService;
 
     @GetMapping
     public Page<BeneficiaryResponse> findAllBy(Pageable pageable) {
@@ -79,8 +83,13 @@ public class BeneficiaryController {
     public void create(@Valid @RequestBody BeneficiaryRequest beneficiaryRequest, @ModelAttribute("user") User user) {
         Customer customer = customerService.findByUserId(user.getId());
         if (customer.isEmpty()) {
-            throw new NotFoundException();
+            throw new BankingServiceException("Not found");
         }
+        Payment payment = paymentService.findByAccount(beneficiaryRequest.account);
+        if (payment.isEmpty() && beneficiaryRequest.bankName.equals(Beneficiary.BANK_NAME)){
+            throw new BankingServiceException("Account does not exists");
+        }
+
         Beneficiary beneficiary = BeneficiaryRequest.toBeneficiary(beneficiaryRequest, customer);
         beneficiaryService.create(beneficiary);
     }
@@ -89,7 +98,11 @@ public class BeneficiaryController {
     public void update(@Valid @RequestBody BeneficiaryRequest beneficiaryRequest, @ModelAttribute("user") User user) {
         Customer customer = customerService.findByUserId(user.getId());
         if (customer.isEmpty()) {
-            throw new NotFoundException();
+            throw new BankingServiceException("Not found");
+        }
+        Payment payment = paymentService.findByAccount(beneficiaryRequest.account);
+        if (payment.isEmpty() && beneficiaryRequest.bankName.equals(Beneficiary.BANK_NAME)){
+            throw new BankingServiceException("Account does not exists");
         }
         Beneficiary beneficiary = BeneficiaryRequest.toBeneficiary(beneficiaryRequest, customer);
         beneficiaryService.update(beneficiary);
