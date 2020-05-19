@@ -23,7 +23,7 @@
                 <th nbTreeGridHeaderCell [nbSortHeader]="getSortDirection(column.bindingName)" *nbTreeGridHeaderCellDef>
                     {{column.showName}}
                 </th>
-                <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data[column.bindingName] || '-'}}</td>
+                <td nbTreeGridCell *nbTreeGridCellDef="let row"></td>
             </ng-container>
 
         </table>

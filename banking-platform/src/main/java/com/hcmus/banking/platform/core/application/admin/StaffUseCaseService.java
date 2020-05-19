@@ -60,6 +60,11 @@ public class StaffUseCaseService {
             throw new BankingServiceException("Code is already exists");
         }
 
+        User user2 = userService.findByEmail(staff.getInfo().getUser().getEmail());
+        if (!user2.isEmpty()){
+            throw new BankingServiceException("Email is already exists");
+        }
+
         staffService.create(staff);
     }
 

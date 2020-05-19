@@ -118,7 +118,7 @@ export class UserService implements OnDestroy {
   }
 
   resetPassword(data, token): Observable<any> {
-    localStorage.setItem("token", token);
+    localStorage.setItem("token", JSON.stringify(token));
 
     const PATH = this.USER_URL + `/reset-password`;
 

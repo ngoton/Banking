@@ -117,7 +117,6 @@ export class ExternalComponent implements OnInit, OnDestroy {
     
   }
 
-
   onSubmit() {
     this.loading = true;
     this.paymentTransactionService.externalPayment(this.paymentTransaction, this.selectedBenificiary)

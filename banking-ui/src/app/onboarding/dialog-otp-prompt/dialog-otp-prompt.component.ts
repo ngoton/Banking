@@ -28,6 +28,9 @@ export class DialogOTPPromptComponent implements OnInit, OnDestroy {
       (res: any) => {
         this.sendingOTP = false;
         this.ref.close(res);
+      },
+      (err: any) => {
+        
       }
     );
     

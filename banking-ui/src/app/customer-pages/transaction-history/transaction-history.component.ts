@@ -128,11 +128,13 @@ export class TransactionHistoryComponent implements OnInit, OnDestroy {
     .subscribe(
       success => {
         success[0].content.forEach(item => {
+          const dateTimeArr: any[] = item.createdAt.split(" ", 2);
+
           let node : TreeNode<FSEntry> = {
             data: {
               transaction_type: null,
               content: item.content,
-              date: item.createdAt,
+              date: dateTimeArr.length != 0 ? dateTimeArr[0] : "",
               money: this.decimalPipe.transform(
                 item.money*(-1),
                 "1.0-3"
@@ -143,11 +145,13 @@ export class TransactionHistoryComponent implements OnInit, OnDestroy {
         });
 
         success[1].content.forEach(item => {
+          const dateTimeArr: any[] = item.createdAt.split(" ", 2);
+
           let node : TreeNode<FSEntry> = {
             data: {
               transaction_type: null,
               content: item.content,
-              date: item.createdAt,
+              date: dateTimeArr.length != 0 ? dateTimeArr[0] : "",
               money: this.decimalPipe.transform(
                 item.money*(-1),
                 "1.0-3"
@@ -170,11 +174,13 @@ export class TransactionHistoryComponent implements OnInit, OnDestroy {
       .subscribe(
         success => {
           success[0].content.forEach(item => {
+            const dateTimeArr: any[] = item.createdAt.split(" ", 2);
+
             let node : TreeNode<FSEntry> = {
               data: {
                 transaction_type: null,
                 content: item.content,
-                date: item.createdAt,
+                date: dateTimeArr.length != 0 ? dateTimeArr[0] : "",
                 money: this.decimalPipe.transform(
                   item.money,
                   "1.0-3"
@@ -185,11 +191,13 @@ export class TransactionHistoryComponent implements OnInit, OnDestroy {
           });
 
           success[1].content.forEach(item => {
+            const dateTimeArr: any[] = item.createdAt.split(" ", 2);
+
             let node : TreeNode<FSEntry> = {
               data: {
                 transaction_type: null,
                 content: item.content,
-                date: item.createdAt,
+                date: dateTimeArr.length != 0 ? dateTimeArr[0] : "",
                 money: this.decimalPipe.transform(
                   item.money,
                   "1.0-3"

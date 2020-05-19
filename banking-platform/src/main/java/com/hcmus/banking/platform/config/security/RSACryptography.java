@@ -7,16 +7,13 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.*;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.stream.Collectors;
 
 @Component
 public class RSACryptography {
@@ -45,8 +42,11 @@ public class RSACryptography {
     }
 
     public PrivateKey getPrivateKey() throws InvalidKeySpecException, IOException {
-        File file = new File(getClass().getResource(privateFile).getFile());
-        String privateKeyContent = new String(Files.readAllBytes(Paths.get(file.getPath())), "UTF-8");
+        ClassLoader classLoader = getClass().getClassLoader();
+        InputStream inputStream = classLoader.getResourceAsStream(privateFile);
+        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+        String privateKeyContent = br.lines()
+                .collect(Collectors.joining(System.lineSeparator()));
         return getPrivateKey(privateKeyContent);
     }
 
@@ -59,8 +59,11 @@ public class RSACryptography {
     }
 
     public PublicKey getPublicKey() throws InvalidKeySpecException, IOException {
-        File file = new File(getClass().getResource(publicFile).getFile());
-        String publicKeyContent = new String(Files.readAllBytes(Paths.get(file.getPath())), "UTF-8");
+        ClassLoader classLoader = getClass().getClassLoader();
+        InputStream inputStream = classLoader.getResourceAsStream(privateFile);
+        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+        String publicKeyContent = br.lines()
+                .collect(Collectors.joining(System.lineSeparator()));
         return getPublicKey(publicKeyContent);
     }
 
