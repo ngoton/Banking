@@ -55,8 +55,8 @@ banking:
         token-refresh-validity: 86400
         base64-secret: NjUzNzc0YTkxZmU0YzAyYzVjODUyYTcwNDM4MzQ2OTQ=
     rsa:
-      private-file: /keypair/private_key
-      public-file: /keypair/public_key
+      private-file: keypair/private_key
+      public-file: keypair/public_key
 merchant:
   pgp:
     account: /AnotherInternetbanking/InfoAccount
