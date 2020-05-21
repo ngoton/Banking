@@ -6,6 +6,7 @@ import com.hcmus.banking.platform.config.security.RSACryptography;
 import com.hcmus.banking.platform.core.application.user.PasswordService;
 import com.hcmus.banking.platform.core.infrastructure.datasource.merchant.MerchantClient;
 import com.hcmus.banking.platform.core.infrastructure.datasource.merchant.MerchantCriteria;
+import com.hcmus.banking.platform.domain.exception.BankingServiceException;
 import com.hcmus.banking.platform.domain.merchant.MerchantAccount;
 import com.hcmus.banking.platform.domain.merchant.MerchantDeposit;
 import com.hcmus.banking.platform.domain.merchant.MerchantTransfer;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.security.PrivateKey;
+import java.security.PublicKey;
 
 @Primary
 @Component("RSAClient")
@@ -105,7 +107,7 @@ public class RSAClient implements MerchantClient {
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
-            String signature = rsaCryptography.sign(objectMapper.writeValueAsString(transactionContentRequest), privateKey);
+            String signature = rsaCryptography.sign(objectMapper.writeValueAsString(transactionHashRequest), privateKey);
 
             TransactionRequest transactionRequest = new TransactionRequest(hash, transactionContentRequest, signature);
 
@@ -119,6 +121,12 @@ public class RSAClient implements MerchantClient {
 
 
             ResponseEntity<TransactionResponse> response = restTemplate.postForEntity(transactionUrl, request, TransactionResponse.class);
+
+            PublicKey publicKey = rsaCryptography.getPublicKey(merchantCriteria.getPartner().getPublicKey());
+            if (!rsaCryptography.verify(objectMapper.writeValueAsString(response.getBody().getContent()), response.getBody().getSign(), publicKey)){
+                throw new BankingServiceException("Could not verify signature");
+            }
+
             return response;
         }catch (Exception e){
 
