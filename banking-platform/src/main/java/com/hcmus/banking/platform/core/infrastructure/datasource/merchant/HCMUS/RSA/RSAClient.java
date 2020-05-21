@@ -105,7 +105,7 @@ public class RSAClient implements MerchantClient {
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
-            String signature = rsaCryptography.sign(objectMapper.writeValueAsString(transactionContentRequest), privateKey);
+            String signature = rsaCryptography.sign(objectMapper.writeValueAsString(transactionHashRequest), privateKey);
 
             TransactionRequest transactionRequest = new TransactionRequest(hash, transactionContentRequest, signature);
 
