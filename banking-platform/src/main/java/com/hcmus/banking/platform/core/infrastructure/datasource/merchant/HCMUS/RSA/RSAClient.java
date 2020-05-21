@@ -123,7 +123,7 @@ public class RSAClient implements MerchantClient {
             ResponseEntity<TransactionResponse> response = restTemplate.postForEntity(transactionUrl, request, TransactionResponse.class);
             
             PublicKey publicKey = rsaCryptography.getPublicKey(merchantCriteria.getPartner().getPublicKey());
-            if (!rsaCryptography.verify(objectMapper.writeValueAsString(response.getBody().getContent()), response.getBody().getSign(), publicKey)){
+            if (!rsaCryptography.verify(response.getBody().getHash(), response.getBody().getSign(), publicKey)){
                 throw new BankingServiceException("Could not verify signature");
             }
             
