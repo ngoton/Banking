@@ -226,7 +226,7 @@ public class PaymentTransactionUseCaseService {
         if (fee) {
             PaymentTransaction paymentTransactionFee = new PaymentTransaction(
                     RandomUtils.generateTransactionCode(),
-                    PaymentTransaction.internalFee(),
+                    transFee,
                     String.format("Phí chuyển khoản ref: %s", paymentTransaction.getCode()),
                     Created.ofEmpty(),
                     toPaymentTransaction.getPayment()
