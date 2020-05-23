@@ -1,33 +1,72 @@
 <nb-card>
     <nb-card-body>
-        <label class="search-ladataSourcebel" for="search">Tìm kiếm:</label>
-        <input nbInput [nbFilterInput]="dataSource" id="search" class="search-input">
+        <div class="form-group row">
+             <label for="inputAccount" class="label col-sm-3 col-form-label">Ngân hàng</label>
+            <div class="col-sm-3">
+                <nb-select name="accountNumber" fullWidth placeholder="Chọn tài khoản">
+                <nb-option>Tấtt cả</nb-option>
+                </nb-select>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class=" form-control-group">
+                <label class="label">Từ ngày:</label>
+                <input nbInput
+                fullWidth
+                readonly
+                name="birthdate"
+                id="input-birthdate"
+                [nbDatepicker]="datepicker"
+                [formControl]=""
+                placeholder="Ngày tháng năm sinh"
+                fieldSize="large"
+                autofocus />
+                <nb-datepicker #datepicker format="yyyy-MM-dd"></nb-datepicker>
+            </div>
+            <div class="form-control-group">
+                <label class="label">Tới ngày:</label>
+                <input nbInput
+                    fullWidth
+                    readonly
+                    name="birthdate"
+                    id="input-birthdate"
+                    [nbDatepicker]="datepicker"
+                    placeholder="Ngày tháng năm sinh"
+                    fieldSize="large"
+                    autofocus/>
+                <nb-datepicker #datepicker format="yyyy-MM-dd"></nb-datepicker>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="offset-sm-3 col-sm-9">
+                <button type="submit" nbButton status="primary">Submit</button>
+            </div>
+        </div>
 
-        <table [nbTreeGrid]="">
+        <table [nbTreeGrid]="dataSource" [nbSort]="dataSource" (sort)="updateSort($event)">
 
             <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allColumns"></tr>
             <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allColumns"></tr>
 
             <ng-container [nbTreeGridColumnDef]="customColumn.bindingName">
                 <th nbTreeGridHeaderCell [nbSortHeader]="getSortDirection(customColumn.bindingName)" *nbTreeGridHeaderCellDef>
-                    {% comment %} {{customColumn.showName}} {% endcomment %}
+                    {{customColumn.showName}}
                 </th>
                 <td nbTreeGridCell *nbTreeGridCellDef="let row">
                     <ngx-fs-icon [kind]="row.data.transaction_type" [expanded]="row.expanded"></ngx-fs-icon>
-                    {% comment %} {{row.data[customColumn.bindingName]}} {% endcomment %}
+                    {{row.data[customColumn.bindingName]}}
                 </td>
             </ng-container>
 
             <ng-container *ngFor="let column of defaultColumns; let index = index" [nbTreeGridColumnDef]="column.bindingName"
                 [showOn]="getShowOn(index)">
                 <th nbTreeGridHeaderCell [nbSortHeader]="getSortDirection(column.bindingName)" *nbTreeGridHeaderCellDef>
-                    {% comment %} {{column.showName}} {% endcomment %}
+                    {{column.showName}}
                 </th>
-                <td nbTreeGridCell *nbTreeGridCellDef="let row"></td>
+                <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data[column.bindingName] || '-'}}</td>
             </ng-container>
 
         </table>
 
     </nb-card-body>
 </nb-card>
-

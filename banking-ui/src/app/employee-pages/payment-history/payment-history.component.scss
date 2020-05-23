@@ -45,3 +45,13 @@
         }
     }
 }
+
+.form-control-group {
+    margin-bottom: 2rem;
+}
+
+.form-control-group.accept-group {
+    display: flex;
+    justify-content: space-between;
+    margin: 2rem 0;
+}
