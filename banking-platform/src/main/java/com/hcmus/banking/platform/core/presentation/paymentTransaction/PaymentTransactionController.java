@@ -37,44 +37,44 @@ public class PaymentTransactionController {
     }
 
     @GetMapping("/history/{id}")
-    public Page<PaymentTransactionResponse> findAllByPaymentId(@PathVariable Long id, Pageable pageable) {
-        Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByPaymentId(id, pageable);
+    public Page<PaymentTransactionResponse> findAllByPaymentId(@PathVariable Long id, PaymentHistoryRequest paymentHistoryRequest, Pageable pageable) {
+        Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByPaymentId(id, paymentHistoryRequest, pageable);
         return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
     }
 
     @GetMapping("/history/paymentTransfer/{id}")
-    public Page<PaymentTransactionResponse> findAllByPaymentIdAndMoneyLessThan(@PathVariable Long id, Pageable pageable) {
-        Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByPaymentIdAndMoneyLessThan(id, pageable);
+    public Page<PaymentTransactionResponse> findAllByPaymentIdAndMoneyLessThan(@PathVariable Long id, PaymentHistoryRequest paymentHistoryRequest, Pageable pageable) {
+        Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByPaymentIdAndMoneyLessThan(id, paymentHistoryRequest, pageable);
         return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
     }
 
     @GetMapping("/history/paymentCredit/{id}")
-    public Page<PaymentTransactionResponse> findAllByPaymentCredit(@PathVariable Long id, Pageable pageable) {
-        Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByCredit(id, pageable);
+    public Page<PaymentTransactionResponse> findAllByPaymentCredit(@PathVariable Long id, PaymentHistoryRequest paymentHistoryRequest, Pageable pageable) {
+        Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByCredit(id, paymentHistoryRequest, pageable);
         return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
     }
 
     @GetMapping("/history/paymentCredit/customer/{id}")
-    public Page<PaymentTransactionResponse> findAllByPaymentCreditCustomer(@PathVariable Long id, Pageable pageable) {
-        Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByCreditCustomer(id, pageable);
+    public Page<PaymentTransactionResponse> findAllByPaymentCreditCustomer(@PathVariable Long id, PaymentHistoryRequest paymentHistoryRequest, Pageable pageable) {
+        Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByCreditCustomer(id, paymentHistoryRequest, pageable);
         return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
     }
 
     @GetMapping("/history/paymentReceive/{id}")
-    public Page<PaymentTransactionResponse> findAllByPaymentIdAndMoneyGreaterThan(@PathVariable Long id, Pageable pageable) {
-        Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByPaymentIdAndMoneyGreaterThan(id, pageable);
+    public Page<PaymentTransactionResponse> findAllByPaymentIdAndMoneyGreaterThan(@PathVariable Long id, PaymentHistoryRequest paymentHistoryRequest, Pageable pageable) {
+        Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByPaymentIdAndMoneyGreaterThan(id, paymentHistoryRequest, pageable);
         return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
     }
 
     @GetMapping("/history/paymentTransfer/customer/{id}")
-    public Page<PaymentTransactionResponse> findAllByPaymentCustomerIdAndMoneyLessThan(@PathVariable Long id, Pageable pageable) {
-        Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByPaymentCustomerIdAndMoneyLessThan(id, pageable);
+    public Page<PaymentTransactionResponse> findAllByPaymentCustomerIdAndMoneyLessThan(@PathVariable Long id, PaymentHistoryRequest paymentHistoryRequest, Pageable pageable) {
+        Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByPaymentCustomerIdAndMoneyLessThan(id, paymentHistoryRequest, pageable);
         return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
     }
 
     @GetMapping("/history/paymentReceive/customer/{id}")
-    public Page<PaymentTransactionResponse> findAllByPaymentCustomerIdAndMoneyGreaterThan(@PathVariable Long id, Pageable pageable) {
-        Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByPaymentCustomerIdAndMoneyGreaterThan(id, pageable);
+    public Page<PaymentTransactionResponse> findAllByPaymentCustomerIdAndMoneyGreaterThan(@PathVariable Long id, PaymentHistoryRequest paymentHistoryRequest, Pageable pageable) {
+        Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByPaymentCustomerIdAndMoneyGreaterThan(id, paymentHistoryRequest, pageable);
         return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
     }
 
@@ -91,8 +91,8 @@ public class PaymentTransactionController {
     }
 
     @GetMapping("/historyBeneficiary/{id}")
-    public Page<PaymentTransactionResponse> findAllByBeneficiary(@PathVariable Long id, Pageable pageable) {
-        Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByBeneficiary(id, pageable);
+    public Page<PaymentTransactionResponse> findAllByBeneficiary(@PathVariable Long id, PaymentHistoryRequest paymentHistoryRequest, Pageable pageable) {
+        Page<PaymentTransaction> paymentTransactions = paymentTransactionService.findAllByBeneficiary(id, paymentHistoryRequest, pageable);
         return PaymentTransactionResponses.ofPage(paymentTransactions, pageable);
     }
 
