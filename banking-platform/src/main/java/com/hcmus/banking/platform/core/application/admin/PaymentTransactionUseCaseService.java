@@ -226,7 +226,7 @@ public class PaymentTransactionUseCaseService {
         if (fee) {
             PaymentTransaction paymentTransactionFee = new PaymentTransaction(
                     RandomUtils.generateTransactionCode(),
-                    PaymentTransaction.internalFee(),
+                    transFee,
                     String.format("Phí chuyển khoản ref: %s", paymentTransaction.getCode()),
                     Created.ofEmpty(),
                     toPaymentTransaction.getPayment()
@@ -240,7 +240,7 @@ public class PaymentTransactionUseCaseService {
         }
 
         if (toPaymentTransaction.getBeneficiary().isInternal()) {
-            Payment receiptPayment = paymentService.findByAccount(toPaymentTransaction.getBeneficiary().getAccount());
+          Payment receiptPayment = paymentService.findByAccount(toPaymentTransaction.getBeneficiary().getAccount());
             PaymentTransaction receiptTransaction = new PaymentTransaction(
                     RandomUtils.generateTransactionCode(),
                     money,
@@ -252,6 +252,7 @@ public class PaymentTransactionUseCaseService {
 
             receiptPayment.setBalance(receiptPayment.getBalance().add(money));
             paymentService.create(receiptPayment);
+
         } else {
             Partner partner = partnerService.findByName(toPaymentTransaction.getBeneficiary().getBankName());
             if (!partner.isEmpty()){

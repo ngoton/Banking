@@ -13,7 +13,8 @@ import {
   NbRadioModule,
   NbDatepicker,
   NbDatepickerModule,
-  NbDialogModule
+  NbDialogModule,
+  NbSortDirective
 } from '@nebular/theme';
 import { ThemeModule } from '../@theme/theme.module';
 import { CurrencyMaskModule } from 'ngx-currency-mask';
@@ -21,7 +22,7 @@ import { CurrencyMaskModule } from 'ngx-currency-mask';
 import { EmployeePagesRoutingModule } from './employee-pages-routing.module';
 import {EmployeePagesComponent} from './employee-pages.component';
 import { TransactionHistoryComponent } from './transaction-history/transaction-history.component';
-import { FsIconComponent } from './transaction-history/transaction-history.component';
+import { FsIconComponent } from './employee-pages.component';
 import { DepositAccountComponent } from './deposit-account/deposit-account.component';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
@@ -106,6 +107,6 @@ const customNotifierOptions: NotifierOptions = {
     NbDateFnsDateModule.forRoot({ format: 'yyyy-MM-dd' }),
     NotifierModule.withConfig(customNotifierOptions),
   ],
-  providers: [DecimalPipe]
+  providers: [DecimalPipe, NbSortDirective]
 })
 export class EmployeePagesModule { }

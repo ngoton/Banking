@@ -120,7 +120,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         (err: HttpErrorResponse) => {
           this.logging = false;
           this.notifi.hide("login"); // remove login notification
-          this.errorAlert(err.message === undefined ? "Đăng nhập thất bại!" : err);
+          this.errorAlert(err === undefined ? "Đăng nhập thất bại!" : "Đăng nhập thất bại! " + err);
           console.log(err);
         }
       );
