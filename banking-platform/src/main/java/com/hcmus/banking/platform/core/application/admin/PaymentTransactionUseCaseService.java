@@ -12,6 +12,7 @@ import com.hcmus.banking.platform.core.application.partner.PartnerService;
 import com.hcmus.banking.platform.core.application.payment.PaymentService;
 import com.hcmus.banking.platform.core.application.paymentTransaction.PaymentTransactionService;
 import com.hcmus.banking.platform.core.infrastructure.datasource.merchant.MerchantCriteria;
+import com.hcmus.banking.platform.core.presentation.paymentTransaction.PaymentHistoryRequest;
 import com.hcmus.banking.platform.core.utils.RandomUtils;
 import com.hcmus.banking.platform.domain.beneficiary.Beneficiary;
 import com.hcmus.banking.platform.domain.credit.Credit;
@@ -79,66 +80,66 @@ public class PaymentTransactionUseCaseService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PaymentTransaction> findAllByPaymentId(Long id, Pageable pageable) {
+    public Page<PaymentTransaction> findAllByPaymentId(Long id, PaymentHistoryRequest paymentHistoryRequest, Pageable pageable) {
         Payment payment = paymentService.findById(id);
         if (payment.isEmpty()) {
             throw new BankingServiceException("Payment does not exist!!!");
         }
-        return paymentTransactionService.findAllByPaymentId(id, pageable);
+        return paymentTransactionService.findAllByPaymentId(id, paymentHistoryRequest, pageable);
     }
 
     @Transactional(readOnly = true)
-    public Page<PaymentTransaction> findAllByPaymentIdAndMoneyGreaterThan(Long id, Pageable pageable) {
+    public Page<PaymentTransaction> findAllByPaymentIdAndMoneyGreaterThan(Long id, PaymentHistoryRequest paymentHistoryRequest, Pageable pageable) {
         Payment payment = paymentService.findById(id);
         if (payment.isEmpty()) {
             throw new BankingServiceException("Payment does not exist!!!");
         }
-        return paymentTransactionService.findAllByPaymentIdAndMoneyGreaterThan(id, pageable);
+        return paymentTransactionService.findAllByPaymentIdAndMoneyGreaterThan(id, paymentHistoryRequest, pageable);
     }
 
     @Transactional(readOnly = true)
-    public Page<PaymentTransaction> findAllByPaymentCustomerIdAndMoneyGreaterThan(Long id, Pageable pageable) {
+    public Page<PaymentTransaction> findAllByPaymentCustomerIdAndMoneyGreaterThan(Long id, PaymentHistoryRequest paymentHistoryRequest, Pageable pageable) {
         Customer customer = customerService.findById(id);
         if (customer.isEmpty()) {
             throw new BankingServiceException("Customer does not exist!!!");
         }
-        return paymentTransactionService.findAllByPaymentCustomerIdAndMoneyGreaterThan(id, pageable);
+        return paymentTransactionService.findAllByPaymentCustomerIdAndMoneyGreaterThan(id, paymentHistoryRequest, pageable);
     }
 
     @Transactional(readOnly = true)
-    public Page<PaymentTransaction> findAllByPaymentCustomerIdAndMoneyLessThan(Long id, Pageable pageable) {
+    public Page<PaymentTransaction> findAllByPaymentCustomerIdAndMoneyLessThan(Long id, PaymentHistoryRequest paymentHistoryRequest, Pageable pageable) {
         Customer customer = customerService.findById(id);
         if (customer.isEmpty()) {
             throw new BankingServiceException("Customer does not exist!!!");
         }
-        return paymentTransactionService.findAllByPaymentCustomerIdAndMoneyLessThan(id, pageable);
+        return paymentTransactionService.findAllByPaymentCustomerIdAndMoneyLessThan(id, paymentHistoryRequest, pageable);
     }
 
     @Transactional(readOnly = true)
-    public Page<PaymentTransaction> findAllByCredit(Long id, Pageable pageable) {
+    public Page<PaymentTransaction> findAllByCredit(Long id, PaymentHistoryRequest paymentHistoryRequest, Pageable pageable) {
         Customer customer = customerService.findByPaymentId(id);
         if (customer.isEmpty()) {
             throw new BankingServiceException("Customer does not exist!!!");
         }
-        return paymentTransactionService.findAllByCredit(customer.getId(), pageable);
+        return paymentTransactionService.findAllByCredit(customer.getId(), paymentHistoryRequest, pageable);
     }
 
     @Transactional(readOnly = true)
-    public Page<PaymentTransaction> findAllByCreditCustomer(Long id, Pageable pageable) {
+    public Page<PaymentTransaction> findAllByCreditCustomer(Long id, PaymentHistoryRequest paymentHistoryRequest, Pageable pageable) {
         Customer customer = customerService.findById(id);
         if (customer.isEmpty()) {
             throw new BankingServiceException("Customer does not exist!!!");
         }
-        return paymentTransactionService.findAllByCredit(customer.getId(), pageable);
+        return paymentTransactionService.findAllByCredit(customer.getId(), paymentHistoryRequest, pageable);
     }
 
     @Transactional(readOnly = true)
-    public Page<PaymentTransaction> findAllByPaymentIdAndMoneyLessThan(Long id, Pageable pageable) {
+    public Page<PaymentTransaction> findAllByPaymentIdAndMoneyLessThan(Long id, PaymentHistoryRequest paymentHistoryRequest, Pageable pageable) {
         Payment payment = paymentService.findById(id);
         if (payment.isEmpty()) {
             throw new BankingServiceException("Payment does not exist!!!");
         }
-        return paymentTransactionService.findAllByPaymentIdAndMoneyLessThan(id, pageable);
+        return paymentTransactionService.findAllByPaymentIdAndMoneyLessThan(id, paymentHistoryRequest, pageable);
     }
 
     @Transactional(readOnly = true)
@@ -151,12 +152,12 @@ public class PaymentTransactionUseCaseService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PaymentTransaction> findAllByBeneficiary(Long id, Pageable pageable) {
+    public Page<PaymentTransaction> findAllByBeneficiary(Long id, PaymentHistoryRequest paymentHistoryRequest, Pageable pageable) {
         Beneficiary beneficiary = beneficiaryService.findById(id);
         if (beneficiary.isEmpty()) {
             throw new BankingServiceException("Beneficiary does not exist!!!");
         }
-        return paymentTransactionService.findAllByBeneficiary(id, pageable);
+        return paymentTransactionService.findAllByBeneficiary(id, paymentHistoryRequest, pageable);
     }
 
     @Transactional
@@ -240,7 +241,7 @@ public class PaymentTransactionUseCaseService {
         }
 
         if (toPaymentTransaction.getBeneficiary().isInternal()) {
-          Payment receiptPayment = paymentService.findByAccount(toPaymentTransaction.getBeneficiary().getAccount());
+            Payment receiptPayment = paymentService.findByAccount(toPaymentTransaction.getBeneficiary().getAccount());
             PaymentTransaction receiptTransaction = new PaymentTransaction(
                     RandomUtils.generateTransactionCode(),
                     money,
@@ -255,10 +256,10 @@ public class PaymentTransactionUseCaseService {
 
         } else {
             Partner partner = partnerService.findByName(toPaymentTransaction.getBeneficiary().getBankName());
-            if (!partner.isEmpty()){
+            if (!partner.isEmpty()) {
                 MerchantCriteria merchantCriteria = new MerchantCriteria(partner, toPaymentTransaction.getBeneficiary().getAccount(), toPaymentTransaction.getContent(), toPaymentTransaction.getMoney(), toPaymentTransaction.getPayment().getAccount(), fee);
                 MerchantDeposit merchantDeposit = merchantService.deposit(merchantCriteria);
-                if (merchantDeposit.isEmpty()){
+                if (merchantDeposit.isEmpty()) {
                     throw new BankingServiceException("Could not transfer money");
                 }
             }
@@ -325,9 +326,9 @@ public class PaymentTransactionUseCaseService {
             return paymentTransactionService.findAllByPartnerName(partnerName, pageable);
         }
         if (Objects.isNull(partnerName) && Objects.nonNull(startDate) && Objects.nonNull(endDate)) {
-            return paymentTransactionService.findAllByDate(new CreatedAt(startDate.atStartOfDay()), new CreatedAt(endDate.atStartOfDay()), pageable);
+            return paymentTransactionService.findAllByDate(new CreatedAt(startDate.atStartOfDay()), new CreatedAt(endDate.plusDays(1).atStartOfDay()), pageable);
         }
 
-        return paymentTransactionService.findAllByPartner(partnerName, new CreatedAt(startDate.atStartOfDay()), new CreatedAt(endDate.atStartOfDay()), pageable);
+        return paymentTransactionService.findAllByPartner(partnerName, new CreatedAt(startDate.atStartOfDay()), new CreatedAt(endDate.plusDays(1).atStartOfDay()), pageable);
     }
 }

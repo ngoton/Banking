@@ -1,6 +1,7 @@
 package com.hcmus.banking.platform.core.application.paymentTransaction;
 
 import com.hcmus.banking.platform.core.infrastructure.datasource.paymentTransaction.PaymentTransactionRepository;
+import com.hcmus.banking.platform.core.presentation.paymentTransaction.PaymentHistoryRequest;
 import com.hcmus.banking.platform.domain.general.CreatedAt;
 import com.hcmus.banking.platform.domain.paymentTransaction.PaymentTransaction;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -20,33 +22,62 @@ public class PaymentTransactionService {
         return paymentTransactionRepository.findAllByOrderByIdDesc(pageable);
     }
 
+    private CreatedAt getStartDate(PaymentHistoryRequest paymentHistoryRequest) {
+        LocalDate startDate = LocalDate.now().minusDays(30);
 
-    public Page<PaymentTransaction> findAllByPaymentId(Long id, Pageable pageable) {
-        return paymentTransactionRepository.findAllByPaymentIdOrderByIdDesc(id, pageable);
+        if (Objects.nonNull(paymentHistoryRequest.getStartDate())) {
+            startDate = paymentHistoryRequest.getStartDate();
+        }
+        return new CreatedAt(startDate.atStartOfDay());
     }
 
-    public Page<PaymentTransaction> findAllByPaymentIdAndMoneyLessThan(Long id, Pageable pageable) {
-        return paymentTransactionRepository.findAllByPaymentIdAndMoneyLessThanOrderByIdDesc(id, BigDecimal.ZERO, pageable);
+    private CreatedAt getEndDate(PaymentHistoryRequest paymentHistoryRequest) {
+        LocalDate endDate = LocalDate.now();
+
+        if (Objects.nonNull(paymentHistoryRequest.getEndDate())) {
+            endDate = paymentHistoryRequest.getEndDate();
+        }
+        return new CreatedAt(endDate.plusDays(1).atStartOfDay());
     }
 
-    public Page<PaymentTransaction> findAllByPaymentIdAndMoneyGreaterThan(Long id, Pageable pageable) {
-        return paymentTransactionRepository.findAllByPaymentIdAndMoneyGreaterThanOrderByIdDesc(id, BigDecimal.ZERO, pageable);
+    public Page<PaymentTransaction> findAllByPaymentId(Long id, PaymentHistoryRequest paymentHistoryRequest, Pageable pageable) {
+        CreatedAt startDate = getStartDate(paymentHistoryRequest);
+        CreatedAt endDate = getEndDate(paymentHistoryRequest);
+        return paymentTransactionRepository.findAllByPaymentIdAndCreatedCreatedAtGreaterThanEqualAndCreatedCreatedAtLessThanEqualOrderByIdDesc(id, startDate, endDate, pageable);
     }
 
-    public Page<PaymentTransaction> findAllByPaymentCustomerIdAndMoneyLessThan(Long id, Pageable pageable) {
-        return paymentTransactionRepository.findAllByPaymentCustomerIdAndMoneyLessThanOrderByIdDesc(id, BigDecimal.ZERO, pageable);
+    public Page<PaymentTransaction> findAllByPaymentIdAndMoneyLessThan(Long id, PaymentHistoryRequest paymentHistoryRequest, Pageable pageable) {
+        CreatedAt startDate = getStartDate(paymentHistoryRequest);
+        CreatedAt endDate = getEndDate(paymentHistoryRequest);
+        return paymentTransactionRepository.findAllByPaymentIdAndMoneyLessThanAndCreatedCreatedAtGreaterThanEqualAndCreatedCreatedAtLessThanEqualOrderByIdDesc(id, BigDecimal.ZERO, startDate, endDate, pageable);
     }
 
-    public Page<PaymentTransaction> findAllByPaymentCustomerIdAndMoneyGreaterThan(Long id, Pageable pageable) {
-        return paymentTransactionRepository.findAllByPaymentCustomerIdAndMoneyGreaterThanOrderByIdDesc(id, BigDecimal.ZERO, pageable);
+    public Page<PaymentTransaction> findAllByPaymentIdAndMoneyGreaterThan(Long id, PaymentHistoryRequest paymentHistoryRequest, Pageable pageable) {
+        CreatedAt startDate = getStartDate(paymentHistoryRequest);
+        CreatedAt endDate = getEndDate(paymentHistoryRequest);
+        return paymentTransactionRepository.findAllByPaymentIdAndMoneyGreaterThanAndCreatedCreatedAtGreaterThanEqualAndCreatedCreatedAtLessThanEqualOrderByIdDesc(id, BigDecimal.ZERO, startDate, endDate, pageable);
+    }
+
+    public Page<PaymentTransaction> findAllByPaymentCustomerIdAndMoneyLessThan(Long id, PaymentHistoryRequest paymentHistoryRequest, Pageable pageable) {
+        CreatedAt startDate = getStartDate(paymentHistoryRequest);
+        CreatedAt endDate = getEndDate(paymentHistoryRequest);
+        return paymentTransactionRepository.findAllByPaymentCustomerIdAndMoneyLessThanAndCreatedCreatedAtGreaterThanEqualAndCreatedCreatedAtLessThanEqualOrderByIdDesc(id, BigDecimal.ZERO, startDate, endDate, pageable);
+    }
+
+    public Page<PaymentTransaction> findAllByPaymentCustomerIdAndMoneyGreaterThan(Long id, PaymentHistoryRequest paymentHistoryRequest, Pageable pageable) {
+        CreatedAt startDate = getStartDate(paymentHistoryRequest);
+        CreatedAt endDate = getEndDate(paymentHistoryRequest);
+        return paymentTransactionRepository.findAllByPaymentCustomerIdAndMoneyGreaterThanAndCreatedCreatedAtGreaterThanEqualAndCreatedCreatedAtLessThanEqualOrderByIdDesc(id, BigDecimal.ZERO, startDate, endDate, pageable);
     }
 
     public Page<PaymentTransaction> findAllByPartnerName(String name, Pageable pageable) {
         return paymentTransactionRepository.findAllByPartnerNameOrderByIdDesc(name, pageable);
     }
 
-    public Page<PaymentTransaction> findAllByBeneficiary(Long id, Pageable pageable) {
-        return paymentTransactionRepository.findAllByBeneficiaryIdOrderByIdDesc(id, pageable);
+    public Page<PaymentTransaction> findAllByBeneficiary(Long id, PaymentHistoryRequest paymentHistoryRequest, Pageable pageable) {
+        CreatedAt startDate = getStartDate(paymentHistoryRequest);
+        CreatedAt endDate = getEndDate(paymentHistoryRequest);
+        return paymentTransactionRepository.findAllByBeneficiaryIdAndCreatedCreatedAtGreaterThanEqualAndCreatedCreatedAtLessThanEqualOrderByIdDesc(id, startDate, endDate, pageable);
     }
 
     public PaymentTransaction findById(Long id) {
@@ -78,7 +109,9 @@ public class PaymentTransactionService {
         return paymentTransactionRepository.findAllByPartnerIsNotNullOrderByIdDesc(pageable);
     }
 
-    public Page<PaymentTransaction> findAllByCredit(Long id, Pageable pageable) {
-        return paymentTransactionRepository.findAllByPaymentCustomerIdAndDebitIsNotNullOrderByIdDesc(id, pageable);
+    public Page<PaymentTransaction> findAllByCredit(Long id, PaymentHistoryRequest paymentHistoryRequest, Pageable pageable) {
+        CreatedAt startDate = getStartDate(paymentHistoryRequest);
+        CreatedAt endDate = getEndDate(paymentHistoryRequest);
+        return paymentTransactionRepository.findAllByPaymentCustomerIdAndDebitIsNotNullAndCreatedCreatedAtGreaterThanEqualAndCreatedCreatedAtLessThanEqualOrderByIdDesc(id, startDate, endDate, pageable);
     }
 }
