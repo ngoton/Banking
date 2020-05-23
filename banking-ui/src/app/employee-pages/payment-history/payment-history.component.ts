@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+
 import {
   NbSortDirection,
   NbSortRequest,
@@ -6,8 +7,11 @@ import {
   NbTreeGridDataSourceBuilder
 } from '@nebular/theme';
 import { DecimalPipe } from '@angular/common';
+<<<<<<< HEAD
+=======
 import { FsIconComponent } from '../employee-pages.component';
 
+>>>>>>> 5dd6b8f5072b565761fe43e75f86e4703251aec9
 
 interface TreeNode<T> {
   data: T;
@@ -28,7 +32,11 @@ interface FSEntry {
   styleUrls: ['./payment-history.component.scss']
 })
 export class PaymentHistoryComponent implements OnInit, OnDestroy {
+<<<<<<< HEAD
+
+=======
  
+>>>>>>> 5dd6b8f5072b565761fe43e75f86e4703251aec9
   customColumn = {bindingName: 'transaction_type', showName: 'Loại giao dịch'};
   defaultColumns = [
     {bindingName: 'content', showName: 'Nội dung'},
@@ -36,6 +44,40 @@ export class PaymentHistoryComponent implements OnInit, OnDestroy {
     {bindingName: 'money', showName: 'Số tiền'}];
   allColumns = ['transaction_type', 'content', 'date', 'money'];
 
+<<<<<<< HEAD
+  // paymentInfor: Payment = new Payment();
+  // savingInfor: Savings = new Savings();
+  receiveHistories: TreeNode<FSEntry> = {
+    data: {
+      transaction_type: 'Nhận tiền',
+      content: '',
+      date: '',
+      money: '',
+    },
+    children: []
+  };
+  transferHistories: TreeNode<FSEntry> = {
+    data: {
+      transaction_type: 'Chuyển khoản',
+      content: '',
+      date: '',
+      money: '',
+    },
+    children: []
+  };
+  creditHistories: TreeNode<FSEntry> = {
+    data: {
+      transaction_type: 'Thanh toán nhắc nợ',
+      content: '',
+      date: '',
+      money: '',
+    },
+    children: []
+  };
+
+  private data: TreeNode<FSEntry>[] = [];
+
+=======
   private data: TreeNode<FSEntry>[] = [
     {
       data: { transaction_type: 'Projects', content: '', date:'', money: '' },
@@ -45,10 +87,69 @@ export class PaymentHistoryComponent implements OnInit, OnDestroy {
       ],
     }
   ];
+>>>>>>> 5dd6b8f5072b565761fe43e75f86e4703251aec9
   dataSource: NbTreeGridDataSource<FSEntry>;
 
   sortColumn: string;
   sortDirection: NbSortDirection = NbSortDirection.NONE;
+<<<<<<< HEAD
+  constructor(private decimalPipe: DecimalPipe,
+              private dataSourceBuilder: NbTreeGridDataSourceBuilder<FSEntry>) {
+
+  }
+
+  updateSort(sortRequest: NbSortRequest): void {
+    this.sortColumn = sortRequest.column;
+    this.sortDirection = sortRequest.direction;
+  }
+
+  getSortDirection(column: string): NbSortDirection {
+    if (this.sortColumn === column) {
+      return this.sortDirection;
+    }
+    return NbSortDirection.NONE;
+  }
+
+  getShowOn(index: number) {
+    const minWithForMultipleColumns = 400;
+    const nextColumnStep = 100;
+    return minWithForMultipleColumns + (nextColumnStep * index);
+  }
+
+  getPaymentTransfer() {
+  }
+
+
+  ngOnInit(){
+    debugger;
+    this.data = [this.receiveHistories, this.transferHistories, this.creditHistories];
+    this.dataSource = this.dataSourceBuilder.create(this.data);
+  }
+  ngOnDestroy(){}
+}
+
+@Component({
+  selector: 'ngx-fs-icon',
+  template: `
+    <nb-tree-grid-row-toggle
+      [expanded]="expanded"
+      *ngIf="isDir(); else fileIcon"
+    >
+    </nb-tree-grid-row-toggle>
+    <ng-template #fileIcon>
+      <nb-icon icon="corner-down-right"></nb-icon>
+    </ng-template>
+  `
+})
+
+export class FsIconComponent {
+  @Input() kind: string;
+  @Input() expanded: boolean;
+
+  isDir(): boolean {
+    return this.kind !== null;
+  }
+=======
 
   constructor(private decimalPipe: DecimalPipe,
               private dataSourceBuilder: NbTreeGridDataSourceBuilder<FSEntry>) {
@@ -77,4 +178,5 @@ export class PaymentHistoryComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(){}
+>>>>>>> 5dd6b8f5072b565761fe43e75f86e4703251aec9
 }
