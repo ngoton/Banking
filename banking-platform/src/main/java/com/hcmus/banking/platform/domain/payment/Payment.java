@@ -15,6 +15,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 
 @Entity
@@ -27,6 +28,7 @@ public class Payment extends IDEntity {
     private static final String EMPTY_STRING = "";
     private String account;
     private BigDecimal balance;
+    private Integer status;
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "createdAt.value", column = @Column(name = "created_at")),
@@ -58,5 +60,9 @@ public class Payment extends IDEntity {
     public static Payment generate() {
         Payment payment = new Payment(RandomUtils.generateAccount(), BigDecimal.ZERO, Created.ofEmpty());
         return payment;
+    }
+
+    public boolean isLocked() {
+        return Objects.nonNull(status) && status.equals(0);
     }
 }

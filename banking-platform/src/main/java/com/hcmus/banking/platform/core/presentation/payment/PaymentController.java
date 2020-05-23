@@ -47,6 +47,11 @@ public class PaymentController {
         paymentService.create(payment);
     }
 
+    @PostMapping("/lock")
+    public void lockPayment(@Valid @RequestBody LockPaymentRequest paymentRequest){
+        paymentService.lockPayment(paymentRequest);
+    }
+
     @PutMapping
     @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public void update(@Valid @RequestBody PaymentRequest paymentRequest){
