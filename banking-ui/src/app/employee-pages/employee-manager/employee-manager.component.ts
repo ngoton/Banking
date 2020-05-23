@@ -79,9 +79,11 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
                }
 
   loadData() {
+    this.loadingStaffs = true;
     this.staffService.all().pipe(untilDestroyed(this))
     .subscribe(
       (success: any) => {
+        this.loadingStaffs = false;
         this.staffs = success.content;
         this.source.load(this.staffs);
       }
@@ -93,7 +95,6 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
   }
 
   btnClickAdd() {
-    debugger;
     let newUser = new User();
 
     this.dialogService.open(DialogEmployeePromptComponent, { 
@@ -111,7 +112,6 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
   }
 
   btnClickEdit(event) {
-    debugger;
     this.dialogService.open(DialogEmployeePromptComponent, { 
       context: {
         title: 'Cập nhật nhân viên',
@@ -127,7 +127,6 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
   }
 
   btnClickDelete(event) {
-    debugger;
     if (window.confirm("Bạn có chắc chắn muốn xóa người này không?")) {
       this.loadingStaff = true;
       this.staffService

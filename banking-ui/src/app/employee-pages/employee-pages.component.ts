@@ -33,11 +33,10 @@ export class EmployeePagesComponent implements OnInit, OnDestroy {
         this.menu = MENU_ITEMS;
         this.router.navigate(['employee/accounts']);
       }
-   });
+   }).unsubscribe();
   }
 
   ngOnDestroy() {
-    
   }
 }
 
