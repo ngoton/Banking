@@ -86,7 +86,7 @@ export class IBankingEmployeeHeaderComponent implements OnInit, OnDestroy {
       case 'STAFF':
         setTimeout(() => {
           this.userService.getStaffInfor(this.user.userId)
-          .pipe(untilDestroyed(this)).subscribe(
+          .pipe(takeUntil(this.destroy$)).subscribe(
             (res: any) => {
               this.staffInfor = res;
               localStorage.setItem("staffInfo", JSON.stringify(this.staffInfor));
@@ -121,6 +121,7 @@ export class IBankingEmployeeHeaderComponent implements OnInit, OnDestroy {
       .pipe(
         filter(({ tag }) => tag === 'ibanking-context-menu'),
         map(({ item: { title } }) => title),
+        takeUntil(this.destroy$)
       )
       .subscribe(title => {
         debugger;

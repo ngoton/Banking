@@ -4,7 +4,7 @@
              <label for="inputAccount" class="label col-sm-3 col-form-label">Ngân hàng</label>
             <div class="col-sm-3">
                 <nb-select name="accountNumber" fullWidth placeholder="Chọn tài khoản">
-                <nb-option>Tấtt cả</nb-option>
+                <nb-option>Tất cả</nb-option>
                 </nb-select>
             </div>
         </div>
@@ -16,12 +16,12 @@
                 readonly
                 name="birthdate"
                 id="input-birthdate"
-                [nbDatepicker]="datepicker"
+                [nbDatepicker]="datepickerStartDate"
                 [formControl]=""
                 placeholder="Ngày tháng năm sinh"
                 fieldSize="large"
                 autofocus />
-                <nb-datepicker #datepicker format="yyyy-MM-dd"></nb-datepicker>
+                <nb-datepicker #datepickerStartDate format="yyyy-MM-dd"></nb-datepicker>
             </div>
             <div class="form-control-group">
                 <label class="label">Tới ngày:</label>
@@ -30,11 +30,11 @@
                     readonly
                     name="birthdate"
                     id="input-birthdate"
-                    [nbDatepicker]="datepicker"
+                    [nbDatepicker]="datepickerEndDate"
                     placeholder="Ngày tháng năm sinh"
                     fieldSize="large"
                     autofocus/>
-                <nb-datepicker #datepicker format="yyyy-MM-dd"></nb-datepicker>
+                <nb-datepicker #datepickerEndDate format="yyyy-MM-dd"></nb-datepicker>
             </div>
         </div>
         <div class="form-group row">
