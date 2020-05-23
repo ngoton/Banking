@@ -30,4 +30,14 @@ export class PaymentService {
         //catchError(this.util.handleError)
       );
   }
+
+  updateStateAccount(account, status){
+    const body = {
+      account: account,
+      status: status == true ? 1 : 0
+    }
+
+    const PATH = this.PAYMENT_URL + `/lock`;
+    return this.http.post<any>(PATH, JSON.stringify(body)).pipe();
+  }
 }

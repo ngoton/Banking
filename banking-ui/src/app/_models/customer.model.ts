@@ -42,11 +42,13 @@ export class Payment {
     paymentId: number;
     account: string;
     balance: string;
+    status: boolean;
 
     constructor(obj?: any) {
         this.paymentId = obj && obj.paymentId || obj && obj.id || null;
         this.account = obj && obj.account || "";
         this.balance = obj && obj.balance || "";
+        this.status = obj && obj.status != 0 || false;
     }
 }
 
@@ -77,12 +79,14 @@ export class Savings {
     account: string;
     balance: string;
     customersId: number;
+    status: boolean;
 
     constructor(obj?: any) {
         this.id = obj && obj.id || null;
         this.account = obj && obj.account || "";
         this.balance = obj && obj.balance || "";
         this.customersId = obj && obj.customersId || null;
+        this.status = obj && obj.status != 0 || false;
     }
 }
 
