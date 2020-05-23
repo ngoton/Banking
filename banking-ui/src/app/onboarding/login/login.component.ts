@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   captchaVerified: string = "";
 
   public keypadNumbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
-  //private subscription: Subscription = new Subscription();
+  private subscription: Subscription = new Subscription();
 
   constructor(
     private location: Location,
@@ -106,7 +106,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       template: this.customNotificationTmpl
     });
     this.logging = true;
-    this.auth.login(formdata)
+    this.subscription = this.auth.login(formdata)
       .pipe(untilDestroyed(this))
       .subscribe(
         (res: any) => {
@@ -152,7 +152,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   authenticateUser(user) {
-    this.notifications.hide('login'); // remove login notification
+    this.notifi.hide('login'); // remove login notification
     setTimeout(() => {
       let userInfor = JSON.parse(localStorage.getItem('userDetails'));
       switch(userInfor.role){
@@ -232,7 +232,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    //this.subscription.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   getConfigValue(key: string): any {};

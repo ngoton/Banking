@@ -11,7 +11,6 @@ import {
   NbSelectModule,
   NbButtonModule,
   NbRadioModule,
-  NbDatepicker,
   NbDatepickerModule,
   NbDialogModule,
   NbSortDirective
@@ -96,7 +95,7 @@ const customNotifierOptions: NotifierOptions = {
     NbInputModule,
     NbTreeGridModule,
     NbRadioModule,
-    NbDatepickerModule,
+    NbDatepickerModule.forRoot(),
     ThemeModule,
     EmployeePagesRoutingModule,
     NbSelectModule,
