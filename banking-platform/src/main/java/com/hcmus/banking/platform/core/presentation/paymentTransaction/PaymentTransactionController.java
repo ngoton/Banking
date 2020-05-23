@@ -110,6 +110,9 @@ public class PaymentTransactionController {
             if (payment.isEmpty()) {
                 throw new BankingServiceException("Account not found");
             }
+            if (payment.isLocked()) {
+                throw new BankingServiceException("Account is locked");
+            }
             paymentTransactionService.deposit(DepositRequest.toPaymentTransaction(depositRequest, payment));
         } else {
             if (!depositRequest.hasUsername()) {
@@ -129,6 +132,9 @@ public class PaymentTransactionController {
                 throw new BankingServiceException("Account not found");
             }
             Payment payment = payments.stream().findFirst().get();
+            if (payment.isLocked()) {
+                throw new BankingServiceException("Account is locked");
+            }
             paymentTransactionService.deposit(DepositRequest.toPaymentTransaction(depositRequest, payment));
 
         }
@@ -139,6 +145,9 @@ public class PaymentTransactionController {
         Customer customer = customerService.findByUserId(user.getId());
         Beneficiary beneficiary = beneficiaryService.findByCustomerAccount(paymentTransactionRequest.beneficiaryAccount, customer.getId());
         Payment payment = paymentService.findById(paymentTransactionRequest.paymentId);
+        if (payment.isLocked()) {
+            throw new BankingServiceException("Account is locked");
+        }
         BigDecimal money = payment.getBalance().subtract(paymentTransactionRequest.money);
         if (money.signum() < 0) {
             throw new BankingServiceException("Not enough money");
@@ -169,6 +178,9 @@ public class PaymentTransactionController {
         Customer customer = customerService.findByUserId(user.getId());
         Beneficiary beneficiary = beneficiaryService.findByCustomerAccount(paymentTransactionRequest.beneficiaryAccount, customer.getId());
         Payment payment = paymentService.findById(paymentTransactionRequest.paymentId);
+        if (payment.isLocked()) {
+            throw new BankingServiceException("Account is locked");
+        }
         BigDecimal money = payment.getBalance().subtract(paymentTransactionRequest.money);
         if (money.signum() < 0) {
             throw new BankingServiceException("Not enough money");
@@ -189,6 +201,9 @@ public class PaymentTransactionController {
     public void paymentVerify(@Valid @RequestBody PaymentRequest paymentRequest, @ModelAttribute("user") User user) {
         Beneficiary beneficiary = beneficiaryService.findById(paymentRequest.beneficiaryId);
         Payment payment = paymentService.findById(paymentRequest.paymentId);
+        if (payment.isLocked()) {
+            throw new BankingServiceException("Account is locked");
+        }
         if (beneficiary.isEmpty() || payment.isEmpty()) {
             throw new BankingServiceException("PaymentId or beneficiaryId is empty!!!");
         }

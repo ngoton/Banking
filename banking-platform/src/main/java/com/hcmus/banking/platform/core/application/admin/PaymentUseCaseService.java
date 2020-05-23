@@ -1,6 +1,7 @@
 package com.hcmus.banking.platform.core.application.admin;
 
 import com.hcmus.banking.platform.core.application.payment.PaymentService;
+import com.hcmus.banking.platform.core.presentation.payment.LockPaymentRequest;
 import com.hcmus.banking.platform.domain.exception.BankingServiceException;
 import com.hcmus.banking.platform.domain.exception.NotFoundException;
 import com.hcmus.banking.platform.domain.payment.Payment;
@@ -78,5 +79,15 @@ public class PaymentUseCaseService {
             throw new BankingServiceException("Payment not found");
         }
         paymentService.delete(payment);
+    }
+
+    @Transactional
+    public void lockPayment(LockPaymentRequest paymentRequest) {
+        Payment payment = paymentService.findByAccount(paymentRequest.account);
+        if (payment.isEmpty()) {
+            throw new BankingServiceException("Payment not found");
+        }
+        payment.setStatus(paymentRequest.status);
+        paymentService.create(payment);
     }
 }
