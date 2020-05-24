@@ -2,8 +2,11 @@ package com.hcmus.banking.platform.core.application.admin;
 
 import com.hcmus.banking.platform.core.application.beneficiary.BeneficiaryService;
 import com.hcmus.banking.platform.core.application.customer.CustomerService;
+import com.hcmus.banking.platform.core.application.paymentTransaction.PaymentTransactionService;
 import com.hcmus.banking.platform.domain.beneficiary.Beneficiary;
+import com.hcmus.banking.platform.domain.exception.BankingServiceException;
 import com.hcmus.banking.platform.domain.exception.NotFoundException;
+import com.hcmus.banking.platform.domain.paymentTransaction.PaymentTransaction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BeneficiaryUseCaseService {
     private final BeneficiaryService beneficiaryService;
+    private final PaymentTransactionService paymentTransactionService;
 
     @Transactional(readOnly = true)
     public Page<Beneficiary> findAllBy(Pageable pageable) {
@@ -69,6 +73,10 @@ public class BeneficiaryUseCaseService {
 
     @Transactional
     public void delete(Long id) {
+        List<PaymentTransaction> paymentTransactions= paymentTransactionService.findAllByBeneficiaryId(id);
+        if(!paymentTransactions.isEmpty()){
+            throw new BankingServiceException("The account has generated the transaction");
+        }
         Beneficiary beneficiary = beneficiaryService.findById(id);
         if (beneficiary.isEmpty()) {
             throw new NotFoundException();

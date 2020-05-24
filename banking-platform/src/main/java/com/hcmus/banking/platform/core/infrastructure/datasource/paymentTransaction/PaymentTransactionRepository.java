@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -41,4 +42,6 @@ public interface PaymentTransactionRepository extends JpaRepository<PaymentTrans
     Page<PaymentTransaction> findAllByPaymentCustomerIdAndMoneyLessThanAndCreatedCreatedAtGreaterThanEqualAndCreatedCreatedAtLessThanEqualOrderByIdDesc(Long id, BigDecimal decimal, CreatedAt startDate, CreatedAt endDate, Pageable pageable);
 
     Page<PaymentTransaction> findAllByPaymentCustomerIdAndDebitIsNotNullAndCreatedCreatedAtGreaterThanEqualAndCreatedCreatedAtLessThanEqualOrderByIdDesc(Long id, CreatedAt startDate, CreatedAt endDate, Pageable pageable);
+
+    List<PaymentTransaction> findAllByBeneficiaryId(Long id);
 }
