@@ -31,7 +31,7 @@ public class Beneficiary extends IDEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customers_id")
     private Customer customer;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinColumn(name = "payments_id")
     private Payment payment;
     @Embedded

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -114,9 +113,5 @@ public class PaymentTransactionService {
         CreatedAt startDate = getStartDate(paymentHistoryRequest);
         CreatedAt endDate = getEndDate(paymentHistoryRequest);
         return paymentTransactionRepository.findAllByPaymentCustomerIdAndDebitIsNotNullAndCreatedCreatedAtGreaterThanEqualAndCreatedCreatedAtLessThanEqualOrderByIdDesc(id, startDate, endDate, pageable);
-    }
-
-    public List<PaymentTransaction> findAllByBeneficiaryId(Long id) {
-        return paymentTransactionRepository.findAllByBeneficiaryId(id);
     }
 }
