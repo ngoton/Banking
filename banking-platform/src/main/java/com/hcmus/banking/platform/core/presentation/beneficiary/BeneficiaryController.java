@@ -85,11 +85,9 @@ public class BeneficiaryController {
         if (customer.isEmpty()) {
             throw new BankingServiceException("Not found");
         }
-        Payment payment = paymentService.findByAccount(beneficiaryRequest.account);
-        if (payment.isEmpty() && beneficiaryRequest.bankName.equals(Beneficiary.BANK_NAME)){
-            throw new BankingServiceException("Account does not exists");
+        if (beneficiaryRequest.bankName.equals(Beneficiary.BANK_NAME)) {
+            paymentService.findByAccount(beneficiaryRequest.account);
         }
-
         Beneficiary beneficiary = BeneficiaryRequest.toBeneficiary(beneficiaryRequest, customer);
         beneficiaryService.create(beneficiary);
     }
@@ -100,9 +98,8 @@ public class BeneficiaryController {
         if (customer.isEmpty()) {
             throw new BankingServiceException("Not found");
         }
-        Payment payment = paymentService.findByAccount(beneficiaryRequest.account);
-        if (payment.isEmpty() && beneficiaryRequest.bankName.equals(Beneficiary.BANK_NAME)){
-            throw new BankingServiceException("Account does not exists");
+        if (beneficiaryRequest.bankName.equals(Beneficiary.BANK_NAME)) {
+            paymentService.findByAccount(beneficiaryRequest.account);
         }
         Beneficiary beneficiary = BeneficiaryRequest.toBeneficiary(beneficiaryRequest, customer);
         beneficiaryService.update(beneficiary);
