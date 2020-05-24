@@ -250,9 +250,14 @@ public class PaymentTransactionUseCaseService {
                     receiptPayment
             );
             paymentTransactionService.create(receiptTransaction);
-
             receiptPayment.setBalance(receiptPayment.getBalance().add(money));
             paymentService.create(receiptPayment);
+            Notification notification = new Notification(
+                    String.format("%s %s", payment.getCustomer().getInfo().getFirstName(), payment.getCustomer().getInfo().getLastName()),
+                    String.format("[%s] %s", "Nhận Tiền", toPaymentTransaction.getContent()),
+                    LocalDateTime.now()
+            );
+            notificationService.notify(notification, receiptPayment.getCustomer().getInfo().getUser().getUsername());
 
         } else {
             Partner partner = partnerService.findByName(toPaymentTransaction.getBeneficiary().getBankName());
@@ -316,6 +321,12 @@ public class PaymentTransactionUseCaseService {
         paymentTransactionService.create(paymentTransaction);
 
         paymentService.create(payment);
+        Notification notification = new Notification(
+                String.format("%s", partner.getName()),
+                String.format("[%s] %s", "Nhận Tiền", paymentTransaction.getContent()),
+                LocalDateTime.now()
+        );
+        notificationService.notify(notification, payment.getCustomer().getInfo().getUser().getUsername());
     }
 
     public Page<PaymentTransaction> findAllByPartner(String partnerName, LocalDate startDate, LocalDate endDate, Pageable pageable) {
