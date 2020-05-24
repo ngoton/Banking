@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { NbThemeService } from '@nebular/theme';
 
 import {
   NbSortDirection,
@@ -8,6 +9,11 @@ import {
 } from '@nebular/theme';
 import { DecimalPipe } from '@angular/common';
 import { FsIconComponent } from '../employee-pages.component';
+import { PaymentTransactionService } from '../../_services/payment-transaction.service';
+import { PartnerService } from '../../_services/partner.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { untilDestroyed } from 'ngx-take-until-destroy';
+import { LocalDataSource } from 'ng2-smart-table';
 
 interface TreeNode<T> {
   data: T;
@@ -65,16 +71,52 @@ export class PaymentHistoryComponent implements OnInit, OnDestroy {
     children: []
   };
 
+  settings = {
+    mode: 'external',
+    columns: {
+      code: {
+        title: "Mã nhân viên",
+        type: "string"
+      },
+      firstName: {
+        title: "Họ và tên đệm",
+        type: "string"
+      },
+      lastName: {
+        title: "Tên",
+        type: "string"
+      },
+      birthDate: {
+        title: "Ngày sinh",
+        type: "string"
+      },
+      phone: {
+        title: "Số điện thoại",
+        type: "string"
+      }
+    },
+  
+    hideSubHeader: true
+  }
+
+
+
   private data: TreeNode<FSEntry>[] = [];
 
   dataSource: NbTreeGridDataSource<FSEntry>;
 
   sortColumn: string;
   sortDirection: NbSortDirection = NbSortDirection.NONE;
-  constructor(private decimalPipe: DecimalPipe,
-              private dataSourceBuilder: NbTreeGridDataSourceBuilder<FSEntry>) {
+  partnerList: any[] = [];
+  paymentList :any[] = [];
 
-  }
+  source: LocalDataSource = new LocalDataSource();
+
+
+  constructor(private paymentTransactionService: PaymentTransactionService,
+    private themeService: NbThemeService,
+    private partnerService: PartnerService) {
+}
 
   updateSort(sortRequest: NbSortRequest): void {
     this.sortColumn = sortRequest.column;
@@ -101,7 +143,48 @@ export class PaymentHistoryComponent implements OnInit, OnDestroy {
   ngOnInit(){
     debugger;
     this.data = [this.receiveHistories, this.transferHistories, this.creditHistories];
-    this.dataSource = this.dataSourceBuilder.create(this.data);
+    // this.dataSource = this.dataSourceBuilder.create(this.data);
+    this.getData();
   }
   ngOnDestroy(){}
+
+  onSubmit(){
+    this.paymentTransactionService.getPaymentTransactionAdministrator(name)
+    .subscribe(
+      (response: any) => {
+
+      },
+      (err: HttpErrorResponse) => {
+
+      }
+    )
+  }
+
+
+  getData(){
+    this.partnerService.getAll().pipe(untilDestroyed(this))
+    .subscribe(
+      (response: any) => {
+        this.partnerList = response;
+      },
+      (err: HttpErrorResponse) => {
+        
+      }
+    )
+  }
+
+  getPaymentHistory(selectedData) {
+    this.paymentTransactionService.getPaymentTransactionAdministrator(selectedData.name).pipe(untilDestroyed(this))
+    .subscribe(
+      (response: any) => {
+        this.paymentList = response;
+        this.source.load(this.paymentList);
+      },
+      (err: HttpErrorResponse) => {
+        
+      }
+    )
+
+  }
+
 }

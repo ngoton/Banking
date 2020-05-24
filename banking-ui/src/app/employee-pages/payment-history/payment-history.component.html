@@ -3,10 +3,11 @@
         <div class="form-group row">
              <label for="inputAccount" class="label col-sm-3 col-form-label">Ngân hàng</label>
             <div class="col-sm-3">
-                <nb-select name="accountNumber" fullWidth placeholder="Chọn tài khoản">
-                <nb-option>Tất cả</nb-option>
+                <nb-select name="accountNumber" fullWidth placeholder="Chọn ngân hàng" (selectedChange)="getPaymentHistory($event)">
+                    <nb-option *ngFor="let partner of partnerList" value="partner.name">{{partner.name}}</nb-option>
                 </nb-select>
             </div>
+
         </div>
         <div class="col-sm-3">
             <div class=" form-control-group">
@@ -18,7 +19,7 @@
                 id="input-birthdate"
                 [nbDatepicker]="datepickerStartDate"
                 [formControl]=""
-                placeholder="Ngày tháng năm sinh"
+                placeholder="Ngày tháng năm"
                 fieldSize="large"
                 autofocus />
                 <nb-datepicker #datepickerStartDate format="yyyy-MM-dd"></nb-datepicker>
@@ -31,7 +32,7 @@
                     name="birthdate"
                     id="input-birthdate"
                     [nbDatepicker]="datepickerEndDate"
-                    placeholder="Ngày tháng năm sinh"
+                    placeholder="Ngày tháng năm"
                     fieldSize="large"
                     autofocus/>
                 <nb-datepicker #datepickerEndDate format="yyyy-MM-dd"></nb-datepicker>
