@@ -1,6 +1,7 @@
 package com.hcmus.banking.platform.core.infrastructure.datasource.merchant.HCMUS.PGP;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hcmus.banking.platform.config.security.PGPCryptography;
 import com.hcmus.banking.platform.config.security.RSACryptography;
 import com.hcmus.banking.platform.core.application.user.PasswordService;
 import com.hcmus.banking.platform.core.infrastructure.datasource.merchant.MerchantClient;
@@ -8,6 +9,7 @@ import com.hcmus.banking.platform.core.infrastructure.datasource.merchant.Mercha
 import com.hcmus.banking.platform.domain.merchant.MerchantAccount;
 import com.hcmus.banking.platform.domain.merchant.MerchantDeposit;
 import com.hcmus.banking.platform.domain.merchant.MerchantTransfer;
+import org.bouncycastle.openpgp.PGPSecretKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -24,6 +26,8 @@ public class PGPClient implements MerchantClient {
     PasswordService passwordService;
     @Autowired
     RSACryptography rsaCryptography;
+    @Autowired
+    PGPCryptography pgpCryptography;
 
     @Value("${merchant.pgp.secret-key}")
     String secretKey;
@@ -89,9 +93,9 @@ public class PGPClient implements MerchantClient {
     private ResponseEntity<String> transaction(MerchantCriteria merchantCriteria) {
         ResponseEntity<String> response = new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
         try {
-            PrivateKey privateKey = rsaCryptography.getPrivateKey();
+            PGPSecretKey privateKey = pgpCryptography.getPrivateKey();
             ObjectMapper objectMapper = new ObjectMapper();
-            String signature = rsaCryptography.sign(objectMapper.writeValueAsString(merchantCriteria), privateKey);
+            String signature = pgpCryptography.sign(objectMapper.writeValueAsString(merchantCriteria), privateKey);
             Long timeStamp = ZonedDateTime.now().plusMinutes(EXPIRED_TIME).toInstant().toEpochMilli();
             TransactionRequest transactionRequest = new TransactionRequest(
                     merchantCriteria.getAccount(),

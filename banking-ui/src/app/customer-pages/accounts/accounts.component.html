@@ -3,7 +3,7 @@
     <ngx-status-card [title]="'Tài khoản thanh toán'" 
                      [content]="'Số tài khoản: ' + payment.account"
                      [subcontent] = "'Số dư khả dụng: ' + payment.balance  + ' VNĐ'"
-                     [type]="'primary'">
+                     [type]="'primary'" [(on)]="payment.status" (callBackFunc)="updateStatusAccount()">
       <i [ngClass]="'nb-checkmark-circle'"></i>
     </ngx-status-card>
   </div>
@@ -11,7 +11,7 @@
     <ngx-status-card [title]="'Tài khoản tiết kiệm'" 
                      [content]="'Số tài khoản: ' + saving.account"
                      [subcontent] = "'Số dư khả dụng: ' + saving.balance + ' VNĐ'"
-                     [type]="'primary'">
+                     [type]="'primary'" [(on)]="saving.status" (callBackFunc)="updateStatusAccount()">
       <i [ngClass]="'nb-checkmark-circle'"></i>
     </ngx-status-card>
   </div>

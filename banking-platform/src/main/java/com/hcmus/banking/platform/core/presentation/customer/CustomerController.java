@@ -20,8 +20,8 @@ public class CustomerController {
     @GetMapping
     @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public Page<CustomerResponse> findAllBy(Pageable pageable){
-       Page<Customer> customers = customerService.findAllBy(pageable);
-       return CustomerResponses.ofPage(customers, pageable);
+        Page<Customer> customers = customerService.findAllBy(pageable);
+        return CustomerResponses.ofPage(customers, pageable);
     }
 
     @GetMapping("/{id}")

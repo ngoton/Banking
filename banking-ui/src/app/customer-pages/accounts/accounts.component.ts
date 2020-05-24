@@ -1,4 +1,4 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component, OnDestroy, ViewEncapsulation} from '@angular/core';
 import { NbThemeService } from '@nebular/theme';
 import { takeWhile, takeUntil } from 'rxjs/operators' ;
 import { SolarData } from '../../@core/data/solar';
@@ -10,6 +10,7 @@ import { PaymentService } from '../../_services/payment.service';
 import { SavingService } from '../../_services/saving.service';
 import { DecimalPipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
+import { NotifierService } from 'angular-notifier';
 
 interface CardSettings {
   title: string;
@@ -20,7 +21,8 @@ interface CardSettings {
 @Component({
   selector: "ngx-accounts",
   styleUrls: ["./accounts.component.scss"],
-  templateUrl: "./accounts.component.html"
+  templateUrl: "./accounts.component.html",
+  encapsulation: ViewEncapsulation.None
 })
 export class AccountsComponent implements OnDestroy {
   private alive = true;
@@ -89,16 +91,21 @@ export class AccountsComponent implements OnDestroy {
   customerInfor: Customers;
   saving: any;
   payment: any;
+  private readonly notifier: NotifierService;
 
   constructor(
     private themeService: NbThemeService,
     private accountsService: AccountsService,
+    private paymentService: PaymentService,
+    private savingService: SavingService,
     private solarService: SolarData,
     private customerService: CustomerService,
-    private decimalPipe: DecimalPipe
+    private decimalPipe: DecimalPipe,
+    private notificationService: NotifierService
   ) {
     this.saving = new Savings();
     this.payment = new Payment();
+    this.notifier = notificationService;
 
     this.themeService
       .getJsTheme()
@@ -116,7 +123,8 @@ export class AccountsComponent implements OnDestroy {
           this.loadingAccount = false;
           
           if(payments.length != 0){
-            this.payment = payments[0];
+            this.payment = new Payment(payments[0]);
+            //this.payment.status = payments[0].status == 1 ? true : false;
             this.payment.balance = this.decimalPipe.transform(
               this.payment.balance,
               "1.0-3"
@@ -127,7 +135,8 @@ export class AccountsComponent implements OnDestroy {
           }
 
           if(savings.length != 0){
-            this.saving = savings[0];
+            this.saving = new Savings(savings[0]);
+            //this.payment.status = savings[0].status == 1 ? true : false;
             this.saving.balance = this.decimalPipe.transform(
               this.saving.balance,
               "1.0-3"
@@ -149,6 +158,30 @@ export class AccountsComponent implements OnDestroy {
       .subscribe(data => {
         this.solarValue = data;
       });
+  }
+
+  updateStatusAccount() {
+    this.loadingAccount = true;
+    this.paymentService.updateStateAccount(this.payment.account, this.payment.status)
+    .pipe(untilDestroyed(this))
+    .subscribe(
+      (success: any) => {
+        this.loadingAccount = false;
+        this.notifier.show({
+          type: "success",
+          message: "Cập nhật thành công!",
+          id: "success-status"
+        });
+      },
+      (error: HttpErrorResponse) => {
+        this.loadingAccount = false;
+        this.notifier.show({
+          type: "error",
+          message: `Cập nhật không thành công! ${error}`,
+          id: "error-status"
+        });
+      }
+    );
   }
 
   ngOnDestroy() {
