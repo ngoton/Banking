@@ -60,7 +60,7 @@ public class RSACryptography {
 
     public PublicKey getPublicKey() throws InvalidKeySpecException, IOException {
         ClassLoader classLoader = getClass().getClassLoader();
-        InputStream inputStream = classLoader.getResourceAsStream(privateFile);
+        InputStream inputStream = classLoader.getResourceAsStream(publicFile);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
         String publicKeyContent = br.lines()
                 .collect(Collectors.joining(System.lineSeparator()));
