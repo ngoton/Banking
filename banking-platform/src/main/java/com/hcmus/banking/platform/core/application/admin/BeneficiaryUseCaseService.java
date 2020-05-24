@@ -60,7 +60,7 @@ public class BeneficiaryUseCaseService {
 
     @Transactional
     public void update(Beneficiary beneficiary) {
-        Beneficiary oldBeneficiary = beneficiaryService.findByAccount(beneficiary.getAccount());
+        Beneficiary oldBeneficiary = beneficiaryService.findByCustomerAccount(beneficiary.getAccount(), beneficiary.getCustomer().getId());
         if (oldBeneficiary.isEmpty()) {
             throw new NotFoundException();
         }
