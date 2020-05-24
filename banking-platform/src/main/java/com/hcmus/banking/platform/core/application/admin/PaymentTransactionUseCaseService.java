@@ -322,7 +322,7 @@ public class PaymentTransactionUseCaseService {
 
         paymentService.create(payment);
         Notification notification = new Notification(
-                String.format("%s %s", payment.getCustomer().getInfo().getFirstName(), payment.getCustomer().getInfo().getLastName()),
+                String.format("%s", partner.getName()),
                 String.format("[%s] %s", "Nhận Tiền", paymentTransaction.getContent()),
                 LocalDateTime.now()
         );
