@@ -8,6 +8,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
     home: true,
   },
   {
+    title: 'Danh sách khách hàng',
+    icon: 'clipboard',
+    link: '/employee/account-manager',
+  },
+  {
     title: 'Nạp tiền',
     icon: 'log-in',
     link: '/employee/deposit-account',

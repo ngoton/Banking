@@ -125,6 +125,14 @@ export class CustomerService implements OnDestroy {
   //     "Authorization": `Bearer ${this.auth.getToken()}`
   //   }),
   // };
+  getAll(): Observable<any>{
+    const PATH = this.CUST_URL;
+      return this.http.get<any>(PATH)
+      .pipe(
+        //retry(3),
+        //catchError(this.util.handleError)
+      );
+  }
 
   getCustomerData(): Observable<any> {
     const userDetails = this.userService.getUserDetails();

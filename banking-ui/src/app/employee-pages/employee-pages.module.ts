@@ -29,6 +29,7 @@ import { EmployeeManagerComponent } from './employee-manager/employee-manager.co
 import { NbDateFnsDateModule } from '@nebular/date-fns';
 import { DialogEmployeePromptComponent } from './employee-manager/dialog-employee-prompt/dialog-employee-prompt.component';
 import { PaymentHistoryComponent } from './payment-history/payment-history.component';
+import { AccountManagerComponent } from './account-manager/account-manager.component';
 
 /**
  * Custom angular notifier options
@@ -81,7 +82,8 @@ const customNotifierOptions: NotifierOptions = {
       DepositAccountComponent,
       EmployeeManagerComponent,
       DialogEmployeePromptComponent,
-      PaymentHistoryComponent
+      PaymentHistoryComponent,
+      AccountManagerComponent
     ],
   entryComponents: [DialogEmployeePromptComponent],
   imports: [
