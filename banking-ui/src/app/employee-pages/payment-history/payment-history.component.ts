@@ -15,6 +15,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { LocalDataSource } from 'ng2-smart-table';
 import { NotifierService } from 'angular-notifier';
+import { Partners } from '../../_models/customer.model';
 
 interface TreeNode<T> {
   data: T;
@@ -94,6 +95,8 @@ export class PaymentHistoryComponent implements OnInit, OnDestroy {
     .subscribe(
       (response: any) => {
         this.partnerList = response;
+        this.selectedPartner = new Partners();
+        this.getPaymentHistory();
       },
       (err: HttpErrorResponse) => {
         
