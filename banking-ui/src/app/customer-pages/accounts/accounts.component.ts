@@ -1,16 +1,16 @@
 import {Component, OnDestroy, ViewEncapsulation} from '@angular/core';
-import { NbThemeService } from '@nebular/theme';
-import { takeWhile, takeUntil } from 'rxjs/operators' ;
-import { SolarData } from '../../@core/data/solar';
-import { AccountsService } from './accounts.service';
-import { Customers, Savings, Credits, Debits, Payment } from '../../_models/customer.model';
-import { CustomerService } from '../../_services/customer.service';
-import { untilDestroyed } from 'ngx-take-until-destroy';
-import { PaymentService } from '../../_services/payment.service';
-import { SavingService } from '../../_services/saving.service';
-import { DecimalPipe } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
-import { NotifierService } from 'angular-notifier';
+import {NbThemeService} from '@nebular/theme';
+import {takeWhile, takeUntil} from 'rxjs/operators' ;
+import {SolarData} from '../../@core/data/solar';
+import {AccountsService} from './accounts.service';
+import {Customers, Savings, Credits, Debits, Payment} from '../../_models/customer.model';
+import {CustomerService} from '../../_services/customer.service';
+import {untilDestroyed} from 'ngx-take-until-destroy';
+import {PaymentService} from '../../_services/payment.service';
+import {SavingService} from '../../_services/saving.service';
+import {DecimalPipe} from '@angular/common';
+import {HttpErrorResponse} from '@angular/common/http';
+import {NotifierService} from 'angular-notifier';
 
 interface CardSettings {
   title: string;
@@ -103,7 +103,7 @@ export class AccountsComponent implements OnDestroy {
     private decimalPipe: DecimalPipe,
     private notificationService: NotifierService
   ) {
-    this.saving = new Savings();
+    this.saving = [new Savings()];
     this.payment = new Payment();
     this.notifier = notificationService;
 
@@ -121,32 +121,36 @@ export class AccountsComponent implements OnDestroy {
         .pipe(untilDestroyed(this))
         .subscribe(([payments, savings]) => {
           this.loadingAccount = false;
-          
-          if(payments.length != 0){
+
+          if (payments.length != 0) {
             this.payment = new Payment(payments[0]);
             //this.payment.status = payments[0].status == 1 ? true : false;
             this.payment.balance = this.decimalPipe.transform(
               this.payment.balance,
               "1.0-3"
             );
-          }
-          else{
+          } else {
             this.payment = new Payment();
           }
 
-          if(savings.length != 0){
-            this.saving = new Savings(savings[0]);
+          if (savings.length != 0) {
+            // this.saving = new Savings(savings[0]);
+            let array = [];
+            savings.forEach(item => array.push(new Savings(item)));
+            array.map(item => {
+              item.balance = this.decimalPipe.transform(
+                item.balance,
+                "1.0-3"
+              );
+              return item;
+            });
             //this.payment.status = savings[0].status == 1 ? true : false;
-            this.saving.balance = this.decimalPipe.transform(
-              this.saving.balance,
-              "1.0-3"
-            );
+            this.saving = array;
+          } else {
+            this.saving = [new Savings()];
           }
-          else{
-            this.saving = new Savings();
-          }
-          
-          
+
+
         }, (err: any) => {
           this.loadingAccount = false;
         });
@@ -163,25 +167,25 @@ export class AccountsComponent implements OnDestroy {
   updateStatusAccount() {
     this.loadingAccount = true;
     this.paymentService.updateStateAccount(this.payment.account, this.payment.status)
-    .pipe(untilDestroyed(this))
-    .subscribe(
-      (success: any) => {
-        this.loadingAccount = false;
-        this.notifier.show({
-          type: "success",
-          message: "Cập nhật thành công!",
-          id: "success-status"
-        });
-      },
-      (error: HttpErrorResponse) => {
-        this.loadingAccount = false;
-        this.notifier.show({
-          type: "error",
-          message: `Cập nhật không thành công! ${error}`,
-          id: "error-status"
-        });
-      }
-    );
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        (success: any) => {
+          this.loadingAccount = false;
+          this.notifier.show({
+            type: "success",
+            message: "Cập nhật thành công!",
+            id: "success-status"
+          });
+        },
+        (error: HttpErrorResponse) => {
+          this.loadingAccount = false;
+          this.notifier.show({
+            type: "error",
+            message: `Cập nhật không thành công! ${error}`,
+            id: "error-status"
+          });
+        }
+      );
   }
 
   ngOnDestroy() {
