@@ -252,7 +252,14 @@ public class PaymentTransactionUseCaseService {
             paymentTransactionService.create(receiptTransaction);
             receiptPayment.setBalance(receiptPayment.getBalance().add(money));
             paymentService.create(receiptPayment);
-
+            
+            Notification notification = new Notification(
+                    String.format("%s %s", payment.getCustomer().getInfo().getFirstName(), payment.getCustomer().getInfo().getLastName()),
+                    String.format("[%s] %s", "Nhận Tiền", toPaymentTransaction.getContent()),
+                    LocalDateTime.now()
+            );
+            notificationService.notify(notification, receiptPayment.getCustomer().getInfo().getUser().getUsername());
+            
         } else {
             Partner partner = partnerService.findByName(toPaymentTransaction.getBeneficiary().getBankName());
             if (!partner.isEmpty()) {
@@ -276,7 +283,13 @@ public class PaymentTransactionUseCaseService {
             creditService.create(credit);
             debitService.create(debit);
 
-
+            Notification notification = new Notification(
+                    String.format("%s %s", credit.getCustomer().getInfo().getFirstName(), credit.getCustomer().getInfo().getLastName()),
+                    String.format("%s %s", credit.getContent(), "[Paid]"),
+                    LocalDateTime.now()
+            );
+            notificationService.notify(notification, credit.getDebit().getCustomer().getInfo().getUser().getUsername());
+            
         }
     }
 
