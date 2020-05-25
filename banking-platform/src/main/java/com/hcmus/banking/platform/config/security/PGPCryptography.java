@@ -24,7 +24,7 @@ public class PGPCryptography {
     private String publicFile;
 
     public PGPCryptography(){
-        Security.addProvider(new BouncyCastleProvider());
+        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
     }
 
     public PGPSecretKey getPrivateKey() throws IOException {
