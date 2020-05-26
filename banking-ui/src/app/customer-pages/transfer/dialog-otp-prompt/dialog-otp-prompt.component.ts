@@ -3,6 +3,8 @@ import { NbDialogRef } from '@nebular/theme';
 import { PaymentTransactions } from '../../../_models/customer.model';
 import { PaymentTransactionService } from '../../../_services/payment-transaction.service';
 import { untilDestroyed } from 'ngx-take-until-destroy';
+import { NotifierService } from 'angular-notifier';
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'ngx-otp-dimiss-prompt',
@@ -12,9 +14,13 @@ import { untilDestroyed } from 'ngx-take-until-destroy';
 export class DialogOTPPromptComponent implements OnInit, OnDestroy {
   sendingOTP = false;
   paymentInfor: PaymentTransactions;
+  private readonly notifier: NotifierService;
 
   constructor(protected ref: NbDialogRef<DialogOTPPromptComponent>,
-              private paymentTransactionService: PaymentTransactionService) {}
+              private paymentTransactionService: PaymentTransactionService,
+              private notifications: NotifierService) {
+                this.notifier = notifications;
+              }
 
   cancel() {
     this.ref.close();
@@ -29,6 +35,14 @@ export class DialogOTPPromptComponent implements OnInit, OnDestroy {
       (res: any) => {
         this.sendingOTP = false;
         this.ref.close(code);
+      },
+      (err: HttpErrorResponse) => {
+        this.sendingOTP = false;
+        this.notifier.show({
+          type: "error",
+          message: "Không thể xác nhận OTP! " + err,
+          id: "error"
+        });
       }
     );
     

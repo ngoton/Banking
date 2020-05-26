@@ -139,7 +139,10 @@ export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
       this.client.subscribe(this.notificationService.topic + userInfo.username, 
         message => {
           this.notifications.push(JSON.parse(message.body));
-          this.countNotify = this.notifications.length;
+          if(this.countNotify == 0)
+            this.countNotify = 1;
+          else
+            this.countNotify = this.notifications.length;
           console.log("notification: ", this.notifications);
       }, function(error){
         alert("STOMP error" + error);
@@ -155,8 +158,10 @@ export class IBankingCustomerHeaderComponent implements OnInit, OnDestroy {
   notifyClicked(){
     this.countNotify = 0;
   }
-  goTo(){
-    this.router.navigate(['/customer/reminder-debt']);
+  goTo(message){
+    let isThongBaoNhan = message.search(/Nhận/gi);
+    if(isThongBaoNhan == -1)
+      this.router.navigate(['/customer/reminder-debt']);
   }
 
   ngOnDestroy() {

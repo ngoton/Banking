@@ -43,7 +43,7 @@
         Thông báo
     </nb-card-header>
     <nb-list *ngIf="notifications.length > 0">
-      <nb-list-item *ngFor="let notify of notifications" (click)="goTo()">
+      <nb-list-item style="cursor: pointer;" *ngFor="let notify of notifications" (click)="goTo(notify.message)">
         <nb-user [name]="notify.sender" [title]="notify.message">
         </nb-user>
       </nb-list-item>
