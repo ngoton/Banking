@@ -138,4 +138,11 @@ export class PaymentTransactionService {
     return this.http.post<any>(PATH, JSON.stringify(body)).pipe(); 
   }
 
+  getPaymentTransactionAdministrator(partnerName, startDate, endDate): Observable<any> {
+    const PATH = this.TRANSFER_URL + `/history/partners` + 
+                  (partnerName != "" && partnerName != null ? `?partnerName=${partnerName}` : ``) +
+                  (startDate != null ? `&startDate=${startDate}` : ``) +
+                  (endDate != null ? `&endDate=${endDate}`: ``);
+    return this.http.get<any>(PATH).pipe();
+  }
 }

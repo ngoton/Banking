@@ -250,6 +250,7 @@ public class PaymentTransactionUseCaseService {
                     receiptPayment
             );
             paymentTransactionService.create(receiptTransaction);
+
             receiptPayment.setBalance(receiptPayment.getBalance().add(money));
             paymentService.create(receiptPayment);
             
@@ -259,7 +260,7 @@ public class PaymentTransactionUseCaseService {
                     LocalDateTime.now()
             );
             notificationService.notify(notification, receiptPayment.getCustomer().getInfo().getUser().getUsername());
-            
+
         } else {
             Partner partner = partnerService.findByName(toPaymentTransaction.getBeneficiary().getBankName());
             if (!partner.isEmpty()) {
@@ -289,7 +290,7 @@ public class PaymentTransactionUseCaseService {
                     LocalDateTime.now()
             );
             notificationService.notify(notification, credit.getDebit().getCustomer().getInfo().getUser().getUsername());
-            
+
         }
     }
 

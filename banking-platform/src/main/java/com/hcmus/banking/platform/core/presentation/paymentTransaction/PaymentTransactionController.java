@@ -168,7 +168,10 @@ public class PaymentTransactionController {
 
             beneficiary = newBeneficiary;
         }
-
+        Payment paymentBeneficiary = paymentService.findById(beneficiary.getPayment().getId());
+        if (paymentBeneficiary.isLocked()) {
+            throw new BankingServiceException("Account is locked");
+        }
         PaymentTransaction paymentTransaction = paymentTransactionService.payment(paymentTransactionRequest.toPaymentTransaction(paymentTransactionRequest, beneficiary, payment), user);
         return new PaymentResponse(paymentTransaction, paymentTransactionRequest.fee);
     }

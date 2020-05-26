@@ -6,6 +6,7 @@ import { from } from 'rxjs';
 import { DepositAccountComponent } from './deposit-account/deposit-account.component';
 import { EmployeeManagerComponent } from './employee-manager/employee-manager.component';
 import { PaymentHistoryComponent } from './payment-history/payment-history.component';
+import { AccountManagerComponent } from './account-manager/account-manager.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,10 @@ const routes: Routes = [
           import('./accounts/accounts.module').then(
             m => m.AccountsModule
           )
+      },
+      {
+        path: 'account-manager',
+        component: AccountManagerComponent
       },
       {
         path: 'transaction-history',
