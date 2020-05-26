@@ -93,7 +93,7 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
                   (err: HttpErrorResponse) => {
                     this.notifications.show({
                       id: `payError`,
-                      message: `Không thể reset mật khẩu!${err}`,
+                      message: `Không thể reset mật khẩu! ${err}`,
                       type: `error`,
                       template: this.customNotificationTmpl
                     });

@@ -5,6 +5,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from '../../_services/user.service';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ngx-change-password',
@@ -22,6 +23,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
   };
 
   constructor(
+    private route: Router,
     private location: Location,
     private notifications: NotifierService, 
     private fb: FormBuilder, 
@@ -52,11 +54,17 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
       .pipe(untilDestroyed(this))
       .subscribe(
         (res: any) => {
-
+          this.notifications.show({
+            id: `success`,
+            message: `Đổi mật khẩu thành công!`,
+            type: `info`,
+            template: this.customNotificationTmpl
+          });
+          this.route.navigate(['onboarding/login']);
         },
         (err: HttpErrorResponse) => {
           this.notifications.hide("ChangePass"); // remove change password notification
-          this.errorAlert(err.message === undefined ? "Cập nhật thất bại!" : err);
+          this.errorAlert("Cập nhật thất bại! " + err);
         }
       );
     this.loading = false;

@@ -48,7 +48,8 @@ export class DialogEmployeePromptComponent implements OnInit, OnDestroy {
 
   convertDate(dateString: string) {
     const arrDateString: string[] = dateString.split('/');
-    return `${arrDateString[2]}-${arrDateString[1]}-${arrDateString[0]}`;
+    const date = this.dateService.createDate(+arrDateString[2], +arrDateString[1], +arrDateString[0]);
+    return date;
   }
 
   cancel() {

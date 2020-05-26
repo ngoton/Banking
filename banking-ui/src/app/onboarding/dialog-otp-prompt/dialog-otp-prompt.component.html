@@ -1,4 +1,11 @@
 <nb-card class="text-center" [nbSpinner]="sendingOTP" nbSpinnerStatus="primary">
+  <notifier-container>
+    <ng-template #customNotification let-notificationData="notification">
+      <div>
+        <strong>{{ notificationData.message }}</strong>
+      </div>
+    </ng-template>
+  </notifier-container>
   <nb-card-header>
     <div>
       Chúng tôi đã gửi mã OTP đến địa chỉ email của bạn.

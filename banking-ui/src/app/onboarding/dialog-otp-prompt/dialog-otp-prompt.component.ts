@@ -1,7 +1,9 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { AuthService } from '../../_services/auth.service';
+import { NotifierService } from 'angular-notifier';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'ngx-dialog-otp-prompt-prompt',
@@ -9,11 +11,13 @@ import { AuthService } from '../../_services/auth.service';
   styleUrls: ['dialog-otp-prompt.component.scss'],
 })
 export class DialogOTPPromptComponent implements OnInit, OnDestroy {
+  @ViewChild("customNotification", { static: true }) customNotificationTmpl;
   sendingOTP = false;
   email: string;
 
   constructor(protected ref: NbDialogRef<DialogOTPPromptComponent>,
-              private authService: AuthService) {}
+              private authService: AuthService,
+              private notifications: NotifierService) {}
 
   cancel() {
     this.ref.close();
@@ -29,8 +33,13 @@ export class DialogOTPPromptComponent implements OnInit, OnDestroy {
         this.sendingOTP = false;
         this.ref.close(res);
       },
-      (err: any) => {
-        
+      (err: HttpErrorResponse) => {
+        this.notifications.show({
+          id: `error`,
+          message: `Không thể xác nhân OTP! ${err}`,
+          type: `error`,
+          template: this.customNotificationTmpl
+        });
       }
     );
     
