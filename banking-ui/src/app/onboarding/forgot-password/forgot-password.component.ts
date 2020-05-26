@@ -47,8 +47,6 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(formdata) {
-    debugger;
-
     this.loading = true;
     this.notifications.hide("RequestPassError"); // remove change password notification
 
@@ -81,7 +79,7 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
                     
                     setTimeout(() => {
                       this.notifications.show({
-                        id: `paied`,
+                        id: `success`,
                         message: `Reset mật khẩu thành công! Mật khẩu mới của bạn là: ${infor.newPassword}`,
                         type: `info`,
                         template: this.customNotificationTmpl
