@@ -7,13 +7,15 @@ import {
   NbTreeGridDataSource,
   NbTreeGridDataSourceBuilder
 } from '@nebular/theme';
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, DatePipe } from '@angular/common';
 import { FsIconComponent } from '../employee-pages.component';
 import { PaymentTransactionService } from '../../_services/payment-transaction.service';
 import { PartnerService } from '../../_services/partner.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { LocalDataSource } from 'ng2-smart-table';
+import { NotifierService } from 'angular-notifier';
+import { Partners } from '../../_models/customer.model';
 
 interface TreeNode<T> {
   data: T;
@@ -34,138 +36,67 @@ interface FSEntry {
   styleUrls: ['./payment-history.component.scss']
 })
 export class PaymentHistoryComponent implements OnInit, OnDestroy {
-  customColumn = {bindingName: 'transaction_type', showName: 'Loại giao dịch'};
-  defaultColumns = [
-    {bindingName: 'content', showName: 'Nội dung'},
-    {bindingName: 'date', showName: 'Ngày'},
-    {bindingName: 'money', showName: 'Số tiền'}];
-  allColumns = ['transaction_type', 'content', 'date', 'money'];
-
-  // paymentInfor: Payment = new Payment();
-  // savingInfor: Savings = new Savings();
-  receiveHistories: TreeNode<FSEntry> = {
-    data: {
-      transaction_type: 'Nhận tiền',
-      content: '',
-      date: '',
-      money: '',
-    },
-    children: []
-  };
-  transferHistories: TreeNode<FSEntry> = {
-    data: {
-      transaction_type: 'Chuyển khoản',
-      content: '',
-      date: '',
-      money: '',
-    },
-    children: []
-  };
-  creditHistories: TreeNode<FSEntry> = {
-    data: {
-      transaction_type: 'Thanh toán nhắc nợ',
-      content: '',
-      date: '',
-      money: '',
-    },
-    children: []
-  };
-
+ 
   settings = {
     mode: 'external',
     columns: {
       code: {
-        title: "Mã nhân viên",
+        title: "Mã giao dịch",
         type: "string"
       },
-      firstName: {
-        title: "Họ và tên đệm",
+      money: {
+        title: "Số tiền (VNĐ)",
         type: "string"
       },
-      lastName: {
-        title: "Tên",
+      content: {
+        title: "Nội dung",
         type: "string"
       },
-      birthDate: {
-        title: "Ngày sinh",
-        type: "string"
-      },
-      phone: {
-        title: "Số điện thoại",
+      createdAt: {
+        title: "Ngày giao dịch",
         type: "string"
       }
     },
-  
+    actions: {
+      columnTitle: "Thao tác",
+      add: false,
+      edit: false,
+      delete: false
+    },
     hideSubHeader: true
   }
 
-
-
-  private data: TreeNode<FSEntry>[] = [];
-
-  dataSource: NbTreeGridDataSource<FSEntry>;
-
-  sortColumn: string;
-  sortDirection: NbSortDirection = NbSortDirection.NONE;
+  selectedPartner: any;
+  startDate: Date;
+  endDate: Date;
   partnerList: any[] = [];
   paymentList :any[] = [];
+  loadingPayment: boolean = false;
+  private readonly notifier: NotifierService;
 
   source: LocalDataSource = new LocalDataSource();
 
 
   constructor(private paymentTransactionService: PaymentTransactionService,
-    private themeService: NbThemeService,
-    private partnerService: PartnerService) {
-}
-
-  updateSort(sortRequest: NbSortRequest): void {
-    this.sortColumn = sortRequest.column;
-    this.sortDirection = sortRequest.direction;
+              private partnerService: PartnerService,
+              private decimalPipe: DecimalPipe,
+              private datePipe: DatePipe,
+              private notificationService: NotifierService) {
+                this.notifier = notificationService;
   }
-
-  getSortDirection(column: string): NbSortDirection {
-    if (this.sortColumn === column) {
-      return this.sortDirection;
-    }
-    return NbSortDirection.NONE;
-  }
-
-  getShowOn(index: number) {
-    const minWithForMultipleColumns = 400;
-    const nextColumnStep = 100;
-    return minWithForMultipleColumns + (nextColumnStep * index);
-  }
-
-  getPaymentTransfer() {
-  }
-
 
   ngOnInit(){
-    debugger;
-    this.data = [this.receiveHistories, this.transferHistories, this.creditHistories];
-    // this.dataSource = this.dataSourceBuilder.create(this.data);
     this.getData();
   }
   ngOnDestroy(){}
-
-  onSubmit(){
-    this.paymentTransactionService.getPaymentTransactionAdministrator(name)
-    .subscribe(
-      (response: any) => {
-
-      },
-      (err: HttpErrorResponse) => {
-
-      }
-    )
-  }
-
 
   getData(){
     this.partnerService.getAll().pipe(untilDestroyed(this))
     .subscribe(
       (response: any) => {
         this.partnerList = response;
+        this.selectedPartner = new Partners();
+        this.getPaymentHistory();
       },
       (err: HttpErrorResponse) => {
         
@@ -173,18 +104,54 @@ export class PaymentHistoryComponent implements OnInit, OnDestroy {
     )
   }
 
-  getPaymentHistory(selectedData) {
-    this.paymentTransactionService.getPaymentTransactionAdministrator(selectedData.name).pipe(untilDestroyed(this))
+  getPaymentHistory() {
+    debugger;
+    this.loadingPayment = true;
+    let start = this.startDate != undefined ? this.datePipe.transform(this.startDate,"yyyy-MM-dd") : null;
+    let end = this.endDate != undefined ? this.datePipe.transform(this.endDate,"yyyy-MM-dd") : null;
+
+    this.paymentTransactionService.getPaymentTransactionAdministrator(this.selectedPartner.name, start, end).pipe(untilDestroyed(this))
     .subscribe(
       (response: any) => {
-        this.paymentList = response;
+        this.paymentList = response.content;
+        this.paymentList.forEach(element => {
+          const dateTimeArr: any[] = element.createdAt.split(" ", 2);
+          
+          element.money = this.decimalPipe.transform(
+            element.money,
+            "1.0-3"
+          );
+          element.createdAt = dateTimeArr.length != 0 ? dateTimeArr[0] : "";
+        });
         this.source.load(this.paymentList);
+        this.loadingPayment = false;
+        
       },
       (err: HttpErrorResponse) => {
+        this.loadingPayment = false;
+        if(start != null && end != null){
+          this.notifier.show({
+            type: "error",
+            message: "Không lấy được danh sách đối soát! " + err,
+            id: "get-error"
+          });
+        }
         
       }
     )
 
   }
 
+  partnerChange(selectedData){
+    this.selectedPartner = selectedData;
+    this.paymentList = [];
+    this.source.load(this.paymentList);
+    this.getPaymentHistory();
+  }
+
+  dateChange(){
+    this.paymentList = [];
+    this.source.load(this.paymentList);
+    this.getPaymentHistory();
+  }
 }

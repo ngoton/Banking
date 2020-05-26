@@ -1,0 +1,10 @@
+<nb-card [nbSpinner]="loadingCustomer" nbSpinnerStatus="primary">
+  <notifier-container></notifier-container>
+    <nb-card-header>
+      Danh sách khách hàng
+    </nb-card-header>
+    <nb-card-body>
+      <ng2-smart-table [settings]="settings" [source]="source">
+      </ng2-smart-table>
+    </nb-card-body>
+</nb-card>
